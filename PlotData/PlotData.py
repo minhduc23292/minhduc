@@ -199,7 +199,8 @@ class PLT(FigureCanvasTkAgg):
             ax_21.plot(f, 10 * np.log10(Pxx_den), color='blue', linewidth=0.5)
             ax_21.set_ylabel(f"Ch{str(ch[0])}" + f' | dB')
             ax_21.yaxis.set_major_formatter(FormatStrFormatter('%0.1f'))
-        ax_21.grid()
+        ax_21.grid(color='green', linestyle='--', linewidth=0.3)
+        ax_21.set_xticks([])
 
         # Chanel Y
         canal_fft = canal_2
@@ -215,7 +216,8 @@ class PLT(FigureCanvasTkAgg):
             ax_22.yaxis.set_major_formatter(FormatStrFormatter('%0.1f'))
             ax_22.plot(f, 10 * np.log10(Pxx_den), color='blue', linewidth=0.5)
 
-        ax_22.grid()
+        ax_22.grid(color='green', linestyle='--', linewidth=0.3)
+        ax_22.set_xticks([])
 
         # Chanel Z
         canal_fft = canal_3
@@ -229,7 +231,7 @@ class PLT(FigureCanvasTkAgg):
             ax_23.yaxis.set_major_formatter(FormatStrFormatter('%0.1f'))
             ax_23.plot(f, 10 * np.log10(Pxx_den), color='blue', linewidth=0.5)
             ax_23.set_ylabel(f"Ch{str(ch[2])}" + f' | dB')
-        ax_23.grid()
+        ax_23.grid(color='green', linestyle='--', linewidth=0.3, axis='y')
         ax_23.set_xlabel('Hz', fontsize=12)
         self.draw()
 

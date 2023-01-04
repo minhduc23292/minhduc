@@ -19,12 +19,14 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from main import Application
+from datetime import datetime
 current_directory = os.getcwd()
 parent_directory = os.path.dirname(os.path.dirname(current_directory))
 blink = 0
 blink1 = 0
 checkWidget = 'wasi'
 track_flag = 0
+grid_flag = True
 
 
 def testVal(inStr, acttyp):
@@ -33,16 +35,20 @@ def testVal(inStr, acttyp):
             return False
     return True
 
+
 class DiagnosticPage(Tk.Frame):
     def __init__(self, parent: "Application"):
         self.parent = parent
-
+        now = datetime.now()
+        self.current_time = now.strftime("%H:%M")
         self.ZoomCanvas = Tk.Canvas()
         self.freqFuntionCanvas = Tk.Canvas()
         self.settingPhoto = PhotoImage(file=f"{current_directory}\image\setting.png")
         self.homePhoto = PhotoImage(file=f"{current_directory}\image\home.png")
         self.arrowPhoto = PhotoImage(file=f"{current_directory}\image\\arrow.png")
-        self.vector = PhotoImage(file=f"{current_directory}\image\Vector.png")
+        self.low_bat = PhotoImage(file=f"{current_directory}\image\low_bat.png")
+        self.half_bat = PhotoImage(file=f"{current_directory}\image\half_bat.png")
+        self.full_bat = PhotoImage(file=f"{current_directory}\image\\full_bat.png")
         self.waitingPhoto = PhotoImage(file=f"{current_directory}\image\waiting.png")
         self.zoomPhoto = PhotoImage(file=f"{current_directory}\image\zoom.png")
         self.savePhoto = PhotoImage(file=f"{current_directory}\image\save.png")
@@ -97,39 +103,47 @@ class DiagnosticPage(Tk.Frame):
         self.generalSideButtonFrame.pack_propagate(0)
         self.generalSideButtonFrame.pack_forget()
 
-        self.batFrame = Tk.Frame(self.featureFrame, bd=1, bg='white', width=117, height=40)
+        self.batFrame = Tk.Frame(self.featureFrame, bd=1, bg='grey95', width=117, height=40)
         self.batFrame.pack()
         self.batFrame.place(relx=0.875, rely=0.01)
         self.batFrame.pack_propagate(0)
         self.creat_diagnostic_page()
         sv_ttk.set_theme("light")
         self.parent.bind_class('TEntry', "<FocusIn>", self.show_key_board)
+        self.parent.bind_class('TCombobox', "<<ComboboxSelected>>", self.change_state)
 
     def show_key_board(self, event):
-        self.widget=self.get_focus_widget()
+        self.applyBt.configure(state='normal')
+        self.widget = self.get_focus_widget()
         self.keyboardFrame = KeyBoard(self.widget)
         parentName = event.widget.winfo_parent()
         self.parent1 = event.widget._nametowidget(parentName)
         self.parent1.focus()
+
     def get_focus_widget(self):
         widget = self.parent.focus_get()
         return widget
+
+    def change_state(self, event):
+        self.applyBt.configure(state="normal")
 
     def creat_diagnostic_page(self):
         self.creat_diagnostic_feature_panel()
         self.creat_diagnostic_config_panel()
         self.creat_side_panel()
-        self.waveformFrameCanvas=WaveformFrameCanvas(self.waveformPlotFrame)
-        self.frequencyFrameCanvas=FrequencyFrameCanvas(self.freqPlotFrame)
-        self.generalFrameCanvas=GeneralFrameCanvas(self.generalPlotFrame)
+        self.waveformFrameCanvas = WaveformFrameCanvas(self.waveformPlotFrame)
+        self.frequencyFrameCanvas = FrequencyFrameCanvas(self.freqPlotFrame)
+        self.generalFrameCanvas = GeneralFrameCanvas(self.generalPlotFrame)
 
     def creat_diagnostic_feature_panel(self):
 
-        self.timeLabel = ttk.Label(self.batFrame, style='bat.TLabel', text="20:20")
+        self.timeLabel = ttk.Label(self.batFrame, style='bat.TLabel', text=self.current_time)
+        self.timeLabel.after(5000, self.update_time)
         self.timeLabel.place(relx=0.05, rely=0.1)
 
-        self.batLabel = ttk.Label(self.batFrame, style='bat.TLabel', text="20%", image=self.vector, compound=Tk.LEFT)
-        self.batLabel.image = self.vector
+        self.batLabel = ttk.Label(self.batFrame, style='bat.TLabel', text="20%", image=self.full_bat, compound=Tk.LEFT)
+        self.batLabel.image = self.full_bat
+        self.batLabel.after(10000, self.update_bat)
         self.batLabel.place(relx=0.5, rely=0.1)
 
         self.homeBt = ttk.Button(self.featureFrame, style='normal.TButton', text="Home", image=self.homePhoto,
@@ -175,11 +189,14 @@ class DiagnosticPage(Tk.Frame):
             self.configBt.configure(style="Accent.TButton")
 
         clean_frame_for_config_panel()
-        self.config=ConfigFrame(self.configFrame, self.parent.origin_config)
-        self.nextBt = ttk.Button(self.configFrame, text="START", style='Accent.TButton',
+        self.config = ConfigFrame(self.configFrame, self.parent.origin_config)
+        self.nextBt = ttk.Button(self.configFrame, text="APPLY and START", style='Accent.TButton',
                                  command=lambda: self.on_start_button_clicked(True))
         self.nextBt.place(relx=0.8, rely=0.89, width=167, height=48)
 
+        self.applyBt = ttk.Button(self.configFrame, text="APPLY", style='Accent.TButton',
+                                 command=lambda: self.on_apply_button_clicked(True))
+        self.applyBt.place(relx=0.6, rely=0.89, width=167, height=48)
 
     def creat_side_panel(self):
         saveBt = ttk.Button(self.waveformSideButtonFrame, style='custom.Accent.TButton', text="SAVE",
@@ -190,7 +207,7 @@ class DiagnosticPage(Tk.Frame):
 
         zoomBt = ttk.Button(self.waveformSideButtonFrame, style='custom.Accent.TButton', text="ZOOM",
                             image=self.zoomPhoto,
-                            compound=Tk.TOP, command=lambda: self.creat_zoom_canvas(1, 843, 195))
+                            compound=Tk.TOP, command=lambda: self.creat_zoom_frame(1, 843, 195))
         zoomBt.place(relx=0, rely=0.678, width=88, height=75)
         zoomBt.image = self.zoomPhoto
 
@@ -210,7 +227,7 @@ class DiagnosticPage(Tk.Frame):
 
         freqZoomBt = ttk.Button(self.freqSideButtonFrame, style='custom.Accent.TButton', text="ZOOM",
                                 image=self.zoomPhoto,
-                                compound=Tk.TOP, command=lambda: self.creat_zoom_canvas(2, 843, 195))
+                                compound=Tk.TOP, command=lambda: self.creat_zoom_frame(2, 843, 195))
         freqZoomBt.place(relx=0, rely=0.678, width=88, height=75)
         freqZoomBt.image = self.zoomPhoto
 
@@ -222,8 +239,9 @@ class DiagnosticPage(Tk.Frame):
                                        command=lambda: self.Tracking(True))
         freqCursorRightBt.place(relx=0, rely=0.375, width=88, height=75)
 
-        freqGridtBt = ttk.Button(self.freqSideButtonFrame, style='custom.Accent.TButton', text="GRID OFF")
-        freqGridtBt.place(relx=0, rely=0.223, width=88, height=75)
+        self.freqGridtBt = ttk.Button(self.freqSideButtonFrame, style='custom.Accent.TButton', text="GRID ON",
+                                      command=self.on_grid_button)
+        self.freqGridtBt.place(relx=0, rely=0.223, width=88, height=75)
 
         self.freqFunctionBt = ttk.Button(self.freqSideButtonFrame, style='custom.Accent.TButton', text="FUNCTION\nNONE",
                                          command=lambda: self.creat_frequency_funtion_button_canvas(842, 37))
@@ -236,7 +254,6 @@ class DiagnosticPage(Tk.Frame):
                                             text="GEAR\nINDICATOR", \
                                             command=self.side_band_energy_indicator)
         generalGearIndicatorBt.place(relx=0, rely=0.63, width=88, height=75)
-
 
     def go_home(self):
         self.mainFrame.destroy()
@@ -405,12 +422,11 @@ class DiagnosticPage(Tk.Frame):
         except Exception as ex:
             print("Error", ex)
 
-
     def get_focus_widget(self):
         widget = self.parent.focus_get()
         return widget
 
-    def creat_zoom_canvas(self, widget, x_pos, y_pos):
+    def creat_zoom_frame(self, widget, x_pos, y_pos):
         global blink, blink1, checkWidget
         if blink1 == 1:
             self.freqFuntionCanvas.destroy()
@@ -421,44 +437,50 @@ class DiagnosticPage(Tk.Frame):
             blink = not blink
             if blink == 1:
                 if widget == 1:
-                    self.make_canvas(self.waveformPlotFrame, self.waveformFrameCanvas.canvas1, x_pos=x_pos, y_pos=y_pos)
+                    self.creat_zoom_button_canvas(self.waveformPlotFrame, self.waveformFrameCanvas.canvas1, x_pos=x_pos,
+                                                  y_pos=y_pos)
                 if widget == 2:
-                    self.make_canvas(self.freqPlotFrame, self.frequencyFrameCanvas.canvas2, x_pos=x_pos, y_pos=y_pos)
+                    self.creat_zoom_button_canvas(self.freqPlotFrame, self.frequencyFrameCanvas.canvas2, x_pos=x_pos,
+                                                  y_pos=y_pos)
             elif blink == 0:
                 self.ZoomCanvas.destroy()
         else:
             if widget == 1:
-                self.make_canvas(self.waveformPlotFrame, self.waveformFrameCanvas.canvas1, x_pos=x_pos, y_pos=y_pos)
+                self.creat_zoom_button_canvas(self.waveformPlotFrame, self.waveformFrameCanvas.canvas1, x_pos=x_pos,
+                                              y_pos=y_pos)
             if widget == 2:
-                self.make_canvas(self.freqPlotFrame, self.frequencyFrameCanvas.canvas2, x_pos=x_pos, y_pos=y_pos)
+                self.creat_zoom_button_canvas(self.freqPlotFrame, self.frequencyFrameCanvas.canvas2, x_pos=x_pos,
+                                              y_pos=y_pos)
             checkWidget = focusingWidget
             blink = 1
 
-    def make_canvas(self, widget, draw_canvas, x_pos, y_pos):
+    def creat_zoom_button_canvas(self, widget, draw_canvas, x_pos, y_pos):
         self.photo15 = PhotoImage(file=f"{current_directory}\image\zoom.png")
         self.photo16 = PhotoImage(file=f"{current_directory}\image\zoom.png")
         self.photo17 = PhotoImage(file=f"{current_directory}\image\zoom.png")
         self.photo18 = PhotoImage(file=f"{current_directory}\image\zoom.png")
+        self.zoomstyle=ttk.Style()
+        self.zoomstyle.configure('zoom.Accent.TButton', font=('Chakra Petch', 9), justify=Tk.CENTER)
         self.ZoomCanvas = Tk.Canvas(widget, width=90, height=312, bg='white')
         self.ZoomCanvas.place(x=x_pos, y=y_pos)
-        button1 = ttk.Button(self.ZoomCanvas, text=_("ZOOM IN"), style='Accent.TButton', image=self.photo15,
+        button1 = ttk.Button(self.ZoomCanvas, text=_("ZOOM IN"), style='zoom.Accent.TButton', image=self.photo15,
                              compound=Tk.TOP,
                              command=lambda: self.view_change(draw_canvas, _type='IN'))
         button1.place(relx=0, rely=0, width=88, height=75)
         button1.image = self.photo15
 
-        button2 = ttk.Button(self.ZoomCanvas, text=_("ZOOM OUT"), style='Accent.TButton', image=self.photo16,
+        button2 = ttk.Button(self.ZoomCanvas, text=_("ZOOM OUT"), style='zoom.Accent.TButton', image=self.photo16,
                              compound=Tk.TOP,
                              command=lambda: self.view_change(draw_canvas, _type='OUT'))
         button2.place(relx=0, rely=0.247, width=88, height=75)
         button2.image = self.photo16
-        button3 = ttk.Button(self.ZoomCanvas, text=_("PAN LEFT"), style='Accent.TButton', image=self.photo17,
+        button3 = ttk.Button(self.ZoomCanvas, text=_("PAN LEFT"), style='zoom.Accent.TButton', image=self.photo17,
                              compound=Tk.TOP,
                              command=lambda: self.view_change(draw_canvas, _type='LEFT'))
         button3.place(relx=0, rely=0.494, width=88, height=75)
         button3.image = self.photo17
 
-        button4 = ttk.Button(self.ZoomCanvas, text=_("PAN RIGHT"), style='Accent.TButton', image=self.photo18,
+        button4 = ttk.Button(self.ZoomCanvas, text=_("PAN RIGHT"), style='zoom.Accent.TButton', image=self.photo18,
                              compound=Tk.TOP,
                              command=lambda: self.view_change(draw_canvas, _type='RIGHT'))
         button4.place(relx=0, rely=0.742, width=88, height=75)
@@ -473,24 +495,21 @@ class DiagnosticPage(Tk.Frame):
                     xright -= 50
                     xleft -= 50
                     ax.set_xlim(xleft, xright)
-                    # [ymin, ymax] = ax.get_ylim()
-                    # ymax-=ymax/10
-                    # ax.set_ylim(ymax=ymax)
+
                 elif _type == "LEFT":
                     [xleft, xright] = ax.get_xlim()
                     xright += 50
                     xleft += 50
                     if xright >= 0:
                         ax.set_xlim(xleft, xright)
-                    # [ymin, ymax] = ax.get_ylim()
-                    # ymax+=ymax/10
-                    # ax.set_ylim(ymax=ymax)
+
                 elif _type == "IN":
                     [xleft, xright] = ax.get_xlim()
                     xright -= 50
                     if xright < xleft + 100:
                         xright = xleft + 100
                     ax.set_xlim(xleft, xright)
+
                 elif _type == "OUT":
                     [xleft, xright] = ax.get_xlim()
                     xright += 50
@@ -505,7 +524,8 @@ class DiagnosticPage(Tk.Frame):
         if blink == 1:
             self.ZoomCanvas.destroy()
         if blink1 == 1:
-            self.draw_frequency_function_button_canvas(self.freqPlotFrame, self.frequencyFrameCanvas.canvas2, x_pos, y_pos)
+            self.draw_frequency_function_button_canvas(self.freqPlotFrame, self.frequencyFrameCanvas.canvas2, x_pos,
+                                                       y_pos)
         elif blink1 == 0:
             self.freqFuntionCanvas.destroy()
 
@@ -537,12 +557,14 @@ class DiagnosticPage(Tk.Frame):
 
         button4 = ttk.Button(self.freqFuntionCanvas, text=_("PSD"), style='custom.Accent.TButton', image=self.photo22,
                              compound=Tk.TOP,
-                             command=lambda: self.view_change(draw_canvas, _type='RIGHT'))
+                             command=self.on_psd_button_click)
         button4.place(relx=0, rely=0.742, width=88, height=75)
         button4.image = self.photo22
 
     def on_no_filter_button_clicked(self):
-
+        global grid_flag
+        grid_flag = True
+        self.freqGridtBt.configure(text=_("GRID ON"))
         self.freqFunctionBt.configure(text=_("FUNCTION\nNONE"))
         win_var = self.parent.origin_config.frequency_config_struct["Window"]
         try:
@@ -558,7 +580,10 @@ class DiagnosticPage(Tk.Frame):
             # self.inforLabel2.config(text=_("Data errors."), bg="lavender", fg="red", font="Verdana 13")
 
     def on_filter_button_clicked(self):
+        global grid_flag
+        grid_flag = True
         try:
+            self.freqGridtBt.configure(text=_("GRID ON"))
             self.freqFunctionBt.configure(text=_("FUNCTION\nFILTER"))
             self.filterCallback()
         except:
@@ -566,7 +591,10 @@ class DiagnosticPage(Tk.Frame):
             # self.inforLabel2.config(text=_("Data errors."), bg="lavender", fg="red", font="Verdana 13")
 
     def on_envelop_button_clicked(self):
+        global grid_flag
+        grid_flag = True
         try:
+            self.freqGridtBt.configure(text=_("GRID ON"))
             self.freqFunctionBt.configure(text=_("FUNCTION\nENVELOP"))
             _sample_rate = self.parent.origin_config.sensor_config["sample_rate"]
             win_var = self.parent.origin_config.frequency_config_struct["Window"]
@@ -575,11 +603,31 @@ class DiagnosticPage(Tk.Frame):
                 amplitude_envelope1 = env_result[0]
                 amplitude_envelope2 = env_result[1]
                 amplitude_envelope3 = env_result[2]
-                Pd.PLT.plot_fft(self.frequencyFrameCanvas.canvas2, amplitude_envelope1, amplitude_envelope2, amplitude_envelope3,
+                Pd.PLT.plot_fft(self.frequencyFrameCanvas.canvas2, amplitude_envelope1, amplitude_envelope2,
+                                amplitude_envelope3,
                                 _sample_rate,
                                 self.parent.origin_config.sensor_config["unit"][:3], [1, 2, 3], win_var)
         except:
             pass
+
+    def on_psd_button_click(self):
+        global grid_flag
+        grid_flag = True
+        try:
+            self.freqGridtBt.configure(text=_("GRID ON"))
+            self.freqFunctionBt.configure(text=_("FUNCTION\nPSD"))
+            _sample_rate = self.parent.origin_config.sensor_config["sample_rate"]
+            canal_1 = self.parent.origin_config.sensor_config["sensor_data"][0]  # Copy list by value not by reference
+            canal_2 = self.parent.origin_config.sensor_config["sensor_data"][1]
+            canal_3 = self.parent.origin_config.sensor_config["sensor_data"][2]
+            win_var = self.parent.origin_config.frequency_config_struct["Window"]
+            unit = self.parent.origin_config.frequency_config_struct["unit"]
+            if (len(canal_1) != 0):
+                Pd.PLT.plot_psd(self.frequencyFrameCanvas.canvas2, canal_1, canal_2, canal_3, _sample_rate,
+                                self.parent.origin_config.sensor_config["unit"][:3], [1, 2, 3], unit, win_var)
+
+        except Exception as ex:
+            print("Exception: ", ex)
 
     def filterCallback(self):
         _sample_rate = self.parent.origin_config.sensor_config["sample_rate"]
@@ -641,11 +689,19 @@ class DiagnosticPage(Tk.Frame):
         self.on_start_button_clicked(False)
 
     def on_refresh_button_clicked(self):
-        Pd.PLT.plot_all_chanel(self.waveformFrameCanvas.canvas1, self.parent.origin_config.sensor_config["sensor_data"][0],
+        Pd.PLT.plot_all_chanel(self.waveformFrameCanvas.canvas1,
+                               self.parent.origin_config.sensor_config["sensor_data"][0],
                                self.parent.origin_config.sensor_config["sensor_data"][1],
                                self.parent.origin_config.sensor_config["sensor_data"][2],
                                self.parent.origin_config.sensor_config["unit"][:3],
                                self.parent.origin_config.sensor_config["sample_rate"])
+
+    def on_apply_button_clicked(self, from_config: bool):
+        if from_config:
+            self.config.update_diagnostic_struct(self.parent.origin_config)
+            self.applyBt.configure(state="disable")
+            # self.configFrame.pack_forget()
+            # self.on_waveform_button_clicked()
 
     def on_start_button_clicked(self, from_config: bool):
         """This button callback is responsed get the data from sensor and execute the waveform callback function"""
@@ -673,7 +729,8 @@ class DiagnosticPage(Tk.Frame):
         #                       compound=Tk.TOP)
         # loadingFrame.place(relx=0.43, rely=0.35)
 
-        Pd.PLT.plot_all_chanel(self.waveformFrameCanvas.canvas1, self.parent.origin_config.sensor_config["sensor_data"][0],
+        Pd.PLT.plot_all_chanel(self.waveformFrameCanvas.canvas1,
+                               self.parent.origin_config.sensor_config["sensor_data"][0],
                                self.parent.origin_config.sensor_config["sensor_data"][1],
                                self.parent.origin_config.sensor_config["sensor_data"][2],
                                self.parent.origin_config.sensor_config["unit"][:3],
@@ -738,7 +795,8 @@ class DiagnosticPage(Tk.Frame):
             if len(self.parent.origin_config.sensor_config["dis"]) < 1:
                 Pd.PLT.clear_axes(self.generalFrameCanvas.canvas3, 3)
             else:
-                Pd.PLT.plot_displacement(self.generalFrameCanvas.canvas3, self.parent.origin_config.sensor_config["displacement_data"],
+                Pd.PLT.plot_displacement(self.generalFrameCanvas.canvas3,
+                                         self.parent.origin_config.sensor_config["displacement_data"],
                                          self.parent.origin_config.sensor_config["dis"])
         except:
             pass
@@ -782,6 +840,21 @@ class DiagnosticPage(Tk.Frame):
         self.generalBt.configure(style="Accent.TButton")
         self.configBt.configure(style="normal.TButton")
 
+    def on_grid_button(self):
+        global grid_flag
+        try:
+            if grid_flag == True:
+                rpmVal = self.parent.origin_config.frequency_config_struct["mesh"]
+                Pd.PLT.plot_grid(self.frequencyFrameCanvas.canvas2, grid_flag, rpmVal)
+                self.freqGridtBt.configure(text=_("GRID OFF"))
+                grid_flag = False
+            else:
+                Pd.PLT.plot_grid(self.frequencyFrameCanvas.canvas2, grid_flag, 25)
+                self.freqGridtBt.configure(text=_("GRID ON"))
+                grid_flag = True
+        except:
+            pass
+
     def Tracking(self, dir: bool):
         global track_flag
         tracking_freq = self.parent.origin_config.frequency_config_struct["TrackRange"]
@@ -821,11 +894,29 @@ class DiagnosticPage(Tk.Frame):
             except:
                 pass
 
+    def update_time(self):
+        now = datetime.now()
+        current_time = now.strftime("%H:%M")
+        self.timeLabel.configure(text=current_time)
+        self.timeLabel.after(5000, self.update_time)
+
+    def update_bat(self):
+        remain_bat=90
+        if remain_bat>=70:
+            self.batLabel.configure(text=f"{int(remain_bat)}%", image=self.full_bat, compound=Tk.LEFT)
+        elif 30<=remain_bat<70:
+            self.batLabel.configure(text=f"{int(remain_bat)}%", image=self.half_bat, compound=Tk.LEFT)
+        else:
+            self.batLabel.configure(text=f"{int(remain_bat)}%", image=self.low_bat, compound=Tk.LEFT)
+        self.batLabel.after(10000, self.update_bat)
+
+
 class ConfigFrame(Tk.Frame):
-    def __init__(self, parent:"self.configFrame", origin_config):
+    def __init__(self, parent: "self.configFrame", origin_config):
         super().__init__(parent)
-        self.parent=parent
+        self.parent = parent
         self.creat_config_frame(origin_config)
+
     def creat_config_frame(self, origin_config):
         self.wfParam1 = Tk.StringVar()
         self.wfParam2 = Tk.StringVar()
@@ -1080,10 +1171,14 @@ class ConfigFrame(Tk.Frame):
 
         origin_config.frequency_config_struct["FilterType"] = self.frqParam1.get()
         origin_config.frequency_config_struct["Window"] = self.frqParam2.get()
-        origin_config.frequency_config_struct["FilterFrom"] = int(self.frqParam3.get())
-        origin_config.frequency_config_struct["FilterTo"] = int(self.frqParam4.get())
-        origin_config.frequency_config_struct["TrackRange"] = int(self.frqParam5.get())
-        origin_config.frequency_config_struct["mesh"] = int(self.frqParam6.get())
+        if self.frqParam3.get()!='':
+            origin_config.frequency_config_struct["FilterFrom"] = int(self.frqParam3.get())
+        if self.frqParam4.get() != '':
+            origin_config.frequency_config_struct["FilterTo"] = int(self.frqParam4.get())
+        if self.frqParam5.get() != '':
+            origin_config.frequency_config_struct["TrackRange"] = int(self.frqParam5.get())
+        if self.frqParam6.get() != '':
+            origin_config.frequency_config_struct["mesh"] = int(self.frqParam6.get())
         origin_config.frequency_config_struct["unit"] = self.frqParam7.get()
 
         tempFmax = self.wfParam7.get()
@@ -1092,6 +1187,7 @@ class ConfigFrame(Tk.Frame):
         tempPower = self.wfParam11.get()
         tempTeeth = self.wfParam12.get()
         tempBore = self.wfParam13.get()
+
 
         if origin_config.waveform_config_struct["Sensor4"] == "NONE":
             if int(tempFmax) <= 14500:
@@ -1109,16 +1205,22 @@ class ConfigFrame(Tk.Frame):
             origin_config.waveform_config_struct["TSATimes"] = int(tempTsaTimes)
         else:
             origin_config.waveform_config_struct["TSATimes"] = 30
-        origin_config.waveform_config_struct["Speed"] = int(tempSpeed)
-        origin_config.waveform_config_struct["Power"] = int(tempPower)
-        origin_config.waveform_config_struct["GearTeeth"] = int(tempTeeth)
-        origin_config.waveform_config_struct["BearingBore"] = int(tempBore)
+
+        if tempSpeed!='':
+            origin_config.waveform_config_struct["Speed"] = int(tempSpeed)
+        if tempPower != '':
+            origin_config.waveform_config_struct["Power"] = int(tempPower)
+        if tempTeeth != '':
+            origin_config.waveform_config_struct["GearTeeth"] = int(tempTeeth)
+        if tempBore != '':
+            origin_config.waveform_config_struct["BearingBore"] = int(tempBore)
 
 
 class WaveformFrameCanvas():
-    def __init__(self, parent:"waveformPlotFrame"):
-        self.parent=parent
+    def __init__(self, parent: "waveformPlotFrame"):
+        self.parent = parent
         self.creat_waveform_canvas()
+
     def creat_waveform_canvas(self):
         fig1 = creatFig.creatFigure(self.parent, 3)
         fig1.set_visible(True)
@@ -1127,21 +1229,23 @@ class WaveformFrameCanvas():
 
 
 class FrequencyFrameCanvas():
-    def __init__(self, parent:"freqPlotFrame"):
-        self.parent=parent
+    def __init__(self, parent: "freqPlotFrame"):
+        self.parent = parent
         self.creat_frequency_canvas()
+
     def creat_frequency_canvas(self):
         fig2 = creatFig.creatFigure(self.parent, 3)
         fig2.set_visible(True)
         self.canvas2 = FigureCanvasTkAgg(fig2, master=self.parent)
         self.canvas2.get_tk_widget().pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
 
-class GeneralFrameCanvas():
-    def __init__(self, parent:"generalPlotFrame"):
-        self.parent=parent
-        self.creat_general_canvas()
-    def creat_general_canvas(self):
 
+class GeneralFrameCanvas():
+    def __init__(self, parent: "generalPlotFrame"):
+        self.parent = parent
+        self.creat_general_canvas()
+
+    def creat_general_canvas(self):
         fig3 = Figure(figsize=(8.1, 8))
         ax_31 = fig3.add_subplot(2, 2, 1)
         ax_31.set_facecolor("lavender")
