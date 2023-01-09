@@ -16,7 +16,7 @@ from digitalFilter.digitalFilter import filter_data
 import defaultConfig.default_config as dfc
 from i18n import _
 import os
-
+from scipy.stats import kurtosis
 current_directory = os.path.dirname(os.path.realpath(__file__))
 parent_directory = os.path.dirname(current_directory)
 save_path = f"{parent_directory}/storage/"
@@ -653,6 +653,7 @@ class PLT(FigureCanvasTkAgg):
             ax_43.text(index, value, str(value)[0:4])
         ax_43.set_ylabel(_('ISO-10816 Velocity (mm/s)'))
         self.draw()
+
 
     def plot_gE_severity(self, gE_arr, hfcf_arr, arr_name, Fmax, rpm, bearing_dia):
         alert = np.power(Fmax / 1000.0, 0.43) * 1.09 * 0.0001 * rpm * np.power(bearing_dia, 0.55)

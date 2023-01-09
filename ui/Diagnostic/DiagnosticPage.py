@@ -20,6 +20,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from main import Application
 from datetime import datetime
+from scipy.stats import kurtosis
 current_directory = os.getcwd()
 parent_directory = os.path.dirname(os.path.dirname(current_directory))
 blink = 0
@@ -38,6 +39,7 @@ def testVal(inStr, acttyp):
 
 class DiagnosticPage(Tk.Frame):
     def __init__(self, parent: "Application"):
+        sv_ttk.set_theme("light")
         self.parent = parent
         now = datetime.now()
         self.current_time = now.strftime("%H:%M")
@@ -88,6 +90,11 @@ class DiagnosticPage(Tk.Frame):
         self.generalPlotFrame.pack_propagate(0)
         self.generalPlotFrame.pack_forget()
 
+        self.summaryPlotFrame = Tk.Frame(self.mainFrame, name="suma", bd=1, bg='white', width=934, height=520)
+        self.summaryPlotFrame.pack(side=Tk.LEFT, fill=Tk.BOTH, expand=1)
+        self.summaryPlotFrame.pack_propagate(0)
+        self.summaryPlotFrame.pack_forget()
+
         self.waveformSideButtonFrame = Tk.Frame(self.mainFrame, name="wasi", bd=1, bg='white', width=90, height=520)
         self.waveformSideButtonFrame.pack(side=Tk.RIGHT, fill=Tk.Y, expand=1)
         self.waveformSideButtonFrame.pack_propagate(0)
@@ -108,7 +115,7 @@ class DiagnosticPage(Tk.Frame):
         self.batFrame.place(relx=0.875, rely=0.01)
         self.batFrame.pack_propagate(0)
         self.creat_diagnostic_page()
-        sv_ttk.set_theme("light")
+
         self.parent.bind_class('TEntry', "<FocusIn>", self.show_key_board)
         self.parent.bind_class('TCombobox', "<<ComboboxSelected>>", self.change_state)
 
@@ -134,6 +141,7 @@ class DiagnosticPage(Tk.Frame):
         self.waveformFrameCanvas = WaveformFrameCanvas(self.waveformPlotFrame)
         self.frequencyFrameCanvas = FrequencyFrameCanvas(self.freqPlotFrame)
         self.generalFrameCanvas = GeneralFrameCanvas(self.generalPlotFrame)
+        self.summaryFrameCanvas = SummaryFrameCanvas(self.summaryPlotFrame)
 
     def creat_diagnostic_feature_panel(self):
 
@@ -182,6 +190,7 @@ class DiagnosticPage(Tk.Frame):
             self.freqSideButtonFrame.pack_forget()
             self.generalPlotFrame.pack_forget()
             self.generalSideButtonFrame.pack_forget()
+            self.summaryPlotFrame.pack_forget()
             self.configFrame.pack()
             self.waveformBt.configure(style="normal.TButton")
             self.frequencyBt.configure(style="normal.TButton")
@@ -247,7 +256,8 @@ class DiagnosticPage(Tk.Frame):
                                          command=lambda: self.creat_frequency_funtion_button_canvas(842, 37))
         self.freqFunctionBt.place(relx=0, rely=0.07, width=88, height=75)
 
-        generalSummatyBt = ttk.Button(self.generalSideButtonFrame, style='custom.Accent.TButton', text="SUMMARY")
+        generalSummatyBt = ttk.Button(self.generalSideButtonFrame, style='custom.Accent.TButton', text="SUMMARY",
+                                      command= self.on_summary_button_clicked)
         generalSummatyBt.place(relx=0, rely=0.8, width=88, height=75)
 
         generalGearIndicatorBt = ttk.Button(self.generalSideButtonFrame, style='custom.Accent.TButton',
@@ -372,55 +382,6 @@ class DiagnosticPage(Tk.Frame):
                 pass
         self.parent.origin_config.sensor_config["unit"] = unit
 
-    def side_band_energy_indicator(self):
-        try:
-            startFreq = []
-            stopFreq = []
-            rpm = self.parent.origin_config.waveform_config_struct["Speed"] / 60
-            SecondGMF = 2 * self.parent.origin_config.waveform_config_struct["GearTeeth"] * rpm
-            if len(self.parent.origin_config.sensor_config["accel"]) > 0 and (SecondGMF - 3 * rpm - 5) > 0 and (
-                    SecondGMF + 3 * rpm + 5) < (
-                    self.parent.origin_config.sensor_config["sample_rate"] / 2.56):
-                for i in range(7):
-                    startFreq.append(SecondGMF - (3 - i) * rpm - 5)
-                    stopFreq.append(SecondGMF - (3 - i) * rpm + 5)
-                CMFAmplitude = []
-                for j in range(len(self.parent.origin_config.sensor_config["accel"])):
-                    [max1, freq] = tab4_tracking_signal(self.parent.origin_config.sensor_config["accel_data"][j],
-                                                        self.parent.origin_config.sensor_config["sample_rate"],
-                                                        [startFreq[3], stopFreq[3]])
-                    CMFAmplitude.append(max1)
-                sumOfSideBand = np.zeros(len(self.parent.origin_config.sensor_config["accel"]))
-                for k in range(len(self.parent.origin_config.sensor_config["accel"])):
-                    for h in range(7):
-                        if h != 3:
-                            [max1, freq] = tab4_tracking_signal(
-                                self.parent.origin_config.sensor_config["accel_data"][k],
-                                self.parent.origin_config.sensor_config["sample_rate"],
-                                [startFreq[h], stopFreq[h]])
-                            sumOfSideBand[k] += max1
-                for k in range(len(self.parent.origin_config.sensor_config["accel"])):
-                    sumOfSideBand[k] /= CMFAmplitude[k]
-
-                # Calculate the Acc Peak
-                AccPeak = []
-                for i in range(len(self.parent.origin_config.sensor_config["accel"])):
-                    arr = filter_data(
-                        self.parent.origin_config.sensor_config["accel_data"][i],
-                        "HIGHPASS",
-                        1000,
-                        20000,
-                        self.parent.origin_config.sensor_config["sample_rate"],
-                        window="Hanning"
-                    )
-                    AccRms = rmsValue(arr)
-                    AccPeak.append(AccRms * 1.414)
-                Pd.PLT.plot_SBR_severity(self.generalFrameCanvas.canvas3, sumOfSideBand, AccPeak,
-                                         self.parent.origin_config.sensor_config["accel"])
-            else:
-                pass
-        except Exception as ex:
-            print("Error", ex)
 
     def get_focus_widget(self):
         widget = self.parent.focus_get()
@@ -801,6 +762,11 @@ class DiagnosticPage(Tk.Frame):
         except:
             pass
 
+
+        try:
+            self.summaryFrameCanvas.plot_summary(self.parent.origin_config)
+        except:
+            pass
     def on_waveform_button_clicked(self):
         self.waveformPlotFrame.pack(side=Tk.LEFT, fill=Tk.X, expand=1)
         self.waveformSideButtonFrame.pack(side=Tk.RIGHT, fill=Tk.X, expand=1)
@@ -809,6 +775,7 @@ class DiagnosticPage(Tk.Frame):
         self.generalPlotFrame.pack_forget()
         self.generalSideButtonFrame.pack_forget()
         self.configFrame.pack_forget()
+        self.summaryPlotFrame.pack_forget()
         self.waveformBt.configure(style="Accent.TButton")
         self.frequencyBt.configure(style="normal.TButton")
         self.generalBt.configure(style="normal.TButton")
@@ -822,6 +789,7 @@ class DiagnosticPage(Tk.Frame):
         self.generalPlotFrame.pack_forget()
         self.generalSideButtonFrame.pack_forget()
         self.configFrame.pack_forget()
+        self.summaryPlotFrame.pack_forget()
         self.waveformBt.configure(style="normal.TButton")
         self.frequencyBt.configure(style="Accent.TButton")
         self.generalBt.configure(style="normal.TButton")
@@ -835,10 +803,82 @@ class DiagnosticPage(Tk.Frame):
         self.generalPlotFrame.pack(side=Tk.LEFT, fill=Tk.X, expand=1)
         self.generalSideButtonFrame.pack(side=Tk.RIGHT, fill=Tk.X, expand=1)
         self.configFrame.pack_forget()
+        self.summaryPlotFrame.pack_forget()
         self.waveformBt.configure(style="normal.TButton")
         self.frequencyBt.configure(style="normal.TButton")
         self.generalBt.configure(style="Accent.TButton")
         self.configBt.configure(style="normal.TButton")
+
+    def on_summary_button_clicked(self):
+        self.waveformPlotFrame.pack_forget()
+        self.waveformSideButtonFrame.pack_forget()
+        self.freqPlotFrame.pack_forget()
+        self.freqSideButtonFrame.pack_forget()
+        self.generalPlotFrame.pack_forget()
+        self.generalSideButtonFrame.pack(side=Tk.RIGHT, fill=Tk.X, expand=1)
+        self.configFrame.pack_forget()
+        self.summaryPlotFrame.pack(side=Tk.LEFT, fill=Tk.X, expand=1)
+        self.waveformBt.configure(style="normal.TButton")
+        self.frequencyBt.configure(style="normal.TButton")
+        self.generalBt.configure(style="Accent.TButton")
+        self.configBt.configure(style="normal.TButton")
+        try:
+            self.summaryFrameCanvas.plot_summary(self.parent.origin_config)
+        except:
+            pass
+    def side_band_energy_indicator(self):
+
+        try:
+            startFreq = []
+            stopFreq = []
+            rpm = self.parent.origin_config.waveform_config_struct["Speed"] / 60
+            SecondGMF = 2 * self.parent.origin_config.waveform_config_struct["GearTeeth"] * rpm
+            if len(self.parent.origin_config.sensor_config["accel"]) > 0 and (SecondGMF - 3 * rpm - 5) > 0 and (
+                    SecondGMF + 3 * rpm + 5) < (
+                    self.parent.origin_config.sensor_config["sample_rate"] / 2.56):
+                for i in range(7):
+                    startFreq.append(SecondGMF - (3 - i) * rpm - 5)
+                    stopFreq.append(SecondGMF - (3 - i) * rpm + 5)
+                CMFAmplitude = []
+                for j in range(len(self.parent.origin_config.sensor_config["accel"])):
+                    [max1, freq] = tab4_tracking_signal(self.parent.origin_config.sensor_config["accel_data"][j],
+                                                        self.parent.origin_config.sensor_config["sample_rate"],
+                                                        [startFreq[3], stopFreq[3]])
+                    CMFAmplitude.append(max1)
+                sumOfSideBand = np.zeros(len(self.parent.origin_config.sensor_config["accel"]))
+                for k in range(len(self.parent.origin_config.sensor_config["accel"])):
+                    for h in range(7):
+                        if h != 3:
+                            [max1, freq] = tab4_tracking_signal(
+                                self.parent.origin_config.sensor_config["accel_data"][k],
+                                self.parent.origin_config.sensor_config["sample_rate"],
+                                [startFreq[h], stopFreq[h]])
+                            sumOfSideBand[k] += max1
+                for k in range(len(self.parent.origin_config.sensor_config["accel"])):
+                    sumOfSideBand[k] /= CMFAmplitude[k]
+
+                # Calculate the Acc Peak
+                AccPeak = []
+                for i in range(len(self.parent.origin_config.sensor_config["accel"])):
+                    arr = filter_data(
+                        self.parent.origin_config.sensor_config["accel_data"][i],
+                        "HIGHPASS",
+                        1000,
+                        20000,
+                        self.parent.origin_config.sensor_config["sample_rate"],
+                        window="Hanning"
+                    )
+                    AccRms = rmsValue(arr)
+                    AccPeak.append(AccRms * 1.414)
+                Pd.PLT.plot_SBR_severity(self.generalFrameCanvas.canvas3, sumOfSideBand, AccPeak,
+                                         self.parent.origin_config.sensor_config["accel"])
+
+            else:
+                pass
+            self.on_general_button_clicked()
+        except Exception as ex:
+            print("Error", ex)
+
 
     def on_grid_button(self):
         global grid_flag
@@ -1111,7 +1151,7 @@ class ConfigFrame(Tk.Frame):
                                     font=('Chakra Petch', 14))
         machineCombo['value'] = (
             'GENERAL', 'STEAM TURBINE', "CRITICAL MACHINE", "GAS TURBINE", "HYDRO TURBINE", "PUMP", "COMPRESSOR",
-            "WIN-TURBINE")
+            "WIND TURBINE")
         machineCombo.grid(column=1, row=1, padx=0, pady=5, sticky="e")
 
         speedLabel = ttk.Label(machineFrame, text=_("Speed (RPM)"), style='white.TLabel')
@@ -1274,3 +1314,132 @@ class GeneralFrameCanvas():
         fig3.set_visible(True)
         self.canvas3 = FigureCanvasTkAgg(fig3, master=self.parent)
         self.canvas3.get_tk_widget().pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
+
+class SummaryFrameCanvas():
+    def __init__(self, parent: "summaryPlotFrame"):
+        self.parent = parent
+        self.creat_summary_canvas()
+    def creat_summary_canvas(self):
+        self.detailFrame = Tk.LabelFrame(self.parent, bg='white', fg="red", font="Verdana 16",
+                                    borderwidth=0)
+        self.detailFrame.pack(side=Tk.TOP, fill=Tk.BOTH)
+
+        self.detailLabel1 = Tk.Label(self.detailFrame, text=_(
+            'Chanel      A-Peak   A-PkPk   A-RMS   V-Peak   V-PkPk   V-RMS   D-Peak   D-PkPk   D-RMS   Crest   Kutorsis.'),
+                                bg='white', fg="blue", font="Verdana 12")
+        self.detailLabel1.grid(column=0, row=0, padx=0, pady=5, sticky='w')
+        self.detailLabel2 = Tk.Label(self.detailFrame, text=_('Chanel1'), bg='white', font="Verdana 12")
+        self.detailLabel2.grid(column=0, row=1, padx=0, pady=5, sticky='w')
+        self.detailLabel3 = Tk.Label(self.detailFrame, text=_('Chanel2'), bg='white', font="Verdana 12")
+        self.detailLabel3.grid(column=0, row=2, padx=0, pady=5, sticky='w')
+        self.detailLabel4 = Tk.Label(self.detailFrame, text=_('Chanel3'), bg='white', font="Verdana 12")
+        self.detailLabel4.grid(column=0, row=3, padx=0, pady=5, sticky='w')
+
+        self.graphFrame = Tk.LabelFrame(self.parent, bg='white', fg="red", borderwidth=0)
+        self.graphFrame.pack(side=Tk.TOP, fill=Tk.BOTH)
+        self.fig4 = Figure(figsize=(9.8,3.6))
+        self.ax_41 = self.fig4.add_subplot(1,2,1)
+        self.ax_41.set_position([0.01, 0.01, 0.48, 0.95])
+        self.ax_41.set_xticks([])
+        self.ax_41.set_yticks([])
+
+        self.ax_42 = self.fig4.add_subplot(1,2,2)
+        self.ax_42.set_position([0.5, 0.01, 0.48, 0.95])
+        self.ax_42.set_xticks([])
+        self.ax_42.set_yticks([])
+
+        self.fig4.set_visible(True)
+        self.canvas4 = FigureCanvasTkAgg(self.fig4, master=self.graphFrame)
+        self.canvas4.get_tk_widget().pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
+
+    def plot_summary(self, origin_config):
+        textLabel = []
+        for i in range(3):
+            try:
+                a_index = origin_config.sensor_config["accel"].index(i)
+                Apeak = max(np.abs(origin_config.sensor_config["accel_data"][a_index]))
+                APp = np.ptp(origin_config.sensor_config["accel_data"][a_index])
+                Arms = rmsValue(origin_config.sensor_config["accel_data"][a_index])
+                Acrest = Apeak / Arms
+                Akutor = kurtosis(origin_config.sensor_config["accel_data"][a_index])
+            except:
+                a_index = -1
+                Apeak = "None "
+                APp = "None "
+                Arms = "None "
+                Acrest = "None "
+                Akutor = "None "
+            try:
+                v_index = origin_config.sensor_config["vel"].index(i)
+                filtered_data = filter_data(origin_config.sensor_config["vel_data"][v_index], "BANDPASS",
+                                            dfc._RMS_HIGHPASS_FROM,
+                                            dfc._RMS_LOWPASS_TO, origin_config.sensor_config["sample_rate"],
+                                            window="Hanning")
+                Vpeak = max(np.abs(filtered_data))
+                VPp = np.ptp(filtered_data)
+                Vrms = rmsValue(filtered_data)
+                Vcrest = Vpeak / Vrms
+                Vkutor = kurtosis(filtered_data)
+            except:
+                v_index = -1
+                Vpeak = "None "
+                VPp = "None "
+                Vrms = "None "
+                Vcrest = "None "
+                Vkutor = "None "
+            try:
+                d_index = origin_config.sensor_config["dis"].index(i)
+                Dpeak = max(np.abs(origin_config.sensor_config["displacement_data"][d_index]))
+                DPp = np.ptp(origin_config.sensor_config["displacement_data"][d_index])
+                Drms = rmsValue(origin_config.sensor_config["displacement_data"][d_index])
+                Dcrest = Dpeak / Drms
+                Dkutor = kurtosis(origin_config.sensor_config["displacement_data"][d_index])
+            except:
+                d_index = -1
+                Dpeak = "None "
+                DPp = "None "
+                Drms = "None "
+                Dcrest = "None "
+                Dkutor = "None "
+            textLabel.append(
+                f'Chanel{i + 1}     {str(Apeak)[:5]}     {str(APp)[0:5]}    {str(Arms)[0:5]}    {str(Vpeak)[0:5]}     {str(VPp)[0:5]}    {str(Vrms)[0:5]}    {str(Dpeak)[0:5]}     {str(DPp)[0:5]}    {str(Drms)[0:5]}    {str(Acrest)[0:5]}    {str(Akutor)[0:5]}')
+        self.detailLabel2.configure(text=textLabel[0])
+        self.detailLabel3.configure(text=textLabel[1])
+        self.detailLabel4.configure(text=textLabel[2])
+
+        if origin_config.waveform_config_struct["MachineType"] == "GENERAL":
+            image = plt.imread(f"{current_directory}\image\IO10816-1.png")
+            image1 = plt.imread(f"{current_directory}\image\gE_picture.png")
+        elif origin_config.waveform_config_struct["MachineType"] == "STEAM TURBINE":
+            image = plt.imread(f"{current_directory}\image\Iso10816-2.png")
+            image1 = plt.imread(f"{current_directory}\image\Iso10816-2-dis.png")
+        elif origin_config.waveform_config_struct["MachineType"] == "CRITICAL MACHINE":
+            image = plt.imread(f"{current_directory}\image\Iso10816-3.png")
+            image1 = plt.imread(f"{current_directory}\image\Iso10816-3-dis.png")
+        elif origin_config.waveform_config_struct["MachineType"] == "GAS TURBINE":
+            image = plt.imread(f"{current_directory}\image\Iso10816-4.png")
+            image1 = plt.imread(f"{current_directory}\image\Iso10816-4.png")
+        elif origin_config.waveform_config_struct["MachineType"] == "HYDRO TURBINE":
+            image = plt.imread(f"{current_directory}\image\Iso10816-5.png")
+            image1 = plt.imread(f"{current_directory}\image\Iso10816-5mount.png")
+        elif origin_config.waveform_config_struct["MachineType"] == "PUMP":
+            image = plt.imread(f"{current_directory}\image\Iso10816-7.png")
+            image1 = plt.imread(f"{current_directory}\image\Iso10816-7.png")
+        elif origin_config.waveform_config_struct["MachineType"] == "COMPRESSOR":
+            image = plt.imread(f"{current_directory}\image\Iso10816-8h.png")
+            image1 = plt.imread(f"{current_directory}\image\Iso10816-8v.png")
+        elif origin_config.waveform_config_struct["MachineType"] == "WIND TURBINE":
+            image = plt.imread(f"{current_directory}\image\iso10816-21.png")
+            image1 = plt.imread(f"{current_directory}\image\iso10816-21.png")
+
+        ax_41, ax_42 = self.fig4.get_axes()
+        ax_41.clear()
+        ax_41.imshow(image)
+        ax_41.axis('off')
+        ax_41.set_visible(True)
+
+        ax_42.clear()
+        ax_42.imshow(image1)
+        ax_42.axis('off')
+        ax_42.set_visible(True)
+        self.canvas4.draw()

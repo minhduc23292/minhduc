@@ -4,16 +4,7 @@ from tkinter import ttk
 from tkinter import PhotoImage
 import os
 from i18n import _
-import matplotlib
 from datetime import datetime
-matplotlib.use('TKAgg')
-import matplotlib.pyplot as plt
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
-from matplotlib.figure import Figure
-from mpl_toolkits.mplot3d import Axes3D, proj3d
-from Calculation.calculate import *
-# from ui.Diagnostic.DiagnosticPage import DiagnosticPage
-import PlotData.PlotData as Pd
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -86,7 +77,7 @@ class HomePage(Tk.Frame):
         self.historyButton.place(relx=0.578, rely=0.59, width=188, height=125)
 
         self.settingButton = ttk.Button(self.homeFrame, style='home.TButton', text="Settings", image=self.smallSePhoto,
-                                        compound=Tk.LEFT, command=self.move_to_diagnostic_page)
+                                        compound=Tk.LEFT, command=self.move_to_setting_page)
         self.settingButton.place(relx=0.76, rely=0.86, width=210, height=52)
 
         self.style.configure('home.TButton', font=('Chakra Petch', 15), bordercolor='black', borderwidth=4,
@@ -99,6 +90,10 @@ class HomePage(Tk.Frame):
     def move_to_diagnostic_page(self):
         self.homeFrame.destroy()
         self.parent.go_to_diagnostic_page()
+
+    def move_to_setting_page(self):
+        self.homeFrame.destroy()
+        self.parent.go_to_setting_page()
 
     def update_time(self):
         now = datetime.now()

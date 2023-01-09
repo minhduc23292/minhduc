@@ -6,6 +6,7 @@ from ui.home.HomePage import HomePage
 import sv_ttk
 from ui.Diagnostic.DiagnosticPage import DiagnosticPage
 from ui.home.HomePage import HomePage
+from ui.Settingpage.SettingPage import SettingPage
 
 class TotalConfig(object):
     def __init__(self):
@@ -25,9 +26,9 @@ class TotalConfig(object):
         }
 
         self.project_struct = {
-            "CompanyName": "",
-            "ProjectCode": "",
-            "Date": ""
+            "CompanyName": "No_name",
+            "ProjectCode": "A1B2C3",
+            "Note": "None"
         }
 
         self.waveform_config_struct = {
@@ -128,10 +129,14 @@ class Application(Tk.Frame):
     def go_to_diagnostic_page(self):
         DiagnosticPage(self)
 
+    def go_to_setting_page(self):
+        SettingPage(self)
+
 if __name__=='__main__':
     root=Tk.Tk()
     sv_ttk.set_theme("light")
     root.geometry("1024x600")
+    # root.call("wm", "attributes", ".", "-fullscreen", "true")
     root.resizable(0, 0)
     root.option_add('ChakraPetch', '20')
     root.title('OTANI ANALYZER')
