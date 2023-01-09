@@ -1,9 +1,9 @@
 import tkinter as Tk
 import sv_ttk
 from tkinter import ttk
-from tkinter import PhotoImage
 import os
 from i18n import _
+from image.image import ImageAdrr
 from datetime import datetime
 from typing import TYPE_CHECKING
 
@@ -19,6 +19,16 @@ class HomePage(Tk.Frame):
         self.parent = parent
         sv_ttk.set_theme("light")
         now = datetime.now()
+        imageAddress = ImageAdrr()
+        self.settingPhoto = imageAddress.settingPhoto
+        self.smallSePhoto = imageAddress.smallSettingPhoto
+        self.diagnosPhoto = imageAddress.diagnosPhoto
+        self.balancePhoto = imageAddress.balancePhoto
+        self.historyPhoto = imageAddress.historyPhoto
+        self.resonacePhoto = imageAddress.resonacePhoto
+        self.low_bat = imageAddress.low_bat
+        self.half_bat = imageAddress.half_bat
+        self.full_bat = imageAddress.full_bat
         self.current_time = now.strftime("%H:%M")
         self.creat_home_page(self.parent.origin_config)
 
@@ -26,15 +36,6 @@ class HomePage(Tk.Frame):
         self.style = ttk.Style(self.parent)
         self.style.configure('home.TLabel', background='white', font=('Chakra Petch', 40))
         self.style.configure('bat.TLabel', background='grey95', font=('Chakra Petch', 12))
-        self.settingPhoto = PhotoImage(file=f"{current_directory}\image\setting.png")
-        self.smallSePhoto = PhotoImage(file=f"{current_directory}\image\small_setting.png")
-        self.diagnosPhoto = PhotoImage(file=f"{current_directory}\image\diagnostic.png")
-        self.balancePhoto = PhotoImage(file=f"{current_directory}\image\Balance.png")
-        self.historyPhoto = PhotoImage(file=f"{current_directory}\image\History.png")
-        self.resonacePhoto = PhotoImage(file=f"{current_directory}\image\\resonance.png")
-        self.low_bat = PhotoImage(file=f"{current_directory}\image\low_bat.png")
-        self.half_bat = PhotoImage(file=f"{current_directory}\image\half_bat.png")
-        self.full_bat = PhotoImage(file=f"{current_directory}\image\\full_bat.png")
 
         self.homeFrame = Tk.Frame(self.parent, bd=1, bg='white', width=1024, height=600)
         self.homeFrame.pack()

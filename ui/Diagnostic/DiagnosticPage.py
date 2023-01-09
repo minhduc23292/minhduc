@@ -1,7 +1,6 @@
 import tkinter as Tk
 import sv_ttk
 from tkinter import ttk
-from tkinter import PhotoImage
 import os
 from i18n import _
 import matplotlib
@@ -15,6 +14,7 @@ from Calculation.calculate import *
 from ui.creatFigure.creatFigure import creatFig
 import PlotData.PlotData as Pd
 from keyboard.keyboard import KeyBoard
+from image.image import ImageAdrr
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -45,15 +45,21 @@ class DiagnosticPage(Tk.Frame):
         self.current_time = now.strftime("%H:%M")
         self.ZoomCanvas = Tk.Canvas()
         self.freqFuntionCanvas = Tk.Canvas()
-        self.settingPhoto = PhotoImage(file=f"{current_directory}\image\setting.png")
-        self.homePhoto = PhotoImage(file=f"{current_directory}\image\home.png")
-        self.arrowPhoto = PhotoImage(file=f"{current_directory}\image\\arrow.png")
-        self.low_bat = PhotoImage(file=f"{current_directory}\image\low_bat.png")
-        self.half_bat = PhotoImage(file=f"{current_directory}\image\half_bat.png")
-        self.full_bat = PhotoImage(file=f"{current_directory}\image\\full_bat.png")
-        self.waitingPhoto = PhotoImage(file=f"{current_directory}\image\waiting.png")
-        self.zoomPhoto = PhotoImage(file=f"{current_directory}\image\zoom.png")
-        self.savePhoto = PhotoImage(file=f"{current_directory}\image\save.png")
+        imageAddress = ImageAdrr()
+        self.settingPhoto = imageAddress.settingPhoto
+        self.homePhoto = imageAddress.homePhoto
+        self.arrowPhoto = imageAddress.arrowPhoto
+        self.low_bat = imageAddress.low_bat
+        self.half_bat = imageAddress.half_bat
+        self.full_bat = imageAddress.full_bat
+        self.waitingPhoto = imageAddress.waitingPhoto
+        self.zoomPhoto = imageAddress.zoomPhoto
+        self.savePhoto = imageAddress.savePhoto
+        self.zoomIn = imageAddress.zoomIn
+        self.zoomOut = imageAddress.zoomOut
+        self.panLeft = imageAddress.panLeft
+        self.panRight = imageAddress.panRight
+        self.function1 = imageAddress.fuction1
 
         self.btstyle = ttk.Style()
         self.btstyle.configure('normal.TButton', font=('Chakra Petch', 12), borderwidth=5, justify=Tk.CENTER)
@@ -416,36 +422,33 @@ class DiagnosticPage(Tk.Frame):
             blink = 1
 
     def creat_zoom_button_canvas(self, widget, draw_canvas, x_pos, y_pos):
-        self.photo15 = PhotoImage(file=f"{current_directory}\image\zoom.png")
-        self.photo16 = PhotoImage(file=f"{current_directory}\image\zoom.png")
-        self.photo17 = PhotoImage(file=f"{current_directory}\image\zoom.png")
-        self.photo18 = PhotoImage(file=f"{current_directory}\image\zoom.png")
+
         self.zoomstyle=ttk.Style()
         self.zoomstyle.configure('zoom.Accent.TButton', font=('Chakra Petch', 9), justify=Tk.CENTER)
         self.ZoomCanvas = Tk.Canvas(widget, width=90, height=312, bg='white')
         self.ZoomCanvas.place(x=x_pos, y=y_pos)
-        button1 = ttk.Button(self.ZoomCanvas, text=_("ZOOM IN"), style='zoom.Accent.TButton', image=self.photo15,
+        button1 = ttk.Button(self.ZoomCanvas, text=_("ZOOM IN"), style='zoom.Accent.TButton', image=self.zoomIn,
                              compound=Tk.TOP,
                              command=lambda: self.view_change(draw_canvas, _type='IN'))
         button1.place(relx=0, rely=0, width=88, height=75)
-        button1.image = self.photo15
+        button1.image = self.zoomIn
 
-        button2 = ttk.Button(self.ZoomCanvas, text=_("ZOOM OUT"), style='zoom.Accent.TButton', image=self.photo16,
+        button2 = ttk.Button(self.ZoomCanvas, text=_("ZOOM OUT"), style='zoom.Accent.TButton', image=self.zoomOut,
                              compound=Tk.TOP,
                              command=lambda: self.view_change(draw_canvas, _type='OUT'))
         button2.place(relx=0, rely=0.247, width=88, height=75)
-        button2.image = self.photo16
-        button3 = ttk.Button(self.ZoomCanvas, text=_("PAN LEFT"), style='zoom.Accent.TButton', image=self.photo17,
+        button2.image = self.zoomOut
+        button3 = ttk.Button(self.ZoomCanvas, text=_("PAN LEFT"), style='zoom.Accent.TButton', image=self.panLeft,
                              compound=Tk.TOP,
                              command=lambda: self.view_change(draw_canvas, _type='LEFT'))
         button3.place(relx=0, rely=0.494, width=88, height=75)
-        button3.image = self.photo17
+        button3.image = self.panLeft
 
-        button4 = ttk.Button(self.ZoomCanvas, text=_("PAN RIGHT"), style='zoom.Accent.TButton', image=self.photo18,
+        button4 = ttk.Button(self.ZoomCanvas, text=_("PAN RIGHT"), style='zoom.Accent.TButton', image=self.panRight,
                              compound=Tk.TOP,
                              command=lambda: self.view_change(draw_canvas, _type='RIGHT'))
         button4.place(relx=0, rely=0.742, width=88, height=75)
-        button4.image = self.photo18
+        button4.image = self.panRight
 
     def view_change(self, canvas, _type):
         axes_arr = canvas.figure.get_axes()
@@ -491,36 +494,33 @@ class DiagnosticPage(Tk.Frame):
             self.freqFuntionCanvas.destroy()
 
     def draw_frequency_function_button_canvas(self, widget, draw_canvas, x_pos, y_pos):
-        self.photo19 = PhotoImage(file=f"{current_directory}\image\zoom.png")
-        self.photo20 = PhotoImage(file=f"{current_directory}\image\zoom.png")
-        self.photo21 = PhotoImage(file=f"{current_directory}\image\zoom.png")
-        self.photo22 = PhotoImage(file=f"{current_directory}\image\zoom.png")
+
         self.freqFuntionCanvas = Tk.Canvas(widget, width=90, height=312, bg='white')
         self.freqFuntionCanvas.place(x=x_pos, y=y_pos)
-        button1 = ttk.Button(self.freqFuntionCanvas, text=_("NONE"), style='custom.Accent.TButton', image=self.photo19,
+        button1 = ttk.Button(self.freqFuntionCanvas, text=_("NONE"), style='custom.Accent.TButton', image=self.function1,
                              compound=Tk.TOP,
                              command=self.on_no_filter_button_clicked)
         button1.place(relx=0, rely=0, width=88, height=75)
-        button1.image = self.photo19
+        button1.image = self.function1
 
         button2 = ttk.Button(self.freqFuntionCanvas, text=_("FILTER"), style='custom.Accent.TButton',
-                             image=self.photo20,
+                             image=self.function1,
                              compound=Tk.TOP,
                              command=self.on_filter_button_clicked)
         button2.place(relx=0, rely=0.247, width=88, height=75)
-        button2.image = self.photo20
+        button2.image = self.function1
         button3 = ttk.Button(self.freqFuntionCanvas, text=_("ENVELOP"), style='custom.Accent.TButton',
-                             image=self.photo21,
+                             image=self.function1,
                              compound=Tk.TOP,
                              command=self.on_envelop_button_clicked)
         button3.place(relx=0, rely=0.494, width=88, height=75)
-        button3.image = self.photo21
+        button3.image = self.function1
 
-        button4 = ttk.Button(self.freqFuntionCanvas, text=_("PSD"), style='custom.Accent.TButton', image=self.photo22,
+        button4 = ttk.Button(self.freqFuntionCanvas, text=_("PSD"), style='custom.Accent.TButton', image=self.function1,
                              compound=Tk.TOP,
                              command=self.on_psd_button_click)
         button4.place(relx=0, rely=0.742, width=88, height=75)
-        button4.image = self.photo22
+        button4.image = self.function1
 
     def on_no_filter_button_clicked(self):
         global grid_flag
@@ -1353,6 +1353,7 @@ class SummaryFrameCanvas():
         self.canvas4.get_tk_widget().pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
 
     def plot_summary(self, origin_config):
+        imageAdress=ImageAdrr()
         textLabel = []
         for i in range(3):
             try:
@@ -1408,29 +1409,29 @@ class SummaryFrameCanvas():
         self.detailLabel4.configure(text=textLabel[2])
 
         if origin_config.waveform_config_struct["MachineType"] == "GENERAL":
-            image = plt.imread(f"{current_directory}\image\IO10816-1.png")
-            image1 = plt.imread(f"{current_directory}\image\gE_picture.png")
+            image = imageAdress.iso1Photo
+            image1 = imageAdress.gePhoto
         elif origin_config.waveform_config_struct["MachineType"] == "STEAM TURBINE":
-            image = plt.imread(f"{current_directory}\image\Iso10816-2.png")
-            image1 = plt.imread(f"{current_directory}\image\Iso10816-2-dis.png")
+            image = imageAdress.iso2vPhoto
+            image1 = imageAdress.iso2dPhoto
         elif origin_config.waveform_config_struct["MachineType"] == "CRITICAL MACHINE":
-            image = plt.imread(f"{current_directory}\image\Iso10816-3.png")
-            image1 = plt.imread(f"{current_directory}\image\Iso10816-3-dis.png")
+            image = imageAdress.iso3vPhoto
+            image1 = imageAdress.iso3dPhoto
         elif origin_config.waveform_config_struct["MachineType"] == "GAS TURBINE":
-            image = plt.imread(f"{current_directory}\image\Iso10816-4.png")
-            image1 = plt.imread(f"{current_directory}\image\Iso10816-4.png")
+            image = imageAdress.iso4Photo
+            image1 = imageAdress.iso4Photo
         elif origin_config.waveform_config_struct["MachineType"] == "HYDRO TURBINE":
-            image = plt.imread(f"{current_directory}\image\Iso10816-5.png")
-            image1 = plt.imread(f"{current_directory}\image\Iso10816-5mount.png")
+            image = imageAdress.iso5vPhoto
+            image1 = imageAdress.iso5dPhoto
         elif origin_config.waveform_config_struct["MachineType"] == "PUMP":
-            image = plt.imread(f"{current_directory}\image\Iso10816-7.png")
-            image1 = plt.imread(f"{current_directory}\image\Iso10816-7.png")
+            image = imageAdress.iso7Photo
+            image1 = imageAdress.iso7Photo
         elif origin_config.waveform_config_struct["MachineType"] == "COMPRESSOR":
-            image = plt.imread(f"{current_directory}\image\Iso10816-8h.png")
-            image1 = plt.imread(f"{current_directory}\image\Iso10816-8v.png")
+            image = imageAdress.iso8hPhoto
+            image1 = imageAdress.iso8vPhoto
         elif origin_config.waveform_config_struct["MachineType"] == "WIND TURBINE":
-            image = plt.imread(f"{current_directory}\image\iso10816-21.png")
-            image1 = plt.imread(f"{current_directory}\image\iso10816-21.png")
+            image = imageAdress.iso21Photo
+            image1 = imageAdress.iso21Photo
 
         ax_41, ax_42 = self.fig4.get_axes()
         ax_41.clear()

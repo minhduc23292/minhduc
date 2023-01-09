@@ -1,7 +1,6 @@
 import tkinter as Tk
 # import sv_ttk
 from tkinter import ttk
-from tkinter import PhotoImage
 import os
 from i18n import _
 from datetime import datetime
@@ -16,6 +15,7 @@ import pms.popMessage as pms
 from pathlib import Path
 import json
 import sys
+from image.image import ImageAdrr
 current_directory = os.getcwd()
 parent_directory = os.path.dirname(os.path.dirname(current_directory))
 
@@ -32,15 +32,11 @@ class SettingPage(Tk.Frame):
         self.parent = parent
         now = datetime.now()
         self.current_time = now.strftime("%H:%M")
-        self.settingPhoto = PhotoImage(file=f"{current_directory}\image\setting.png")
-        self.homePhoto = PhotoImage(file=f"{current_directory}\image\home.png")
-        self.arrowPhoto = PhotoImage(file=f"{current_directory}\image\\arrow.png")
-        self.low_bat = PhotoImage(file=f"{current_directory}\image\low_bat.png")
-        self.half_bat = PhotoImage(file=f"{current_directory}\image\half_bat.png")
-        self.full_bat = PhotoImage(file=f"{current_directory}\image\\full_bat.png")
-        self.waitingPhoto = PhotoImage(file=f"{current_directory}\image\waiting.png")
-        self.zoomPhoto = PhotoImage(file=f"{current_directory}\image\zoom.png")
-        self.savePhoto = PhotoImage(file=f"{current_directory}\image\save.png")
+        imageAddress = ImageAdrr()
+        self.homePhoto = imageAddress.homePhoto
+        self.low_bat = imageAddress.low_bat
+        self.half_bat = imageAddress.half_bat
+        self.full_bat = imageAddress.full_bat
 
         self.btstyle = ttk.Style()
         self.btstyle.configure('normal.TButton', font=('Chakra Petch', 12), borderwidth=5, justify=Tk.CENTER)
@@ -211,11 +207,13 @@ class WifiConfig(Tk.Frame):
         self.style.configure('wifi.TLabel', font=('Chakra Petch', 13))
         self.style.configure('wifi.TLabelframe', font=('Chakra Petch', 15))
         self.style.configure('wifi.TButton', font=('Chakra Petch', 15), width=40, height=40)
+
         super().__init__(parent, width=1024, height=350, bg="white", bd=0)
         self.creat_wifi_page()
         self.focus()
 
     def creat_wifi_page(self):
+        imageAddress = ImageAdrr()
         connectingSsid = None
         infoText = "No wifi connection"
         self.wilessParam1 = Tk.StringVar()
@@ -223,16 +221,17 @@ class WifiConfig(Tk.Frame):
         try:
             connectingSsid = wifi.wiless._get_wifi_status()
             infoText = f'WIFI: {connectingSsid["ssid"]}'
-            self.wifiImage = PhotoImage(file=f"{current_directory}\image\wifi-strength-off-outline.png")
+
+            self.wifiImage = imageAddress.noWifiImage
             if connectingSsid["ssid"] != "":
                 if connectingSsid["quality"] > 0.7:
-                    self.wifiImage = PhotoImage(file=f"{current_directory}\image\wifi-strength-4.png")
+                    self.wifiImage = imageAddress.strongWifiImage
                 elif connectingSsid["quality"] <= 0.7 and connectingSsid["quality"] > 0.3:
-                    self.wifiImage = PhotoImage(file=f"{current_directory}\image\wifi-strength-3.png")
+                    self.wifiImage = imageAddress.mediumWifiImage
                 else:
-                    self.wifiImage = PhotoImage(file=f"{current_directory}\image\wifi-strength-1.png")
+                    self.wifiImage = imageAddress.weakWifiImage
         except:
-            self.wifiImage = PhotoImage(file=f"{current_directory}\image\wifi-strength-off-outline.png")
+            self.wifiImage = imageAddress.noWifiImage
 
         wifiLableFrame = ttk.LabelFrame(self, text='Wifi config', style="wifi.TLabelframe")
         wifiLableFrame.grid(column=0, row=0, padx=10, pady=5, columnspan=2, sticky='wn')
@@ -314,13 +313,14 @@ class Power(Tk.Frame):
         self.focus()
 
     def creat_power_page(self):
-        shutdownImage=PhotoImage(file=f"{current_directory}\image\Shutdown.png")
+        imageAdress=ImageAdrr()
+        shutdownImage=imageAdress.shutdownImage
         shutdownButton=ttk.Button(self, text="SHUTDOWN", compound=Tk.TOP, image=shutdownImage, style="power.TButton",
                                   command=self.on_shutdown_button_clicked)
         shutdownButton.image=shutdownImage
         shutdownButton.place(x=280, y=140, width=190, height=172)
 
-        restartImage = PhotoImage(file=f"{current_directory}\image\Restart.png")
+        restartImage = imageAdress.restartImage
         restartButton = ttk.Button(self, text="RESTART", compound=Tk.TOP, image=restartImage, style="power.TButton",
                                    command=self.on_restart_button_clicked)
         restartButton.image=restartImage
