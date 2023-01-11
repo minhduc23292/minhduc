@@ -167,7 +167,7 @@ class DiagnosticPage(Tk.Frame):
         self.homeBt.image = self.homePhoto
 
         self.configBt = ttk.Button(self.featureFrame, style='normal.TButton', text="Config", \
-                                   command=lambda: self.creat_diagnostic_config_panel())
+                                   command=lambda: self.on_config_button_clicked())
         self.configBt.place(relx=0.128, rely=0.018, width=115, height=72)
 
         self.arrowLabel = ttk.Label(self.featureFrame, style='normal.TLabel', image=self.arrowPhoto)
@@ -267,7 +267,7 @@ class DiagnosticPage(Tk.Frame):
         generalSummatyBt.place(relx=0, rely=0.8, width=88, height=75)
 
         generalGearIndicatorBt = ttk.Button(self.generalSideButtonFrame, style='custom.Accent.TButton',
-                                            text="GEAR\nINDICATOR", \
+                                            text="RESERVE", state='disable',
                                             command=self.side_band_energy_indicator)
         generalGearIndicatorBt.place(relx=0, rely=0.63, width=88, height=75)
 
@@ -669,26 +669,9 @@ class DiagnosticPage(Tk.Frame):
         if from_config:
             self.config.update_diagnostic_struct(self.parent.origin_config)
             self.configFrame.pack_forget()
-            self.on_waveform_button_clicked()
+            # self.on_waveform_button_clicked()
         self.read_sensor()
-
-        def clean_frame_for_waveform_panel():
-            self.waveformPlotFrame.pack(side=Tk.LEFT, fill=Tk.X, expand=1)
-            self.waveformSideButtonFrame.pack(side=Tk.RIGHT, fill=Tk.X, expand=1)
-            self.freqPlotFrame.pack_forget()
-            self.freqSideButtonFrame.pack_forget()
-            self.generalPlotFrame.pack_forget()
-            self.generalSideButtonFrame.pack_forget()
-            self.configFrame.pack_forget()
-
-        clean_frame_for_waveform_panel()
-        # self.configFrame = Tk.Frame(self.mainFrame, bd=1, bg='white', width=1024, height=520)
-        # self.configFrame.pack()
-        # self.configFrame.pack_propagate(0)
-        # loadingFrame=Tk.Frame(self.configFrame, bd=1, bg='grey95', width=1024, height=520)
-        # loadingFrame = ttk.Label(self.configFrame, style='normal.TLabel', text="Waiting...", image=self.waitingPhoto,
-        #                       compound=Tk.TOP)
-        # loadingFrame.place(relx=0.43, rely=0.35)
+        self.on_waveform_button_clicked()
 
         Pd.PLT.plot_all_chanel(self.waveformFrameCanvas.canvas1,
                                self.parent.origin_config.sensor_config["sensor_data"][0],
@@ -702,6 +685,9 @@ class DiagnosticPage(Tk.Frame):
                         self.parent.origin_config.sensor_config["sample_rate"],
                         self.parent.origin_config.sensor_config["unit"][:3],
                         [1, 2, 3], win_var="Hanning")
+
+
+    def general_indicator_plot(self):
         try:
             vel_arr_data = []
             if len(self.parent.origin_config.sensor_config["vel"]) > 0:
@@ -722,8 +708,9 @@ class DiagnosticPage(Tk.Frame):
 
             else:
                 Pd.PLT.clear_axes(self.generalFrameCanvas.canvas3, 2)
-        except:
-            pass
+        except Exception as ex:
+            print(ex)
+
 
         try:
             _sample_rate = self.parent.origin_config.sensor_config["sample_rate"]
@@ -750,8 +737,8 @@ class DiagnosticPage(Tk.Frame):
                                         self.parent.origin_config.sensor_config["accel"], dfc._GE_FMAX,
                                         rpmVal, bearing_dia)
                 self.side_band_energy_indicator()
-        except:
-            pass
+        except Exception as ex:
+            print(ex)
         try:
             if len(self.parent.origin_config.sensor_config["dis"]) < 1:
                 Pd.PLT.clear_axes(self.generalFrameCanvas.canvas3, 3)
@@ -759,14 +746,22 @@ class DiagnosticPage(Tk.Frame):
                 Pd.PLT.plot_displacement(self.generalFrameCanvas.canvas3,
                                          self.parent.origin_config.sensor_config["displacement_data"],
                                          self.parent.origin_config.sensor_config["dis"])
-        except:
-            pass
+        except Exception as ex:
+            print(ex)
+    def on_config_button_clicked(self):
+        self.waveformPlotFrame.pack_forget()
+        self.waveformSideButtonFrame.pack_forget()
+        self.freqPlotFrame.pack_forget()
+        self.freqSideButtonFrame.pack_forget()
+        self.generalPlotFrame.pack_forget()
+        self.generalSideButtonFrame.pack_forget()
+        self.configFrame.pack(side=Tk.LEFT, fill=Tk.X, expand=1)
+        self.summaryPlotFrame.pack_forget()
+        self.waveformBt.configure(style="normal.TButton")
+        self.frequencyBt.configure(style="normal.TButton")
+        self.generalBt.configure(style="normal.TButton")
+        self.configBt.configure(style="Accent.TButton")
 
-
-        try:
-            self.summaryFrameCanvas.plot_summary(self.parent.origin_config)
-        except:
-            pass
     def on_waveform_button_clicked(self):
         self.waveformPlotFrame.pack(side=Tk.LEFT, fill=Tk.X, expand=1)
         self.waveformSideButtonFrame.pack(side=Tk.RIGHT, fill=Tk.X, expand=1)
@@ -808,6 +803,7 @@ class DiagnosticPage(Tk.Frame):
         self.frequencyBt.configure(style="normal.TButton")
         self.generalBt.configure(style="Accent.TButton")
         self.configBt.configure(style="normal.TButton")
+        self.general_indicator_plot()
 
     def on_summary_button_clicked(self):
         self.waveformPlotFrame.pack_forget()
@@ -823,6 +819,7 @@ class DiagnosticPage(Tk.Frame):
         self.generalBt.configure(style="Accent.TButton")
         self.configBt.configure(style="normal.TButton")
         try:
+            # self.summaryFrameCanvas = SummaryFrameCanvas(self.summaryPlotFrame)
             self.summaryFrameCanvas.plot_summary(self.parent.origin_config)
         except:
             pass
@@ -875,7 +872,6 @@ class DiagnosticPage(Tk.Frame):
 
             else:
                 pass
-            self.on_general_button_clicked()
         except Exception as ex:
             print("Error", ex)
 
@@ -1408,6 +1404,7 @@ class SummaryFrameCanvas():
         self.detailLabel3.configure(text=textLabel[1])
         self.detailLabel4.configure(text=textLabel[2])
 
+        print("haha", origin_config.waveform_config_struct["MachineType"])
         if origin_config.waveform_config_struct["MachineType"] == "GENERAL":
             image = imageAdress.iso1Photo
             image1 = imageAdress.gePhoto

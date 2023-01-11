@@ -70,7 +70,7 @@ class HomePage(Tk.Frame):
 
         self.resonanceButton = ttk.Button(self.homeFrame, style='home.TButton', text="Resonance\nAnalysis",
                                           image=self.resonacePhoto,
-                                          compound=Tk.TOP, command=self.move_to_diagnostic_page)
+                                          compound=Tk.TOP, command=self.move_to_resonance_page)
         self.resonanceButton.place(relx=0.21, rely=0.59, width=188, height=125)
 
         self.historyButton = ttk.Button(self.homeFrame, style='home.TButton', text="History", image=self.historyPhoto,
@@ -95,6 +95,10 @@ class HomePage(Tk.Frame):
     def move_to_setting_page(self):
         self.homeFrame.destroy()
         self.parent.go_to_setting_page()
+
+    def move_to_resonance_page(self):
+        self.homeFrame.destroy()
+        self.parent.go_to_resonance_page()
 
     def update_time(self):
         now = datetime.now()

@@ -7,6 +7,7 @@ import sv_ttk
 from ui.Diagnostic.DiagnosticPage import DiagnosticPage
 from ui.home.HomePage import HomePage
 from ui.Settingpage.SettingPage import SettingPage
+from ui.ResonanceModule.ResonaceModule import Resonance
 
 class TotalConfig(object):
     def __init__(self):
@@ -131,6 +132,9 @@ class Application(Tk.Frame):
 
     def go_to_setting_page(self):
         SettingPage(self)
+
+    def go_to_resonance_page(self):
+        Resonance(self)
 
 if __name__=='__main__':
     root=Tk.Tk()

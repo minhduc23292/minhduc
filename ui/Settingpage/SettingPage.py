@@ -65,7 +65,6 @@ class SettingPage(Tk.Frame):
 
         self.creat_setting_feature_panel()
         self.notebook = CreatTab(self.settingFrame)
-        # self.creat_general_setting_tab()
         self.generalConfigFrame=GeneralConfig(self.notebook.tab1, self.parent.origin_config)
         self.generalConfigFrame.pack(side=Tk.LEFT, fill=Tk.BOTH, expand=1)
         self.wifiConfigFrame=WifiConfig(self.notebook.tab2).pack(side=Tk.LEFT, fill=Tk.BOTH, expand=1)
