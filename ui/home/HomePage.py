@@ -41,9 +41,9 @@ class HomePage(Tk.Frame):
         self.homeFrame.pack()
         self.homeFrame.pack_propagate(0)
 
-        self.batFrame = Tk.Frame(self.homeFrame, bd=1, bg='grey95', width=117, height=40)
+        self.batFrame = Tk.Frame(self.homeFrame, bd=1, bg='grey95', width=117, height=35)
         self.batFrame.pack()
-        self.batFrame.place(relx=0.875, rely=0.01)
+        self.batFrame.place(relx=0.89, rely=0.0)
         self.batFrame.pack_propagate(0)
 
         homeLabel = ttk.Label(self.homeFrame, style='home.TLabel', text="Otani Analyzer", image=self.settingPhoto,

@@ -116,9 +116,9 @@ class DiagnosticPage(Tk.Frame):
         self.generalSideButtonFrame.pack_propagate(0)
         self.generalSideButtonFrame.pack_forget()
 
-        self.batFrame = Tk.Frame(self.featureFrame, bd=1, bg='grey95', width=117, height=40)
+        self.batFrame = Tk.Frame(self.featureFrame, bd=1, bg='grey95', width=117, height=35)
         self.batFrame.pack()
-        self.batFrame.place(relx=0.875, rely=0.01)
+        self.batFrame.place(relx=0.89, rely=0.0)
         self.batFrame.pack_propagate(0)
         self.creat_diagnostic_page()
 
@@ -163,15 +163,18 @@ class DiagnosticPage(Tk.Frame):
         self.homeBt = ttk.Button(self.featureFrame, style='normal.TButton', text="Home", image=self.homePhoto,
                                  compound=Tk.TOP, \
                                  command=self.go_home)
-        self.homeBt.place(relx=0.015, rely=0.018, width=100, height=72)
+        self.homeBt.place(relx=0, rely=0.018, width=100, height=72)
         self.homeBt.image = self.homePhoto
+
+        barrie=Tk.Frame(self.featureFrame, width=3, height=72, background='grey')
+        barrie.place(relx=0.11, rely=0.018)
 
         self.configBt = ttk.Button(self.featureFrame, style='normal.TButton', text="Config", \
                                    command=lambda: self.on_config_button_clicked())
-        self.configBt.place(relx=0.128, rely=0.018, width=115, height=72)
+        self.configBt.place(relx=0.122, rely=0.018, width=115, height=72)
 
         self.arrowLabel = ttk.Label(self.featureFrame, style='normal.TLabel', image=self.arrowPhoto)
-        self.arrowLabel.place(relx=0.242, rely=0.25)
+        self.arrowLabel.place(relx=0.238, rely=0.25)
         self.arrowLabel.image = self.arrowPhoto
 
         self.waveformBt = ttk.Button(self.featureFrame, style='normal.TButton', text="Waveform\nAnalysis", \
@@ -1404,7 +1407,6 @@ class SummaryFrameCanvas():
         self.detailLabel3.configure(text=textLabel[1])
         self.detailLabel4.configure(text=textLabel[2])
 
-        print("haha", origin_config.waveform_config_struct["MachineType"])
         if origin_config.waveform_config_struct["MachineType"] == "GENERAL":
             image = imageAdress.iso1Photo
             image1 = imageAdress.gePhoto

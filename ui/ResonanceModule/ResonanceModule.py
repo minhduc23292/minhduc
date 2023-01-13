@@ -53,14 +53,16 @@ class Resonance(Tk.Frame):
         self.low_bat = imageAddress.low_bat
         self.half_bat = imageAddress.half_bat
         self.full_bat = imageAddress.full_bat
-
+        self.arrowPhoto = imageAddress.arrowPhoto
+        
         self.btstyle = ttk.Style()
-        self.btstyle.configure('normal.TButton', font=('Chakra Petch', 12), borderwidth=5, justify=Tk.CENTER)
+        self.btstyle.configure('normal.TButton', font=('Chakra Petch', 13), borderwidth=5, justify=Tk.CENTER)
         self.btstyle.map('normal.TButton', foreground=[('active', 'blue')])
         self.btstyle.configure('custom.Accent.TButton', font=('Chakra Petch', 10), bordercolor='black', borderwidth=4,
                                justify=Tk.CENTER)
-        self.btstyle.configure('bat.TLabel', font=('Chakra Petch', 12))
-        self.btstyle.configure('normal.TLabel', font=('Chakra Petch', 12), background='white')
+        self.btstyle.configure('bat.TLabel', font=('Chakra Petch', 13))
+        self.btstyle.configure('normal.TLabel', font=('Chakra Petch', 13), background='white')
+        self.btstyle.configure('red.TLabel', font=('Chakra Petch', 13), background='white', foreground='red')
 
         self.mainFrame = Tk.Frame(self.parent, bd=1, bg='white', width=1024, height=600)
         self.mainFrame.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
@@ -69,6 +71,11 @@ class Resonance(Tk.Frame):
         self.featureFrame = Tk.Frame(self.mainFrame, bd=1, bg='white', width=1024, height=80)
         self.featureFrame.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
         self.featureFrame.pack_propagate(0)
+
+        self.batFrame = Tk.Frame(self.featureFrame, bd=1, bg='grey95', width=117, height=35)
+        self.batFrame.pack()
+        self.batFrame.place(relx=0.89, rely=0.0)
+        self.batFrame.pack_propagate(0)
         self.creat_setting_feature_panel()
 
         self.resonanceConfigFrame = ResonanceConfig(self.mainFrame, self.parent.origin_config)
@@ -80,17 +87,11 @@ class Resonance(Tk.Frame):
         self.resonanceAnalysisFrame.pack_propagate(0)
         self.resonanceAnalysisFrame.pack_forget()
 
-        self.batFrame = Tk.Frame(self.featureFrame, bd=1, bg='grey95', width=117, height=40)
-        self.batFrame.pack()
-        self.batFrame.place(relx=0.875, rely=0.01)
-        self.batFrame.pack_propagate(0)
-
-
         self.parent.bind_class('TEntry', "<FocusIn>", self.show_key_board)
         self.parent.bind_class('TCombobox', "<<ComboboxSelected>>", self.change_state)
 
     def show_key_board(self, event):
-        # self.generalConfigFrame.applyButton.configure(state='normal')
+        self.resonanceConfigFrame.resonanceApplyButton.configure(state='normal')
         self.widget = self.get_focus_widget()
         self.keyboardFrame = KeyBoard(self.widget)
         parentName = event.widget.winfo_parent()
@@ -102,8 +103,7 @@ class Resonance(Tk.Frame):
         return widget
 
     def change_state(self, event):
-        pass
-        # self.applyBt.configure(state="normal")
+        self.resonanceConfigFrame.resonanceApplyButton.configure(state="normal")
 
     def creat_setting_feature_panel(self):
 
@@ -119,28 +119,41 @@ class Resonance(Tk.Frame):
         self.homeBt = ttk.Button(self.featureFrame, style='normal.TButton', text="Home", image=self.homePhoto,
                                  compound=Tk.TOP,
                                  command=self.go_home)
-        self.homeBt.place(relx=0.015, rely=0.018, width=100, height=72)
+        self.homeBt.place(relx=0.0, rely=0.018, width=100, height=72)
         self.homeBt.image = self.homePhoto
 
-        self.configBt = ttk.Button(self.featureFrame, style='normal.TButton', text="Setting")
-        self.configBt.place(relx=0.128, rely=0.018, width=115, height=72)
+        barrie=Tk.Frame(self.featureFrame, width=3, height=72, background='grey')
+        barrie.place(relx=0.11, rely=0.018)
 
+        self.configBt = ttk.Button(self.featureFrame, style='normal.TButton', text="Config",
+                                    command=self.on_config_button_clicked)
+        self.configBt.place(relx=0.122, rely=0.018, width=115, height=72)
+
+        self.arrowLabel = ttk.Label(self.featureFrame, style='normal.TLabel', image=self.arrowPhoto)
+        self.arrowLabel.place(relx=0.237, rely=0.25)
+        self.arrowLabel.image = self.arrowPhoto
+        
         self.analysis = ttk.Button(self.featureFrame, style='normal.TButton', text="Resonance\nAnalysis",
                                    command=self.on_analysis_button_clicked)
-        self.analysis.place(relx=0.255, rely=0.018, width=115, height=72)
+        self.analysis.place(relx=0.265, rely=0.018, width=115, height=72)
 
         self.infoFrame= Tk.Frame(self.featureFrame, width=451, height=72, bg='white', bd=0)
         self.infoFrame.place(relx=0.41, rely=0.018)
 
-        self.infoLabel1=ttk.Label(self.infoFrame, text="Information", style="normal.TLabel")
-        self.infoLabel1.grid(column=0, row=0, padx=10, pady=5)
+        self.infoLabel1=ttk.Label(self.infoFrame, text="Information", style="red.TLabel")
+        self.infoLabel1.grid(column=0, row=0, padx=0, pady=5, sticky='w')
 
-        self.infoLabel2 = ttk.Label(self.infoFrame, text="Information", style="normal.TLabel")
-        self.infoLabel2.grid(column=0, row=1, padx=10, pady=5)
+        self.infoLabel2 = ttk.Label(self.infoFrame, text="Click the READ SENSOR and make a hit.", style="normal.TLabel")
+        self.infoLabel2.grid(column=0, row=1, padx=0, pady=5, sticky='w')
 
     def on_analysis_button_clicked(self):
         self.resonanceConfigFrame.pack_forget()
         self.resonanceAnalysisFrame.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
+
+    def on_config_button_clicked(self):
+        self.resonanceConfigFrame.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
+        self.resonanceAnalysisFrame.pack_forget()
+
     def update_time(self):
         now = datetime.now()
         current_time = now.strftime("%H:%M")
@@ -268,9 +281,9 @@ class ResonanceConfig(Tk.Frame):
         numOfAverageEntry = ttk.Entry(resonanceConfigFrame, width=14, textvariable=self.resonanceParam11)
         numOfAverageEntry.grid(column=3, row=5, padx=0, pady=5, sticky='e')
 
-        resonanceApplyButton = ttk.Button(resonanceConfigFrame, text=_("Apply"), style="Accent.TButton",
+        self.resonanceApplyButton = ttk.Button(resonanceConfigFrame, text=_("Apply"), style="Accent.TButton",
                                     command=lambda: self.update_resonance_struct(resonance_config_struct))
-        resonanceApplyButton.grid(column=3, row=6, padx=0, pady=10, ipadx=36, ipady=5, sticky='w')
+        self.resonanceApplyButton.grid(column=3, row=6, padx=0, pady=10, ipadx=36, ipady=5, sticky='w')
 
 
     def update_resonance_struct(self, resonance_config_struct):
@@ -301,6 +314,7 @@ class ResonanceConfig(Tk.Frame):
         resonance_config_struct["Tracking"] = int(tempTracking)
         resonance_config_struct["num_of_average"] = int(tempAverage)
 
+        self.resonanceApplyButton.configure(state="disable")
 class ResonanceAnalysis(Tk.Frame):
     def __init__(self, parent:"mainFrame", origin_config, infoLabel):
         super().__init__(parent, width=1024 , height=520 , bg='white')
@@ -330,6 +344,7 @@ class SideButtonFrame(Tk.Frame):
         self.canvas=canvas
         self.style = ttk.Style()
         self.style.configure('custom.TLabel', font=('Chakra Petch', 13), bg='white')
+        self.style.configure('red.TLabel', font=('Chakra Petch', 13), bg='white', foreground='red')
         self.style.configure('custom.TLabelframe', font=('Chakra Petch', 15), bg='white', borderwidth=0)
         self.style.configure('custom.TButton', font=('Chakra Petch', 15))
         imageAddress = ImageAdrr()
@@ -344,16 +359,12 @@ class SideButtonFrame(Tk.Frame):
 
     def creat_button(self):
         self.readSensorBt = ttk.Button(self, style='custom.Accent.TButton', text="READ\nSENSOR",
-                                image=self.savePhoto, compound=Tk.TOP,
-                                command=self.on_read_sensor_clicked)
+                                compound=Tk.TOP, command=self.on_read_sensor_clicked)
         self.readSensorBt.place(relx=0, rely=0.83, width=88, height=75)
-        self.readSensorBt.image = self.savePhoto
 
         self.freqZoomBt = ttk.Button(self, style='custom.Accent.TButton', text="ZOOM",
-                                image=self.zoomPhoto,
                                 compound=Tk.TOP)
         self.freqZoomBt.place(relx=0, rely=0.678, width=88, height=75)
-        self.freqZoomBt.image = self.zoomPhoto
 
         self.freqCursorLeftBt = ttk.Button(self, style='custom.Accent.TButton', text="CURSOR\nLEFT",
                                       )
@@ -376,8 +387,8 @@ class SideButtonFrame(Tk.Frame):
         self.readSensorBt.update_idletasks()
         if self.origin_config.resonance_config_struct['Function'] == "Impact test":
             try:
-                # t3 = threading.Thread(target=self.frf, args=(0, self.lock))
-                # t3.start()
+                t3 = threading.Thread(target=self.frf, args=(0, self.lock))
+                t3.start()
                 t4 = threading.Thread(target=self.update_label,
                                       args=(self.origin_config.resonance_config_struct["sampling_time"],))
                 t4.start()
@@ -386,8 +397,8 @@ class SideButtonFrame(Tk.Frame):
                 self.readSensorBt.configure(state="normal")
         elif self.origin_config.resonance_config_struct['Function'] == "FRF":
             try:
-                # t3 = threading.Thread(target=self.frf, args=(1, self.lock))
-                # t3.start()
+                t3 = threading.Thread(target=self.frf, args=(1, self.lock))
+                t3.start()
                 t4 = threading.Thread(target=self.update_label,
                                       args=(self.origin_config.resonance_config_struct["sampling_time"],))
                 t4.start()
@@ -397,7 +408,7 @@ class SideButtonFrame(Tk.Frame):
 
     def update_label(self, num):
         while num >= 0:
-            self.infoLabel.configure(text=_("Time remain: ") + f'{str(num)}', fg='red')
+            self.infoLabel.configure(text=_("Time remain: ") + f'{str(num)}', style='custom.TLabel')
             self.infoLabel.update_idletasks()
             num -= 1
             time.sleep(1)
@@ -475,7 +486,7 @@ class SideButtonFrame(Tk.Frame):
                 [max_pos, max_val] = find_max(bp_filter_data)
                 resonance_data = bp_filter_data[max_pos - 20:]
                 if len(resonance_data) < window_len:
-                    self.infoLabel.configure(text=_('This hit is invalid. Make a new hit.'), fg='red')
+                    self.infoLabel.configure(text=_('This hit is invalid. Make a new hit.'), style='red.TLabel')
                     self.readSensorBt.configure(state="normal")
                     return
                 else:
@@ -485,7 +496,7 @@ class SideButtonFrame(Tk.Frame):
                                                                                 damping_factor)
                     amplitude_resonance_arr = amplitude_arr
                     phase_resonance_arr = phase_arr
-                    self.readSensorBt.configure(state="normal", bg="green2")
+                    self.readSensorBt.configure(state="normal")
                     self.readSensorBt.update_idletasks()
             elif flag == 1:
                 [max_pos, max_val] = find_max(sampleData)

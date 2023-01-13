@@ -7,7 +7,7 @@ import sv_ttk
 from ui.Diagnostic.DiagnosticPage import DiagnosticPage
 from ui.home.HomePage import HomePage
 from ui.Settingpage.SettingPage import SettingPage
-from ui.ResonanceModule.ResonaceModule import Resonance
+from ui.ResonanceModule.ResonanceModule import Resonance
 
 class TotalConfig(object):
     def __init__(self):
@@ -120,7 +120,7 @@ class TotalConfig(object):
 class Application(Tk.Frame):
 
     def __init__(self, parent):
-        super().__init__(parent)
+        super().__init__(parent, padx=8, pady=8)
         self.origin_config = TotalConfig()
         HomePage(self).pack()
 
@@ -140,7 +140,7 @@ if __name__=='__main__':
     root=Tk.Tk()
     sv_ttk.set_theme("light")
     root.geometry("1024x600")
-    # root.call("wm", "attributes", ".", "-fullscreen", "true")
+    root.call("wm", "attributes", ".", "-fullscreen", "true")
     root.resizable(0, 0)
     root.option_add('ChakraPetch', '20')
     root.title('OTANI ANALYZER')

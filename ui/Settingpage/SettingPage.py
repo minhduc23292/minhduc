@@ -58,9 +58,9 @@ class SettingPage(Tk.Frame):
         self.settingFrame.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
         self.settingFrame.pack_propagate(0)
 
-        self.batFrame = Tk.Frame(self.featureFrame, bd=1, bg='grey95', width=117, height=40)
+        self.batFrame = Tk.Frame(self.featureFrame, bd=1, bg='grey95', width=117, height=35)
         self.batFrame.pack()
-        self.batFrame.place(relx=0.875, rely=0.01)
+        self.batFrame.place(relx=0.89, rely=0.0)
         self.batFrame.pack_propagate(0)
 
         self.creat_setting_feature_panel()
@@ -104,11 +104,14 @@ class SettingPage(Tk.Frame):
         self.homeBt = ttk.Button(self.featureFrame, style='normal.TButton', text="Home", image=self.homePhoto,
                                  compound=Tk.TOP,
                                  command=self.go_home)
-        self.homeBt.place(relx=0.015, rely=0.018, width=100, height=72)
+        self.homeBt.place(relx=0.0, rely=0.018, width=100, height=72)
         self.homeBt.image = self.homePhoto
 
+        barrie=Tk.Frame(self.featureFrame, width=3, height=72, background='grey')
+        barrie.place(relx=0.11, rely=0.018)
+
         self.configBt = ttk.Button(self.featureFrame, style='normal.TButton', text="Setting")
-        self.configBt.place(relx=0.128, rely=0.018, width=115, height=72)
+        self.configBt.place(relx=0.122, rely=0.018, width=115, height=72)
 
 
     def update_time(self):

@@ -8,7 +8,7 @@ class KeyBoard(Tk.Toplevel):
     def __init__(self, currentWidget):
         super().__init__(width=1024, height=600, bg='white')
         self.geometry("1024x600")
-        # self.attributes('-fullscreen', True)
+        self.attributes('-fullscreen', True)
         self.createPad(currentWidget)
         self.keystyle = ttk.Style()
         self.keystyle.configure('key.TButton', font=('Chakra Petch', 12), justify=Tk.CENTER)
