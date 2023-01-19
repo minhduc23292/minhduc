@@ -43,7 +43,7 @@ class SettingPage(Tk.Frame):
         self.btstyle.map('normal.TButton', foreground=[('active', 'blue')])
         self.btstyle.configure('custom.Accent.TButton', font=('Chakra Petch', 10), bordercolor='black', borderwidth=4,
                                justify=Tk.CENTER)
-        self.btstyle.configure('bat.TLabel', font=('Chakra Petch', 12))
+        self.btstyle.configure('bat.TLabel', font=('Chakra Petch', 13))
         self.btstyle.configure('normal.TLabel', font=('Chakra Petch', 12), background='white')
 
         self.mainFrame = Tk.Frame(self.parent, bd=1, bg='white', width=1024, height=600)
@@ -110,7 +110,7 @@ class SettingPage(Tk.Frame):
         barrie=Tk.Frame(self.featureFrame, width=3, height=72, background='grey')
         barrie.place(relx=0.11, rely=0.018)
 
-        self.configBt = ttk.Button(self.featureFrame, style='normal.TButton', text="Setting")
+        self.configBt = ttk.Button(self.featureFrame, style='Accent.TButton', text="Setting")
         self.configBt.place(relx=0.122, rely=0.018, width=115, height=72)
 
 
@@ -248,7 +248,7 @@ class WifiConfig(Tk.Frame):
         ssidLabel = ttk.Label(wifiLableFrame, text="ID", style="wifi.TLabel")
         ssidLabel.grid(column=0, row=1, padx=10, pady=5, sticky='w')
         ssidCombo = ttk.Combobox(wifiLableFrame, width=14, textvariable=self.wilessParam1, state="readonly",
-                                 font=("Chakra Petch", 15))
+                                 font=("Chakra Petch", 15), takefocus=False)
         try:
             ssidCombo['value'] = wifi.wiless._scan_networks()
         except:
@@ -258,8 +258,8 @@ class WifiConfig(Tk.Frame):
         passwordLabel = ttk.Label(wifiLableFrame, text=_("Password"), style="wifi.TLabel")
         passwordLabel.grid(column=0, row=2, padx=10, pady=5, sticky='w')
 
-        passwordEntry = ttk.Entry(wifiLableFrame, width=18, textvariable=self.wilessParam2)
-        passwordEntry.grid(column=1, row=2, padx=10, pady=5, sticky='e')
+        passwordEntry = ttk.Entry(wifiLableFrame, width=17, textvariable=self.wilessParam2, takefocus=False)
+        passwordEntry.grid(column=1, row=2, padx=10, pady=5, ipadx=2, sticky='e')
         # wilessCancelButton = Tk.Button(wifiLableFrame, text=_("Cancel"), width=11, height=3,
         #                                activebackground='yellow',
         #                                bg="lavender", state='normal', command=self.cancel_button)
@@ -333,15 +333,12 @@ class Power(Tk.Frame):
             print("Shutdown")
             # with self.lock:
             #     self.batery.i2c_send_turn_off()
-            # os.system("sudo shutdown -h now")
+            os.system("sudo shutdown -h now")
         else:
             pass
     def on_restart_button_clicked(self):
         if (pms.general_warning("Do you want to restart the device")):
-            print("Restart")
-            # with self.lock:
-            #     self.batery.i2c_send_turn_off()
-            # os.system("sudo shutdown -h now")
+            os.system("sudo shutdown -r now")
         else:
             pass
 

@@ -1,6 +1,6 @@
 import tkinter as Tk
 from tkinter import ttk
-import sv_ttk
+# import sv_ttk
 from i18n import _
 kb_flag=0
 widget=None

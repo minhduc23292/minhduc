@@ -1,5 +1,5 @@
 import tkinter as Tk
-import sv_ttk
+# import sv_ttk
 from tkinter import ttk
 import matplotlib
 matplotlib.use('TKAgg')
@@ -26,7 +26,10 @@ ad7609 = ctypes.CDLL(f'{current_directory}/ad7609BTZ.so')
 from digitalFilter.digitalFilter import filter_data
 from Calculation.calculate import *
 import PlotData.PlotData as Pd
-
+blink = 0
+blink1 = 0
+checkWidget = 'wasi'
+track_flag = 0
 window_len = 2001
 damping_factor = 10
 resonance_data=[]
@@ -35,7 +38,7 @@ phase_resonance_arr=[]
 amplitude_add_arr=[]
 phase_add_arr=[]
 x_arr=[]
-
+factor_change_permission=True
 def testVal(inStr, acttyp):
     if acttyp == '1':  # insert
         if not inStr.isdigit():
@@ -125,7 +128,7 @@ class Resonance(Tk.Frame):
         barrie=Tk.Frame(self.featureFrame, width=3, height=72, background='grey')
         barrie.place(relx=0.11, rely=0.018)
 
-        self.configBt = ttk.Button(self.featureFrame, style='normal.TButton', text="Config",
+        self.configBt = ttk.Button(self.featureFrame, style='Accent.TButton', text="Config",
                                     command=self.on_config_button_clicked)
         self.configBt.place(relx=0.122, rely=0.018, width=115, height=72)
 
@@ -133,9 +136,9 @@ class Resonance(Tk.Frame):
         self.arrowLabel.place(relx=0.237, rely=0.25)
         self.arrowLabel.image = self.arrowPhoto
         
-        self.analysis = ttk.Button(self.featureFrame, style='normal.TButton', text="Resonance\nAnalysis",
+        self.analysisBt = ttk.Button(self.featureFrame, style='normal.TButton', text="Resonance\nAnalysis",
                                    command=self.on_analysis_button_clicked)
-        self.analysis.place(relx=0.265, rely=0.018, width=115, height=72)
+        self.analysisBt.place(relx=0.265, rely=0.018, width=115, height=72)
 
         self.infoFrame= Tk.Frame(self.featureFrame, width=451, height=72, bg='white', bd=0)
         self.infoFrame.place(relx=0.41, rely=0.018)
@@ -149,10 +152,14 @@ class Resonance(Tk.Frame):
     def on_analysis_button_clicked(self):
         self.resonanceConfigFrame.pack_forget()
         self.resonanceAnalysisFrame.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
+        self.configBt.configure(style="normal.TButton")
+        self.analysisBt.configure(style="Accent.TButton")
 
     def on_config_button_clicked(self):
         self.resonanceConfigFrame.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
         self.resonanceAnalysisFrame.pack_forget()
+        self.configBt.configure(style="Accent.TButton")
+        self.analysisBt.configure(style="normal.TButton")
 
     def update_time(self):
         now = datetime.now()
@@ -210,9 +217,8 @@ class ResonanceConfig(Tk.Frame):
         self.resonanceParam10.set(resonance_config_struct["Hport"])
         self.resonanceParam11.set(resonance_config_struct["num_of_average"])
 
-        resonanceConfigFrame = Tk.LabelFrame(self, text=_(' '), bg="white", border=0)
-        resonanceConfigFrame.pack(side=Tk.TOP, fill=Tk.BOTH)
-
+        resonanceConfigFrame = ttk.LabelFrame(self, text=_('Configuration'), style='TLabelframe')
+        resonanceConfigFrame.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
         functionLabel = ttk.Label(resonanceConfigFrame, text=_('Function'), style="resonance.TLabel")
         functionLabel.grid(column=0, row=0, padx=10, pady=5, sticky="w")
         functionCombo = ttk.Combobox(resonanceConfigFrame, width=10, textvariable=self.resonanceParam0,
@@ -253,37 +259,43 @@ class ResonanceConfig(Tk.Frame):
 
         filterFromLabel = ttk.Label(resonanceConfigFrame, text=_("Bandpass Filter From"), style="resonance.TLabel")
         filterFromLabel.grid(column=2, row=0, padx=20, pady=5, sticky='w')
-        filterFromEntry = ttk.Entry(resonanceConfigFrame, width=14, textvariable=self.resonanceParam4)
+        filterFromEntry = ttk.Entry(resonanceConfigFrame, width=14, textvariable=self.resonanceParam4, validate="key")
+        filterFromEntry['validatecommand'] = (filterFromEntry.register(testVal), '%P', '%d')
         filterFromEntry.grid(column=3, row=0, padx=0, pady=5, sticky='e')
 
         filterToLabel = ttk.Label(resonanceConfigFrame, text=_("Bandpass Filter To"), style="resonance.TLabel")
         filterToLabel.grid(column=2, row=1, padx=20, pady=5, sticky='w')
-        filterToEntry = ttk.Entry(resonanceConfigFrame, width=14, textvariable=self.resonanceParam5)
+        filterToEntry = ttk.Entry(resonanceConfigFrame, width=14, textvariable=self.resonanceParam5, validate="key")
+        filterToEntry['validatecommand'] = (filterToEntry.register(testVal), '%P', '%d')
         filterToEntry.grid(column=3, row=1, padx=0, pady=5, sticky='e')
 
         viewLabel = ttk.Label(resonanceConfigFrame, text=_("Sample rate"), style="resonance.TLabel")
         viewLabel.grid(column=2, row=2, padx=20, pady=5, sticky='w')
-        viewEntry = ttk.Entry(resonanceConfigFrame, width=14, textvariable=self.resonanceParam6)
+        viewEntry = ttk.Entry(resonanceConfigFrame, width=14, textvariable=self.resonanceParam6, validate="key")
+        viewEntry['validatecommand'] = (viewEntry.register(testVal), '%P', '%d')
         viewEntry.grid(column=3, row=2, padx=0, pady=5, sticky='e')
 
         meshLabel = ttk.Label(resonanceConfigFrame, text=_("Sampling time"), style="resonance.TLabel")
         meshLabel.grid(column=2, row=3, padx=20, pady=5, sticky='w')
-        meshEntry = ttk.Entry(resonanceConfigFrame, width=14, textvariable=self.resonanceParam7)
+        meshEntry = ttk.Entry(resonanceConfigFrame, width=14, textvariable=self.resonanceParam7, validate="key")
+        meshEntry['validatecommand'] = (meshEntry.register(testVal), '%P', '%d')
         meshEntry.grid(column=3, row=3, padx=0, pady=5, sticky='e')
 
         trackingLabel = ttk.Label(resonanceConfigFrame, text=_("Tracking resolution"), style="resonance.TLabel")
         trackingLabel.grid(column=2, row=4, padx=20, pady=5, sticky='w')
-        trackingEntry = ttk.Entry(resonanceConfigFrame, width=14, textvariable=self.resonanceParam9)
+        trackingEntry = ttk.Entry(resonanceConfigFrame, width=14, textvariable=self.resonanceParam9, validate="key")
+        trackingEntry['validatecommand'] = (trackingEntry.register(testVal), '%P', '%d')
         trackingEntry.grid(column=3, row=4, padx=0, pady=5, sticky='e')
 
         numOfAverageLabel = ttk.Label(resonanceConfigFrame, text=_("Num of Average"), style="resonance.TLabel")
         numOfAverageLabel.grid(column=2, row=5, padx=20, pady=5, sticky='w')
-        numOfAverageEntry = ttk.Entry(resonanceConfigFrame, width=14, textvariable=self.resonanceParam11)
+        numOfAverageEntry = ttk.Entry(resonanceConfigFrame, width=14, textvariable=self.resonanceParam11, validate="key")
+        numOfAverageEntry['validatecommand'] = (numOfAverageEntry.register(testVal), '%P', '%d')
         numOfAverageEntry.grid(column=3, row=5, padx=0, pady=5, sticky='e')
 
         self.resonanceApplyButton = ttk.Button(resonanceConfigFrame, text=_("Apply"), style="Accent.TButton",
                                     command=lambda: self.update_resonance_struct(resonance_config_struct))
-        self.resonanceApplyButton.grid(column=3, row=6, padx=0, pady=10, ipadx=36, ipady=5, sticky='w')
+        self.resonanceApplyButton.grid(column=3, row=6, padx=0, pady=10, ipadx=40, ipady=5, sticky='w')
 
 
     def update_resonance_struct(self, resonance_config_struct):
@@ -301,23 +313,29 @@ class ResonanceConfig(Tk.Frame):
         tempTracking = self.resonanceParam9.get()
         tempAverage = self.resonanceParam11.get()
 
-        if int(tempSamplerate) <= 10000:
-            resonance_config_struct["sampleRate"] = int(tempSamplerate)
-        else:
-            resonance_config_struct["sampleRate"] = 10000
-        if int(tempSamplingtime) < 10:
-            resonance_config_struct["sampling_time"] = int(tempSamplingtime)
-        else:
-            resonance_config_struct["sampling_time"] = 10
-        resonance_config_struct["FilterFrom"] = int(tempFilterFrom)
-        resonance_config_struct["FilterTo"] = int(tempFilterTo)
-        resonance_config_struct["Tracking"] = int(tempTracking)
-        resonance_config_struct["num_of_average"] = int(tempAverage)
+        if tempSamplerate!='':
+            if int(tempSamplerate) <= 10000:
+                resonance_config_struct["sampleRate"] = int(tempSamplerate)
+            else:
+                resonance_config_struct["sampleRate"] = 10000
+        if tempSamplingtime!='':
+            if int(tempSamplingtime) < 10:
+                resonance_config_struct["sampling_time"] = int(tempSamplingtime)
+            else:
+                resonance_config_struct["sampling_time"] = 10
+        if tempFilterFrom!='':
+            resonance_config_struct["FilterFrom"] = int(tempFilterFrom)
+        if tempFilterTo!='':
+            resonance_config_struct["FilterTo"] = int(tempFilterTo)
+        if tempTracking!='':
+            resonance_config_struct["Tracking"] = int(tempTracking)
+        if tempAverage!='':
+            resonance_config_struct["num_of_average"] = int(tempAverage)
 
         self.resonanceApplyButton.configure(state="disable")
 class ResonanceAnalysis(Tk.Frame):
     def __init__(self, parent:"mainFrame", origin_config, infoLabel):
-        super().__init__(parent, width=1024 , height=520 , bg='white')
+        super().__init__(parent, width=1008 , height=504 , bg='white')
         self.parent = parent
         self.origin_config = origin_config
         self.lock = Lock()
@@ -336,7 +354,7 @@ class ResonanceAnalysis(Tk.Frame):
 
 class SideButtonFrame(Tk.Frame):
     def __init__(self, parent, origin_config, infoLabel, lock, canvas):
-        super().__init__(parent, bd=1, bg='white', width=90, height=520)
+        super().__init__(parent, bd=1, bg='white', width=90, height=504)
         self.parent=parent
         self.origin_config=origin_config
         self.infoLabel=infoLabel
@@ -348,6 +366,8 @@ class SideButtonFrame(Tk.Frame):
         self.style.configure('custom.TLabelframe', font=('Chakra Petch', 15), bg='white', borderwidth=0)
         self.style.configure('custom.TButton', font=('Chakra Petch', 15))
         imageAddress = ImageAdrr()
+        self.ZoomCanvas = Tk.Canvas()
+        self.factorCanvas = Tk.Canvas()
         self.zoomPhoto = imageAddress.zoomPhoto
         self.savePhoto = imageAddress.savePhoto
         self.zoomIn = imageAddress.zoomIn
@@ -360,27 +380,27 @@ class SideButtonFrame(Tk.Frame):
     def creat_button(self):
         self.readSensorBt = ttk.Button(self, style='custom.Accent.TButton', text="READ\nSENSOR",
                                 compound=Tk.TOP, command=self.on_read_sensor_clicked)
-        self.readSensorBt.place(relx=0, rely=0.83, width=88, height=75)
+        self.readSensorBt.place(x=0, y=425, width=88, height=75)
 
         self.freqZoomBt = ttk.Button(self, style='custom.Accent.TButton', text="ZOOM",
-                                compound=Tk.TOP)
-        self.freqZoomBt.place(relx=0, rely=0.678, width=88, height=75)
+                                compound=Tk.TOP, command=lambda:self.on_zoom_button_clicked(827, 117))
+        self.freqZoomBt.place(x=0, y=348, width=88, height=75)
 
-        self.freqCursorLeftBt = ttk.Button(self, style='custom.Accent.TButton', text="CURSOR\nLEFT",
-                                      )
-        self.freqCursorLeftBt.place(relx=0, rely=0.527, width=88, height=75)
+        self.cursorLeftBt = ttk.Button(self, style='custom.Accent.TButton', text="CURSOR\nLEFT",
+                                      command=lambda:self.Tracking(False))
+        self.cursorLeftBt.place(x=0, y=271, width=88, height=75)
 
-        self.freqCursorRightBt = ttk.Button(self, style='custom.Accent.TButton', text="CURSOR\nRIGHT",
-                                       )
-        self.freqCursorRightBt.place(relx=0, rely=0.375, width=88, height=75)
+        self.cursorRightBt = ttk.Button(self, style='custom.Accent.TButton', text="CURSOR\nRIGHT",
+                                       command=lambda:self.Tracking(True))
+        self.cursorRightBt.place(x=0, y=194, width=88, height=75)
 
-        self.freqGridtBt = ttk.Button(self, style='custom.Accent.TButton', text="GRID ON",
-                                      )
-        self.freqGridtBt.place(relx=0, rely=0.223, width=88, height=75)
+        self.factorBt = ttk.Button(self, style='custom.Accent.TButton', text="FACTOR\n+-",
+                                      command=lambda:self.on_factor_button_clicked(827, 40))
+        self.factorBt.place(x=0, y=117, width=88, height=75)
 
-        self.freqFunctionBt = ttk.Button(self, style='custom.Accent.TButton', text="FUNCTION\nNONE",
-                                         )
-        self.freqFunctionBt.place(relx=0, rely=0.07, width=88, height=75)
+        self.addBt = ttk.Button(self, style='custom.Accent.TButton', text="ADD",
+                                         command=self.add_data)
+        self.addBt.place(x=0, y=40, width=88, height=75)
 
     def on_read_sensor_clicked(self):
         self.readSensorBt.configure(state="disable")
@@ -405,6 +425,224 @@ class SideButtonFrame(Tk.Frame):
 
             except:
                 self.readSensorBt.configure(state="normal")
+    
+    def on_zoom_button_clicked(self, x_pos, y_pos):
+        global blink, blink1, checkWidget
+        if blink1 == 1:
+            self.factorCanvas.destroy()
+            blink1=0
+        self.ZoomCanvas.destroy()
+        blink = not blink
+        if blink == 1:
+            self.creat_zoom_button_canvas(self.parent.resonancePlotFrame, self.parent.resonancePlotFrame.canvas1, x_pos,
+                                                y_pos, 1)
+        elif blink == 0:
+            self.ZoomCanvas.destroy()
+       
+    def creat_zoom_button_canvas(self, widget, draw_canvas, x_pos, y_pos, function_flag):
+
+        self.zoomstyle=ttk.Style()
+        self.zoomstyle.configure('zoom.Accent.TButton', font=('Chakra Petch', 9), justify=Tk.CENTER)
+        self.ZoomCanvas = Tk.Canvas(widget, width=90, height=385, bg='white')
+        self.ZoomCanvas.place(x=x_pos, y=y_pos)
+        button1 = ttk.Button(self.ZoomCanvas, text=_("ZOOM IN"), style='zoom.Accent.TButton', image=self.zoomIn,
+                             compound=Tk.TOP,
+                             command=lambda: self.view_change(draw_canvas, _type='IN'))
+        button1.place(x=0, y=0, width=88, height=75)
+        button1.image = self.zoomIn
+
+        button2 = ttk.Button(self.ZoomCanvas, text=_("ZOOM OUT"), style='zoom.Accent.TButton', image=self.zoomOut,
+                             compound=Tk.TOP,
+                             command=lambda: self.view_change(draw_canvas, _type='OUT'))
+        button2.place(x=0, y=77, width=88, height=75)
+        button2.image = self.zoomOut
+        button3 = ttk.Button(self.ZoomCanvas, text=_("PAN LEFT"), style='zoom.Accent.TButton', image=self.panLeft,
+                             compound=Tk.TOP,
+                             command=lambda: self.view_change(draw_canvas, _type='LEFT'))
+        button3.place(x=0, y=154, width=88, height=75)
+        button3.image = self.panLeft
+
+        button4 = ttk.Button(self.ZoomCanvas, text=_("PAN RIGHT"), style='zoom.Accent.TButton', image=self.panRight,
+                             compound=Tk.TOP,
+                             command=lambda: self.view_change(draw_canvas, _type='RIGHT'))
+        button4.place(x=0, y=231, width=88, height=75)
+        button4.image = self.panRight
+
+        button5 = ttk.Button(self.ZoomCanvas, text=_("RESET"), style='zoom.Accent.TButton', state='disable')
+        button5.place(x=0, y=308, width=88, height=75)
+
+    def view_change(self, canvas, _type):
+        axes_arr = canvas.figure.get_axes()
+        try:
+            for ax in axes_arr:
+                if _type == "RIGHT":
+                    [xleft, xright] = ax.get_xlim()
+                    xright -= 50
+                    xleft -= 50
+                    ax.set_xlim(xleft, xright)
+
+                elif _type == "LEFT":
+                    [xleft, xright] = ax.get_xlim()
+                    xright += 50
+                    xleft += 50
+                    if xright >= 0:
+                        ax.set_xlim(xleft, xright)
+
+                elif _type == "IN":
+                    [xleft, xright] = ax.get_xlim()
+                    xright -= 50
+                    if xright < xleft + 100:
+                        xright = xleft + 100
+                    ax.set_xlim(xleft, xright)
+
+                elif _type == "OUT":
+                    [xleft, xright] = ax.get_xlim()
+                    xright += 50
+                    ax.set_xlim(xleft, xright)
+            canvas.draw()
+        except:
+            pass
+    
+    def on_factor_button_clicked(self, x_pos, y_pos):
+        global blink1, blink
+        blink1 = not blink1
+        if blink == 1:
+            self.ZoomCanvas.destroy()
+            blink=0
+        if blink1 == 1:
+            self.draw_factor_button_canvas(self.parent.resonancePlotFrame, self.parent.resonancePlotFrame.canvas1, x_pos,
+                                                       y_pos)
+        elif blink1 == 0:
+            self.factorCanvas.destroy()
+
+    def draw_factor_button_canvas(self, widget, draw_canvas, x_pos, y_pos):
+
+        self.factorCanvas = Tk.Canvas(widget, width=90, height=152, bg='white')
+        self.factorCanvas.place(x=x_pos, y=y_pos)
+        self.factorUp = ttk.Button(self.factorCanvas, text=_("FACTOR+"), style='custom.Accent.TButton', image=self.function1,
+                             compound=Tk.TOP, command=self.factor_up)
+        self.factorUp.place(x=0, y=0, width=88, height=75)
+        self.factorUp.image = self.function1
+
+        self.factorDown = ttk.Button(self.factorCanvas, text=_("FACTOR-"), style='custom.Accent.TButton',
+                             image=self.function1,
+                             compound=Tk.TOP, command=self.factor_down)
+        self.factorDown.place(x=0, y=77, width=88, height=75)
+        self.factorDown.image = self.function1
+    
+    def Tracking(self, dir:bool):
+        global track_flag, resonance_data
+        tracking_freq=self.origin_config.resonance_config_struct["Tracking"]
+        axes_arr = self.parent.resonancePlotFrame.canvas1.figure.get_axes()
+        if len(axes_arr)>0:
+            [xleft, xright] = axes_arr[1].get_xlim()
+            
+            if dir==True:
+                if xleft>=track_flag:
+                    track_flag=xleft
+                if xright<track_flag:
+                    return
+                track_flag+=tracking_freq
+                start_freq=track_flag-tracking_freq
+                stop_freq=track_flag
+            else:
+                if xright<=track_flag:
+                    track_flag = xright
+
+                track_flag-=tracking_freq
+
+                if xleft>=track_flag:
+                    track_flag = xleft
+                if track_flag<=0:
+                    track_flag=0
+                start_freq=track_flag
+                stop_freq=track_flag+tracking_freq
+            try:
+                
+                _sample_rate=self.origin_config.resonance_config_struct["sampleRate"]
+                [max1, freq]=tab4_tracking_signal(resonance_data, _sample_rate, [start_freq, stop_freq])
+                title= 'Frequency: '+ f'{str(freq)[:4]}'+' hz'
+                Pd.PLT.plot_grid_specific(self.parent.resonancePlotFrame.canvas1, freq, title, False)
+                
+                self.infoLabel.config(text=title)
+        
+            except:
+                self.infoLabel.config(text=_("Data errors."))
+    def add_data(self):
+        global amplitude_resonance_arr, phase_resonance_arr, amplitude_add_arr, phase_add_arr, x_arr, factor_change_permission
+        factor_change_permission=False
+        amplitude_add_arr.append(amplitude_resonance_arr)
+        phase_add_arr.append(phase_resonance_arr)
+        # print("amplitude_add_arr: ", len(amplitude_add_arr))
+        if len(amplitude_add_arr)==self.origin_config.resonance_config_struct["num_of_average"]:
+            temp_amp=np.array(amplitude_add_arr)
+            temp_phase=np.array(phase_add_arr)
+            average_amplitude=np.zeros(len(temp_amp[0]))   
+            average_phase=np.zeros(len(temp_amp[0]))
+            for i in range(self.origin_config.resonance_config_struct["num_of_average"]):
+                average_amplitude+=temp_amp[i]
+                average_phase+=temp_phase[i]
+            Pd.PLT.plot_average_resonance(self.parent.resonancePlotFrame.canvas1, x_arr, average_amplitude, average_phase)
+            amplitude_add_arr=[]
+            phase_add_arr=[]
+            self.infoLabel.configure(text=_('The averaged graph are shown in figure 1 and 2:'))
+            self.infoLabel.update_idletasks()
+            factor_change_permission=True
+            try:
+                self.factorCanvas.destroy()
+            except:
+                pass
+            self.factorBt.configure(state="disable")
+            self.factorBt.update_idletasks()
+            # self.factorDown.configure(state="disable")
+            # self.factorDown.update_idletasks()
+            # self.factorUp.configure(state="disable")
+            # self.factorUp.update_idletasks()
+            # self.cursorLeftBt.configure(state="disable")
+            # self.cursorLeftBt.update_idletasks()
+            # self.cursorRightBt.configure(state="disable")
+            # self.cursorRightBt.update_idletasks()
+
+        else:
+            pass
+        amplitude_resonance_arr=[]
+        phase_resonance_arr=[]
+        self.addBt.configure(state="disable")
+        self.addBt.update_idletasks()
+        
+    def factor_up(self):
+        global damping_factor, resonance_data, window_len, factor_change_permission, x_arr, amplitude_resonance_arr, phase_resonance_arr
+        try:
+            if factor_change_permission:
+                if self.origin_config.resonance_config_struct["Factor"]=="Length":
+                    window_len+=100
+                    if window_len>len(resonance_data):
+                        window_len=len(resonance_data)
+                else:
+                    damping_factor*=10
+                [x_arr, amplitude_arr, phase_arr]=Pd.PLT.plot_impact_test(self.parent.resonancePlotFrame.canvas1, resonance_data, self.origin_config.resonance_config_struct["sampleRate"],window_len, damping_factor)
+                amplitude_resonance_arr=amplitude_arr
+                phase_resonance_arr=phase_arr
+
+        except:
+            pass
+    def factor_down(self):
+        global damping_factor, resonance_data, window_len, factor_change_permission, x_arr, amplitude_resonance_arr, phase_resonance_arr
+        try:
+            if factor_change_permission:
+                if self.origin_config.resonance_config_struct["Factor"]=="Length":
+                    window_len-=100
+                    if window_len<=500:
+                        window_len=500
+                else:
+                    damping_factor/=10
+                    if damping_factor <=0.1:
+                        damping_factor=0.1
+                [x_arr, amplitude_arr, phase_arr]=Pd.PLT.plot_impact_test(self.parent.resonancePlotFrame.canvas1, resonance_data, self.origin_config.resonance_config_struct["sampleRate"],window_len, damping_factor)
+                amplitude_resonance_arr=amplitude_arr
+                phase_resonance_arr=phase_arr
+        except:
+            pass
 
     def update_label(self, num):
         while num >= 0:
@@ -419,7 +657,6 @@ class SideButtonFrame(Tk.Frame):
         resonance_data = []
         self.readSensorBt.configure(state="disable")
         self.readSensorBt.update_idletasks()
-
         numOfChanel = 4
         chaneln = []
         data_length = self.origin_config.resonance_config_struct["sampleRate"] * \
@@ -488,7 +725,7 @@ class SideButtonFrame(Tk.Frame):
                 if len(resonance_data) < window_len:
                     self.infoLabel.configure(text=_('This hit is invalid. Make a new hit.'), style='red.TLabel')
                     self.readSensorBt.configure(state="normal")
-                    return
+                    self.addBt.configure(state="disable")
                 else:
                     [x_arr, amplitude_arr, phase_arr] = Pd.PLT.plot_impact_test(self.canvas, resonance_data,
                                                                                 self.origin_config.resonance_config_struct[
@@ -496,8 +733,8 @@ class SideButtonFrame(Tk.Frame):
                                                                                 damping_factor)
                     amplitude_resonance_arr = amplitude_arr
                     phase_resonance_arr = phase_arr
-                    self.readSensorBt.configure(state="normal")
-                    self.readSensorBt.update_idletasks()
+                    self.addBt.configure(state="normal")
+                    self.addBt.update_idletasks()
             elif flag == 1:
                 [max_pos, max_val] = find_max(sampleData)
                 resonance_data = sampleData[max_pos - 20:]
@@ -507,9 +744,16 @@ class SideButtonFrame(Tk.Frame):
         except Exception as ex:
             print(ex)
         self.readSensorBt.configure(state="normal")
+        self.readSensorBt.update_idletasks()
+        self.factorBt.configure(state="normal")
+        self.factorBt.update_idletasks()
+        self.cursorLeftBt.configure(state="normal")
+        self.cursorLeftBt.update_idletasks()
+        self.cursorRightBt.configure(state="normal")
+        self.cursorRightBt.update_idletasks()
 class ResonancePlotCanvas(Tk.Frame):
     def __init__(self, parent):
-        super().__init__(parent, bd=1, bg='white', width=934, height=520)
+        super().__init__(parent, bd=1, bg='white', width=918, height=504)
         fig1 = creatFig.creatFigure(self, 3)
         fig1.set_visible(True)
         self.canvas1 = FigureCanvasTkAgg(fig1, master=self)

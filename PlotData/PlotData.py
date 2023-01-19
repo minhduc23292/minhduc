@@ -1128,21 +1128,26 @@ class PLT(FigureCanvasTkAgg):
             ax3.xaxis.grid(False, which='minor')
             self.draw()
 
-    def plot_grid_specific(self, grid_val: float, title):
+    def plot_grid_specific(self, grid_val: float, title, set_title_flag):
         hfont = {'fontname': 'DejaVu Sans', 'fontsize': 10}
         axes_arr = self.figure.get_axes()
         [left, right] = axes_arr[0].get_xlim()
         if grid_val > right:
             grid_val = right
         arr_grid = [grid_val]
-        for i in range(len(axes_arr)):
-            axes_arr[i].set_xticks(arr_grid, minor=True)
-            axes_arr[i].xaxis.grid(True, which='minor', color="r")
-            # axes_arr[i].text(grid_val, 10, "haha", transform=self.figure.transFigure)
-            axes_arr[i].set_visible(True)
-        axes_arr[0].set_title(title,  color="red", **hfont)
+        if set_title_flag:
+            for i in range(len(axes_arr)):
+                axes_arr[i].set_xticks(arr_grid, minor=True)
+                axes_arr[i].xaxis.grid(True, which='minor', color="r")
+                axes_arr[i].set_visible(True)
+            axes_arr[0].set_title(title,  color="red", **hfont)
+        else:
+            for i in range(2):
+                axes_arr[i].set_xticks(arr_grid, minor=True)
+                axes_arr[i].xaxis.grid(True, which='minor', color="r")
+                axes_arr[i].set_visible(True)
         self.draw()
-
+        
     def plot_impact_test(self, canal, sample_rate, window_len, damping_factor):
         max_freq = int(sample_rate / 2.56)
         [max_pos, max_val] = find_max(canal)
@@ -1153,17 +1158,17 @@ class PLT(FigureCanvasTkAgg):
 
         # ----------------- Plotting ---------------
         X1 = np.linspace(0, int((N / sample_rate) * 1000), N)  # X axis, 5000 sps, 1/5 ms.
-        ax_12, ax_13, ax_11 = self.figure.get_axes()
+        ax_11, ax_12, ax_13 = self.figure.get_axes()
 
-        ax_11.clear()
-        ax_11.set_visible(True)
-        ax_11.yaxis.set_major_formatter(FormatStrFormatter('%0.2f'))
-        ax_11.plot(X1, canal, color='blue', linewidth=0.4)
-        ax_11.plot(X1[:window_len], w, color='red', linewidth=0.7)
-        ax_11.set_xlabel("ms")
-        ax_11.set_ylabel('g')
-        ax_11.grid()  # Shows grid.
-        ax_11.set_xlim(xmin=0, xmax=(3000 * window_len) / sample_rate)
+        ax_13.clear()
+        ax_13.set_visible(True)
+        ax_13.yaxis.set_major_formatter(FormatStrFormatter('%0.2f'))
+        ax_13.plot(X1, canal, color='blue', linewidth=0.4)
+        ax_13.plot(X1[:window_len], w, color='red', linewidth=0.7)
+        ax_13.set_xlabel("ms")
+        ax_13.set_ylabel('g')
+        ax_13.grid()  # Shows grid.
+        ax_13.set_xlim(xmin=0, xmax=(3000 * window_len) / sample_rate)
 
         T = 1.0 / sample_rate
         y = canal[:window_len]
@@ -1172,24 +1177,24 @@ class PLT(FigureCanvasTkAgg):
         yfphase = np.angle(yf[:(int(window_len // 2))]) * 180 / np.pi
         xf = fftpack.fftfreq(window_len, T)[:int(window_len // 2)]
 
+        ax_11.clear()
+        ax_11.set_visible(True)
+        ax_11.yaxis.set_major_formatter(FormatStrFormatter('%0.2f'))
+        ax_11.plot(xf, yf1, color='blue', linewidth=0.5)
+        ax_11.grid()
+        ax_11.set_xlabel("Hz")
+        ax_11.set_ylabel(_('Amplitude-g'))
+        ax_11.set_xlim(xmax=max_freq)
+
         ax_12.clear()
         ax_12.set_visible(True)
-        ax_12.yaxis.set_major_formatter(FormatStrFormatter('%0.2f'))
-        ax_12.plot(xf, yf1, color='blue', linewidth=0.5)
+        ax_12.yaxis.set_major_formatter(FormatStrFormatter('%0.0f'))
+        ax_12.plot(xf, yfphase, color='blue', linewidth=0.5)
         ax_12.grid()
+        ax_12.set_yticks([-180, -90, 0, 90, 180])
         ax_12.set_xlabel("Hz")
-        ax_12.set_ylabel(_('Amplitude-g'))
+        ax_12.set_ylabel(_('Phase-degree'))
         ax_12.set_xlim(xmax=max_freq)
-
-        ax_13.clear()
-        ax_13.set_visible(True)
-        ax_13.yaxis.set_major_formatter(FormatStrFormatter('%0.0f'))
-        ax_13.plot(xf, yfphase, color='blue', linewidth=0.5)
-        ax_13.grid()
-        ax_13.set_yticks([-180, -90, 0, 90, 180])
-        ax_13.set_xlabel("Hz")
-        ax_13.set_ylabel(_('Phase-degree'))
-        ax_13.set_xlim(xmax=max_freq)
         self.draw()
         return [xf, yf1, yfphase]
 
@@ -1202,17 +1207,17 @@ class PLT(FigureCanvasTkAgg):
 
         # ----------------- Plotting ---------------
         X1 = np.linspace(0, int((N / sample_rate) * 1000), N)  # X axis, 5000 sps, 1/5 ms.
-        ax_12, ax_13, ax_11 = self.figure.get_axes()
-        ax_11.clear()
-        ax_11.set_visible(True)
-        ax_11.yaxis.set_major_formatter(FormatStrFormatter('%0.2f'))
-        ax_11.plot(X1, acc_data, color='blue', linewidth=0.4)
-        ax_11.plot(X1, hamer_data, color='black', linewidth=0.4)
-        ax_11.plot(X1[:window_len], w, color='red', linewidth=0.7)
-        ax_11.set_xlabel("ms")
-        ax_11.set_ylabel('g')
-        ax_11.grid()  # Shows grid.
-        ax_11.set_xlim(xmin=0, xmax=(3000 * window_len) / sample_rate)
+        ax_11, ax_12, ax_13 = self.figure.get_axes()
+        ax_13.clear()
+        ax_13.set_visible(True)
+        ax_13.yaxis.set_major_formatter(FormatStrFormatter('%0.2f'))
+        ax_13.plot(X1, acc_data, color='blue', linewidth=0.4)
+        ax_13.plot(X1, hamer_data, color='black', linewidth=0.4)
+        ax_13.plot(X1[:window_len], w, color='red', linewidth=0.7)
+        ax_13.set_xlabel("ms")
+        ax_13.set_ylabel('g')
+        ax_13.grid()  # Shows grid.
+        ax_13.set_xlim(xmin=0, xmax=(3000 * window_len) / sample_rate)
 
         T = 1.0 / sample_rate
         y = acc_data[:window_len]
@@ -1226,45 +1231,45 @@ class PLT(FigureCanvasTkAgg):
         yfphase = np.angle(yf[:(int(window_len // 2))]) * 180 / np.pi
         xf = fftpack.fftfreq(window_len, T)[:int(window_len // 2)]
 
+        ax_11.clear()
+        ax_11.set_visible(True)
+        ax_11.yaxis.set_major_formatter(FormatStrFormatter('%0.2f'))
+        ax_11.plot(xf, yf1, color='blue', linewidth=0.5)
+        # ax_11.plot(xf, np.abs(yfhamer[:(int(window_len // 2))]), color='black', linewidth=0.5)
+        ax_11.grid()
+        ax_11.set_xlabel("Hz")
+        ax_11.set_ylabel(_('Amplitude-g'))
+        ax_11.set_xlim(xmax=max_freq)
+
         ax_12.clear()
         ax_12.set_visible(True)
-        ax_12.yaxis.set_major_formatter(FormatStrFormatter('%0.2f'))
-        ax_12.plot(xf, yf1, color='blue', linewidth=0.5)
-        # ax_12.plot(xf, np.abs(yfhamer[:(int(window_len // 2))]), color='black', linewidth=0.5)
+        ax_12.yaxis.set_major_formatter(FormatStrFormatter('%0.0f'))
+        ax_12.plot(xf, yfphase, color='blue', linewidth=0.5)
         ax_12.grid()
+        ax_12.set_yticks([-180, -90, 0, 90, 180])
         ax_12.set_xlabel("Hz")
-        ax_12.set_ylabel(_('Amplitude-g'))
+        ax_12.set_ylabel(_('Phase-degree'))
         ax_12.set_xlim(xmax=max_freq)
-
-        ax_13.clear()
-        ax_13.set_visible(True)
-        ax_13.yaxis.set_major_formatter(FormatStrFormatter('%0.0f'))
-        ax_13.plot(xf, yfphase, color='blue', linewidth=0.5)
-        ax_13.grid()
-        ax_13.set_yticks([-180, -90, 0, 90, 180])
-        ax_13.set_xlabel("Hz")
-        ax_13.set_ylabel(_('Phase-degree'))
-        ax_13.set_xlim(xmax=max_freq)
         self.draw()
 
     def plot_average_resonance(self, xf, amplitude, phase):
         ax_11, ax_12, ax_13 = self.figure.get_axes()
+        ax_13.set_visible(True)
+        ax_11.clear()
         ax_11.set_visible(True)
+        ax_11.yaxis.set_major_formatter(FormatStrFormatter('%0.2f'))
+        ax_11.plot(xf, amplitude, color='blue', linewidth=0.4)
+        ax_11.set_xlabel("hz")
+        ax_11.set_ylabel('Amplitude-g')
+        ax_11.grid()  # Shows grid.
+
         ax_12.clear()
         ax_12.set_visible(True)
-        ax_12.yaxis.set_major_formatter(FormatStrFormatter('%0.2f'))
-        ax_12.plot(xf, amplitude, color='blue', linewidth=0.4)
+        ax_12.yaxis.set_major_formatter(FormatStrFormatter('%0.0f'))
+        ax_12.plot(xf, phase, color='blue', linewidth=0.4)
         ax_12.set_xlabel("hz")
-        ax_12.set_ylabel('Amplitude-g')
+        ax_12.set_ylabel(_('Phase-degree'))
         ax_12.grid()  # Shows grid.
-
-        ax_13.clear()
-        ax_13.set_visible(True)
-        ax_13.yaxis.set_major_formatter(FormatStrFormatter('%0.0f'))
-        ax_13.plot(xf, phase, color='blue', linewidth=0.4)
-        ax_13.set_xlabel("hz")
-        ax_13.set_ylabel(_('Phase-degree'))
-        ax_13.grid()  # Shows grid.
         self.draw()
 
 

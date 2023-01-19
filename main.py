@@ -8,7 +8,8 @@ from ui.Diagnostic.DiagnosticPage import DiagnosticPage
 from ui.home.HomePage import HomePage
 from ui.Settingpage.SettingPage import SettingPage
 from ui.ResonanceModule.ResonanceModule import Resonance
-
+from ui.balancingModule.balancingModule import Balancing
+from ui.history.historyModule import History
 class TotalConfig(object):
     def __init__(self):
         self.sensor_config = {
@@ -108,7 +109,7 @@ class TotalConfig(object):
                     "FilterTo":3000,
                     "sampleRate":5000,
                     "sampling_time":5,
-                    "num_of_average":5,
+                    "num_of_average":3,
                     "Tracking":25
         }
 
@@ -136,13 +137,28 @@ class Application(Tk.Frame):
     def go_to_resonance_page(self):
         Resonance(self)
 
+    def go_to_balancing_page(self):
+        Balancing(self)
+    def go_to_history_page(self):
+        History(self)
+
+    def _quit(self):
+        root.quit()
+        root.destroy()
+        exit()
+
 if __name__=='__main__':
-    root=Tk.Tk()
-    sv_ttk.set_theme("light")
-    root.geometry("1024x600")
-    root.call("wm", "attributes", ".", "-fullscreen", "true")
-    root.resizable(0, 0)
-    root.option_add('ChakraPetch', '20')
-    root.title('OTANI ANALYZER')
-    Application(root).pack(expand=True, fill="both")
-    root.mainloop()
+    try:
+        root=Tk.Tk()
+        sv_ttk.set_theme("light")
+        root.geometry("1024x600")
+        root.call("wm", "attributes", ".", "-fullscreen", "true")
+        root.resizable(0, 0)
+        root.option_add('ChakraPetch', '20')
+        root.title('OTANI ANALYZER')
+        app=Application(root)
+        app.pack(expand=True, fill="both")
+        root.mainloop()
+    except KeyboardInterrupt:
+        print("quit the app")
+        app._quit()

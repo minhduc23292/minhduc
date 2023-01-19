@@ -1,5 +1,5 @@
 import tkinter as Tk
-import sv_ttk
+# import sv_ttk
 from tkinter import ttk
 import os
 from i18n import _
@@ -14,10 +14,10 @@ parent_directory = os.path.dirname(os.path.dirname(current_directory))
 
 
 class HomePage(Tk.Frame):
-    def __init__(self, parent: "Application"):
+    def __init__(self, parent: "Application"):  
         super().__init__(parent)
         self.parent = parent
-        sv_ttk.set_theme("light")
+        # sv_ttk.set_theme("light")
         now = datetime.now()
         imageAddress = ImageAdrr()
         self.settingPhoto = imageAddress.settingPhoto
@@ -35,7 +35,7 @@ class HomePage(Tk.Frame):
     def creat_home_page(self, origin_config):
         self.style = ttk.Style(self.parent)
         self.style.configure('home.TLabel', background='white', font=('Chakra Petch', 40))
-        self.style.configure('bat.TLabel', background='grey95', font=('Chakra Petch', 12))
+        self.style.configure('bat.TLabel', background='grey95', font=('Chakra Petch', 13))
 
         self.homeFrame = Tk.Frame(self.parent, bd=1, bg='white', width=1024, height=600)
         self.homeFrame.pack()
@@ -65,7 +65,7 @@ class HomePage(Tk.Frame):
 
         self.balancingButton = ttk.Button(self.homeFrame, style='home.TButton', text="Dynamic\nBalancing",
                                           image=self.balancePhoto,
-                                          compound=Tk.TOP, command=self.move_to_diagnostic_page)
+                                          compound=Tk.TOP, command=self.move_to_balancing_page)
         self.balancingButton.place(relx=0.578, rely=0.32, width=188, height=125)
 
         self.resonanceButton = ttk.Button(self.homeFrame, style='home.TButton', text="Resonance\nAnalysis",
@@ -74,7 +74,7 @@ class HomePage(Tk.Frame):
         self.resonanceButton.place(relx=0.21, rely=0.59, width=188, height=125)
 
         self.historyButton = ttk.Button(self.homeFrame, style='home.TButton', text="History", image=self.historyPhoto,
-                                        compound=Tk.TOP, command=self.move_to_diagnostic_page)
+                                        compound=Tk.TOP, command=self.move_to_history_page)
         self.historyButton.place(relx=0.578, rely=0.59, width=188, height=125)
 
         self.settingButton = ttk.Button(self.homeFrame, style='home.TButton', text="Settings", image=self.smallSePhoto,
@@ -100,6 +100,14 @@ class HomePage(Tk.Frame):
         self.homeFrame.destroy()
         self.parent.go_to_resonance_page()
 
+    def move_to_balancing_page(self):
+        self.homeFrame.destroy()
+        self.parent.go_to_balancing_page()
+
+    def move_to_history_page(self):
+        self.homeFrame.destroy()
+        self.parent.go_to_history_page()
+        
     def update_time(self):
         now = datetime.now()
         current_time = now.strftime("%H:%M")
