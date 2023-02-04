@@ -1,0 +1,1322 @@
+# Japanese translations for PACKAGE package.
+# Copyright (C) 2022 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Le Phuong <lephuong@phuonglh>, 2022.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-02-05 00:00+0700\n"
+"PO-Revision-Date: 2022-11-02 18:07+0900\n"
+"Last-Translator: Le Phuong <lephuong@phuonglh>\n"
+"Language-Team: Vietnamese\n"
+"Language: vi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: popup/pop_message.py:5 pms/popMessage.py:5
+msgid "OS IS BEING SHUTDDWN"
+msgstr "Đang tắt hệ điều hành"
+
+#: popup/pop_message.py:8 pms/popMessage.py:8
+msgid "Company name and project code dont exist. Do you want to continue ?"
+msgstr "Công ty và dự án đều không tồn tại. Bạn có muốn tiếp tục không"
+
+#: popup/pop_message.py:13 pms/popMessage.py:13
+msgid "Do you want shutdown the device?"
+msgstr "Bạn có muốn tắt thiết bị không"
+
+#: popup/pop_message.py:18 pms/popMessage.py:18
+msgid "This project code is existed, please type another code"
+msgstr "Dự án không tồn tại, hãy chọn mã dự án khác"
+
+#: popup/pop_message.py:23 pms/popMessage.py:23
+msgid "Company existed and project code dont exist. Do you want to continue ?"
+msgstr "Mã dự án chưa tồn tại. Bạn có muốn tiếp tục không"
+
+#: popup/pop_message.py:28 pms/popMessage.py:28
+msgid "Company and project existed. Do you want to continue ?"
+msgstr "Dự án đã tồn tại. Bạn có muốn tiếp tục không"
+
+#: popup/pop_message.py:40 pms/popMessage.py:40
+msgid "Please entry the "
+msgstr "Hãy nhập"
+
+#: keyboard/keyboard.py:26
+msgid "Input"
+msgstr "Input"
+
+#: ui/balancingModule/balancingModule.py:185 ui/history/historyModule.py:190
+#: ui/ResonanceModule/ResonanceModule.py:198 ui/home/HomePage.py:144
+#: ui/Diagnostic/DiagnosticPage.py:1146 ui/Settingpage/SettingPage.py:151
+msgid "Low Battery! Plug in the charger to keep it running"
+msgstr "Pin yếu! Cắm sạc để duy trì hoạt động bình thường"
+
+#: ui/balancingModule/balancingModule.py:259 ui/history/historyModule.py:248
+#: ui/ResonanceModule/ResonanceModule.py:258
+msgid "Configuration"
+msgstr "Cấu hình"
+
+#: ui/balancingModule/balancingModule.py:262
+msgid "Num of planes"
+msgstr "Số mặt phẳng"
+
+#: ui/balancingModule/balancingModule.py:269
+msgid "Num of sensors"
+msgstr "Số cảm biến"
+
+#: ui/balancingModule/balancingModule.py:276
+msgid "Sensor type"
+msgstr "Loại cảm biến"
+
+#: ui/balancingModule/balancingModule.py:283
+msgid "Sensor1"
+msgstr "Cảm biến 1"
+
+#: ui/balancingModule/balancingModule.py:290
+msgid "Sensor2"
+msgstr "Cảm biến 2"
+
+#: ui/balancingModule/balancingModule.py:297
+msgid "Trial mass 1 (g)"
+msgstr "Lượng thử 1 (g)"
+
+#: ui/balancingModule/balancingModule.py:304
+msgid "Trial mass 2 (g)"
+msgstr "Lượng thử 2 (g)"
+
+#: ui/balancingModule/balancingModule.py:311
+msgid "Angle 1 (deg)"
+msgstr "Góc 1 (độ)"
+
+#: ui/balancingModule/balancingModule.py:318
+msgid "Angle 2 (deg)"
+msgstr "Góc 2 (độ)"
+
+#: ui/balancingModule/balancingModule.py:326
+msgid "Rotating dir"
+msgstr "Chiều quay"
+
+#: ui/balancingModule/balancingModule.py:333
+#: ui/Diagnostic/DiagnosticPage.py:1286
+msgid "FFT lines"
+msgstr "Số dòng FFT"
+
+#: ui/balancingModule/balancingModule.py:340
+#: ui/ResonanceModule/ResonanceModule.py:310
+msgid "Sample rate"
+msgstr "Tốc độ lấy mẫu"
+
+#: ui/balancingModule/balancingModule.py:347
+msgid "Num of blades"
+msgstr "Số cánh"
+
+#: ui/balancingModule/balancingModule.py:354
+msgid "CW split"
+msgstr "Tách vật"
+
+#: ui/balancingModule/balancingModule.py:386
+#: ui/ResonanceModule/ResonanceModule.py:334
+msgid "Apply"
+msgstr "Xác nhận"
+
+#: ui/balancingModule/balancingModule.py:390
+msgid "Calulate"
+msgstr "Tính toán"
+
+#: ui/balancingModule/balancingModule.py:412
+#: ui/balancingModule/balancingModule.py:427 ui/history/historyModule.py:344
+msgid "Parameter errors. Check the input type."
+msgstr "Tham số nhập vào lỗi. Kiểm tra lại các mục nhập vào."
+
+#: ui/balancingModule/balancingModule.py:423
+#: ui/balancingModule/balancingModule.py:436 ui/history/historyModule.py:351
+msgid "OK"
+msgstr ""
+
+#: ui/balancingModule/balancingModule.py:507
+msgid ""
+"START\n"
+"INITIAL\n"
+"RUN"
+msgstr "CHẠY THÔ"
+
+#: ui/balancingModule/balancingModule.py:517
+#: ui/balancingModule/balancingModule.py:533
+#: ui/balancingModule/balancingModule.py:549
+#: ui/balancingModule/balancingModule.py:565
+#: ui/balancingModule/balancingModule.py:594
+#: ui/balancingModule/balancingModule.py:610
+#: ui/balancingModule/balancingModule.py:627
+#: ui/balancingModule/balancingModule.py:644
+#: ui/balancingModule/balancingModule.py:661
+#: ui/balancingModule/balancingModule.py:678
+#: ui/balancingModule/balancingModule.py:695
+#: ui/balancingModule/balancingModule.py:712
+#: ui/balancingModule/balancingModule.py:729
+#: ui/balancingModule/balancingModule.py:746
+#: ui/balancingModule/balancingModule.py:774
+#: ui/balancingModule/balancingModule.py:791
+#: ui/balancingModule/balancingModule.py:808
+#: ui/balancingModule/balancingModule.py:825
+#: ui/balancingModule/balancingModule.py:842
+msgid "STOP"
+msgstr "DỪNG"
+
+#: ui/balancingModule/balancingModule.py:521
+#: ui/balancingModule/balancingModule.py:537
+#: ui/balancingModule/balancingModule.py:553
+#: ui/balancingModule/balancingModule.py:569
+#: ui/balancingModule/balancingModule.py:598
+#: ui/balancingModule/balancingModule.py:614
+#: ui/balancingModule/balancingModule.py:631
+#: ui/balancingModule/balancingModule.py:648
+#: ui/balancingModule/balancingModule.py:665
+#: ui/balancingModule/balancingModule.py:682
+#: ui/balancingModule/balancingModule.py:699
+#: ui/balancingModule/balancingModule.py:716
+#: ui/balancingModule/balancingModule.py:733
+#: ui/balancingModule/balancingModule.py:750
+#: ui/balancingModule/balancingModule.py:778
+#: ui/balancingModule/balancingModule.py:795
+#: ui/balancingModule/balancingModule.py:812
+#: ui/balancingModule/balancingModule.py:829
+#: ui/balancingModule/balancingModule.py:846
+msgid "Wait until phase and amplitude is stable and click STOP"
+msgstr "Chờ đến khi pha và biên độ ổn định, kích nút DỪNG"
+
+#: ui/balancingModule/balancingModule.py:525
+msgid ""
+"TRIAL\n"
+"RUN"
+msgstr ""
+"CHẠY VỚI\n"
+" VẬT THỬ"
+
+#: ui/balancingModule/balancingModule.py:529
+msgid "Next step: Execute the trial run"
+msgstr "Bước tiếp theo: Thực hiện chạy với vật thử."
+
+#: ui/balancingModule/balancingModule.py:541
+#: ui/balancingModule/balancingModule.py:817
+msgid ""
+"TRIM 1\n"
+"RUN"
+msgstr ""
+"CHẠY TINH\n"
+" LẦN 1"
+
+#: ui/balancingModule/balancingModule.py:545
+msgid "Next step: Execute the first trim run"
+msgstr "Bước tiếp theo: Chạy tinh lần 1."
+
+#: ui/balancingModule/balancingModule.py:557
+#: ui/balancingModule/balancingModule.py:834
+msgid ""
+"TRIM 2\n"
+"RUN"
+msgstr ""
+"CHẠY TINH\n"
+" LẦN 2"
+
+#: ui/balancingModule/balancingModule.py:561
+msgid "Next step: Execute the second trim run"
+msgstr "Bước tiếp theo: Chạy tinh lần 2."
+
+#: ui/balancingModule/balancingModule.py:573
+msgid ""
+"END\n"
+"PROCESS"
+msgstr "KẾT THÚC"
+
+#: ui/balancingModule/balancingModule.py:577
+msgid "Next step: Finish!"
+msgstr "Bước tiếp theo: Kết thúc"
+
+#: ui/balancingModule/balancingModule.py:587
+#: ui/balancingModule/balancingModule.py:851
+msgid ""
+"INITIAL\n"
+"RUN"
+msgstr "CHẠY THÔ"
+
+#: ui/balancingModule/balancingModule.py:602
+msgid ""
+"INITIAL\n"
+"PL2"
+msgstr ""
+"CHẠY THÔ\n"
+"MẶT 2"
+
+#: ui/balancingModule/balancingModule.py:606
+msgid "Next step: Initial Run, Collect data on the plane 2"
+msgstr "Bước tiếp theo: Lấy dữ liệu trên mặt phẳng số 2"
+
+#: ui/balancingModule/balancingModule.py:619
+msgid ""
+"TRIAL 1\n"
+"PL1"
+msgstr ""
+"CHẠY THỬ\n"
+"LẦN 1\n"
+" MẶT 1"
+
+#: ui/balancingModule/balancingModule.py:623
+msgid "Next step: First Trial Run, Collect data on the plane 1"
+msgstr "Bước tiếp theo: Chạy với vật thử, lấy data ở mặt phẳng 1"
+
+#: ui/balancingModule/balancingModule.py:636
+msgid ""
+"TRIAL 1\n"
+"PL2"
+msgstr ""
+"CHẠY THỬ\n"
+"LẦN 1\n"
+" MẶT 2"
+
+#: ui/balancingModule/balancingModule.py:640
+msgid "Next step: First Trial Run, Collect data on the plane 2"
+msgstr "Bước tiếp theo: Chạy với vật thử, lấy data ở mặt phẳng 2"
+
+#: ui/balancingModule/balancingModule.py:653
+msgid ""
+"TRIAL 2\n"
+"PL1"
+msgstr ""
+"CHẠY THỬ\n"
+"LẦN 2\n"
+"MẶT 1"
+
+#: ui/balancingModule/balancingModule.py:657
+msgid "Next step: Second Trial Run, Collect data on the plane 1"
+msgstr "Bước tiếp theo: Chạy với vật thử, lấy data ở mặt phẳng 1"
+
+#: ui/balancingModule/balancingModule.py:670
+msgid ""
+"TRIAL 2\n"
+"PL2"
+msgstr ""
+"CHẠY THỬ\n"
+"LẦN 2\n"
+"MẶT 2"
+
+#: ui/balancingModule/balancingModule.py:674
+msgid "Next step: Second Trial Run, Collect data on the plane 2"
+msgstr "Bước tiếp theo: Chạy với vật thử, lấy data ở mặt phẳng 2"
+
+#: ui/balancingModule/balancingModule.py:687
+msgid ""
+"TRIM 1\n"
+"PL1"
+msgstr ""
+"CHẠY TINH\n"
+"LẦN 1\n"
+"MẶT 1"
+
+#: ui/balancingModule/balancingModule.py:691
+msgid "Next step: First Trim Run, Collect data on the plane 1"
+msgstr "Bước tiếp theo: Chạy tinh lần 1, lấy data ở mặt phẳng 1"
+
+#: ui/balancingModule/balancingModule.py:704
+msgid ""
+"TRIM 1\n"
+"PL2"
+msgstr ""
+"CHẠY TINH\n"
+"LẦN 1\n"
+"MẶT 2"
+
+#: ui/balancingModule/balancingModule.py:708
+msgid "Next step: First Trim Run, Collect data on the plane 2"
+msgstr "Bước tiếp theo: Chạy tinh lần 1, lấy data ở mặt phẳng 2"
+
+#: ui/balancingModule/balancingModule.py:721
+msgid ""
+"TRIM 2\n"
+"PL1"
+msgstr ""
+"CHẠY TINH\n"
+"LẦN 2\n"
+"MẶT 1"
+
+#: ui/balancingModule/balancingModule.py:725
+msgid "Next step: Second Trim Run, Collect data on the plane 1"
+msgstr "Bước tiếp theo: Chạy tinh lần 2, lấy data ở mặt phẳng 1"
+
+#: ui/balancingModule/balancingModule.py:738
+msgid ""
+"TRIM 2\n"
+"PL2"
+msgstr ""
+"CHẠY TINH\n"
+"LẦN 2\n"
+"MẶT 2"
+
+#: ui/balancingModule/balancingModule.py:742
+#: ui/balancingModule/balancingModule.py:759
+msgid "Next step: Second Trim Run, Collect data on the plane 2"
+msgstr "Bước tiếp theo: Chạy tinh lần 2, lấy data ở mặt phẳng 2"
+
+#: ui/balancingModule/balancingModule.py:755
+msgid ""
+"INITIAL 1\n"
+"PL1"
+msgstr ""
+"CHẠY THÔ\n"
+"LẦN 1\n"
+"MẶT 1"
+
+#: ui/balancingModule/balancingModule.py:783
+msgid ""
+"TRIAL 1\n"
+"RUN"
+msgstr ""
+"CHẠY THỬ\n"
+"LẦN 1"
+
+#: ui/balancingModule/balancingModule.py:787
+msgid "Next step: First Trial Run, Mount the sensor on two planes and execute"
+msgstr ""
+"Bước tiếp theo: Chạy với vật thử lần 1, gắn cảm biến ở cả hai mặt phẳng."
+
+#: ui/balancingModule/balancingModule.py:800
+msgid ""
+"TRIAL 2\n"
+"RUN"
+msgstr ""
+"CHẠY THỬ\n"
+"LẦN 2"
+
+#: ui/balancingModule/balancingModule.py:804
+msgid "Next step: Second Trial Run, Mount the sensor on two planes and execute"
+msgstr ""
+"Bước tiếp theo: Chạy với vật thử lần 2, gắn cảm biến ở cả hai mặt phẳng."
+
+#: ui/balancingModule/balancingModule.py:821
+msgid "Next step: First Trim Run, Mount the sensor on two planes and execute"
+msgstr "Bước tiếp theo: Chạy tinh lần 1, gắn cảm biến ở cả hai mặt phẳng."
+
+#: ui/balancingModule/balancingModule.py:838
+msgid "Next step: Second Trim Run, Mount the sensor on two planes and execute"
+msgstr "Bước tiếp theo: Chạy tinh lần 2, gắn cảm biến ở cả hai mặt phẳng."
+
+#: ui/balancingModule/balancingModule.py:855
+msgid "Next step: Initial Run, Mount the sensor on two planes and execute"
+msgstr "Bước tiếp theo: Chạy thô, gắn cảm biến ở cả hai mặt phẳng."
+
+#: ui/balancingModule/balancingModule.py:952
+#: ui/balancingModule/balancingModule.py:1063 ui/history/historyModule.py:687
+#: ui/history/historyModule.py:724 ui/ResonanceModule/ResonanceModule.py:608
+msgid "Data errors."
+msgstr "Lỗi dữ liệu"
+
+#: ui/history/historyModule.py:252 ui/history/historyModule.py:384
+msgid "Project Code"
+msgstr "Mã dự án"
+
+#: ui/history/historyModule.py:258
+msgid "Sensor Position"
+msgstr "Vị trí sensor"
+
+#: ui/history/historyModule.py:270 ui/ResonanceModule/ResonanceModule.py:298
+msgid "Bandpass Filter From"
+msgstr "Lọc bandpass từ"
+
+#: ui/history/historyModule.py:276 ui/ResonanceModule/ResonanceModule.py:304
+msgid "Bandpass Filter To"
+msgstr "Lọc bandpass tới"
+
+#: ui/history/historyModule.py:282
+msgid "View Limit"
+msgstr "Vùng hiển thị"
+
+#: ui/history/historyModule.py:288 ui/ResonanceModule/ResonanceModule.py:322
+#: ui/Diagnostic/DiagnosticPage.py:1331
+msgid "Tracking resolution"
+msgstr "Tốc độ dò"
+
+#: ui/history/historyModule.py:294
+msgid "Use Average"
+msgstr "Trung bình phổ"
+
+#: ui/history/historyModule.py:298
+msgid "Average Bin"
+msgstr "Độ dài trung bình"
+
+#: ui/history/historyModule.py:308
+msgid "Project Table"
+msgstr "Danh sách dự án"
+
+#: ui/history/historyModule.py:319
+msgid "Delete Project"
+msgstr "Xóa dự án"
+
+#: ui/history/historyModule.py:373
+msgid "Do you want to delete this project?"
+msgstr "Bạn có muốn xóa dự án này không"
+
+#: ui/history/historyModule.py:377
+msgid "Selected project is deleted."
+msgstr "Dự án đã được xóa."
+
+#: ui/history/historyModule.py:386
+msgid "Delete project errors"
+msgstr "Lỗi trong khi xóa dự án."
+
+#: ui/history/historyModule.py:476 ui/ResonanceModule/ResonanceModule.py:486
+#: ui/Diagnostic/DiagnosticPage.py:613
+msgid "ZOOM IN"
+msgstr "PHÓNG TO"
+
+#: ui/history/historyModule.py:482 ui/ResonanceModule/ResonanceModule.py:492
+#: ui/Diagnostic/DiagnosticPage.py:619
+msgid "ZOOM OUT"
+msgstr "THU NHỎ"
+
+#: ui/history/historyModule.py:487 ui/ResonanceModule/ResonanceModule.py:497
+#: ui/Diagnostic/DiagnosticPage.py:624
+msgid "PAN LEFT"
+msgstr "DỊCH TRÁI"
+
+#: ui/history/historyModule.py:493 ui/ResonanceModule/ResonanceModule.py:503
+#: ui/Diagnostic/DiagnosticPage.py:630
+msgid "PAN RIGHT"
+msgstr "DỊCH PHẢI"
+
+#: ui/history/historyModule.py:499 ui/ResonanceModule/ResonanceModule.py:509
+#: ui/Diagnostic/DiagnosticPage.py:636
+msgid "RESET"
+msgstr "RESET"
+
+#: ui/history/historyModule.py:552
+msgid "WAVEFORM"
+msgstr ""
+
+#: ui/history/historyModule.py:556
+msgid "FREQUENCY"
+msgstr ""
+
+#: ui/history/historyModule.py:560
+msgid ""
+"VELOCITY\n"
+"FREQUENCY"
+msgstr ""
+
+#: ui/history/historyModule.py:564
+msgid "ENVELOPED"
+msgstr ""
+
+#: ui/history/historyModule.py:568
+msgid "WATERFALL"
+msgstr ""
+
+#: ui/history/historyModule.py:572
+msgid "TREND"
+msgstr ""
+
+#: ui/history/historyModule.py:657
+msgid "Fcut is wrong. Use the default value."
+msgstr "Lỗi Fcut. Sử dụng bộ lọc mặc định."
+
+#: ui/history/historyModule.py:683
+msgid "Project: "
+msgstr "Dự án: "
+
+#: ui/history/historyModule.py:685 ui/history/historyModule.py:847
+msgid "There is no data, please check SETTING !"
+msgstr "Không có dữ liệu, kiểm tra cài đặt"
+
+#: ui/history/historyModule.py:721
+msgid "Frequency:"
+msgstr "Tần số"
+
+#: ui/history/historyModule.py:731
+msgid "Do you want to export the report"
+msgstr "Bạn có muốn xuất báo cáo"
+
+#: ui/history/historyModule.py:796
+msgid "Filter bandpass frequency is wrong. Use the default value."
+msgstr "Lỗi bộ lọc thông dải. Sử dụng bộ lọc mặc định."
+
+#: ui/history/historyModule.py:824
+msgid "Figure1: Vibration trend"
+msgstr "Hình 1: Xu hướng dao động."
+
+#: ui/history/historyModule.py:828
+msgid "Figure2: Waveform"
+msgstr "Hình 2: Độ rung trong miền thời gian."
+
+#: ui/history/historyModule.py:832
+msgid "Figure3: Frequency spectrum"
+msgstr "Hình 3: Phổ tần số"
+
+#: ui/history/historyModule.py:836
+msgid "Figure4: Velocity spectrum"
+msgstr "Phổ tần số vận tốc"
+
+#: ui/history/historyModule.py:840
+msgid "Figure5: Envelope spectrum"
+msgstr "Hình 5: Phổ đường bao"
+
+#: ui/history/historyModule.py:845
+msgid "Report is exported !"
+msgstr "Xuất dữ liệu thành công!"
+
+#: ui/ResonanceModule/ResonanceModule.py:260
+msgid "Function"
+msgstr "Tính năng"
+
+#: ui/ResonanceModule/ResonanceModule.py:267
+msgid "Sensor Port"
+msgstr "Cổng cảm biến"
+
+#: ui/ResonanceModule/ResonanceModule.py:273
+msgid "Hammer Port"
+msgstr "Cổng búa lực"
+
+#: ui/ResonanceModule/ResonanceModule.py:279
+msgid "Window Type"
+msgstr "Kiểu cửa sổ"
+
+#: ui/ResonanceModule/ResonanceModule.py:285
+msgid "Window Factor"
+msgstr "Hệ số cửa sổ"
+
+#: ui/ResonanceModule/ResonanceModule.py:292
+msgid "Filter Type"
+msgstr "Kiểu bộ lọc"
+
+#: ui/ResonanceModule/ResonanceModule.py:316
+msgid "Sampling time"
+msgstr "Thời gian lấy mẫu"
+
+#: ui/ResonanceModule/ResonanceModule.py:328
+msgid "Num of Average"
+msgstr "Số lần trung bình"
+
+#: ui/ResonanceModule/ResonanceModule.py:560
+msgid "FACTOR+"
+msgstr ""
+"TĂNG\n"
+"HỆ SỐ"
+
+#: ui/ResonanceModule/ResonanceModule.py:565
+msgid "FACTOR-"
+msgstr ""
+"GIẢM\n"
+"HỆ SỐ"
+
+#: ui/ResonanceModule/ResonanceModule.py:626
+msgid "The averaged graph are shown in figure 1 and 2:"
+msgstr "Biên độ và pha hiển thị trong biểu đồ số 1 và 2."
+
+#: ui/ResonanceModule/ResonanceModule.py:687
+msgid "Time remain: "
+msgstr "Thời gian còn lại: "
+
+#: ui/ResonanceModule/ResonanceModule.py:764
+msgid "This hit is invalid. Make a new hit."
+msgstr "Cú đánh búa không hợp lệ. Hãy thực hiện cú đánh búa mới."
+
+#: ui/Diagnostic/DiagnosticPage.py:348
+msgid "READING.....Please wait:"
+msgstr "ĐANG ĐỌC CẢM BIẾN...XIN CHỜ:"
+
+#: ui/Diagnostic/DiagnosticPage.py:348
+msgid "seconds."
+msgstr "giây."
+
+#: ui/Diagnostic/DiagnosticPage.py:452
+msgid "Actual sample rate:"
+msgstr "Tốc độ lấy mẫu thực tế:"
+
+#: ui/Diagnostic/DiagnosticPage.py:476 ui/Diagnostic/DiagnosticPage.py:569
+msgid "There is no data !"
+msgstr "Không có dữ liệu !"
+
+#: ui/Diagnostic/DiagnosticPage.py:511 ui/Diagnostic/DiagnosticPage.py:537
+#: ui/Diagnostic/DiagnosticPage.py:561
+msgid "Data is saved."
+msgstr "Dữ liệu được lưu"
+
+#: ui/Diagnostic/DiagnosticPage.py:572
+msgid "Please input project code and company name !"
+msgstr "Hãy nhập mã dự án và tên công ty !"
+
+#: ui/Diagnostic/DiagnosticPage.py:688
+msgid "NONE"
+msgstr ""
+
+#: ui/Diagnostic/DiagnosticPage.py:694
+msgid "FILTER"
+msgstr "LỌC"
+
+#: ui/Diagnostic/DiagnosticPage.py:700
+msgid "ENVELOP"
+msgstr ""
+
+#: ui/Diagnostic/DiagnosticPage.py:707
+msgid "PSD"
+msgstr ""
+
+#: ui/Diagnostic/DiagnosticPage.py:716 ui/Diagnostic/DiagnosticPage.py:735
+#: ui/Diagnostic/DiagnosticPage.py:746 ui/Diagnostic/DiagnosticPage.py:766
+#: ui/Diagnostic/DiagnosticPage.py:1077
+msgid "GRID ON"
+msgstr "GRID ON"
+
+#: ui/Diagnostic/DiagnosticPage.py:717
+msgid ""
+"FUNCTION\n"
+"NONE"
+msgstr ""
+"TÍNH NĂNG\n"
+"NONE"
+
+#: ui/Diagnostic/DiagnosticPage.py:736
+msgid ""
+"FUNCTION\n"
+"FILTER"
+msgstr ""
+"TÍNH NĂNG\n"
+"LỌC"
+
+#: ui/Diagnostic/DiagnosticPage.py:747
+msgid ""
+"FUNCTION\n"
+"ENVELOP"
+msgstr ""
+"TÍNH NĂNG\n"
+"ENVELOP"
+
+#: ui/Diagnostic/DiagnosticPage.py:767
+msgid ""
+"FUNCTION\n"
+"PSD"
+msgstr ""
+"TÍNH NĂNG\n"
+"PSD"
+
+#: ui/Diagnostic/DiagnosticPage.py:1073
+msgid "GRID OFF"
+msgstr "GRID OFF"
+
+#: ui/Diagnostic/DiagnosticPage.py:1235
+msgid "Port1"
+msgstr "Cổng 1"
+
+#: ui/Diagnostic/DiagnosticPage.py:1243
+msgid "Port2"
+msgstr "Cổng 2"
+
+#: ui/Diagnostic/DiagnosticPage.py:1251
+msgid "Port3"
+msgstr "Cổng 3"
+
+#: ui/Diagnostic/DiagnosticPage.py:1259
+msgid "Port4"
+msgstr "Cổng 4"
+
+#: ui/Diagnostic/DiagnosticPage.py:1267
+msgid "Key sensor"
+msgstr "Pha gốc"
+
+#: ui/Diagnostic/DiagnosticPage.py:1275
+msgid "    Use TSA"
+msgstr " Dùng TSA"
+
+#: ui/Diagnostic/DiagnosticPage.py:1280
+msgid "TSA times"
+msgstr "Số lần TSA"
+
+#: ui/Diagnostic/DiagnosticPage.py:1293
+msgid "Fmax "
+msgstr "Fmax"
+
+#: ui/Diagnostic/DiagnosticPage.py:1299
+msgid "Filter configuration"
+msgstr "Cấu hình bộ lọc"
+
+#: ui/Diagnostic/DiagnosticPage.py:1302
+msgid "Filter type"
+msgstr "Kiểu bộ lọc"
+
+#: ui/Diagnostic/DiagnosticPage.py:1310
+msgid "Window type"
+msgstr "Kiểu cửa sổ"
+
+#: ui/Diagnostic/DiagnosticPage.py:1319
+msgid "Filter From (Hz)"
+msgstr "Tần số cắt dưới"
+
+#: ui/Diagnostic/DiagnosticPage.py:1325
+msgid "Filter To (Hz)"
+msgstr "Tần số cắt trên"
+
+#: ui/Diagnostic/DiagnosticPage.py:1337
+msgid "Mesh grid"
+msgstr "Hiện lưới"
+
+#: ui/Diagnostic/DiagnosticPage.py:1343
+msgid "Unit show"
+msgstr "Đơn vị"
+
+#: ui/Diagnostic/DiagnosticPage.py:1351
+msgid "Machine configuration"
+msgstr "Cấu hình máy"
+
+#: ui/Diagnostic/DiagnosticPage.py:1354
+msgid "Machine name"
+msgstr "Tên máy"
+
+#: ui/Diagnostic/DiagnosticPage.py:1359
+msgid "Machine type"
+msgstr "Kiểu máy"
+
+#: ui/Diagnostic/DiagnosticPage.py:1368
+msgid "Speed (RPM)"
+msgstr "Tốc độ"
+
+#: ui/Diagnostic/DiagnosticPage.py:1374
+msgid "Power (kW)"
+msgstr "Công suất (kW)"
+
+#: ui/Diagnostic/DiagnosticPage.py:1380
+msgid "Gear teeth"
+msgstr "Số răng"
+
+#: ui/Diagnostic/DiagnosticPage.py:1386
+msgid "Bearing bore (mm)"
+msgstr "BRGs bore (mm)"
+
+#: ui/Diagnostic/DiagnosticPage.py:1392
+msgid "Foundation"
+msgstr "Kiểu nền móng"
+
+#: ui/Diagnostic/DiagnosticPage.py:1538
+msgid ""
+"Chanel      A-Peak   A-PkPk   A-RMS   V-Peak   V-PkPk   V-RMS   D-Peak   D-"
+"PkPk   D-RMS   Crest   Kutorsis."
+msgstr ""
+"Kênh      A-Peak   A-PkPk   A-RMS   V-Peak   V-PkPk   V-RMS   D-Peak   D-"
+"PkPk   D-RMS   Crest   Kutorsis."
+
+#: ui/Diagnostic/DiagnosticPage.py:1541
+msgid "Chanel1"
+msgstr "Kênh 1"
+
+#: ui/Diagnostic/DiagnosticPage.py:1543
+msgid "Chanel2"
+msgstr "Kênh 2"
+
+#: ui/Diagnostic/DiagnosticPage.py:1545
+msgid "Chanel3"
+msgstr "Kênh 3"
+
+#: ui/Settingpage/SettingPage.py:189
+msgid "Project Code*"
+msgstr "Mã dự án*"
+
+#: ui/Settingpage/SettingPage.py:196
+msgid "Company Name"
+msgstr "Công ty"
+
+#: ui/Settingpage/SettingPage.py:202
+msgid "Note"
+msgstr ""
+
+#: ui/Settingpage/SettingPage.py:236
+msgid "GENERAL"
+msgstr ""
+
+#: ui/Settingpage/SettingPage.py:237
+msgid "WIFI"
+msgstr ""
+
+#: ui/Settingpage/SettingPage.py:238
+msgid "LANGUAGE"
+msgstr "NGÔN NGỮ"
+
+#: ui/Settingpage/SettingPage.py:239
+msgid "POWER"
+msgstr "TẮT MÁY"
+
+#: ui/Settingpage/SettingPage.py:295
+msgid "Password"
+msgstr "Mật khẩu"
+
+#: ui/Settingpage/SettingPage.py:305
+msgid "Connect"
+msgstr "Kết nối"
+
+#: ui/Settingpage/SettingPage.py:309
+msgid "Disconnect"
+msgstr "Ngắt kết nối"
+
+#: ui/Settingpage/SettingPage.py:420
+msgid "Restart is required to change the language. Do you want to restart now"
+msgstr ""
+"Cần khởi động lại ứng dụng để thay đổi ngôn ngữ. Bạn có muốn khởi động lại "
+"không"
+
+#: report/report.py:37
+msgid "MACHINE DIAGNOSTIC REPORT"
+msgstr "BÁO CÁO CHUẨN ĐOÁN TÌNH TRẠNG THIẾT BỊ"
+
+#: report/report.py:39
+msgid "Setup"
+msgstr "Cài đặt"
+
+#: report/report.py:42
+msgid "Diagnostic Person:"
+msgstr "Người chuẩn đoán: "
+
+#: report/report.py:46
+msgid "Machine type:"
+msgstr "Kiểu máy: "
+
+#: report/report.py:50
+msgid "Power(kW):"
+msgstr "Công suất (kW)"
+
+#: report/report.py:54
+msgid "Speed(RPM):"
+msgstr "Tốc độ(RPM)"
+
+#: report/report.py:58
+msgid "Shaft diameter:"
+msgstr "Đường kính trục: "
+
+#: report/report.py:62
+msgid "Measurement type:"
+msgstr "Kiểu đo: "
+
+#: report/report.py:66
+msgid "Sensor:"
+msgstr "Cảm biến: "
+
+#: report/report.py:70
+msgid "Sensor mount:"
+msgstr "Gắn cảm biến: "
+
+#: report/report.py:74
+msgid "Sensor position:"
+msgstr "Vị trí sensor: "
+
+#: report/report.py:78
+msgid "Bearing code:"
+msgstr "Mã vòng bi: "
+
+#: report/report.py:82
+msgid "Shaft bore:"
+msgstr "Đường kính trục: "
+
+#: report/report.py:86
+msgid "Gear teeth:"
+msgstr "Số răng bánh răng:"
+
+#: report/report.py:90
+msgid "Other:"
+msgstr "Khác: "
+
+#: report/report.py:93
+msgid "Conclusion"
+msgstr "Kết luận"
+
+#: report/report.py:123
+msgid "Details"
+msgstr "Chi tiết"
+
+#: PlotData/PlotData.py:31 PlotData/PlotData.py:67 PlotData/PlotData.py:355
+#: PlotData/PlotData.py:578 PlotData/PlotData.py:587
+msgid "Amplitude"
+msgstr "Biên độ"
+
+#: PlotData/PlotData.py:354
+msgid "Frequency(Hz)"
+msgstr "Tần số (Hz)"
+
+#: PlotData/PlotData.py:419 PlotData/PlotData.py:498 PlotData/PlotData.py:1164
+msgid "Frequency [Hz]"
+msgstr "Tần số [Hz]"
+
+#: PlotData/PlotData.py:438 PlotData/PlotData.py:1165
+msgid "Time [ms]"
+msgstr "Thời gian [ms]"
+
+#: PlotData/PlotData.py:598
+msgid "Velocity RMS (mm/s)"
+msgstr "Vận tốc RMS (mm/s)"
+
+#: PlotData/PlotData.py:610
+msgid "Accelleration Pk (g)"
+msgstr "Gear-Gia tốc đỉnh (g)"
+
+#: PlotData/PlotData.py:671
+msgid "ISO-10816 Displacement (um)"
+msgstr "ISO-10816 Chuyển vị(um)"
+
+#: PlotData/PlotData.py:715
+msgid "ISO-10816 Velocity (mm/s)"
+msgstr "ISO-10816 Vận tốc(mm/s)"
+
+#: PlotData/PlotData.py:758
+msgid "gE/HFCF for bearing"
+msgstr "gE/HFCF của vòng bi"
+
+#: PlotData/PlotData.py:803
+msgid "Sideband ratio/ Acc-Peak Gearbox"
+msgstr "Hệ số giải biên/ Gia tốc đỉnh Hộp số"
+
+#: PlotData/PlotData.py:854
+msgid "Dynamic balancing"
+msgstr "Cân bằng động"
+
+#: PlotData/PlotData.py:854
+msgid "Compensation mass = "
+msgstr "Khối lượng bù"
+
+#: PlotData/PlotData.py:855
+msgid "at angle ="
+msgstr "tại góc"
+
+#: PlotData/PlotData.py:885 PlotData/PlotData.py:954 PlotData/PlotData.py:1029
+#: PlotData/PlotData.py:1139
+msgid "1st plane"
+msgstr "Mặt phẳng thứ nhất"
+
+#: PlotData/PlotData.py:886 PlotData/PlotData.py:955 PlotData/PlotData.py:1140
+msgid "2nd plane"
+msgstr "Mặt phẳng thứ 2"
+
+#: PlotData/PlotData.py:1146
+msgid "Dynamic balancing 2nd plane"
+msgstr "Cân bằng động 2 mặt phẳng"
+
+#: PlotData/PlotData.py:1163
+msgid "STFT Magnitude-"
+msgstr "STFT Cường độ -"
+
+#: PlotData/PlotData.py:1259 PlotData/PlotData.py:1314
+msgid "Amplitude-g"
+msgstr "Biên độ(g)"
+
+#: PlotData/PlotData.py:1269 PlotData/PlotData.py:1324
+#: PlotData/PlotData.py:1344
+msgid "Phase-degree"
+msgstr "Pha(độ)"
+
+#~ msgid "Sensor3"
+#~ msgstr "Cổng 3"
+
+#~ msgid "Sensor4"
+#~ msgstr "Cổng 4 "
+
+#~ msgid "Channel "
+#~ msgstr "Kênh "
+
+#~ msgid "Channel 4"
+#~ msgstr "Kênh 4"
+
+#~ msgid "Data errors. Check sensor setting to solve this problem"
+#~ msgstr "Dữ liệu không đúng. Kiểm tra cài đặt cảm biến."
+
+#~ msgid "Click FILTER to filter and zoom the data."
+#~ msgstr "Nhấn FILTER để lọc và phóng to"
+
+#~ msgid "Click to each channel for more detail."
+#~ msgstr "Chọn kênh để xem chi tiết."
+
+#~ msgid "Please check the config."
+#~ msgstr "Xin hãy kiểm tra cài đặt"
+
+#~ msgid "Click ZOOM to zoom in the chart."
+#~ msgstr "Nhân ZOOM để phóng to đồ thị"
+
+#~ msgid "Filter value errors. Default cutoff frequency value is used."
+#~ msgstr "Lỗi bộ lọc. Bộ lọc mặc định được sử dụng"
+
+#~ msgid "Click PSD to calculate PSD and zoom in."
+#~ msgstr "Chọn PSD để tính toán PSD và phóng to."
+
+#~ msgid "Click Enveloped Spectral to calculate enveloped signal and zoom in."
+#~ msgstr "Chọn Enveloped để tính toán phổ đường bao và phóng to."
+
+#~ msgid "Click FILTER to filter and zoom in the chart."
+#~ msgstr "Chọn FILTER để lọc và phóng to đồ thị"
+
+#~ msgid "See the SUMMARY page for more details."
+#~ msgstr "Xem chi tiêt tại trang SUMMARY."
+
+#~ msgid "Gearbox indicator needs accelerometer and appopriate input 2xGMF."
+#~ msgstr ""
+#~ "Chỉ báo hộp số cần cảm biến gia tốc, số răng và tốc độ quay của bánh răng "
+#~ "đó."
+
+#~ msgid "See the graph for more details."
+#~ msgstr "Xem chi tiết trong đồ thị"
+
+#~ msgid "Do you want to export data"
+#~ msgstr "Bạn có muốn xuất dữ liệu"
+
+#~ msgid "There is no data, please check input value !"
+#~ msgstr "Không có dữ liệu, kiểm tra giá trị được nhập !"
+
+#~ msgid "NO FILTER"
+#~ msgstr "KHÔNG LỌC"
+
+#~ msgid "CHANNEL1"
+#~ msgstr "KÊNH 1"
+
+#~ msgid "CHANNEL2"
+#~ msgstr "KÊNH 2"
+
+#~ msgid "CHANNEL3"
+#~ msgstr "KÊNH 3"
+
+#~ msgid "LASER"
+#~ msgstr "LASER"
+
+#~ msgid ""
+#~ "CHANNEL\n"
+#~ "DETAILS"
+#~ msgstr ""
+#~ "KÊNH\n"
+#~ "CHI TIẾT"
+
+#~ msgid "SETTING"
+#~ msgstr "CÀI ĐẶT"
+
+#~ msgid ""
+#~ "ALL\n"
+#~ "CHANNEL"
+#~ msgstr ""
+#~ "DỮ LIỆU\n"
+#~ "GỐC"
+
+#~ msgid "ZOOM"
+#~ msgstr "ZOOM"
+
+#~ msgid ""
+#~ "READ\n"
+#~ "SENSOR"
+#~ msgstr ""
+#~ "ĐỌC\n"
+#~ "CẢM BIẾN"
+
+#~ msgid ""
+#~ "TRACKING\n"
+#~ "LEFT"
+#~ msgstr "DỊCH TRÁI"
+
+#~ msgid ""
+#~ "TRACKING\n"
+#~ "RIGHT"
+#~ msgstr "DỊCH PHẢI"
+
+#~ msgid "SUMMARY"
+#~ msgstr "TÓM TẮT"
+
+#~ msgid ""
+#~ "GEARBOX\n"
+#~ "INDICATOR"
+#~ msgstr ""
+#~ "CHỈ BÁO\n"
+#~ "HỘP SỐ"
+
+#~ msgid "ADD"
+#~ msgstr "THÊM"
+
+#~ msgid ""
+#~ "EXPORT\n"
+#~ "REPORT"
+#~ msgstr ""
+#~ "XUẤT\n"
+#~ "BÁO CÁO"
+
+#~ msgid "LOAD"
+#~ msgstr "HIỂN THỊ"
+
+#~ msgid ""
+#~ "WIFI\n"
+#~ "SETTING"
+#~ msgstr ""
+#~ "CÀI ĐẶT \n"
+#~ "WIFI"
+
+#~ msgid ""
+#~ "SENSOR\n"
+#~ "POWER OFF"
+#~ msgstr ""
+#~ "TẮT NGUỒN\n"
+#~ "CẢM BIẾN"
+
+#~ msgid ""
+#~ "SAVE\n"
+#~ "DATA"
+#~ msgstr "LƯU DATA"
+
+#~ msgid ""
+#~ "EXPORT\n"
+#~ "FROM DB"
+#~ msgstr ""
+#~ "XUẤT FILE\n"
+#~ "DATABASE"
+
+#~ msgid "Information"
+#~ msgstr "Thông tin"
+
+#~ msgid "Project and device managerment"
+#~ msgstr "Quản lý thông tin dự án và thiết bị"
+
+#~ msgid "Project"
+#~ msgstr "Dự án"
+
+#~ msgid "Date(YYYY-MM-DD)"
+#~ msgstr "Thời gian"
+
+#~ msgid "Get time now"
+#~ msgstr "Lấy thời gian"
+
+#~ msgid "Waveform analysis"
+#~ msgstr "Phân tích dạng sóng"
+
+#~ msgid "Frequency analysis"
+#~ msgstr "Phân tích tần số"
+
+#~ msgid "General analysis"
+#~ msgstr "Phân tích tổng quan"
+
+#~ msgid "History analysis"
+#~ msgstr "Phân tích dữ liệu lịch sử"
+
+#~ msgid "Resonance Analysis"
+#~ msgstr "Phân tích cộng hưởng"
+
+#~ msgid "TACHOMETER problem ! TSA is not applied."
+#~ msgstr "Cảm biến quang chưa đúng, không áp dụng TSA."
+
+#~ msgid "Data is updated."
+#~ msgstr "Dữ liệu được cập nhật"
+
+#~ msgid "See the SUMMARY page for more details"
+#~ msgstr "Xem chi tiết trong trang TỔNG HỢP "
+
+#~ msgid "Do you want to turn on sensor power supply"
+#~ msgstr "Bạn có muốn bật nguồn cảm biến không?"
+
+#~ msgid "Do you want to turn off sensor power supply"
+#~ msgstr "Bạn có muốn tắt nguồn cảm biến không?"
+
+#~ msgid ""
+#~ "SENSOR\n"
+#~ "POWER ON"
+#~ msgstr ""
+#~ "BẬT NGUỒN\n"
+#~ "CẢM BIẾN"
+
+#~ msgid ""
+#~ "WaveForm\n"
+#~ " Analysis\n"
+#~ msgstr ""
+#~ " Phân tích\n"
+#~ "dạng sóng\n"
+
+#~ msgid ""
+#~ "Frequency\n"
+#~ "  Analysis\n"
+#~ msgstr ""
+#~ " Phân tích\n"
+#~ "    tần số\n"
+
+#~ msgid ""
+#~ "  General\n"
+#~ "Monitoring\n"
+#~ msgstr ""
+#~ " Giám sát\n"
+#~ "   chung\n"
+
+#~ msgid ""
+#~ "Resonance\n"
+#~ "  Analysis\n"
+#~ msgstr ""
+#~ " Phân tích\n"
+#~ "    Modal\n"
+
+#~ msgid ""
+#~ "   History\n"
+#~ "   Viewer\n"
+#~ msgstr ""
+#~ "   Hiển thi\n"
+#~ "   Lịch sử\n"
+
+#~ msgid ""
+#~ "  Dynamic\n"
+#~ " Balancing\n"
+#~ msgstr ""
+#~ " Cân bằng\n"
+#~ "     động\n"
+
+#~ msgid ""
+#~ "    DATA\n"
+#~ "  POWER\n"
+#~ msgstr ""
+#~ "   Dữ liệu\n"
+#~ "   Thiết bị\n"
+
+#~ msgid "Input the parameters bellow."
+#~ msgstr "Nhập các tham số dưới đây"
+
+#~ msgid "Sensor config"
+#~ msgstr "Cấu hình cảm biến"
+
+#~ msgid "Sensitivity"
+#~ msgstr "Độ nhạy"
+
+#~ msgid "Machine config"
+#~ msgstr "Thông số máy"
+
+#~ msgid "Orbit plot config"
+#~ msgstr "Cấu hình vẽ quỹ đạo"
+
+#~ msgid "  Orbit plot"
+#~ msgstr "Vẽ quỹ đạo"
+
+#~ msgid "  Filter"
+#~ msgstr "Bộ lọc"
+
+#~ msgid "Filter From"
+#~ msgstr "Fcut dưới"
+
+#~ msgid "Filter To"
+#~ msgstr "Fcut trên"
+
+#~ msgid "X Channel"
+#~ msgstr "Kênh X "
+
+#~ msgid "Y Channel"
+#~ msgstr "Kênh Y"
+
+#~ msgid "Tachometer"
+#~ msgstr "Tachometer"
+
+#~ msgid "Sym Tacho"
+#~ msgstr "Sym Tacho"
+
+#~ msgid "Cancel"
+#~ msgstr "Thoát"
+
+#~ msgid "Plot Type"
+#~ msgstr "Loại biểu đồ"
+
+#~ msgid "Chanel details."
+#~ msgstr "Xem chi tiết"
+
+#~ msgid "Detail"
+#~ msgstr "Chi tiết"
+
+#~ msgid "Language"
+#~ msgstr "Ngôn ngữ"

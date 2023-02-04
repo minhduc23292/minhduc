@@ -1232,7 +1232,7 @@ class ConfigFrame(Tk.Frame):
         sensorFrame = ttk.LabelFrame(self.wfConfigFrame, text='Sensor configuration', style='config.TLabelframe')
         sensorFrame.grid(column=0, row=0, padx=10, pady=0, ipadx=5, rowspan=9, columnspan=2, sticky='wn')
 
-        sensor1Label = ttk.Label(sensorFrame, text=_('Sensor1'), style='config.TLabel')
+        sensor1Label = ttk.Label(sensorFrame, text=_('Port1'), style='config.TLabel')
         sensor1Label.grid(column=0, row=0, padx=5, pady=5, sticky='w')
 
         sensor1Combo = ttk.Combobox(sensorFrame, width=10, textvariable=self.wfParam1, state="readonly",
@@ -1240,7 +1240,7 @@ class ConfigFrame(Tk.Frame):
         sensor1Combo['value'] = ('NONE', 'HA', 'VA', 'AA', 'HV', 'VV', 'AV')
         sensor1Combo.grid(column=1, row=0, padx=0, pady=5, sticky='e')
 
-        sensor2Label = ttk.Label(sensorFrame, text=_('Sensor2'), style='config.TLabel')
+        sensor2Label = ttk.Label(sensorFrame, text=_('Port2'), style='config.TLabel')
         sensor2Label.grid(column=0, row=1, padx=5, pady=5, sticky='w')
 
         sensor2Combo = ttk.Combobox(sensorFrame, width=10, textvariable=self.wfParam2, state="readonly",
@@ -1248,7 +1248,7 @@ class ConfigFrame(Tk.Frame):
         sensor2Combo['value'] = ('NONE', 'HA', 'VA', 'AA', 'HV', 'VV', 'AV')
         sensor2Combo.grid(column=1, row=1, padx=0, pady=5, sticky='e')
 
-        sensor3Label = ttk.Label(sensorFrame, text=_('Sensor3'), style='config.TLabel')
+        sensor3Label = ttk.Label(sensorFrame, text=_('Port3'), style='config.TLabel')
         sensor3Label.grid(column=0, row=2, padx=5, pady=5, sticky='w')
 
         sensor3Combo = ttk.Combobox(sensorFrame, width=10, textvariable=self.wfParam3, state="readonly",
@@ -1256,7 +1256,7 @@ class ConfigFrame(Tk.Frame):
         sensor3Combo['value'] = ('NONE', 'HA', 'VA', 'AA', 'HV', 'VV', 'AV')
         sensor3Combo.grid(column=1, row=2, padx=0, pady=5, sticky='e')
 
-        sensor4Label = ttk.Label(sensorFrame, text=_('Sensor4'), style='config.TLabel')
+        sensor4Label = ttk.Label(sensorFrame, text=_('Port4'), style='config.TLabel')
         sensor4Label.grid(column=0, row=3, padx=5, pady=5, sticky='w')
 
         sensor4Combo = ttk.Combobox(sensorFrame, width=10, textvariable=self.wfParam4, state="readonly",
