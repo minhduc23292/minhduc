@@ -30,9 +30,12 @@ class TotalConfig(object):
         self.project_struct = {
             "CompanyName": "No_name",
             "ProjectCode": "A1B2C3",
+            "Date":"2023-01-31",
             "Note": "None"
         }
-
+        self.batery_struct={
+            "remainCap": 50
+        }
         self.waveform_config_struct = {
             "Sensor1": 'HA',
             "Sensor2": 'VA',
@@ -42,7 +45,7 @@ class TotalConfig(object):
             "UseTSA": 0,
             "TSATimes": 10,
             "Fmax": 2000,
-            "num_fft_line": 4096,
+            "num_fft_line": 1600,
             "MachineName": "",
             "MachineType": "GENERAL",
             "Speed": 1500,

@@ -10,8 +10,6 @@ from keyboard.keyboard import KeyBoard
 from ui.creatFigure.creatFigure import creatFig
 from image.image import ImageAdrr
 from datetime import datetime
-import threading
-from threading import Lock
 import time
 import numpy as np
 from typing import TYPE_CHECKING
@@ -26,6 +24,11 @@ ad7609 = ctypes.CDLL(f'{current_directory}/ad7609BTZ.so')
 from digitalFilter.digitalFilter import filter_data
 from Calculation.calculate import *
 import PlotData.PlotData as Pd
+import pms.popMessage as pms
+import threading
+from threading import Lock
+from bateryMonitor.powerManager import *
+from ds3231.ds3231B import DS3231
 blink = 0
 blink1 = 0
 checkWidget = 'wasi'
@@ -39,6 +42,11 @@ amplitude_add_arr=[]
 phase_add_arr=[]
 x_arr=[]
 factor_change_permission=True
+remainCap = 50
+remainVolt = 3.8
+stateOfCharge = "CHARGING"
+firstTime = True
+
 def testVal(inStr, acttyp):
     if acttyp == '1':  # insert
         if not inStr.isdigit():
@@ -49,8 +57,9 @@ class Resonance(Tk.Frame):
     def __init__(self, parent: "Application"):
         # sv_ttk.set_theme("light")
         self.parent = parent
-        now = datetime.now()
-        self.current_time = now.strftime("%H:%M")
+        self.i2c_lock=Lock()
+        self.batery=BQ27510()
+        self.read_battery()
         imageAddress = ImageAdrr()
         self.homePhoto = imageAddress.homePhoto
         self.low_bat = imageAddress.low_bat
@@ -109,12 +118,12 @@ class Resonance(Tk.Frame):
         self.resonanceConfigFrame.resonanceApplyButton.configure(state="normal")
 
     def creat_setting_feature_panel(self):
-
-        self.timeLabel = ttk.Label(self.batFrame, style='bat.TLabel', text=self.current_time)
+        global remainCap
+        self.timeLabel = ttk.Label(self.batFrame, style='bat.TLabel', text=self.get_time_now())
         self.timeLabel.after(5000, self.update_time)
         self.timeLabel.place(relx=0.05, rely=0.1)
 
-        self.batLabel = ttk.Label(self.batFrame, style='bat.TLabel', text="20%", image=self.full_bat, compound=Tk.LEFT)
+        self.batLabel = ttk.Label(self.batFrame, style='bat.TLabel', text=f"{str(remainCap)}%", image=self.full_bat, compound=Tk.LEFT)
         self.batLabel.image = self.full_bat
         self.batLabel.after(10000, self.update_bat)
         self.batLabel.place(relx=0.5, rely=0.1)
@@ -162,20 +171,49 @@ class Resonance(Tk.Frame):
         self.analysisBt.configure(style="normal.TButton")
 
     def update_time(self):
-        now = datetime.now()
-        current_time = now.strftime("%H:%M")
+        # now = datetime.now()
+        # current_time = now.strftime("%H:%M")
+        current_time=self.get_time_now()
         self.timeLabel.configure(text=current_time)
         self.timeLabel.after(5000, self.update_time)
 
+    def get_time_now(self):
+        ds3231 = DS3231(1, 0x68)
+        rtcTime=str(ds3231.read_datetime())
+        # rtcTime=time.strftime("%Y-%m-%d %H:%M:%S")
+        return rtcTime[11:16]
+
     def update_bat(self):
-        remain_bat=90
-        if remain_bat>=70:
-            self.batLabel.configure(text=f"{int(remain_bat)}%", image=self.full_bat, compound=Tk.LEFT)
-        elif 30<=remain_bat<70:
-            self.batLabel.configure(text=f"{int(remain_bat)}%", image=self.half_bat, compound=Tk.LEFT)
+        global firstTime, remainCap, stateOfCharge, remainVolt
+        t8 = threading.Thread(target=self.read_battery)
+        t8.start()
+        averageCapacity = remainCap
+        if averageCapacity>=70:
+            self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.full_bat, compound=Tk.LEFT)
+        elif 30<=averageCapacity<70:
+            self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.half_bat, compound=Tk.LEFT)
         else:
-            self.batLabel.configure(text=f"{int(remain_bat)}%", image=self.low_bat, compound=Tk.LEFT)
+            self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.low_bat, compound=Tk.LEFT)
+            if firstTime:
+                pms.general_warning(_("Low Battery! Plug in the charger to keep it running"))
+                firstTime = False
+            if remainVolt <= 2.85:
+                if stateOfCharge !="CHARGING":
+                    with self.i2c_lock:
+                        self.batery.i2c_send_turn_off()
+                    os.system("sudo shutdown -h now")
         self.batLabel.after(10000, self.update_bat)
+
+    def read_battery(self):
+        global remainCap, stateOfCharge, remainVolt
+        with self.i2c_lock:
+            remainCap = round(self.batery.get_remaining_capacity())
+            remainVolt=self.batery.bq27510_battery_voltage()
+            if self.batery.bq27510_battery_current() > 0:
+                stateOfCharge = "CHARGING"
+            else:
+                stateOfCharge = "DISCHARGE"
+
     def go_home(self):
         self.mainFrame.destroy()
         self.parent.go_to_home_page()

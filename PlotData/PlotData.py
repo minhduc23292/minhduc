@@ -318,7 +318,7 @@ class PLT(FigureCanvasTkAgg):
             self.figure.delaxes(axes_arr[cc - 1])
             cc -= 1
         self.figure.add_subplot(1, 1, 1, projection="3d")
-        self.figure.set_size_inches(9, 11.8)
+        self.figure.set_size_inches(9.2, 10)
         self.figure.subplots_adjust(left=-0.25, right=1.1, top=1.1, bottom=0.38)
         self.figure.set_visible(True)
         ax_41, = self.figure.get_axes()
@@ -359,7 +359,7 @@ class PLT(FigureCanvasTkAgg):
         self.draw()
 
     def plot_all_history(self, arr, d_arr, sample_rate, viewRange, flag, tsa_use, tsa_bin, export_png=False):
-        self.figure.set_size_inches(8.2, 6.6)
+        self.figure.set_size_inches(9.2, 5.2)
         file_name = ''
         h_num = len(arr)
         axes_arr = self.figure.get_axes()
@@ -441,6 +441,67 @@ class PLT(FigureCanvasTkAgg):
             return
         self.draw()
 
+    def plot_velocity_spectral(self, arr, d_arr, sample_rate, viewRange, flag, tsa_use, tsa_bin, export_png=False):
+        self.figure.set_size_inches(9.2, 5.2)
+        file_name='velocity_frequency.png'
+        completeName = os.path.join(save_path, file_name)
+        h_num = len(arr)
+        axes_arr = self.figure.get_axes()
+        cc=len(axes_arr)
+        while cc>0:
+            self.figure.delaxes(axes_arr[cc-1])
+            cc-=1
+        axes_arr = self.figure.get_axes()
+        cc=len(axes_arr)
+        while  cc<h_num:
+            self.figure.add_subplot(h_num,1,cc+1)
+            cc+=1
+        axes_arr1 = self.figure.get_axes()
+        self.figure.set_visible(True)
+        for i in axes_arr:
+            i.cla()
+            i.clear()
+        num_of_axes=len(axes_arr1)
+        if num_of_axes == 1:
+            self.figure.subplots_adjust(left=0.1, right=0.95, top=0.95, bottom=0.15)
+        if num_of_axes == 2:
+            self.figure.subplots_adjust(left=0.1, right=0.95, top=0.95, bottom=0.15)
+        if num_of_axes == 3:
+            self.figure.subplots_adjust(left=0.1, right=0.95, top=0.95, bottom=0.15)
+        if num_of_axes == 4:
+            self.figure.subplots_adjust(left=0.1, right=0.95, top=0.95, bottom=0.15)
+        if num_of_axes == 5:
+            self.figure.subplots_adjust(left=0.1, right=0.95, top=0.95, bottom=0.15)
+        if num_of_axes == 6:
+            self.figure.subplots_adjust(left=0.1, right=0.95, top=0.95, bottom= 0.15)
+  
+        for i in range(h_num):
+            if tsa_use==1:
+                [yf2, xf2] = frequency_tsa(arr[i], tsa_bin, sample_rate[i] )
+            else:
+                n = len(arr[i])
+                w = signal.hann(n, sym=False)  # Hann (Hanning) window
+                xf2 = np.linspace(0.0, 1.0 / (2.0/sample_rate[i]), int(n / 2))
+                xf2=xf2[5:]
+                y = arr[i]
+                yf = fftpack.fft(y * w) * (4 / n)
+                yf2 = np.abs(yf[5:int(n / 2)])
+            for j in range(len(yf2)):
+                yf2[j]/=0.0002*np.pi*xf2[j]
+            axes_arr1[i].yaxis.set_major_formatter(FormatStrFormatter('%0.2f'))
+            axes_arr1[i].plot(xf2, yf2, color='blue', linewidth=0.5)
+            axes_arr1[i].grid()
+            axes_arr1[i].set_ylabel(d_arr[i]+'|')
+            axes_arr1[i].set_xlim(xmax=viewRange[1], xmin=viewRange[0])
+        for i in range(h_num-1):
+            axes_arr1[i].set_xticklabels([])
+        axes_arr1[-1].set_xlabel(_("Frequency [Hz]"))
+        
+        if export_png==True:
+            self.figure.savefig(completeName, bbox_inches='tight')
+            return
+        self.draw()
+
     def plot_trend(self, data_arr, d_arr, sample_rate_arr, sensorPosition, isoStandard, rpm, bearing_bore, view_arr,
                    export_png=False):
         file_name = "trend.png"
@@ -493,7 +554,7 @@ class PLT(FigureCanvasTkAgg):
             gE_arr = np.flip(np.array(gE_arr))
             hfcf_arr = np.flip(np.array(hfcf_arr))
             Acc_Pk_arr = np.flip(np.array(Acc_Pk_arr))
-        self.figure.set_size_inches(8.2, 6.5)
+        self.figure.set_size_inches(9.2, 5.1)
         axes_arr = self.figure.get_axes()
         cc = len(axes_arr)
         while cc > 0:
@@ -1087,7 +1148,7 @@ class PLT(FigureCanvasTkAgg):
 
     def plot_spectrogram(self, f, t, Zxx, date):
         t *= 1000
-        self.figure.set_size_inches(8.2, 6.5)
+        self.figure.set_size_inches(9.2, 5.2)
         axes_arr = self.figure.get_axes()
         cc = len(axes_arr)
         while cc > 0:
@@ -1129,7 +1190,7 @@ class PLT(FigureCanvasTkAgg):
             self.draw()
 
     def plot_grid_specific(self, grid_val: float, title, set_title_flag):
-        hfont = {'fontname': 'DejaVu Sans', 'fontsize': 10}
+        hfont = {'fontname': 'Chakra Petch', 'fontsize': 10}
         axes_arr = self.figure.get_axes()
         [left, right] = axes_arr[0].get_xlim()
         if grid_val > right:
@@ -1146,6 +1207,18 @@ class PLT(FigureCanvasTkAgg):
                 axes_arr[i].set_xticks(arr_grid, minor=True)
                 axes_arr[i].xaxis.grid(True, which='minor', color="r")
                 axes_arr[i].set_visible(True)
+        self.draw()
+
+    def plot_grid_only(self, grid_val:float):
+        axes_arr = self.figure.get_axes()
+        [left, right]=axes_arr[0].get_xlim()
+        if grid_val>right:
+            grid_val=right
+        arr_grid=[grid_val]
+        for i in range(len(axes_arr)):
+            axes_arr[i].set_xticks(arr_grid, minor=True)
+            axes_arr[i].xaxis.grid(True, which='minor', color="r")
+            axes_arr[i].set_visible(True)
         self.draw()
         
     def plot_impact_test(self, canal, sample_rate, window_len, damping_factor):

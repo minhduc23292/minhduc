@@ -1,0 +1,10 @@
+__pycache__
+*.csv
+*.so
+*.txt
+test.py
+.idea
+*.mo
+*~
+.venv
+*.db

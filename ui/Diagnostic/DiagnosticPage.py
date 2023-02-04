@@ -23,15 +23,25 @@ from datetime import datetime
 from scipy.stats import kurtosis
 import threading
 from threading import Lock
+import fileOperation.fileOperation as file_operation
+import pms.popMessage as pms
+import sqlite3 as lite
 current_directory = os.getcwd()
 parent_directory = os.path.dirname(os.path.dirname(current_directory))
+import ctypes
+from numpy.ctypeslib import ndpointer
+ad7609 = ctypes.CDLL(f'{current_directory}/ad7609BTZ.so')
+from bateryMonitor.powerManager import *
+from ds3231.ds3231B import DS3231
 blink = 0
 blink1 = 0
 checkWidget = 'wasi'
 track_flag = 0
 grid_flag = True
-
-
+remainCap = 50
+remainVolt = 3.8
+stateOfCharge = "CHARGING"
+firstTime = True
 def testVal(inStr, acttyp):
     if acttyp == '1':  # insert
         if not inStr.isdigit():
@@ -43,10 +53,12 @@ class DiagnosticPage(Tk.Frame):
     def __init__(self, parent: "Application"):
         # sv_ttk.set_theme("light")
         self.parent = parent
-        now = datetime.now()
-        self.current_time = now.strftime("%H:%M")
         self.ZoomCanvas = Tk.Canvas()
         self.freqFuntionCanvas = Tk.Canvas()
+        self.con = lite.connect(f'{current_directory}/company.db')
+        ad7609.init()
+        self.lock = Lock()
+        self.batery=BQ27510()
         imageAddress = ImageAdrr()
         self.settingPhoto = imageAddress.settingPhoto
         self.homePhoto = imageAddress.homePhoto
@@ -62,13 +74,14 @@ class DiagnosticPage(Tk.Frame):
         self.panLeft = imageAddress.panLeft
         self.panRight = imageAddress.panRight
         self.function1 = imageAddress.fuction1
-
+        self.read_battery()
         self.btstyle = ttk.Style()
         self.btstyle.configure('normal.TButton', font=('Chakra Petch', 13), borderwidth=1, justify=Tk.CENTER)
         # self.btstyle.map('normal.TButton', foreground=[('active', 'blue')])
         self.btstyle.configure('custom.Accent.TButton', font=('Chakra Petch', 10), justify=Tk.CENTER)
         self.btstyle.configure('bat.TLabel', font=('Chakra Petch', 13))
         self.btstyle.configure('normal.TLabel', font=('Chakra Petch', 13), background='white')
+        self.btstyle.configure('red.TLabel', font=('Chakra Petch', 13), background='white', foreground='red')
 
         self.mainFrame = Tk.Frame(self.parent, bd=1, bg='white', width=1008, height=584)
         self.mainFrame.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
@@ -117,8 +130,11 @@ class DiagnosticPage(Tk.Frame):
         self.generalSideButtonFrame.pack_propagate(0)
         self.generalSideButtonFrame.pack_forget()
 
-        self.batFrame = Tk.Frame(self.featureFrame, bd=1, bg='grey95', width=117, height=35)
-        self.batFrame.pack()
+        self.infoFrame= Tk.Frame(self.featureFrame, width=170, height=72, bg='white', bd=0)
+        self.infoFrame.place(relx=0.711, rely=0.018)
+
+        self.batFrame = Tk.Frame(self.featureFrame, width=117, height=35, bd=1, bg='grey95')
+        # self.batFrame.pack()
         self.batFrame.place(relx=0.89, rely=0.0)
         self.batFrame.pack_propagate(0)
         self.creat_diagnostic_page()
@@ -152,12 +168,12 @@ class DiagnosticPage(Tk.Frame):
      
 
     def creat_diagnostic_feature_panel(self):
-
-        self.timeLabel = ttk.Label(self.batFrame, style='bat.TLabel', text=self.current_time)
+        global remainCap
+        self.timeLabel = ttk.Label(self.batFrame, style='bat.TLabel', text=self.get_time_now())
         self.timeLabel.after(5000, self.update_time)
         self.timeLabel.place(relx=0.05, rely=0.1)
 
-        self.batLabel = ttk.Label(self.batFrame, style='bat.TLabel', text="20%", image=self.full_bat, compound=Tk.LEFT)
+        self.batLabel = ttk.Label(self.batFrame, style='bat.TLabel', text=f"{str(remainCap)}%", image=self.full_bat, compound=Tk.LEFT)
         self.batLabel.image = self.full_bat
         self.batLabel.after(10000, self.update_bat)
         self.batLabel.place(relx=0.5, rely=0.1)
@@ -191,6 +207,13 @@ class DiagnosticPage(Tk.Frame):
                                     command=self.on_general_button_clicked)
         self.generalBt.place(relx=0.562, rely=0.018, width=143, height=72)
 
+        self.infoLabel1=ttk.Label(self.infoFrame, text="Information", style="red.TLabel")
+        self.infoLabel1.grid(column=0, row=0, padx=0, pady=5, sticky='w')
+
+        self.infoLabel2 = ttk.Label(self.infoFrame, text="OK.", style="normal.TLabel", width=26)
+        self.infoLabel2.grid(column=0, row=1, padx=0, pady=5, sticky='w')
+
+
     def creat_diagnostic_config_panel(self):
         def clean_frame_for_config_panel():
             for widget in self.configFrame.winfo_children():
@@ -221,7 +244,8 @@ class DiagnosticPage(Tk.Frame):
     def creat_side_panel(self):
         saveBt = ttk.Button(self.waveformSideButtonFrame, style='custom.Accent.TButton', text="SAVE",
                             image=self.savePhoto,
-                            compound=Tk.TOP)
+                            compound=Tk.TOP,
+                            command=self.on_save_button_clicked)
         saveBt.place(x=0, y=271, width=88, height=75)
         saveBt.image = self.savePhoto
 
@@ -242,7 +266,8 @@ class DiagnosticPage(Tk.Frame):
 
         freqSaveBt = ttk.Button(self.freqSideButtonFrame, style='custom.Accent.TButton', text="SAVE",
                                 image=self.savePhoto,
-                                compound=Tk.TOP)
+                                compound=Tk.TOP,
+                                command=self.on_save_button_clicked)
         freqSaveBt.place(x=0, y=425, width=88, height=75)
         freqSaveBt.image = self.savePhoto
 
@@ -318,26 +343,57 @@ class DiagnosticPage(Tk.Frame):
             n = 6
         else:
             n = 4
-        chanelm = [[], [], [], [], []]
-        data_length = pow2(self.parent.origin_config.sensor_config["fft_line"]) + 2
-        total_length = data_length * n + 1
-        mt = np.linspace(0, (data_length) / self.parent.origin_config.sensor_config["sample_rate"], data_length,
-                         endpoint=False)
-        if n == 4:
-            chanelm[0] = 3 * np.cos(2 * np.pi * 25 * mt) + 2 * np.cos(2 * np.pi * 50 * mt + np.pi / 2)
-            chanelm[1] = 10 * np.cos(2 * np.pi * 25 * mt + np.pi / 2) + 2 * np.cos(2 * np.pi * 50 * mt)
-            chanelm[2] = 6 * np.cos(2 * np.pi * 25 * mt + np.pi / 2) + 2 * np.cos(2 * np.pi * 50 * mt)
-        elif n == 6:
-            chanelm[0] = 3 * np.cos(2 * np.pi * 25 * mt) + 2 * np.cos(2 * np.pi * 50 * mt + np.pi / 2)
-            chanelm[1] = 10 * np.cos(2 * np.pi * 25 * mt + np.pi / 2) + 2 * np.cos(2 * np.pi * 50 * mt)
-            chanelm[2] = 6 * np.cos(2 * np.pi * 25 * mt + np.pi / 2) + 2 * np.cos(2 * np.pi * 50 * mt)
-            chanelm[4] = signal.square(2 * np.pi * 25 * mt, duty=0.1)
+        data_length = pow2(int(self.parent.origin_config.sensor_config["fft_line"]*2.56))+2
+        waitingTime=int(data_length/self.parent.origin_config.sensor_config["sample_rate"])+2
+        self.infoLabel2.configure(text=_("READING.....Please wait:")+ f" {str(waitingTime)} " +_("seconds."), style="red.TLabel")
+        self.infoLabel2.update_idletasks()
+        total_length=data_length*n+1
+        ttl=[]
+        with self.lock:
+            ad7609.ADCread.restype = ctypes.POINTER(ctypes.c_float * total_length)
+            ad7609.ADCread.argtypes = [ctypes.c_int, ctypes.c_int, ctypes.c_int]
+            ad7609.freeme.argtypes = ctypes.c_void_p,
+            ad7609.freeme.restype = None
+            kq=ad7609.ADCread(data_length, self.parent.origin_config.sensor_config["sample_rate"], n)
+            ttl=[i for i in kq.contents]
+            ad7609.freeme(kq)
+        actual_sample_rate= int(ttl[-1])
+        chanelm=[[],[],[],[],[]]
+        if n==4:
+            for j in range(len(ttl)-1):
+                if j%4==0:
+                    chanelm[0].append(ttl[j])
+                elif j%4==1:
+                    chanelm[1].append(ttl[j])
+                elif j%4==2:
+                    chanelm[2].append(ttl[j])
+                elif j%4==3:
+                    chanelm[3].append(ttl[j])
+                else:
+                    pass
+        elif n==6:
+            for j in range(len(ttl)-1):
+                if j%6==0:
+                    chanelm[0].append(ttl[j])
+                elif j%6==1:
+                    chanelm[1].append(ttl[j])
+                elif j%6==2:
+                    pass
+                    # chanelm[5].append(ttl[j])
+                elif j%6==3:
+                    chanelm[2].append(ttl[j])
+                elif j%6==4:
+                    chanelm[3].append(ttl[j])
+                elif j%6==5:
+                    chanelm[4].append(ttl[j])
+                else:
+                    pass
         for i in range(n - 1):
             chaneln.append(np.array(chanelm[i][2:]))
 
         if n == 6:
             chaneln[4] /= 2  # 0
-            # chaneln[4] = fresh_laser_pulse(chaneln[4])
+            chaneln[4] = fresh_laser_pulse(chaneln[4])
             unit[3] = 'laser sensor'
         if self.parent.origin_config.waveform_config_struct["UseTSA"] == 1 and n == 6:
             mark = []
@@ -393,8 +449,128 @@ class DiagnosticPage(Tk.Frame):
             else:
                 pass
         self.parent.origin_config.sensor_config["unit"] = unit
+        self.infoLabel2.configure(text=_("Actual sample rate:")+ f" {str(actual_sample_rate)}", style="normal.TLabel")
 
+    def on_save_button_clicked(self):
+        sample_rate = int(self.parent.origin_config.waveform_config_struct["Fmax"]*2.56)
+        driveCheckVal = self.parent.origin_config.waveform_config_struct["MachineType"]
+        companyName = self.parent.origin_config.project_struct["CompanyName"]
+        prjCode = self.parent.origin_config.project_struct["ProjectCode"]
+        if companyName!="" and prjCode!="":
+            rpmVal = self.parent.origin_config.waveform_config_struct["Speed"]
+            powerVal = self.parent.origin_config.waveform_config_struct["Power"]
+            foundationVal = self.parent.origin_config.waveform_config_struct["Foundation"]
+            bearingBoreVal = self.parent.origin_config.waveform_config_struct["BearingBore"]
+            gearToothVal = self.parent.origin_config.waveform_config_struct["GearTeeth"]
+            date = self.parent.origin_config.project_struct["Date"]
+            machineName = self.parent.origin_config.waveform_config_struct["MachineName"]
 
+            ss1=self.parent.origin_config.waveform_config_struct["Sensor1"]
+            ss2=self.parent.origin_config.waveform_config_struct["Sensor2"]
+            ss3=self.parent.origin_config.waveform_config_struct["Sensor3"]
+            if len(self.parent.origin_config.sensor_config["sensor_data"])!=0:
+                canal1 = self.parent.origin_config.sensor_config["sensor_data"][0]
+                canal2 = self.parent.origin_config.sensor_config["sensor_data"][1]
+                canal3 = self.parent.origin_config.sensor_config["sensor_data"][2]
+            else:
+                pms.show_error(_('There is no data !'))
+                return
+            if len(canal1)!= 0:
+                canal1_str = file_operation.conv_str_tag(canal1)
+                canal2_str = file_operation.conv_str_tag(canal2)
+                canal3_str = file_operation.conv_str_tag(canal3)
+                # canal4_str = file_operation.conv_str_tag(canal4)
+                with self.con:
+                    cur = self.con.cursor()
+                    exist_name=cur.execute(f"SELECT * FROM Company_ID WHERE NAME = '{companyName}'")
+                    arr=[b for b in exist_name]
+                    exist_code=cur.execute(f"SELECT * FROM Project_ID WHERE CODE = '{prjCode}'")
+                    arr1=[b for b in exist_code]
+                    companylist = cur.execute("SELECT * FROM Company_ID")
+                    companylistarr = [b for b in companylist]
+                    projectlist = cur.execute("SELECT * FROM Project_ID")
+                    projectlistarr = [b for b in projectlist]
+                    if len(arr)==0 and len(arr1)==0:
+                        if pms.company_project_dont_exist_warning()==True:
+                            cur.execute(f"INSERT INTO Company_ID (COM_ID, NAME, ADR) VALUES ({len(companylistarr)+1},'{companyName}','')")
+                            cur.execute(f"""INSERT INTO Project_ID (COM_ID, CODE, POWER, RPM, DRIVEN, NOTE, FOUNDATION, GEARTOOTH, BEARINGBORE) VALUES 
+                                        ({len(companylistarr)+1},'{prjCode}', {powerVal}, {rpmVal}, 
+                                        '{driveCheckVal}','{machineName}', '{foundationVal}', {gearToothVal}, {bearingBoreVal})""")
+                            if ss1 != 'NONE':
+                                cur.execute(f""" INSERT INTO DATA (CODE, DATE, POS, DATA, Sample_rate) VALUES ('{prjCode}', '{date}','{ss1}','{canal1_str}',{sample_rate})""")
+                            else:
+                                pass
+                            if ss2 != 'NONE':
+                                cur.execute(f""" INSERT INTO DATA (CODE, DATE, POS, DATA, Sample_rate) VALUES ('{prjCode}', '{date}','{ss2}','{canal2_str}',{sample_rate})""")
+                            else:
+                                pass
+                            if ss3 != 'NONE':
+                                cur.execute(f""" INSERT INTO DATA (CODE, DATE, POS, DATA, Sample_rate) VALUES ('{prjCode}', '{date}','{ss3}','{canal3_str}',{sample_rate})""")
+                            else:
+                                pass
+                            self.infoLabel2.configure(text=_("Data is saved."), style="normal.TLabel")
+
+                        else:
+                            print('nhap lai so lieu 1')
+
+                    elif len(arr)==0 and len(arr1)==1:
+                        pms.company_project_exist_error()
+
+                    elif len(arr) == 1 and len(arr1) == 0:
+                        if(pms.company_or_project_existed_warning())==True:
+                            cur.execute(f"""INSERT INTO Project_ID (COM_ID, CODE, POWER, RPM, DRIVEN, NOTE, FOUNDATION, GEARTOOTH, BEARINGBORE) 
+                            VALUES ({arr[0][0]},'{prjCode}',{powerVal},{rpmVal},'{driveCheckVal}','{machineName}', '{foundationVal}', {gearToothVal}, {bearingBoreVal})""")
+                            if ss1 != 'NONE':
+                                cur.execute(f""" INSERT INTO DATA (CODE, DATE, POS, DATA, Sample_rate) VALUES ('{prjCode}', '{date}', '{ss1}', '{canal1_str}',{sample_rate})""")
+                            else:
+                                pass
+                            if ss2 != 'NONE':
+                                cur.execute(f""" INSERT INTO DATA (CODE, DATE, POS, DATA, Sample_rate) VALUES ('{prjCode}', 
+                                            '{date}','{ss2}','{canal2_str}',{sample_rate})""")
+                            else:
+                                pass
+                            if ss3 != 'NONE':
+                                cur.execute(f""" INSERT INTO DATA (CODE, DATE, POS, DATA, Sample_rate) VALUES ('{prjCode}', 
+                                            '{date}','{ss3}','{canal3_str}',{sample_rate})""")
+                            else:
+                                pass
+                            self.infoLabel2.configure(text=_("Data is saved."), style="normal.TLabel")
+                        else:
+                            print('nhap lai so lieu 3')
+                    elif len(arr) == 1 and len(arr1) == 1:
+                        if arr[0][0]==arr1[0][1] :
+                            if pms.company_project_existed_warning()==True:
+                                if ss1 != 'NONE':
+                                    cur.execute(
+                                        f""" INSERT INTO DATA (CODE, DATE, POS, DATA, Sample_rate) VALUES ('{prjCode}', 
+                                                '{date}','{ss1}','{canal1_str}',{sample_rate})""")
+                                else:
+                                    pass
+                                if ss2 != 'NONE':
+                                    cur.execute(
+                                        f""" INSERT INTO DATA (CODE, DATE, POS, DATA, Sample_rate) VALUES ('{prjCode}', 
+                                                '{date}','{ss2}','{canal2_str}',{sample_rate})""")
+                                else:
+                                    pass
+                                if ss3 != 'NONE':
+                                    cur.execute(
+                                        f""" INSERT INTO DATA (CODE, DATE, POS, DATA, Sample_rate) VALUES ('{prjCode}', 
+                                                '{date}','{ss3}','{canal3_str}',{sample_rate})""")
+                                else:
+                                    pass
+                                self.infoLabel2.configure(text=_("Data is saved."), style="normal.TLabel")
+                            else:
+                                pass
+                        else:
+                            pms.company_project_exist_error()
+                    else:
+                        pass
+            else:
+                pms.show_error(_('There is no data !'))
+                return
+        else:
+            pms.show_error(_('Please input project code and company name !'))
+            return   
     def get_focus_widget(self):
         widget = self.parent.focus_get()
         return widget
@@ -943,21 +1119,48 @@ class DiagnosticPage(Tk.Frame):
                 pass
 
     def update_time(self):
-        now = datetime.now()
-        current_time = now.strftime("%H:%M")
+        # now = datetime.now()
+        # current_time = now.strftime("%H:%M")
+        current_time=self.get_time_now()
         self.timeLabel.configure(text=current_time)
         self.timeLabel.after(5000, self.update_time)
 
+    def get_time_now(self):
+        ds3231 = DS3231(1, 0x68)
+        rtcTime=str(ds3231.read_datetime())
+        # rtcTime=time.strftime("%Y-%m-%d %H:%M:%S")
+        return rtcTime[11:16]
+
     def update_bat(self):
-        remain_bat=90
-        if remain_bat>=70:
-            self.batLabel.configure(text=f"{int(remain_bat)}%", image=self.full_bat, compound=Tk.LEFT)
-        elif 30<=remain_bat<70:
-            self.batLabel.configure(text=f"{int(remain_bat)}%", image=self.half_bat, compound=Tk.LEFT)
+        global firstTime, remainCap, stateOfCharge, remainVolt
+        t8 = threading.Thread(target=self.read_battery)
+        t8.start()
+        averageCapacity = remainCap
+        if averageCapacity>=70:
+            self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.full_bat, compound=Tk.LEFT)
+        elif 30<=averageCapacity<70:
+            self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.half_bat, compound=Tk.LEFT)
         else:
-            self.batLabel.configure(text=f"{int(remain_bat)}%", image=self.low_bat, compound=Tk.LEFT)
+            self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.low_bat, compound=Tk.LEFT)
+            if firstTime:
+                pms.general_warning(_("Low Battery! Plug in the charger to keep it running"))
+                firstTime = False
+            if remainVolt <= 2.85:
+                if stateOfCharge !="CHARGING":
+                    with self.lock:
+                        self.batery.i2c_send_turn_off()
+                    os.system("sudo shutdown -h now")
         self.batLabel.after(10000, self.update_bat)
 
+    def read_battery(self):
+        global remainCap, stateOfCharge, remainVolt
+        with self.lock:
+            remainCap = round(self.batery.get_remaining_capacity())
+            remainVolt=self.batery.bq27510_battery_voltage()
+            if self.batery.bq27510_battery_current() > 0:
+                stateOfCharge = "CHARGING"
+            else:
+                stateOfCharge = "DISCHARGE"
 
 class ConfigFrame(Tk.Frame):
     def __init__(self, parent: "self.configFrame", origin_config):
@@ -1084,7 +1287,7 @@ class ConfigFrame(Tk.Frame):
         fftLineLabel.grid(column=0, row=7, padx=5, pady=5, sticky='w')
         fftLineCombo = ttk.Combobox(sensorFrame, width=10, textvariable=self.wfParam8, state="readonly", \
                                     font=('Chakra Petch', 14))
-        fftLineCombo['value'] = ('2048', '4096', '8192', '16384', '32768', '65536', '131072')
+        fftLineCombo['value'] = ('800','1600','3200','6400','12800', '25600', '51200')
         fftLineCombo.grid(column=1, row=7, padx=0, pady=5, sticky="e")
 
         sampleRateLabel = ttk.Label(sensorFrame, text=_("Fmax "), style='config.TLabel')
