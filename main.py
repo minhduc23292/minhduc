@@ -124,7 +124,12 @@ class TotalConfig(object):
 class Application(Tk.Frame):
 
     def __init__(self, parent):
-        super().__init__(parent, padx=8, pady=8)
+        super().__init__(parent, padx=8, pady=8, bg='#ffffff')
+        
+        # Configure font globally
+        self.style = ttk.Style(parent)
+        self.style.configure('Accent.TButton', font=('Chakra Petch', 13))
+        
         self.origin_config = TotalConfig()
         HomePage(self).pack()
 
