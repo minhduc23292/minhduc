@@ -49,7 +49,6 @@ class SettingPage(Tk.Frame):
 
         self.btstyle = ttk.Style()
         self.btstyle.configure('normal.TButton', font=('Chakra Petch', 12), borderwidth=5, justify=Tk.CENTER)
-        self.btstyle.map('normal.TButton', foreground=[('active', 'blue')])
         self.btstyle.configure('custom.Accent.TButton', font=('Chakra Petch', 10), bordercolor='black', borderwidth=4,
                                justify=Tk.CENTER)
         self.btstyle.configure('bat.TLabel', font=('Chakra Petch', 13))
