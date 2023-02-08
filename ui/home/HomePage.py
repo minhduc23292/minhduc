@@ -91,10 +91,6 @@ class HomePage(Tk.Frame):
 
         self.style.configure('home.TButton', font=('Chakra Petch', 15), bordercolor='black', borderwidth=4,
                              justify=Tk.CENTER)
-        self.style.map('home.TButton',
-                       foreground=[('disabled', 'yellow'),
-                                   ('pressed', 'blue'),
-                                   ('active', 'blue')])
 
     def move_to_diagnostic_page(self):
         self.homeFrame.destroy()

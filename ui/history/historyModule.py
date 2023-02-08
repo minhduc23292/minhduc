@@ -61,7 +61,6 @@ class History(Tk.Frame):
         self.arrowPhoto = imageAddress.arrowPhoto
         self.style = ttk.Style()
         self.style.configure('normal.TButton', font=('Chakra Petch', 13), borderwidth=5, justify=Tk.CENTER)
-        self.style.map('normal.TButton', foreground=[('active', 'blue')])
         self.style.configure('custom.Accent.TButton', font=('Chakra Petch', 10), bordercolor='black', borderwidth=4,
                                justify=Tk.CENTER)
         self.style.configure('bat.TLabel', font=('Chakra Petch', 13))
