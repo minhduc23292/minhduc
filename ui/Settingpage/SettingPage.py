@@ -77,7 +77,7 @@ class SettingPage(Tk.Frame):
         self.generalConfigFrame=GeneralConfig(self.notebook.tab1, self.parent.origin_config)
         self.generalConfigFrame.pack(side=Tk.LEFT, fill=Tk.BOTH, expand=1)
         self.wifiConfigFrame=WifiConfig(self.notebook.tab2).pack(side=Tk.LEFT, fill=Tk.BOTH, expand=1)
-        self.powerConfigFrame=Power(self.notebook.tab4, self.lock).pack(side=Tk.LEFT, fill=Tk.BOTH, expand=1)
+        self.powerConfigFrame=Power(self.notebook.tab4, self.lock, self.batery).pack(side=Tk.LEFT, fill=Tk.BOTH, expand=1)
         self.languageConfigFrame=LanguageConfig(self.notebook.tab3, self.parent.origin_config.language_config_struct)
         self.languageConfigFrame.pack(side=Tk.LEFT, fill=Tk.BOTH, expand=1)
         self.parent.bind_class('TEntry', "<FocusIn>", self.show_key_board)
@@ -342,8 +342,9 @@ class WifiConfig(Tk.Frame):
             print(ex)
 
 class Power(Tk.Frame):
-    def __init__(self, parent, lock):
+    def __init__(self, parent, lock, batery):
         self.lock=lock
+        self.batery=batery
         self.style = ttk.Style()
         self.style.configure('power.TLabel', font=('Chakra Petch', 13))
         self.style.configure('power.TLabelframe', font=('Chakra Petch', 15))
