@@ -26,13 +26,20 @@ stateOfCharge = "CHARGING"
 firstTime = True
 current_directory = os.getcwd()
 parent_directory = os.path.dirname(os.path.dirname(current_directory))
-
+ds3231 = DS3231(1, 0x68)
 def testVal(inStr, acttyp):
     if acttyp == '1':  # insert
         if not inStr.isdigit():
             return False
     return True
 
+def get_time_now(date_time_flag):
+        rtcTime=str(ds3231.read_datetime())
+        # rtcTime=time.strftime("%Y-%m-%d %H:%M:%S")
+        if (date_time_flag==1):
+            return rtcTime[11:16]
+        else:
+            return rtcTime[:10]
 
 class SettingPage(Tk.Frame):
     def __init__(self, parent: "Application"):
@@ -46,10 +53,15 @@ class SettingPage(Tk.Frame):
         self.low_bat = imageAddress.low_bat
         self.half_bat = imageAddress.half_bat
         self.full_bat = imageAddress.full_bat
-
+        self.empty_bat = imageAddress.empty_bat
+        self.lowCharging = imageAddress.lowCharging
+        self.medCharging = imageAddress.medCharging
+        self.fullCharging = imageAddress.fullCharging
+        self.emptyCharging = imageAddress.emptyCharging
+        
         self.btstyle = ttk.Style()
-        self.btstyle.configure('normal.TButton', font=('Chakra Petch', 12), borderwidth=5, justify=Tk.CENTER)
-        self.btstyle.configure('custom.Accent.TButton', font=('Chakra Petch', 10), bordercolor='black', borderwidth=4,
+        self.btstyle.configure('normal.TButton', font=('Chakra Petch', 15), borderwidth=5, justify=Tk.CENTER)
+        self.btstyle.configure('custom.Accent.TButton', font=('Chakra Petch', 15), bordercolor='black', borderwidth=4,
                                justify=Tk.CENTER)
         self.btstyle.configure('bat.TLabel', font=('Chakra Petch', 13))
         self.btstyle.configure('normal.TLabel', font=('Chakra Petch', 12), background='white')
@@ -66,9 +78,9 @@ class SettingPage(Tk.Frame):
         self.settingFrame.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
         self.settingFrame.pack_propagate(0)
 
-        self.batFrame = Tk.Frame(self.featureFrame, bd=1, bg='grey95', width=117, height=35)
+        self.batFrame = Tk.Frame(self.featureFrame, bd=1, bg='grey95', width=130, height=35)
         self.batFrame.pack()
-        self.batFrame.place(relx=0.89, rely=0.0)
+        self.batFrame.place(relx=0.87, rely=0.0)
         self.batFrame.pack_propagate(0)
 
         self.creat_setting_feature_panel()
@@ -100,7 +112,7 @@ class SettingPage(Tk.Frame):
 
     def creat_setting_feature_panel(self):
         global remainCap
-        self.timeLabel = ttk.Label(self.batFrame, style='bat.TLabel', text=self.get_time_now())
+        self.timeLabel = ttk.Label(self.batFrame, style='bat.TLabel', text=get_time_now(1))
         self.timeLabel.after(5000, self.update_time)
         self.timeLabel.place(relx=0.05, rely=0.1)
 
@@ -118,22 +130,18 @@ class SettingPage(Tk.Frame):
         barrie=Tk.Frame(self.featureFrame, width=3, height=72, background='grey')
         barrie.place(relx=0.11, rely=0.018)
 
-        self.configBt = ttk.Button(self.featureFrame, style='Accent.TButton', text="Setting")
+        self.configBt = ttk.Button(self.featureFrame, style='custom.Accent.TButton', text=_("Setting"))
         self.configBt.place(relx=0.122, rely=0.018, width=115, height=72)
 
 
     def update_time(self):
         # now = datetime.now()
         # current_time = now.strftime("%H:%M")
-        current_time=self.get_time_now()
+        current_time=get_time_now(1)
         self.timeLabel.configure(text=current_time)
         self.timeLabel.after(5000, self.update_time)
 
-    def get_time_now(self):
-        ds3231 = DS3231(1, 0x68)
-        rtcTime=str(ds3231.read_datetime())
-        # rtcTime=time.strftime("%Y-%m-%d %H:%M:%S")
-        return rtcTime[11:16]
+    
 
     def update_bat(self):
         global firstTime, remainCap, stateOfCharge, remainVolt
@@ -141,11 +149,26 @@ class SettingPage(Tk.Frame):
         t8.start()
         averageCapacity = remainCap
         if averageCapacity>=70:
-            self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.full_bat, compound=Tk.LEFT)
+            if stateOfCharge !="CHARGING":
+                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.full_bat, compound=Tk.LEFT)
+            else:
+                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.fullCharging, compound=Tk.LEFT)
         elif 30<=averageCapacity<70:
-            self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.half_bat, compound=Tk.LEFT)
+            if stateOfCharge !="CHARGING":
+                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.half_bat, compound=Tk.LEFT)
+            else:
+                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.medCharging, compound=Tk.LEFT)
+        elif 10<=averageCapacity<30:
+            if stateOfCharge !="CHARGING":
+                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.low_bat, compound=Tk.LEFT)
+            else:
+                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.lowCharging, compound=Tk.LEFT)
+
         else:
-            self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.low_bat, compound=Tk.LEFT)
+            if stateOfCharge !="CHARGING":
+                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.empty_bat, compound=Tk.LEFT)
+            else:
+                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.emptyCharging, compound=Tk.LEFT)
             if firstTime:
                 pms.general_warning(_("Low Battery! Plug in the charger to keep it running"))
                 firstTime = False
@@ -172,6 +195,10 @@ class SettingPage(Tk.Frame):
 class GeneralConfig(Tk.Frame):
     def __init__(self, parent, origin_config):
         super().__init__(parent, width=1024, height=350, bg="white")
+        self.style = ttk.Style()
+        self.style.configure('gen.TLabel', font=('Chakra Petch', 14))
+        self.style.configure('gen.TLabelframe', font=('Chakra Petch', 10))
+        self.style.configure('gen.TButton', font=('Chakra Petch', 15), width=40, height=40)
         self.creat_genral_config_page(origin_config)
 
     def creat_genral_config_page(self, origin_config):
@@ -180,31 +207,38 @@ class GeneralConfig(Tk.Frame):
         self.prjParam3 = Tk.StringVar()
         self.prjParam1.set(origin_config.project_struct["ProjectCode"])
         self.prjParam2.set(origin_config.project_struct["CompanyName"])
-        self.prjParam3.set(origin_config.project_struct["Note"])
+        self.prjParam3.set(origin_config.project_struct["Date"])
 
-        projectFrame = ttk.LabelFrame(self, text='Project config')
+        projectFrame = ttk.LabelFrame(self, text=_('Project config'))
         projectFrame.grid(column=0, row=0, padx=10, pady=10, columnspan=2, sticky='wn')
 
-        prjCodeLabel = ttk.Label(projectFrame, text=_('Project Code*'), style='white.TLabel')
+        prjCodeLabel = ttk.Label(projectFrame, text=_('Project Code*'), style='gen.TLabel')
         prjCodeLabel.grid(column=0, row=0, padx=10, pady=5, sticky='w')
 
-        prjCodeEntry = ttk.Entry(projectFrame, width=30, textvariable=self.prjParam1, takefocus=False)
+        prjCodeEntry = ttk.Entry(projectFrame, width=20, textvariable=self.prjParam1, takefocus=False,
+                                font=('Chakra Petch', 14))
         # prjCodeEntry['validatecommand'] = (prjCodeEntry.register(testVal), '%P', '%d')
         prjCodeEntry.grid(column=1, row=0, padx=10, pady=5, sticky='e')
 
-        companyLabel = ttk.Label(projectFrame, text=_('Company Name'), style='white.TLabel')
+        companyLabel = ttk.Label(projectFrame, text=_('Company Name'), style='gen.TLabel')
         companyLabel.grid(column=0, row=1, padx=10, pady=5, sticky='w')
 
-        companyEntry = ttk.Entry(projectFrame, width=30, textvariable=self.prjParam2, takefocus=False)
+        companyEntry = ttk.Entry(projectFrame, width=20, textvariable=self.prjParam2, takefocus=False,
+                                font=('Chakra Petch', 14))
         companyEntry.grid(column=1, row=1, padx=10, pady=5, sticky='e')
 
-        noteLabel = ttk.Label(projectFrame, text=_('Note'), style='white.TLabel')
+        noteLabel = ttk.Label(projectFrame, text=_('Date'), style='gen.TLabel')
         noteLabel.grid(column=0, row=2, padx=10, pady=5, sticky='w')
 
-        noteEntry = ttk.Entry(projectFrame, width=30, textvariable=self.prjParam3, takefocus=False)
-        noteEntry.grid(column=1, row=2, padx=10, pady=5, sticky='e')
+        self.noteEntry = ttk.Entry(projectFrame, width=20, textvariable=self.prjParam3, takefocus=False,
+                                font=('Chakra Petch', 14))
+        self.noteEntry.grid(column=1, row=2, padx=10, pady=5, sticky='e')
 
-        self.applyButton = ttk.Button(projectFrame, text="APPLY", style="Accent.TButton",
+        self.applyButton = ttk.Button(projectFrame, text=_("Get time now"), style="Accent.TButton",
+                                      command=self.on_get_time_now_button_clicked)
+        self.applyButton.grid(column=2, row=2, padx=10, pady=20, sticky='ew')
+
+        self.applyButton = ttk.Button(projectFrame, text=_("APPLY"), style="Accent.TButton",
                                       command=lambda: self.on_apply_button_clicked(origin_config))
         self.applyButton.grid(column=1, row=3, padx=10, pady=20, ipady=5, sticky='ew')
 
@@ -215,9 +249,12 @@ class GeneralConfig(Tk.Frame):
         if self.prjParam1.get()!='':
             origin_config.project_struct["ProjectCode"] = self.prjParam1.get()
         if self.prjParam3.get()!='':
-            origin_config.project_struct["Note"] = self.prjParam3.get()
+            origin_config.project_struct["Date"] = self.prjParam3.get()
         self.applyButton.configure(state="disable")
 
+    def on_get_time_now_button_clicked(self):
+        text=get_time_now(0)
+        self.prjParam3.set(text)
 
 class CreatTab(ttk.Notebook):
     def __init__(self, parent):
@@ -242,7 +279,7 @@ class CreatTab(ttk.Notebook):
 class WifiConfig(Tk.Frame):
     def __init__(self, parent):
         self.style = ttk.Style()
-        self.style.configure('wifi.TLabel', font=('Chakra Petch', 13))
+        self.style.configure('wifi.TLabel', font=('Chakra Petch', 14))
         self.style.configure('wifi.TLabelframe', font=('Chakra Petch', 15))
         self.style.configure('wifi.TButton', font=('Chakra Petch', 15), width=40, height=40)
 
@@ -271,7 +308,7 @@ class WifiConfig(Tk.Frame):
         except:
             self.wifiImage = imageAddress.noWifiImage
 
-        wifiLableFrame = ttk.LabelFrame(self, text='Wifi config', style="wifi.TLabelframe")
+        wifiLableFrame = ttk.LabelFrame(self, text=_('Wifi config'), style="wifi.TLabelframe")
         wifiLableFrame.grid(column=0, row=0, padx=10, pady=5, columnspan=2, sticky='wn')
 
         wifiLabel = ttk.Label(wifiLableFrame, text=infoText, style="wifi.TLabel")
@@ -294,18 +331,19 @@ class WifiConfig(Tk.Frame):
         passwordLabel = ttk.Label(wifiLableFrame, text=_("Password"), style="wifi.TLabel")
         passwordLabel.grid(column=0, row=2, padx=10, pady=5, sticky='w')
 
-        passwordEntry = ttk.Entry(wifiLableFrame, width=17, textvariable=self.wilessParam2, takefocus=False)
-        passwordEntry.grid(column=1, row=2, padx=10, pady=5, ipadx=2, sticky='e')
+        passwordEntry = ttk.Entry(wifiLableFrame, width=17, textvariable=self.wilessParam2, takefocus=False,
+                                font=('Chakra Petch', 14))
+        passwordEntry.grid(column=1, row=2, padx=10, pady=5, ipadx=4, sticky='e')
         # wilessCancelButton = Tk.Button(wifiLableFrame, text=_("Cancel"), width=11, height=3,
         #                                activebackground='yellow',
         #                                bg="lavender", state='normal', command=self.cancel_button)
         # wilessCancelButton.grid(column=0, row=3, padx=0, pady=10, sticky='w')
 
-        wilessConnectButton = ttk.Button(wifiLableFrame, text=_("Connect"), command=self.connection, style="Accent.TButton")
+        wilessConnectButton = ttk.Button(wifiLableFrame, text=_("CONNECT"), command=self.connection, style="Accent.TButton")
         wilessConnectButton.width=50
         wilessConnectButton.grid(column=0, row=3, padx=0, pady=10, ipadx=20, ipady=5, sticky='e')
 
-        wilessDisconnectButton = ttk.Button(wifiLableFrame, text=_("Disconnect"), command=self.disconnect, style="Accent.TButton")
+        wilessDisconnectButton = ttk.Button(wifiLableFrame, text=_("DISCONNECT"), command=self.disconnect, style="Accent.TButton")
         wilessDisconnectButton.grid(column=1, row=3, padx=10, pady=10, ipadx=14, ipady=5, sticky='e')
 
     def connection(self):
@@ -355,13 +393,13 @@ class Power(Tk.Frame):
     def creat_power_page(self):
         imageAdress=ImageAdrr()
         shutdownImage=imageAdress.shutdownImage
-        shutdownButton=ttk.Button(self, text="SHUTDOWN", compound=Tk.TOP, image=shutdownImage, style="power.TButton",
+        shutdownButton=ttk.Button(self, text=_("SHUTDOWN"), compound=Tk.TOP, image=shutdownImage, style="power.TButton",
                                   command=self.on_shutdown_button_clicked)
         shutdownButton.image=shutdownImage
         shutdownButton.place(x=280, y=140, width=190, height=172)
 
         restartImage = imageAdress.restartImage
-        restartButton = ttk.Button(self, text="RESTART", compound=Tk.TOP, image=restartImage, style="power.TButton",
+        restartButton = ttk.Button(self, text=_("RESTART"), compound=Tk.TOP, image=restartImage, style="power.TButton",
                                    command=self.on_restart_button_clicked)
         restartButton.image=restartImage
         restartButton.place(x=518, y=140, width=190, height=172)
@@ -396,15 +434,15 @@ class LanguageConfig(Tk.Frame):
         with open(self.json_pathname, 'r', encoding='utf-8') as f:
             currentLanguage = json.load(f)
         self.languageParam1.set(currentLanguage["Language"])
-        languageLabelFrame=ttk.LabelFrame(self, text="Language")
+        languageLabelFrame=ttk.LabelFrame(self, text=_("Language config"))
         languageLabelFrame.grid(column=0, row=0, padx=10, pady=5, columnspan=2, sticky='wn')
-        languageLabel=ttk.Label(languageLabelFrame, text="Language", style="language.TLabel")
+        languageLabel=ttk.Label(languageLabelFrame, text=_("Language"), style="language.TLabel")
         languageLabel.grid(column=0, row=0, padx=10, pady=5, sticky='w')
         languageCombo=ttk.Combobox(languageLabelFrame, width=14, textvariable=self.languageParam1, state="readonly",
                                  font=("Chakra Petch", 15), takefocus=False)
         languageCombo["value"]=('ENGLISH','JAPANESE','VIETNAMESE')
         languageCombo.grid(column=1, row=0, padx=10, pady=5, sticky='e')
-        languageButton=ttk.Button(languageLabelFrame, text="Apply", style="Accent.TButton",
+        languageButton=ttk.Button(languageLabelFrame, text="APPLY", style="Accent.TButton",
                                   command=lambda:self.on_apply_button_clicked(language_config_struct))
         languageButton.grid(column=1, row=1, padx=10, pady=10, ipadx=20, ipady=5, sticky='e')
 

@@ -58,11 +58,18 @@ class History(Tk.Frame):
         self.low_bat = imageAddress.low_bat
         self.half_bat = imageAddress.half_bat
         self.full_bat = imageAddress.full_bat
+        self.empty_bat = imageAddress.empty_bat
+        self.lowCharging = imageAddress.lowCharging
+        self.medCharging = imageAddress.medCharging
+        self.fullCharging = imageAddress.fullCharging
+        self.emptyCharging = imageAddress.emptyCharging
         self.arrowPhoto = imageAddress.arrowPhoto
         self.style = ttk.Style()
-        self.style.configure('normal.TButton', font=('Chakra Petch', 13), borderwidth=5, justify=Tk.CENTER)
+        self.style.configure('normal.TButton', font=('Chakra Petch', 15), borderwidth=5, justify=Tk.CENTER)
         self.style.configure('custom.Accent.TButton', font=('Chakra Petch', 10), bordercolor='black', borderwidth=4,
                                justify=Tk.CENTER)
+        self.style.configure('feature.Accent.TButton', font=('Chakra Petch', 15), borderwidth=1, justify=Tk.CENTER)
+
         self.style.configure('bat.TLabel', font=('Chakra Petch', 13))
         self.style.configure('normal.TLabel', font=('Chakra Petch', 13), background='white')
         self.style.configure('red.TLabel', font=('Chakra Petch', 13), background='white', foreground='red')
@@ -72,12 +79,12 @@ class History(Tk.Frame):
         self.mainFrame.pack_propagate(0)
 
         self.featureFrame = Tk.Frame(self.mainFrame, bd=1, bg='white', width=1024, height=80)
-        self.featureFrame.pack(side=Tk.TOP, fill=Tk.X, expand=1)
+        self.featureFrame.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
         self.featureFrame.pack_propagate(0)
 
-        self.batFrame = Tk.Frame(self.featureFrame, bd=1, bg='grey95', width=117, height=35)
+        self.batFrame = Tk.Frame(self.featureFrame, bd=1, bg='grey95', width=130, height=35)
         self.batFrame.pack()
-        self.batFrame.place(relx=0.89, rely=0.0)
+        self.batFrame.place(relx=0.87, rely=0.0)
         self.batFrame.pack_propagate(0)
 
         self.creat_setting_feature_panel()
@@ -128,7 +135,7 @@ class History(Tk.Frame):
         barrie=Tk.Frame(self.featureFrame, width=3, height=72, background='grey')
         barrie.place(relx=0.11, rely=0.018)
 
-        self.configBt = ttk.Button(self.featureFrame, style='Accent.TButton', text="Config",
+        self.configBt = ttk.Button(self.featureFrame, style='feature.Accent.TButton', text=_("Config"),
                                     command=self.on_config_button_clicked)
         self.configBt.place(relx=0.122, rely=0.018, width=115, height=72)
 
@@ -136,14 +143,14 @@ class History(Tk.Frame):
         self.arrowLabel.place(relx=0.237, rely=0.25)
         self.arrowLabel.image = self.arrowPhoto
         
-        self.analysisBt = ttk.Button(self.featureFrame, style='normal.TButton', text="History\nAnalysis",
+        self.analysisBt = ttk.Button(self.featureFrame, style='normal.TButton', text=_("History\nAnalysis"),
                                    command=self.on_analysis_button_clicked)
         self.analysisBt.place(relx=0.265, rely=0.018, width=115, height=72)
 
         self.infoFrame= Tk.Frame(self.featureFrame, width=451, height=72, bg='white', bd=0)
         self.infoFrame.place(relx=0.41, rely=0.018)
 
-        self.infoLabel1=ttk.Label(self.infoFrame, text="Information", style="red.TLabel")
+        self.infoLabel1=ttk.Label(self.infoFrame, text=_("Information"), style="red.TLabel")
         self.infoLabel1.grid(column=0, row=0, padx=0, pady=5, sticky='w')
 
         self.infoLabel2 = ttk.Label(self.infoFrame, text="OK.", style="normal.TLabel", width=42)
@@ -153,12 +160,12 @@ class History(Tk.Frame):
         self.historyConfigFrame.pack_forget()
         self.historyAnalysisFrame.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
         self.configBt.configure(style="normal.TButton")
-        self.analysisBt.configure(style="Accent.TButton")
+        self.analysisBt.configure(style="feature.Accent.TButton")
 
     def on_config_button_clicked(self):
         self.historyConfigFrame.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
         self.historyAnalysisFrame.pack_forget()
-        self.configBt.configure(style="Accent.TButton")
+        self.configBt.configure(style="feature.Accent.TButton")
         self.analysisBt.configure(style="normal.TButton")
 
     def update_time(self):
@@ -180,11 +187,26 @@ class History(Tk.Frame):
         t8.start()
         averageCapacity = remainCap
         if averageCapacity>=70:
-            self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.full_bat, compound=Tk.LEFT)
+            if stateOfCharge !="CHARGING":
+                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.full_bat, compound=Tk.LEFT)
+            else:
+                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.fullCharging, compound=Tk.LEFT)
         elif 30<=averageCapacity<70:
-            self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.half_bat, compound=Tk.LEFT)
+            if stateOfCharge !="CHARGING":
+                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.half_bat, compound=Tk.LEFT)
+            else:
+                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.medCharging, compound=Tk.LEFT)
+        elif 10<=averageCapacity<30:
+            if stateOfCharge !="CHARGING":
+                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.low_bat, compound=Tk.LEFT)
+            else:
+                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.lowCharging, compound=Tk.LEFT)
+
         else:
-            self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.low_bat, compound=Tk.LEFT)
+            if stateOfCharge !="CHARGING":
+                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.empty_bat, compound=Tk.LEFT)
+            else:
+                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.emptyCharging, compound=Tk.LEFT)
             if firstTime:
                 pms.general_warning(_("Low Battery! Plug in the charger to keep it running"))
                 firstTime = False
@@ -220,6 +242,7 @@ class historyConfig(Tk.Frame):
         self.style.configure('history.TLabelframe', font=('Chakra Petch', 15), bg='white', borderwidth=0)
         self.style.configure('history.TButton', font=('Chakra Petch', 15))
         self.style.configure('history.TEntry', font=('Chakra Petch', 15))
+        self.style.configure('history.Switch.TCheckbutton', font=('Chakra Petch', 13))
         self.creatConfig(history_config_struct)
 
     def creatConfig(self, history_config_struct):
@@ -250,15 +273,16 @@ class historyConfig(Tk.Frame):
 
         projectIDLabel = ttk.Label(historyFrame, text=_('Project Code'), style="history.TLabel")
         projectIDLabel.grid(column=0, row=0, padx=5, pady=5, sticky="w")
-        projectIDEntry=ttk.Entry(historyFrame, width=14, textvariable=self.historyParam1, style="history.TEntry",
+        projectIDEntry=ttk.Entry(historyFrame, width=14, textvariable=self.historyParam1, font=('Chakra Petch', 13),
                                 validate="key")
         projectIDEntry.grid(column=1, row=0, padx=(0,10), pady=5, sticky="e")
 
         positionLabel = ttk.Label(historyFrame, text=_('Sensor Position'), style="history.TLabel")
         positionLabel.grid(column=0, row=1, padx=5, pady=5, sticky="w")
-        positionCombo=ttk.Combobox(historyFrame, width=10, textvariable=self.historyParam2, state="readonly")
+        positionCombo=ttk.Combobox(historyFrame, width=10, textvariable=self.historyParam2, state="readonly",
+                                    font=('Chakra Petch', 13))
         positionCombo['value'] = ('HA','VA','AA','HV','VV','AV')
-        positionCombo.grid(column=1, row=1, padx=(0, 10), pady=5, ipadx=3, sticky="e")
+        positionCombo.grid(column=1, row=1, padx=(0, 10), pady=5, ipadx=7, sticky="e")
 
         # plotLabel = ttk.Label(historyFrame, text=_('Plot Type'), style="history.TLabel")
         # plotLabel.grid(column=0, row=2, padx=5, pady=5, sticky="w")
@@ -268,44 +292,45 @@ class historyConfig(Tk.Frame):
 
         filterFromLabel = ttk.Label(historyFrame, text=_("Bandpass Filter From"), style="history.TLabel")
         filterFromLabel.grid(column=0, row=3, padx=5, pady=5, sticky='w')
-        filterFromEntry=ttk.Entry(historyFrame, width=14, textvariable=self.historyParam4, style="history.TEntry",
+        filterFromEntry=ttk.Entry(historyFrame, width=14, textvariable=self.historyParam4, font=('Chakra Petch', 13),
                                 validate="key")
         filterFromEntry.grid(column=1, row=3, padx=(0,10), pady=5, sticky='e')
 
         filterToLabel = ttk.Label(historyFrame, text=_("Bandpass Filter To"), style="history.TLabel")
         filterToLabel.grid(column=0, row=4, padx=5, pady=5, sticky='w')
-        filterToEntry=ttk.Entry(historyFrame, width=14, textvariable=self.historyParam5, style="history.TEntry",
+        filterToEntry=ttk.Entry(historyFrame, width=14, textvariable=self.historyParam5, font=('Chakra Petch', 13),
                                 validate="key")
         filterToEntry.grid(column=1, row=4, padx=(0, 10), pady=5, sticky='e')
 
         viewLabel = ttk.Label(historyFrame, text=_("View Limit"), style="history.TLabel")
         viewLabel.grid(column=0, row=5, padx=5, pady=5, sticky='w')
-        viewEntry=ttk.Entry(historyFrame, width=14, textvariable=self.historyParam6, style="history.TEntry",
+        viewEntry=ttk.Entry(historyFrame, width=14, textvariable=self.historyParam6, font=('Chakra Petch', 13),
                                 validate="key")
         viewEntry.grid(column=1, row=5, padx=(0, 10), pady=5, sticky='e')
 
         meshLabel = ttk.Label(historyFrame, text=_("Tracking resolution"), style="history.TLabel")
         meshLabel.grid(column=0, row=6, padx=5, pady=5, sticky='w')
-        meshEntry=ttk.Entry(historyFrame, width=14, textvariable=self.historyParam7, style="history.TEntry",
+        meshEntry=ttk.Entry(historyFrame, width=14, textvariable=self.historyParam7, font=('Chakra Petch', 13),
                                 validate="key")
         meshEntry.grid(column=1, row=6, padx=(0, 10), pady=5, sticky='e')
         
         tsaCheckButton=ttk.Checkbutton(historyFrame, text=_("Use Average"), offvalue=0, onvalue=1, 
-                            variable=self.tsa_var, command=self.update_text_tsa, style="Switch.TCheckbutton")
+                            variable=self.tsa_var, command=self.update_text_tsa, style="history.Switch.TCheckbutton")
         tsaCheckButton.grid(column=1,row=7, padx=0, pady=5, sticky='w')
 
         tsaLabel = ttk.Label(historyFrame, text=_("Average Bin"), style="history.TLabel")
         tsaLabel.grid(column=0, row=8, padx=5, pady=5, sticky='w')
-        self.tsaBin=ttk.Combobox(historyFrame, width=10, textvariable=self.historyParam8, state="readonly")
+        self.tsaBin=ttk.Combobox(historyFrame, width=10, textvariable=self.historyParam8, state="readonly",
+                                    font=('Chakra Petch', 13))
         self.tsaBin['value'] = ('2048','4096','8192','16384','32768')
-        self.tsaBin.grid(column=1, row=8, padx=(0, 10), pady=5, ipadx=3, sticky='e')
+        self.tsaBin.grid(column=1, row=8, padx=(0, 10), pady=5, ipadx=7, sticky='e')
 
-        self.applyBt = ttk.Button(historyFrame, style='Accent.TButton', text="Apply",
+        self.applyBt = ttk.Button(historyFrame, style='Accent.TButton', text="APPLY",
                                    command=lambda: self.update_config_struct(history_config_struct))
-        self.applyBt.grid(column=1, row=9, padx=(0, 10), pady=(50,5), ipadx=40, ipady=5, sticky='w')
+        self.applyBt.grid(column=1, row=9, padx=(0, 10), pady=(30,5), ipadx=52, ipady=5, sticky='w')
 
         databaseConfigFrame = ttk.LabelFrame(self, text=_('Project Table'), style="history.TLabelframe")
-        databaseConfigFrame.grid(column=1, row=0, padx=80, pady=0, sticky='ne')
+        databaseConfigFrame.grid(column=1, row=0, padx=60, pady=0, sticky='ne')
 
         self.textbox=Tk.scrolledtext.ScrolledText(databaseConfigFrame, 
                                       wrap = Tk.WORD, 
@@ -317,7 +342,7 @@ class historyConfig(Tk.Frame):
         self.textbox.grid(column=0, row=0, padx=0, pady=0, sticky='e')
         deletePrjButton = ttk.Button(databaseConfigFrame, text=_("Delete Project"), style='Accent.TButton',
                             command=self.delete_project)
-        deletePrjButton.grid(column=0, row=1, padx=10, pady=5, ipadx=10, ipady=5, sticky='e')
+        deletePrjButton.grid(column=0, row=1, padx=10, pady=(10, 5), ipadx=10, ipady=5, sticky='e')
 
     def update_text_tsa(self):
         self.applyBt.configure(state='normal')
@@ -357,10 +382,10 @@ class historyConfig(Tk.Frame):
             # cur.execute(f"SELECT NOTE FROM Project_ID WHERE CODE = '9991';")
             # note = cur.fetchall()
             load_data_arr = [i for i in load_data]
-            showstring='PrjID' +'\t'+ 'DATE' + '\t' +'\t' +'POSITION'+ '\t'+'   SAMPLE RATE'+'\n'+'\n'
+            showstring='PrjID' +'\t'+ '      '+ 'DATE' + '\t' +'              ' +'POSITION'+ '\t'+'    '+'SAMPLE RATE'+'\n'+'\n'
             for k in range(len(load_data)):
-                showstring+= str(load_data_arr[k][0])+'\t'+ str(load_data_arr[k][1])+'\t'+ '\t'+ str(load_data_arr[k][2])+\
-                '\t'+ '\t'+ str(load_data_arr[k][3])+'\n'
+                showstring+= str(load_data_arr[k][0])+'\t'+'   '+ str(load_data_arr[k][1])+'\t'+ '\t'+ str(load_data_arr[k][2])+\
+                '\t'+ str(load_data_arr[k][3])+'\n'
             return showstring
 
     def delete_project(self):
@@ -428,7 +453,7 @@ class SideButtonFrame(Tk.Frame):
         self.creat_button()
 
     def creat_button(self):
-        saveBt = ttk.Button(self, style='custom.Accent.TButton', text="EXPORT\nREPORT", command=self.report)
+        saveBt = ttk.Button(self, style='custom.Accent.TButton', text=_("EXPORT\nREPORT"), command=self.report)
         saveBt.place(x=0, y=425, width=88, height=75)
 
         freqZoomBt = ttk.Button(self, style='custom.Accent.TButton', text="ZOOM",
@@ -495,7 +520,8 @@ class SideButtonFrame(Tk.Frame):
         button4.place(x=0, y=231, width=88, height=75)
         button4.image = self.panRight
 
-        button5 = ttk.Button(self.ZoomCanvas, text=_("RESET"), style='zoom.Accent.TButton')
+        button5 = ttk.Button(self.ZoomCanvas, text=_("RESET"), style='zoom.Accent.TButton',
+                            command=lambda: self.view_change(draw_canvas, _type='RESET'))
         button5.place(x=0, y=308, width=88, height=75)
 
     def view_change(self, canvas, _type):
@@ -525,6 +551,9 @@ class SideButtonFrame(Tk.Frame):
                 elif _type == "OUT":
                     [xleft, xright] = ax.get_xlim()
                     xright += 50
+                    ax.set_xlim(xleft, xright)
+                elif _type == "RESET":
+                    [xleft, xright] = [0, self.history_config_struct["ViewLimit"]]
                     ax.set_xlim(xleft, xright)
             canvas.draw()
         except:
@@ -616,22 +645,22 @@ class SideButtonFrame(Tk.Frame):
                 self.history_config_struct["dataSample"]=result_arr2
                 self.history_config_struct["sampleRate"]=sample_rate_arr
                 if plot_type=="WAVEFORM":
-                    self.freqFunctionBt.configure(text="PLOT\nWAVEFORM", style="small.Accent.TButton")
+                    self.freqFunctionBt.configure(text=_("PLOT\nWAVEFORM"), style="small.Accent.TButton")
                     Pd.PLT.plot_all_history(self.canvas, result_arr2, date_arr, sample_rate_arr, viewRange, 1, tsaUse, tsaBin, export_png=export_png)
                 elif plot_type=="FREQUENCY":
-                    self.freqFunctionBt.configure(text="PLOT\nFREQUENCY\nSPECTRUM", style="small.Accent.TButton")
+                    self.freqFunctionBt.configure(text=_("PLOT\nFREQUENCY\nSPECTRUM"), style="small.Accent.TButton")
                     Pd.PLT.plot_all_history(self.canvas, result_arr2, date_arr, sample_rate_arr, viewRange, 0, tsaUse, tsaBin, export_png=export_png)
                 elif plot_type=="VEL FREQUENCY":
                     if sensorPosition[-1]=='A':
-                        self.freqFunctionBt.configure(text="PLOT\nVELOCITY\nSPECTRUM", style="small.Accent.TButton")
+                        self.freqFunctionBt.configure(text=_("PLOT\nVELOCITY\nSPECTRUM"), style="small.Accent.TButton")
                         Pd.PLT.plot_velocity_spectral(self.canvas, result_arr2, date_arr, sample_rate_arr, viewRange, 3, tsaUse, tsaBin, export_png=export_png)
                     
                 elif plot_type=="WATERFALL":
-                    self.freqFunctionBt.configure(text="PLOT\nWATERFALL", style="small.Accent.TButton")
+                    self.freqFunctionBt.configure(text=_("PLOT\nWATERFALL"), style="small.Accent.TButton")
                     Pd.PLT.plot_waterfall(self.canvas, result_arr1, date_arr, sample_rate_arr, viewRange, export_png=export_png)
 
                 elif plot_type=="TREND":
-                    self.freqFunctionBt.configure(text="PLOT\nTREND", style="small.Accent.TButton")
+                    self.freqFunctionBt.configure(text=_("PLOT\nTREND"), style="small.Accent.TButton")
                     self.freqCursorLeftBt.configure(state='disable')
                     self.freqCursorRightBt.configure(state='disable')
                     self.freqCursorLeftBt.update_idletasks()
@@ -645,7 +674,7 @@ class SideButtonFrame(Tk.Frame):
                     Pd.PLT.plot_trend(self.canvas, result_arr1, date_arr, sample_rate_arr, sensorPosition,\
                     isoStandard, rpm, bearing_bore, view_arr, export_png=export_png)
                 elif plot_type=="ENVELOPED":
-                    self.freqFunctionBt.configure(text="PLOT\nENVELOPED", style="small.Accent.TButton")
+                    self.freqFunctionBt.configure(text=_("PLOT\nENVELOPED"), style="small.Accent.TButton")
                     filter_type = "BANDPASS"
                     filter_from = self.history_config_struct["FilterFrom"]# high pass cutoff freq
                     filter_to = self.history_config_struct["FilterTo"]# low pass cutoff freq

@@ -36,6 +36,7 @@ remainCap = 50
 remainVolt = 3.8
 stateOfCharge = "CHARGING"
 firstTime = True
+split_canvas_flag=0
 def testVal(inStr, acttyp):
     if acttyp == '1':  # insert
         if not inStr.isdigit():
@@ -50,15 +51,21 @@ class Balancing(Tk.Frame):
         self.low_bat = imageAddress.low_bat
         self.half_bat = imageAddress.half_bat
         self.full_bat = imageAddress.full_bat
+        self.empty_bat = imageAddress.empty_bat
+        self.lowCharging = imageAddress.lowCharging
+        self.medCharging = imageAddress.medCharging
+        self.fullCharging = imageAddress.fullCharging
+        self.emptyCharging = imageAddress.emptyCharging
         self.arrowPhoto = imageAddress.arrowPhoto
         self.lock = Lock()
         self.batery=BQ27510()
         self.read_battery()
         self.btstyle = ttk.Style()
-        self.btstyle.configure('normal.TButton', font=('Chakra Petch', 13), borderwidth=5, justify=Tk.CENTER)
+        self.btstyle.configure('normal.TButton', font=('Chakra Petch', 15), borderwidth=5, justify=Tk.CENTER)
         self.btstyle.map('normal.TButton', foreground=[('active', 'blue')])
         self.btstyle.configure('custom.Accent.TButton', font=('Chakra Petch', 10), bordercolor='black', borderwidth=4,
                                justify=Tk.CENTER)
+        self.btstyle.configure('feature.Accent.TButton', font=('Chakra Petch', 15), borderwidth=1, justify=Tk.CENTER)
         self.btstyle.configure('bat.TLabel', font=('Chakra Petch', 13))
         self.btstyle.configure('normal.TLabel', font=('Chakra Petch', 13), background='white')
         self.btstyle.configure('red.TLabel', font=('Chakra Petch', 13), background='white', foreground='red')
@@ -68,12 +75,12 @@ class Balancing(Tk.Frame):
         self.mainFrame.pack_propagate(0)
 
         self.featureFrame = Tk.Frame(self.mainFrame, bd=1, bg='white', width=1024, height=80)
-        self.featureFrame.pack(side=Tk.TOP, fill=Tk.X, expand=1)
+        self.featureFrame.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
         self.featureFrame.pack_propagate(0)
 
-        self.batFrame = Tk.Frame(self.featureFrame, bd=1, bg='grey95', width=117, height=35)
+        self.batFrame = Tk.Frame(self.featureFrame, bd=1, bg='grey95', width=130, height=35)
         self.batFrame.pack()
-        self.batFrame.place(relx=0.89, rely=0.0)
+        self.batFrame.place(relx=0.87, rely=0.0)
         self.batFrame.pack_propagate(0)
 
         self.creat_setting_feature_panel()
@@ -124,7 +131,7 @@ class Balancing(Tk.Frame):
         barrie=Tk.Frame(self.featureFrame, width=3, height=72, background='grey')
         barrie.place(relx=0.11, rely=0.018)
 
-        self.configBt = ttk.Button(self.featureFrame, style='Accent.TButton', text="Config",
+        self.configBt = ttk.Button(self.featureFrame, style='feature.Accent.TButton', text=_("Config"),
                                     command=self.on_config_button_clicked)
         self.configBt.place(relx=0.122, rely=0.018, width=115, height=72)
 
@@ -132,29 +139,29 @@ class Balancing(Tk.Frame):
         self.arrowLabel.place(relx=0.237, rely=0.25)
         self.arrowLabel.image = self.arrowPhoto
         
-        self.analysisBt = ttk.Button(self.featureFrame, style='normal.TButton', text="Balancing",
+        self.analysisBt = ttk.Button(self.featureFrame, style='normal.TButton', text=_("Balancing"),
                                    command=self.on_analysis_button_clicked)
         self.analysisBt.place(relx=0.265, rely=0.018, width=115, height=72)
 
         self.infoFrame= Tk.Frame(self.featureFrame, width=451, height=72, bg='white', bd=0)
         self.infoFrame.place(relx=0.41, rely=0.018)
 
-        self.infoLabel1=ttk.Label(self.infoFrame, text="Information", style="red.TLabel")
+        self.infoLabel1=ttk.Label(self.infoFrame, text=_("Information"), style="red.TLabel")
         self.infoLabel1.grid(column=0, row=0, padx=0, pady=5, sticky='w')
 
-        self.infoLabel2 = ttk.Label(self.infoFrame, text="Click RUN to start.", style="normal.TLabel", width=42)
+        self.infoLabel2 = ttk.Label(self.infoFrame, text=_("Click RUN to start."), style="normal.TLabel", width=42)
         self.infoLabel2.grid(column=0, row=1, padx=0, pady=5, sticky='w')
 
     def on_analysis_button_clicked(self):
         self.balancingConfigFrame.pack_forget()
         self.balancingAnalysisFrame.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
         self.configBt.configure(style="normal.TButton")
-        self.analysisBt.configure(style="Accent.TButton")
+        self.analysisBt.configure(style="feature.Accent.TButton")
 
     def on_config_button_clicked(self):
         self.balancingConfigFrame.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
         self.balancingAnalysisFrame.pack_forget()
-        self.configBt.configure(style="Accent.TButton")
+        self.configBt.configure(style="feature.Accent.TButton")
         self.analysisBt.configure(style="normal.TButton")
 
     def update_time(self):
@@ -176,11 +183,26 @@ class Balancing(Tk.Frame):
         t8.start()
         averageCapacity = remainCap
         if averageCapacity>=70:
-            self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.full_bat, compound=Tk.LEFT)
+            if stateOfCharge !="CHARGING":
+                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.full_bat, compound=Tk.LEFT)
+            else:
+                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.fullCharging, compound=Tk.LEFT)
         elif 30<=averageCapacity<70:
-            self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.half_bat, compound=Tk.LEFT)
+            if stateOfCharge !="CHARGING":
+                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.half_bat, compound=Tk.LEFT)
+            else:
+                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.medCharging, compound=Tk.LEFT)
+        elif 10<=averageCapacity<30:
+            if stateOfCharge !="CHARGING":
+                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.low_bat, compound=Tk.LEFT)
+            else:
+                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.lowCharging, compound=Tk.LEFT)
+
         else:
-            self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.low_bat, compound=Tk.LEFT)
+            if stateOfCharge !="CHARGING":
+                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.empty_bat, compound=Tk.LEFT)
+            else:
+                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.emptyCharging, compound=Tk.LEFT)
             if firstTime:
                 pms.general_warning(_("Low Battery! Plug in the charger to keep it running"))
                 firstTime = False
@@ -231,14 +253,6 @@ class BalancingConfig(Tk.Frame):
         self.balParam12=Tk.StringVar()
         self.balParam13=Tk.StringVar()
         self.balParam14=Tk.StringVar()
-        self.balParam15=Tk.StringVar()
-        self.balParam16=Tk.StringVar()
-        self.balParam17=Tk.StringVar()
-        self.balParam18=Tk.StringVar()
-        self.balParam19=Tk.StringVar()
-        self.balParam20=Tk.StringVar()
-        self.balParam21=Tk.StringVar()
-        self.balParam22=Tk.StringVar()
 
         # self.balParam1.set(balancing_config_struct["roto_type"])
         self.balParam2.set(balancing_config_struct["num_planes"])
@@ -263,132 +277,97 @@ class BalancingConfig(Tk.Frame):
         numOfPlane.grid(column=0, row=1, padx=5, pady=5, sticky="w")
         numPlaneCombo=ttk.Combobox(BalancingFrame, width=10, textvariable=self.balParam2, state="readonly", font=('Chakra Petch', 13))
         numPlaneCombo['value'] = ('One','Two')
-        numPlaneCombo.grid(column=1, row=1, padx=0, pady=5, sticky="w")
+        numPlaneCombo.grid(column=1, row=1, padx=0, pady=5, ipadx=2, sticky="w")
         # self.numPlaneCombo.current(0)
 
         numOfSensors = ttk.Label(BalancingFrame, text=_('Num of sensors'), style='balancing.TLabel')
         numOfSensors.grid(column=0, row=2, padx=5, pady=5, sticky="w")
         numSensorCombo=ttk.Combobox(BalancingFrame, width=10, textvariable=self.balParam3, state="readonly", font=('Chakra Petch', 13))
         numSensorCombo['value'] = ('One','Two')
-        numSensorCombo.grid(column=1, row=2, padx=0, pady=5, sticky="w")
+        numSensorCombo.grid(column=1, row=2, padx=0, pady=5, ipadx=2, sticky="w")
         # self.numSensorCombo.current(0)
 
         sensorType = ttk.Label(BalancingFrame, text=_('Sensor type'), style='balancing.TLabel')
         sensorType.grid(column=0, row=3, padx=5, pady=5, sticky="w")
         sensorTypeCombo=ttk.Combobox(BalancingFrame, width=10, textvariable=self.balParam10, state="readonly", font=('Chakra Petch', 13))
         sensorTypeCombo['value'] = ('Velocity','Acceleration')
-        sensorTypeCombo.grid(column=1, row=3, padx=0, pady=5, sticky="w")
+        sensorTypeCombo.grid(column=1, row=3, padx=0, pady=5, ipadx=2, sticky="w")
         # self.sensorTypeCombo.current(0)
 
         sensor1Lable = ttk.Label(BalancingFrame, text=_('Sensor1'), style='balancing.TLabel')
         sensor1Lable.grid(column=0, row=4, padx=5, pady=5, sticky="w")
         sensor1Combo=ttk.Combobox(BalancingFrame, width=10, textvariable=self.balParam11, state="readonly", font=('Chakra Petch', 13))
         sensor1Combo['value'] = ('Port1','Port2','Port3')
-        sensor1Combo.grid(column=1, row=4, padx=0, pady=5, sticky="w")
+        sensor1Combo.grid(column=1, row=4, padx=0, pady=5, ipadx=2, sticky="w")
         # self.sensor1Combo.current(1)
 
         sensor2Lable = ttk.Label(BalancingFrame, text=_('Sensor2'), style='balancing.TLabel')
         sensor2Lable.grid(column=0, row=5, padx=5, pady=5, sticky="w")
         sensor2Combo=ttk.Combobox(BalancingFrame, width=10, textvariable=self.balParam12, state="readonly", font=('Chakra Petch', 13))
         sensor2Combo['value'] = ('Port1','Port2','Port3')
-        sensor2Combo.grid(column=1, row=5, padx=0, pady=5, sticky="w")
+        sensor2Combo.grid(column=1, row=5, padx=0, pady=5, ipadx=2, sticky="w")
         # self.sensor2Combo.current(1)
 
         mass1Label = ttk.Label(BalancingFrame, text=_("Trial mass 1 (g)"), style='balancing.TLabel')
         mass1Label.grid(column=0, row=6, padx=5, pady=5, sticky="w")
-        mass1Entry = ttk.Entry(BalancingFrame, width=14, textvariable=self.balParam5, style="balancing.TEntry",
+        mass1Entry = ttk.Entry(BalancingFrame, width=13, textvariable=self.balParam5, font=('Chakra Petch', 13),
                                 validate="key")
         mass1Entry['validatecommand'] = (mass1Entry.register(testVal), '%P', '%d')
         mass1Entry.grid(column=1, row=6, padx=0, pady=5, sticky="w")
 
         mass2Label = ttk.Label(BalancingFrame, text=_("Trial mass 2 (g)"), style='balancing.TLabel')
         mass2Label.grid(column=0, row=7, padx=5, pady=5, sticky="w")
-        mass2Entry = ttk.Entry(BalancingFrame, width=14, textvariable=self.balParam6, style="balancing.TEntry",
+        mass2Entry = ttk.Entry(BalancingFrame, width=13, textvariable=self.balParam6, font=('Chakra Petch', 13),
                                 validate="key")
         mass2Entry['validatecommand'] = (mass2Entry.register(testVal), '%P', '%d')
         mass2Entry.grid(column=1, row=7, padx=0, pady=5, sticky="w")
 
         mass1AngelLabel = ttk.Label(BalancingFrame, text=_("Angle 1 (deg)"), style='balancing.TLabel')
-        mass1AngelLabel.grid(column=2, row=6, padx=5, pady=5, sticky="w")
-        mass1AngleEntry = ttk.Entry(BalancingFrame, width=14, textvariable=self.balParam13, style="balancing.TEntry",
+        mass1AngelLabel.grid(column=2, row=6, padx=(30, 0), pady=5, sticky="w")
+        mass1AngleEntry = ttk.Entry(BalancingFrame, width=13, textvariable=self.balParam13, font=('Chakra Petch', 13),
                                 validate="key")
         mass1AngleEntry['validatecommand'] = (mass1AngleEntry.register(testVal), '%P', '%d')
         mass1AngleEntry.grid(column=3, row=6, padx=0, pady=5, sticky="w")
 
         mass2AngelLabel = ttk.Label(BalancingFrame, text=_("Angle 2 (deg)"), style='balancing.TLabel')
-        mass2AngelLabel.grid(column=2, row=7, padx=5, pady=5, sticky="w")
-        mass2AngleEntry = ttk.Entry(BalancingFrame, width=14, textvariable=self.balParam14, style="balancing.TEntry",
+        mass2AngelLabel.grid(column=2, row=7, padx=(30, 0), pady=5, sticky="w")
+        mass2AngleEntry = ttk.Entry(BalancingFrame, width=13, textvariable=self.balParam14, font=('Chakra Petch', 13),
                                 validate="key")
         mass2AngleEntry['validatecommand'] = (mass2AngleEntry.register(testVal), '%P', '%d')
         mass2AngleEntry.grid(column=3, row=7, padx=0, pady=5, sticky="w")
 
 
         direction = ttk.Label(BalancingFrame, text=_("Rotating dir"), style='balancing.TLabel')
-        direction.grid(column=2, row=1, padx=5, pady=5, sticky="w")
+        direction.grid(column=2, row=1, padx=(30, 0), pady=5, sticky="w")
         dirCombo=ttk.Combobox(BalancingFrame, width=10, textvariable=self.balParam7, state="readonly", font=('Chakra Petch', 13))
         dirCombo['value'] = ('Clockwise','Counter-Clockwise')
-        dirCombo.grid(column=3, row=1, padx=0, pady=5, sticky="w")
+        dirCombo.grid(column=3, row=1, padx=0, pady=5, ipadx=2, sticky="w")
         # self.dirCombo.current(0)
 
         fftLine = ttk.Label(BalancingFrame, text=_('FFT lines'), style='balancing.TLabel')
-        fftLine.grid(column=2, row=2, padx=5, pady=5, sticky="w")
+        fftLine.grid(column=2, row=2, padx=(30, 0), pady=5, sticky="w")
         numLineCombo=ttk.Combobox(BalancingFrame, width=10, textvariable=self.balParam8, state="readonly", font=('Chakra Petch', 13))
         numLineCombo['value'] = ('1000','1200','1500','2000','4000','8000','16000')
-        numLineCombo.grid(column=3, row=2, padx=0, pady=5, sticky="w")
+        numLineCombo.grid(column=3, row=2, padx=0, pady=5, ipadx=2, sticky="w")
         # self.numLineCombo.current(2)
         
         balancingSampleRate = ttk.Label(BalancingFrame, text=_("Sample rate"), style='balancing.TLabel')
-        balancingSampleRate.grid(column=2, row=3, padx=5, pady=5, sticky="w")
-        SampleRateEntry = ttk.Entry(BalancingFrame, width=14, textvariable=self.balParam9, style="balancing.TEntry",
+        balancingSampleRate.grid(column=2, row=3, padx=(30, 0), pady=5, sticky="w")
+        SampleRateEntry = ttk.Entry(BalancingFrame, width=13, textvariable=self.balParam9, font=('Chakra Petch', 13),
                                     validate="key")
         SampleRateEntry['validatecommand'] = (SampleRateEntry.register(testVal), '%P', '%d')
         SampleRateEntry.grid(column=3, row=3, padx=0, pady=5, sticky="w")
 
         numOfBlades = ttk.Label(BalancingFrame, text=_('Num of blades'), style='balancing.TLabel')
-        numOfBlades.grid(column=2, row=4, padx=5, pady=5, sticky="w")
-        numBladeEntry = ttk.Entry(BalancingFrame, width=14, textvariable=self.balParam4, style="balancing.TEntry",
+        numOfBlades.grid(column=2, row=4, padx=(30, 0), pady=5, sticky="w")
+        numBladeEntry = ttk.Entry(BalancingFrame, width=13, textvariable=self.balParam4, font=('Chakra Petch', 13),
                                     validate="key")
         numBladeEntry['validatecommand'] = (numBladeEntry.register(testVal), '%P', '%d')
         numBladeEntry.grid(column=3, row=4, padx=0, pady=5, sticky="w")
 
-        corr_weight_devide = ttk.Label(BalancingFrame, text=_("CW split"), style='balancing.TLabel')
-        corr_weight_devide.grid(column=2, row=8, padx=5, pady=5, sticky="w")
-        corr_weight_1 = ttk.Label(BalancingFrame, text="CW1", style='balancing.TLabel')
-        corr_weight_1.grid(column=2, row=9, padx=5, pady=5, sticky="w")
-        corr_weight_2 = ttk.Label(BalancingFrame, text="CW2", style='balancing.TLabel')
-        corr_weight_2.grid(column=2, row=10, padx=5, pady=5, sticky="w")
-
-        # self.CW1Entry = ttk.Entry(BalancingFrame, width=14, textvariable=self.balParam15, bg='white', font="Verdana 16")
-        # self.CW1Entry.grid(column=3, row=10, padx=0, pady=5, sticky="w")
-        # self.CW2Entry = ttk.Entry(BalancingFrame, width=14, textvariable=self.balParam16, bg='white', font="Verdana 16")
-        # self.CW2Entry.grid(column=3, row=11, padx=0, pady=5, sticky="w")
-
-        CW1ChangeAngle1Entry = ttk.Entry(BalancingFrame, width=14, textvariable=self.balParam15, state="readonly", style="balancing.TEntry")
-        CW1ChangeAngle1Entry.grid(column=3, row=8, padx=0, pady=5, sticky="w")
-        CW1ChangeAngle2Entry = ttk.Entry(BalancingFrame, width=14, textvariable=self.balParam16, state="readonly", style="balancing.TEntry")
-        CW1ChangeAngle2Entry.grid(column=4, row=8, padx=0, pady=5, sticky="w")
-
-        CW2ChangeAngle1Entry = ttk.Entry(BalancingFrame, width=14, textvariable=self.balParam17, state="readonly", style="balancing.TEntry")
-        CW2ChangeAngle1Entry.grid(column=5, row=8, padx=0, pady=5, sticky="w")
-        CW2ChangeAngle2Entry = ttk.Entry(BalancingFrame, width=14, textvariable=self.balParam18, state="readonly", style="balancing.TEntry")
-        CW2ChangeAngle2Entry.grid(column=6, row=8, padx=0, pady=5, sticky="w")
-
-        CW1Mass1Entry = ttk.Entry(BalancingFrame, width=14, textvariable=self.balParam19, state="readonly", style="balancing.TEntry")
-        CW1Mass1Entry.grid(column=3, row=9, padx=0, pady=5, sticky="w")
-        CW1Mass2Entry = ttk.Entry(BalancingFrame, width=14, textvariable=self.balParam20, state="readonly", style="balancing.TEntry")
-        CW1Mass2Entry.grid(column=4, row=9, padx=0, pady=5, sticky="w")
-
-        CW2Mass1Entry = ttk.Entry(BalancingFrame, width=14, textvariable=self.balParam21, state="readonly", style="balancing.TEntry")
-        CW2Mass1Entry.grid(column=5, row=10, padx=0, pady=5, sticky="w")
-        CW2Mass2Entry = ttk.Entry(BalancingFrame, width=14, textvariable=self.balParam22, state="readonly", style="balancing.TEntry")
-        CW2Mass2Entry.grid(column=6, row=10, padx=0, pady=5, sticky="w")
-
-        self.balancingApplyButton = ttk.Button(BalancingFrame, text=_("Apply"), style="Accent.TButton",
+        self.balancingApplyButton = ttk.Button(BalancingFrame, text=_("APPLY"), style="Accent.TButton",
                                     command=lambda:self.update_config_struct(balancing_config_struct))
-        self.balancingApplyButton.grid(column=4, row=11, padx=0, pady=5, ipadx=35, ipady=5, sticky='w')
-
-        self.CWDevideButton = ttk.Button(BalancingFrame, text=_("Calulate"), style="Accent.TButton")
-        self.CWDevideButton.grid(column=6, row=11, padx=0, pady=5, ipadx=30, ipady=5, sticky='w')
+        self.balancingApplyButton.grid(column=4, row=8, padx=(200, 0), pady=(90, 0), ipadx=50, ipady=8, sticky='w')
 
 
     def update_config_struct(self, balancing_config_struct):
@@ -464,7 +443,8 @@ class SideButtonFrame(Tk.Frame):
         self.lock = lock
         self.canvas=canvas
         self.style = ttk.Style()
-        self.style.configure('custom.TLabel', font=('Chakra Petch', 13), bg='white')
+        self.calculateCanvas=Tk.Canvas()
+        self.style.configure('custom.TLabel', font=('Chakra Petch', 13), bg='grey95')
         self.style.configure('red.TLabel', font=('Chakra Petch', 13), bg='white', foreground='red')
         self.style.configure('custom.TLabelframe', font=('Chakra Petch', 15), bg='white', borderwidth=0)
         self.style.configure('custom.TButton', font=('Chakra Petch', 15))
@@ -488,6 +468,105 @@ class SideButtonFrame(Tk.Frame):
         self.resetBt = ttk.Button(self, style='custom.Accent.TButton', text="RESET",
                                 compound=Tk.TOP, command=self.reset_balancing)
         self.resetBt.place(x=0, y=348, width=88, height=75)
+
+        self.splitBt = ttk.Button(self, style='custom.Accent.TButton', text="SPLIT\nMASS",
+                                compound=Tk.TOP, command=lambda:self.on_split_button_click(self.parent.balancingPlotFrame, 268, 3))
+        self.splitBt.place(x=0, y=271, width=88, height=75)
+
+
+    def on_split_button_click(self, widget, x_pos, y_pos):
+        global split_canvas_flag
+        split_canvas_flag=not split_canvas_flag
+        if split_canvas_flag==1:
+            self.creat_split_canvas(widget, x_pos, y_pos)
+        else:
+            self.calculateCanvas.destroy()
+    def creat_split_canvas(self, widget, x_pos, y_pos):
+        self.calculateCanvas=Tk.Canvas(widget, width=660, height=110, bg='grey95')
+        self.calculateCanvas.place(x=x_pos, y=y_pos)
+        self.balParam15=Tk.StringVar()
+        self.balParam16=Tk.StringVar()
+        self.balParam17=Tk.StringVar()
+        self.balParam18=Tk.StringVar()
+        self.balParam19=Tk.StringVar()
+        self.balParam20=Tk.StringVar()
+        self.balParam21=Tk.StringVar()
+        self.balParam22=Tk.StringVar()
+        corr_weight_devide = ttk.Label(self.calculateCanvas, text=_("CW split"), style='custom.TLabel')
+        corr_weight_devide.grid(column=2, row=8, padx=5, pady=5, sticky="w")
+        corr_weight_1 = ttk.Label(self.calculateCanvas, text="CW1", style='custom.TLabel')
+        corr_weight_1.grid(column=2, row=9, padx=5, pady=5, sticky="w")
+        corr_weight_2 = ttk.Label(self.calculateCanvas, text="CW2", style='custom.TLabel')
+        corr_weight_2.grid(column=2, row=10, padx=5, pady=5, sticky="w")
+
+        CW1ChangeAngle1Entry = ttk.Entry(self.calculateCanvas, width=14, textvariable=self.balParam15, 
+                                takefocus=False, state="disable", style="balancing.TEntry")
+        CW1ChangeAngle1Entry.grid(column=3, row=8, padx=0, pady=5, sticky="w")
+        CW1ChangeAngle2Entry = ttk.Entry(self.calculateCanvas, width=14, textvariable=self.balParam16, 
+                                takefocus=False, state="disable", style="balancing.TEntry")
+        CW1ChangeAngle2Entry.grid(column=4, row=8, padx=0, pady=5, sticky="w")
+
+        CW2ChangeAngle1Entry = ttk.Entry(self.calculateCanvas, width=14, textvariable=self.balParam17, 
+                                takefocus=False, state="disable", style="balancing.TEntry")
+        CW2ChangeAngle1Entry.grid(column=5, row=8, padx=0, pady=5, sticky="w")
+        CW2ChangeAngle2Entry = ttk.Entry(self.calculateCanvas, width=14, textvariable=self.balParam18, 
+                                takefocus=False, state="disable", style="balancing.TEntry")
+        CW2ChangeAngle2Entry.grid(column=6, row=8, padx=0, pady=5, sticky="w")
+
+        CW1Mass1Entry = ttk.Entry(self.calculateCanvas, width=14, textvariable=self.balParam19, 
+                                takefocus=False, state="disable", style="balancing.TEntry")
+        CW1Mass1Entry.grid(column=3, row=9, padx=0, pady=5, sticky="w")
+        CW1Mass2Entry = ttk.Entry(self.calculateCanvas, width=14, textvariable=self.balParam20, 
+                                takefocus=False, state="disable", style="balancing.TEntry")
+        CW1Mass2Entry.grid(column=4, row=9, padx=0, pady=5, sticky="w")
+
+        CW2Mass1Entry = ttk.Entry(self.calculateCanvas, width=14, textvariable=self.balParam21, 
+                                takefocus=False, state="disable", style="balancing.TEntry")
+        CW2Mass1Entry.grid(column=5, row=10, padx=0, pady=5, sticky="w")
+        CW2Mass2Entry = ttk.Entry(self.calculateCanvas, width=14, textvariable=self.balParam22, 
+                                takefocus=False, state="disable", style="balancing.TEntry")
+        CW2Mass2Entry.grid(column=6, row=10, padx=0, pady=5, sticky="w")
+        self.calculate_weight()
+    def calculate_weight(self):
+        def separate_angle(numofblades, current_angle):
+            bladeArr=np.linspace(0, 360, numofblades+1)
+            for i in bladeArr:
+                if i>current_angle:
+                    temp_angle=i
+                    break
+            return[i-int(360/numofblades), i] 
+        if self.balancing_config_struct["num_planes"]=="Two" and len(self.balancing_config_struct["trim_run"])>0:
+            angle_mark1=separate_angle(self.balancing_config_struct["num_blades"], self.balancing_config_struct["trim_run"][-1][1])
+            angle_mark2=separate_angle(self.balancing_config_struct["num_blades"], self.balancing_config_struct["trim_run"][-1][3])
+            self.balParam15.set(angle_mark1[0])
+            self.balParam16.set(angle_mark1[1])
+            self.balParam17.set(angle_mark2[0])
+            self.balParam18.set(angle_mark2[1])
+            anpha1= (self.balancing_config_struct["trim_run"][-1][1]-angle_mark1[0])*np.pi/180
+            beta1= (angle_mark1[1]-self.balancing_config_struct["trim_run"][-1][1])*np.pi/180
+            gamma1= np.pi-anpha1-beta1
+            anpha2= (self.balancing_config_struct["trim_run"][-1][3]-angle_mark2[0])*np.pi/180
+            beta2=  (angle_mark2[1]-self.balancing_config_struct["trim_run"][-1][3])*np.pi/180
+            gamma2= np.pi-anpha2-beta2
+            smaller_angle_cw1= self.balancing_config_struct["trim_run"][-1][0]*np.sin(beta1)/np.sin(gamma1)
+            bigger_angle_cw1= self.balancing_config_struct["trim_run"][-1][0]*np.sin(anpha1)/np.sin(gamma1)
+            smaller_angle_cw2= self.balancing_config_struct["trim_run"][-1][2]*np.sin(beta2)/np.sin(gamma2)
+            bigger_angle_cw2= self.balancing_config_struct["trim_run"][-1][2]*np.sin(anpha2)/np.sin(gamma2)
+            self.balParam19.set(str(smaller_angle_cw1)[:4])
+            self.balParam20.set(str(bigger_angle_cw1)[:4])
+            self.balParam21.set(str(smaller_angle_cw2)[:4])
+            self.balParam22.set(str(bigger_angle_cw2)[:4])
+        elif self.balancing_config_struct["num_planes"]=="One" and len(self.balancing_config_struct["trim_run"])>0:
+            angle_mark1=separate_angle(self.balancing_config_struct["num_blades"], self.balancing_config_struct["trim_run"][-1][1])
+            self.balParam15.set(angle_mark1[0])
+            self.balParam16.set(angle_mark1[1])
+            anpha1= (self.balancing_config_struct["trim_run"][-1][1]-angle_mark1[0])*np.pi/180
+            beta1= (angle_mark1[1]-self.balancing_config_struct["trim_run"][-1][1])*np.pi/180
+            gamma1= np.pi-anpha1-beta1
+            smaller_angle_cw1= self.balancing_config_struct["trim_run"][-1][0]*np.sin(beta1)/np.sin(gamma1)
+            bigger_angle_cw1= self.balancing_config_struct["trim_run"][-1][0]*np.sin(anpha1)/np.sin(gamma1)
+            self.balParam19.set(str(smaller_angle_cw1)[:4])
+            self.balParam20.set(str(bigger_angle_cw1)[:4])
 
 
     def change_state(self):

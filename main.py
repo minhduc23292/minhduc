@@ -30,7 +30,7 @@ class TotalConfig(object):
         self.project_struct = {
             "CompanyName": "No_name",
             "ProjectCode": "A1B2C3",
-            "Date":"2023-01-31",
+            "Date":"----_--_--",
             "Note": "None"
         }
         self.batery_struct={

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-05 00:00+0700\n"
+"POT-Creation-Date: 2023-02-09 00:13+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -49,759 +49,930 @@ msgstr ""
 msgid "Input"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:185 ui/history/historyModule.py:190
-#: ui/ResonanceModule/ResonanceModule.py:198 ui/home/HomePage.py:144
-#: ui/Diagnostic/DiagnosticPage.py:1146 ui/Settingpage/SettingPage.py:151
+#: ui/balancingModule/balancingModule.py:134 ui/history/historyModule.py:138
+#: ui/ResonanceModule/ResonanceModule.py:146
+#: ui/Diagnostic/DiagnosticPage.py:197
+msgid "Config"
+msgstr ""
+
+#: ui/balancingModule/balancingModule.py:142
+msgid "Balancing"
+msgstr ""
+
+#: ui/balancingModule/balancingModule.py:149 ui/history/historyModule.py:153
+#: ui/ResonanceModule/ResonanceModule.py:161
+#: ui/Diagnostic/DiagnosticPage.py:217
+msgid "Information"
+msgstr ""
+
+#: ui/balancingModule/balancingModule.py:152
+msgid "Click RUN to start."
+msgstr ""
+
+#: ui/balancingModule/balancingModule.py:207 ui/history/historyModule.py:211
+#: ui/ResonanceModule/ResonanceModule.py:219 ui/home/HomePage.py:160
+#: ui/Diagnostic/DiagnosticPage.py:1168 ui/Settingpage/SettingPage.py:173
 msgid "Low Battery! Plug in the charger to keep it running"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:259 ui/history/historyModule.py:248
-#: ui/ResonanceModule/ResonanceModule.py:258
+#: ui/balancingModule/balancingModule.py:281 ui/history/historyModule.py:270
+#: ui/ResonanceModule/ResonanceModule.py:279
 msgid "Configuration"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:262
+#: ui/balancingModule/balancingModule.py:284
 msgid "Num of planes"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:269
+#: ui/balancingModule/balancingModule.py:291
 msgid "Num of sensors"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:276
+#: ui/balancingModule/balancingModule.py:298
 msgid "Sensor type"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:283
+#: ui/balancingModule/balancingModule.py:305
 msgid "Sensor1"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:290
+#: ui/balancingModule/balancingModule.py:312
 msgid "Sensor2"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:297
+#: ui/balancingModule/balancingModule.py:319
 msgid "Trial mass 1 (g)"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:304
+#: ui/balancingModule/balancingModule.py:326
 msgid "Trial mass 2 (g)"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:311
+#: ui/balancingModule/balancingModule.py:333
 msgid "Angle 1 (deg)"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:318
+#: ui/balancingModule/balancingModule.py:340
 msgid "Angle 2 (deg)"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:326
+#: ui/balancingModule/balancingModule.py:348
 msgid "Rotating dir"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:333
-#: ui/Diagnostic/DiagnosticPage.py:1286
+#: ui/balancingModule/balancingModule.py:355
+#: ui/Diagnostic/DiagnosticPage.py:1310
 msgid "FFT lines"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:340
-#: ui/ResonanceModule/ResonanceModule.py:310
+#: ui/balancingModule/balancingModule.py:362
+#: ui/ResonanceModule/ResonanceModule.py:338
 msgid "Sample rate"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:347
+#: ui/balancingModule/balancingModule.py:369
 msgid "Num of blades"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:354
-msgid "CW split"
+#: ui/balancingModule/balancingModule.py:376
+#: ui/ResonanceModule/ResonanceModule.py:366 ui/Settingpage/SettingPage.py:241
+msgid "APPLY"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:386
-#: ui/ResonanceModule/ResonanceModule.py:334
-msgid "Apply"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:390
-msgid "Calulate"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:412
-#: ui/balancingModule/balancingModule.py:427 ui/history/historyModule.py:344
+#: ui/balancingModule/balancingModule.py:399
+#: ui/balancingModule/balancingModule.py:414 ui/history/historyModule.py:368
 msgid "Parameter errors. Check the input type."
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:423
-#: ui/balancingModule/balancingModule.py:436 ui/history/historyModule.py:351
+#: ui/balancingModule/balancingModule.py:410
+#: ui/balancingModule/balancingModule.py:423 ui/history/historyModule.py:375
 msgid "OK"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:507
+#: ui/balancingModule/balancingModule.py:503
+msgid "CW split"
+msgstr ""
+
+#: ui/balancingModule/balancingModule.py:594
 msgid ""
 "START\n"
 "INITIAL\n"
 "RUN"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:517
-#: ui/balancingModule/balancingModule.py:533
-#: ui/balancingModule/balancingModule.py:549
-#: ui/balancingModule/balancingModule.py:565
-#: ui/balancingModule/balancingModule.py:594
-#: ui/balancingModule/balancingModule.py:610
-#: ui/balancingModule/balancingModule.py:627
-#: ui/balancingModule/balancingModule.py:644
-#: ui/balancingModule/balancingModule.py:661
-#: ui/balancingModule/balancingModule.py:678
-#: ui/balancingModule/balancingModule.py:695
-#: ui/balancingModule/balancingModule.py:712
-#: ui/balancingModule/balancingModule.py:729
-#: ui/balancingModule/balancingModule.py:746
-#: ui/balancingModule/balancingModule.py:774
-#: ui/balancingModule/balancingModule.py:791
-#: ui/balancingModule/balancingModule.py:808
-#: ui/balancingModule/balancingModule.py:825
-#: ui/balancingModule/balancingModule.py:842
+#: ui/balancingModule/balancingModule.py:604
+#: ui/balancingModule/balancingModule.py:620
+#: ui/balancingModule/balancingModule.py:636
+#: ui/balancingModule/balancingModule.py:652
+#: ui/balancingModule/balancingModule.py:681
+#: ui/balancingModule/balancingModule.py:697
+#: ui/balancingModule/balancingModule.py:714
+#: ui/balancingModule/balancingModule.py:731
+#: ui/balancingModule/balancingModule.py:748
+#: ui/balancingModule/balancingModule.py:765
+#: ui/balancingModule/balancingModule.py:782
+#: ui/balancingModule/balancingModule.py:799
+#: ui/balancingModule/balancingModule.py:816
+#: ui/balancingModule/balancingModule.py:833
+#: ui/balancingModule/balancingModule.py:861
+#: ui/balancingModule/balancingModule.py:878
+#: ui/balancingModule/balancingModule.py:895
+#: ui/balancingModule/balancingModule.py:912
+#: ui/balancingModule/balancingModule.py:929
 msgid "STOP"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:521
-#: ui/balancingModule/balancingModule.py:537
-#: ui/balancingModule/balancingModule.py:553
-#: ui/balancingModule/balancingModule.py:569
-#: ui/balancingModule/balancingModule.py:598
-#: ui/balancingModule/balancingModule.py:614
-#: ui/balancingModule/balancingModule.py:631
-#: ui/balancingModule/balancingModule.py:648
-#: ui/balancingModule/balancingModule.py:665
-#: ui/balancingModule/balancingModule.py:682
-#: ui/balancingModule/balancingModule.py:699
-#: ui/balancingModule/balancingModule.py:716
-#: ui/balancingModule/balancingModule.py:733
-#: ui/balancingModule/balancingModule.py:750
-#: ui/balancingModule/balancingModule.py:778
-#: ui/balancingModule/balancingModule.py:795
-#: ui/balancingModule/balancingModule.py:812
-#: ui/balancingModule/balancingModule.py:829
-#: ui/balancingModule/balancingModule.py:846
+#: ui/balancingModule/balancingModule.py:608
+#: ui/balancingModule/balancingModule.py:624
+#: ui/balancingModule/balancingModule.py:640
+#: ui/balancingModule/balancingModule.py:656
+#: ui/balancingModule/balancingModule.py:685
+#: ui/balancingModule/balancingModule.py:701
+#: ui/balancingModule/balancingModule.py:718
+#: ui/balancingModule/balancingModule.py:735
+#: ui/balancingModule/balancingModule.py:752
+#: ui/balancingModule/balancingModule.py:769
+#: ui/balancingModule/balancingModule.py:786
+#: ui/balancingModule/balancingModule.py:803
+#: ui/balancingModule/balancingModule.py:820
+#: ui/balancingModule/balancingModule.py:837
+#: ui/balancingModule/balancingModule.py:865
+#: ui/balancingModule/balancingModule.py:882
+#: ui/balancingModule/balancingModule.py:899
+#: ui/balancingModule/balancingModule.py:916
+#: ui/balancingModule/balancingModule.py:933
 msgid "Wait until phase and amplitude is stable and click STOP"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:525
+#: ui/balancingModule/balancingModule.py:612
 msgid ""
 "TRIAL\n"
 "RUN"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:529
+#: ui/balancingModule/balancingModule.py:616
 msgid "Next step: Execute the trial run"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:541
-#: ui/balancingModule/balancingModule.py:817
+#: ui/balancingModule/balancingModule.py:628
+#: ui/balancingModule/balancingModule.py:904
 msgid ""
 "TRIM 1\n"
 "RUN"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:545
+#: ui/balancingModule/balancingModule.py:632
 msgid "Next step: Execute the first trim run"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:557
-#: ui/balancingModule/balancingModule.py:834
+#: ui/balancingModule/balancingModule.py:644
+#: ui/balancingModule/balancingModule.py:921
 msgid ""
 "TRIM 2\n"
 "RUN"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:561
+#: ui/balancingModule/balancingModule.py:648
 msgid "Next step: Execute the second trim run"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:573
+#: ui/balancingModule/balancingModule.py:660
 msgid ""
 "END\n"
 "PROCESS"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:577
+#: ui/balancingModule/balancingModule.py:664
 msgid "Next step: Finish!"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:587
-#: ui/balancingModule/balancingModule.py:851
+#: ui/balancingModule/balancingModule.py:674
+#: ui/balancingModule/balancingModule.py:938
 msgid ""
 "INITIAL\n"
 "RUN"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:602
+#: ui/balancingModule/balancingModule.py:689
 msgid ""
 "INITIAL\n"
 "PL2"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:606
+#: ui/balancingModule/balancingModule.py:693
 msgid "Next step: Initial Run, Collect data on the plane 2"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:619
+#: ui/balancingModule/balancingModule.py:706
 msgid ""
 "TRIAL 1\n"
 "PL1"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:623
+#: ui/balancingModule/balancingModule.py:710
 msgid "Next step: First Trial Run, Collect data on the plane 1"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:636
+#: ui/balancingModule/balancingModule.py:723
 msgid ""
 "TRIAL 1\n"
 "PL2"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:640
+#: ui/balancingModule/balancingModule.py:727
 msgid "Next step: First Trial Run, Collect data on the plane 2"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:653
+#: ui/balancingModule/balancingModule.py:740
 msgid ""
 "TRIAL 2\n"
 "PL1"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:657
+#: ui/balancingModule/balancingModule.py:744
 msgid "Next step: Second Trial Run, Collect data on the plane 1"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:670
+#: ui/balancingModule/balancingModule.py:757
 msgid ""
 "TRIAL 2\n"
 "PL2"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:674
+#: ui/balancingModule/balancingModule.py:761
 msgid "Next step: Second Trial Run, Collect data on the plane 2"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:687
+#: ui/balancingModule/balancingModule.py:774
 msgid ""
 "TRIM 1\n"
 "PL1"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:691
+#: ui/balancingModule/balancingModule.py:778
 msgid "Next step: First Trim Run, Collect data on the plane 1"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:704
+#: ui/balancingModule/balancingModule.py:791
 msgid ""
 "TRIM 1\n"
 "PL2"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:708
+#: ui/balancingModule/balancingModule.py:795
 msgid "Next step: First Trim Run, Collect data on the plane 2"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:721
+#: ui/balancingModule/balancingModule.py:808
 msgid ""
 "TRIM 2\n"
 "PL1"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:725
+#: ui/balancingModule/balancingModule.py:812
 msgid "Next step: Second Trim Run, Collect data on the plane 1"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:738
+#: ui/balancingModule/balancingModule.py:825
 msgid ""
 "TRIM 2\n"
 "PL2"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:742
-#: ui/balancingModule/balancingModule.py:759
+#: ui/balancingModule/balancingModule.py:829
+#: ui/balancingModule/balancingModule.py:846
 msgid "Next step: Second Trim Run, Collect data on the plane 2"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:755
+#: ui/balancingModule/balancingModule.py:842
 msgid ""
 "INITIAL 1\n"
 "PL1"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:783
+#: ui/balancingModule/balancingModule.py:870
 msgid ""
 "TRIAL 1\n"
 "RUN"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:787
+#: ui/balancingModule/balancingModule.py:874
 msgid "Next step: First Trial Run, Mount the sensor on two planes and execute"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:800
+#: ui/balancingModule/balancingModule.py:887
 msgid ""
 "TRIAL 2\n"
 "RUN"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:804
+#: ui/balancingModule/balancingModule.py:891
 msgid "Next step: Second Trial Run, Mount the sensor on two planes and execute"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:821
+#: ui/balancingModule/balancingModule.py:908
 msgid "Next step: First Trim Run, Mount the sensor on two planes and execute"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:838
+#: ui/balancingModule/balancingModule.py:925
 msgid "Next step: Second Trim Run, Mount the sensor on two planes and execute"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:855
+#: ui/balancingModule/balancingModule.py:942
 msgid "Next step: Initial Run, Mount the sensor on two planes and execute"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:952
-#: ui/balancingModule/balancingModule.py:1063 ui/history/historyModule.py:687
-#: ui/history/historyModule.py:724 ui/ResonanceModule/ResonanceModule.py:608
+#: ui/balancingModule/balancingModule.py:1039
+#: ui/balancingModule/balancingModule.py:1150 ui/history/historyModule.py:715
+#: ui/history/historyModule.py:752 ui/ResonanceModule/ResonanceModule.py:645
 msgid "Data errors."
 msgstr ""
 
-#: ui/history/historyModule.py:252 ui/history/historyModule.py:384
+#: ui/history/historyModule.py:146
+msgid ""
+"History\n"
+"Analysis"
+msgstr ""
+
+#: ui/history/historyModule.py:274 ui/history/historyModule.py:408
 msgid "Project Code"
 msgstr ""
 
-#: ui/history/historyModule.py:258
+#: ui/history/historyModule.py:280
 msgid "Sensor Position"
 msgstr ""
 
-#: ui/history/historyModule.py:270 ui/ResonanceModule/ResonanceModule.py:298
+#: ui/history/historyModule.py:293 ui/ResonanceModule/ResonanceModule.py:324
 msgid "Bandpass Filter From"
 msgstr ""
 
-#: ui/history/historyModule.py:276 ui/ResonanceModule/ResonanceModule.py:304
+#: ui/history/historyModule.py:299 ui/ResonanceModule/ResonanceModule.py:331
 msgid "Bandpass Filter To"
 msgstr ""
 
-#: ui/history/historyModule.py:282
+#: ui/history/historyModule.py:305
 msgid "View Limit"
 msgstr ""
 
-#: ui/history/historyModule.py:288 ui/ResonanceModule/ResonanceModule.py:322
-#: ui/Diagnostic/DiagnosticPage.py:1331
+#: ui/history/historyModule.py:311 ui/ResonanceModule/ResonanceModule.py:352
+#: ui/Diagnostic/DiagnosticPage.py:1358
 msgid "Tracking resolution"
 msgstr ""
 
-#: ui/history/historyModule.py:294
+#: ui/history/historyModule.py:317
 msgid "Use Average"
 msgstr ""
 
-#: ui/history/historyModule.py:298
+#: ui/history/historyModule.py:321
 msgid "Average Bin"
 msgstr ""
 
-#: ui/history/historyModule.py:308
+#: ui/history/historyModule.py:332
 msgid "Project Table"
 msgstr ""
 
-#: ui/history/historyModule.py:319
+#: ui/history/historyModule.py:343
 msgid "Delete Project"
 msgstr ""
 
-#: ui/history/historyModule.py:373
+#: ui/history/historyModule.py:397
 msgid "Do you want to delete this project?"
 msgstr ""
 
-#: ui/history/historyModule.py:377
+#: ui/history/historyModule.py:401
 msgid "Selected project is deleted."
 msgstr ""
 
-#: ui/history/historyModule.py:386
+#: ui/history/historyModule.py:410
 msgid "Delete project errors"
 msgstr ""
 
-#: ui/history/historyModule.py:476 ui/ResonanceModule/ResonanceModule.py:486
-#: ui/Diagnostic/DiagnosticPage.py:613
+#: ui/history/historyModule.py:456
+msgid ""
+"EXPORT\n"
+"REPORT"
+msgstr ""
+
+#: ui/history/historyModule.py:500 ui/ResonanceModule/ResonanceModule.py:519
+#: ui/Diagnostic/DiagnosticPage.py:620
 msgid "ZOOM IN"
 msgstr ""
 
-#: ui/history/historyModule.py:482 ui/ResonanceModule/ResonanceModule.py:492
-#: ui/Diagnostic/DiagnosticPage.py:619
+#: ui/history/historyModule.py:506 ui/ResonanceModule/ResonanceModule.py:525
+#: ui/Diagnostic/DiagnosticPage.py:626
 msgid "ZOOM OUT"
 msgstr ""
 
-#: ui/history/historyModule.py:487 ui/ResonanceModule/ResonanceModule.py:497
-#: ui/Diagnostic/DiagnosticPage.py:624
+#: ui/history/historyModule.py:511 ui/ResonanceModule/ResonanceModule.py:530
+#: ui/Diagnostic/DiagnosticPage.py:631
 msgid "PAN LEFT"
 msgstr ""
 
-#: ui/history/historyModule.py:493 ui/ResonanceModule/ResonanceModule.py:503
-#: ui/Diagnostic/DiagnosticPage.py:630
+#: ui/history/historyModule.py:517 ui/ResonanceModule/ResonanceModule.py:536
+#: ui/Diagnostic/DiagnosticPage.py:637
 msgid "PAN RIGHT"
 msgstr ""
 
-#: ui/history/historyModule.py:499 ui/ResonanceModule/ResonanceModule.py:509
-#: ui/Diagnostic/DiagnosticPage.py:636
+#: ui/history/historyModule.py:523 ui/ResonanceModule/ResonanceModule.py:542
+#: ui/Diagnostic/DiagnosticPage.py:643
 msgid "RESET"
 msgstr ""
 
-#: ui/history/historyModule.py:552
+#: ui/history/historyModule.py:580
 msgid "WAVEFORM"
 msgstr ""
 
-#: ui/history/historyModule.py:556
+#: ui/history/historyModule.py:584
 msgid "FREQUENCY"
 msgstr ""
 
-#: ui/history/historyModule.py:560
+#: ui/history/historyModule.py:588
 msgid ""
 "VELOCITY\n"
 "FREQUENCY"
 msgstr ""
 
-#: ui/history/historyModule.py:564
+#: ui/history/historyModule.py:592 ui/Diagnostic/DiagnosticPage.py:707
 msgid "ENVELOPED"
 msgstr ""
 
-#: ui/history/historyModule.py:568
+#: ui/history/historyModule.py:596
 msgid "WATERFALL"
 msgstr ""
 
-#: ui/history/historyModule.py:572
+#: ui/history/historyModule.py:600
 msgid "TREND"
 msgstr ""
 
-#: ui/history/historyModule.py:657
+#: ui/history/historyModule.py:648
+msgid ""
+"PLOT\n"
+"WAVEFORM"
+msgstr ""
+
+#: ui/history/historyModule.py:651
+msgid ""
+"PLOT\n"
+"FREQUENCY\n"
+"SPECTRUM"
+msgstr ""
+
+#: ui/history/historyModule.py:655
+msgid ""
+"PLOT\n"
+"VELOCITY\n"
+"SPECTRUM"
+msgstr ""
+
+#: ui/history/historyModule.py:659
+msgid ""
+"PLOT\n"
+"WATERFALL"
+msgstr ""
+
+#: ui/history/historyModule.py:663
+msgid ""
+"PLOT\n"
+"TREND"
+msgstr ""
+
+#: ui/history/historyModule.py:677
+msgid ""
+"PLOT\n"
+"ENVELOPED"
+msgstr ""
+
+#: ui/history/historyModule.py:685
 msgid "Fcut is wrong. Use the default value."
 msgstr ""
 
-#: ui/history/historyModule.py:683
+#: ui/history/historyModule.py:711
 msgid "Project: "
 msgstr ""
 
-#: ui/history/historyModule.py:685 ui/history/historyModule.py:847
+#: ui/history/historyModule.py:713 ui/history/historyModule.py:875
 msgid "There is no data, please check SETTING !"
 msgstr ""
 
-#: ui/history/historyModule.py:721
+#: ui/history/historyModule.py:749
 msgid "Frequency:"
 msgstr ""
 
-#: ui/history/historyModule.py:731
+#: ui/history/historyModule.py:759
 msgid "Do you want to export the report"
 msgstr ""
 
-#: ui/history/historyModule.py:796
+#: ui/history/historyModule.py:824
 msgid "Filter bandpass frequency is wrong. Use the default value."
 msgstr ""
 
-#: ui/history/historyModule.py:824
+#: ui/history/historyModule.py:852
 msgid "Figure1: Vibration trend"
 msgstr ""
 
-#: ui/history/historyModule.py:828
+#: ui/history/historyModule.py:856
 msgid "Figure2: Waveform"
 msgstr ""
 
-#: ui/history/historyModule.py:832
+#: ui/history/historyModule.py:860
 msgid "Figure3: Frequency spectrum"
 msgstr ""
 
-#: ui/history/historyModule.py:836
+#: ui/history/historyModule.py:864
 msgid "Figure4: Velocity spectrum"
 msgstr ""
 
-#: ui/history/historyModule.py:840
+#: ui/history/historyModule.py:868
 msgid "Figure5: Envelope spectrum"
 msgstr ""
 
-#: ui/history/historyModule.py:845
+#: ui/history/historyModule.py:873
 msgid "Report is exported !"
 msgstr ""
 
-#: ui/ResonanceModule/ResonanceModule.py:260
+#: ui/ResonanceModule/ResonanceModule.py:154 ui/home/HomePage.py:86
+msgid ""
+"Resonance\n"
+"Analysis"
+msgstr ""
+
+#: ui/ResonanceModule/ResonanceModule.py:164
+msgid "Click the READ SENSOR and make a hit."
+msgstr ""
+
+#: ui/ResonanceModule/ResonanceModule.py:281
 msgid "Function"
 msgstr ""
 
-#: ui/ResonanceModule/ResonanceModule.py:267
+#: ui/ResonanceModule/ResonanceModule.py:288
 msgid "Sensor Port"
 msgstr ""
 
-#: ui/ResonanceModule/ResonanceModule.py:273
+#: ui/ResonanceModule/ResonanceModule.py:295
 msgid "Hammer Port"
 msgstr ""
 
-#: ui/ResonanceModule/ResonanceModule.py:279
+#: ui/ResonanceModule/ResonanceModule.py:302
 msgid "Window Type"
 msgstr ""
 
-#: ui/ResonanceModule/ResonanceModule.py:285
+#: ui/ResonanceModule/ResonanceModule.py:309
 msgid "Window Factor"
 msgstr ""
 
-#: ui/ResonanceModule/ResonanceModule.py:292
+#: ui/ResonanceModule/ResonanceModule.py:317
 msgid "Filter Type"
 msgstr ""
 
-#: ui/ResonanceModule/ResonanceModule.py:316
+#: ui/ResonanceModule/ResonanceModule.py:345
 msgid "Sampling time"
 msgstr ""
 
-#: ui/ResonanceModule/ResonanceModule.py:328
+#: ui/ResonanceModule/ResonanceModule.py:359
 msgid "Num of Average"
 msgstr ""
 
-#: ui/ResonanceModule/ResonanceModule.py:560
+#: ui/ResonanceModule/ResonanceModule.py:451
+#: ui/Diagnostic/DiagnosticPage.py:269
+msgid ""
+"READ\n"
+"SENSOR"
+msgstr ""
+
+#: ui/ResonanceModule/ResonanceModule.py:472
+msgid "ADD"
+msgstr ""
+
+#: ui/ResonanceModule/ResonanceModule.py:597
 msgid "FACTOR+"
 msgstr ""
 
-#: ui/ResonanceModule/ResonanceModule.py:565
+#: ui/ResonanceModule/ResonanceModule.py:602
 msgid "FACTOR-"
 msgstr ""
 
-#: ui/ResonanceModule/ResonanceModule.py:626
+#: ui/ResonanceModule/ResonanceModule.py:663
 msgid "The averaged graph are shown in figure 1 and 2:"
 msgstr ""
 
-#: ui/ResonanceModule/ResonanceModule.py:687
+#: ui/ResonanceModule/ResonanceModule.py:724
 msgid "Time remain: "
 msgstr ""
 
-#: ui/ResonanceModule/ResonanceModule.py:764
+#: ui/ResonanceModule/ResonanceModule.py:801
 msgid "This hit is invalid. Make a new hit."
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:348
-msgid "READING.....Please wait:"
+#: ui/home/HomePage.py:76
+msgid "Diagnostic"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:348
-msgid "seconds."
+#: ui/home/HomePage.py:81
+msgid ""
+"Dynamic\n"
+"Balancing"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:452
-msgid "Actual sample rate:"
+#: ui/home/HomePage.py:91
+msgid "History"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:476 ui/Diagnostic/DiagnosticPage.py:569
-msgid "There is no data !"
+#: ui/home/HomePage.py:95
+msgid "Settings"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:511 ui/Diagnostic/DiagnosticPage.py:537
-#: ui/Diagnostic/DiagnosticPage.py:561
-msgid "Data is saved."
+#: ui/Diagnostic/DiagnosticPage.py:205
+msgid ""
+"Waveform\n"
+"Analysis"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:572
-msgid "Please input project code and company name !"
+#: ui/Diagnostic/DiagnosticPage.py:209
+msgid ""
+"Frequency\n"
+"Analysis"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:688
-msgid "NONE"
+#: ui/Diagnostic/DiagnosticPage.py:213
+msgid ""
+"General\n"
+"Monitoring"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:694
-msgid "FILTER"
+#: ui/Diagnostic/DiagnosticPage.py:252 ui/Diagnostic/DiagnosticPage.py:274
+msgid "SAVE"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:700
-msgid "ENVELOP"
+#: ui/Diagnostic/DiagnosticPage.py:287
+msgid ""
+"CURSOR\n"
+"LEFT"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:707
-msgid "PSD"
+#: ui/Diagnostic/DiagnosticPage.py:291
+msgid ""
+"CURSOR\n"
+"RIGHT"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:716 ui/Diagnostic/DiagnosticPage.py:735
-#: ui/Diagnostic/DiagnosticPage.py:746 ui/Diagnostic/DiagnosticPage.py:766
-#: ui/Diagnostic/DiagnosticPage.py:1077
+#: ui/Diagnostic/DiagnosticPage.py:295 ui/Diagnostic/DiagnosticPage.py:723
+#: ui/Diagnostic/DiagnosticPage.py:742 ui/Diagnostic/DiagnosticPage.py:753
+#: ui/Diagnostic/DiagnosticPage.py:773 ui/Diagnostic/DiagnosticPage.py:1084
 msgid "GRID ON"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:717
+#: ui/Diagnostic/DiagnosticPage.py:299 ui/Diagnostic/DiagnosticPage.py:724
 msgid ""
 "FUNCTION\n"
 "NONE"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:736
+#: ui/Diagnostic/DiagnosticPage.py:303
+msgid "SUMMARY"
+msgstr ""
+
+#: ui/Diagnostic/DiagnosticPage.py:355
+msgid "READING.....Please wait:"
+msgstr ""
+
+#: ui/Diagnostic/DiagnosticPage.py:355
+msgid "seconds."
+msgstr ""
+
+#: ui/Diagnostic/DiagnosticPage.py:459
+msgid "Actual sample rate:"
+msgstr ""
+
+#: ui/Diagnostic/DiagnosticPage.py:483 ui/Diagnostic/DiagnosticPage.py:576
+msgid "There is no data !"
+msgstr ""
+
+#: ui/Diagnostic/DiagnosticPage.py:518 ui/Diagnostic/DiagnosticPage.py:544
+#: ui/Diagnostic/DiagnosticPage.py:568
+msgid "Data is saved."
+msgstr ""
+
+#: ui/Diagnostic/DiagnosticPage.py:579
+msgid "Please input project code and company name !"
+msgstr ""
+
+#: ui/Diagnostic/DiagnosticPage.py:695
+msgid "NONE"
+msgstr ""
+
+#: ui/Diagnostic/DiagnosticPage.py:701
+msgid "FILTER"
+msgstr ""
+
+#: ui/Diagnostic/DiagnosticPage.py:714
+msgid "PSD"
+msgstr ""
+
+#: ui/Diagnostic/DiagnosticPage.py:743
 msgid ""
 "FUNCTION\n"
 "FILTER"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:747
+#: ui/Diagnostic/DiagnosticPage.py:754
 msgid ""
 "FUNCTION\n"
-"ENVELOP"
+"ENVELOPED"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:767
+#: ui/Diagnostic/DiagnosticPage.py:774
 msgid ""
 "FUNCTION\n"
 "PSD"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1073
+#: ui/Diagnostic/DiagnosticPage.py:1080
 msgid "GRID OFF"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1235
+#: ui/Diagnostic/DiagnosticPage.py:1259
 msgid "Port1"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1243
+#: ui/Diagnostic/DiagnosticPage.py:1267
 msgid "Port2"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1251
+#: ui/Diagnostic/DiagnosticPage.py:1275
 msgid "Port3"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1259
+#: ui/Diagnostic/DiagnosticPage.py:1283
 msgid "Port4"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1267
+#: ui/Diagnostic/DiagnosticPage.py:1291
 msgid "Key sensor"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1275
-msgid "    Use TSA"
+#: ui/Diagnostic/DiagnosticPage.py:1299
+msgid "  Use TSA"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1280
+#: ui/Diagnostic/DiagnosticPage.py:1304
 msgid "TSA times"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1293
+#: ui/Diagnostic/DiagnosticPage.py:1317
 msgid "Fmax "
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1299
+#: ui/Diagnostic/DiagnosticPage.py:1324
 msgid "Filter configuration"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1302
+#: ui/Diagnostic/DiagnosticPage.py:1327
 msgid "Filter type"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1310
+#: ui/Diagnostic/DiagnosticPage.py:1335
 msgid "Window type"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1319
+#: ui/Diagnostic/DiagnosticPage.py:1344
 msgid "Filter From (Hz)"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1325
+#: ui/Diagnostic/DiagnosticPage.py:1351
 msgid "Filter To (Hz)"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1337
+#: ui/Diagnostic/DiagnosticPage.py:1365
 msgid "Mesh grid"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1343
+#: ui/Diagnostic/DiagnosticPage.py:1372
 msgid "Unit show"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1351
+#: ui/Diagnostic/DiagnosticPage.py:1380
 msgid "Machine configuration"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1354
+#: ui/Diagnostic/DiagnosticPage.py:1383
 msgid "Machine name"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1359
+#: ui/Diagnostic/DiagnosticPage.py:1389
 msgid "Machine type"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1368
+#: ui/Diagnostic/DiagnosticPage.py:1398
 msgid "Speed (RPM)"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1374
+#: ui/Diagnostic/DiagnosticPage.py:1405
 msgid "Power (kW)"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1380
+#: ui/Diagnostic/DiagnosticPage.py:1412
 msgid "Gear teeth"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1386
+#: ui/Diagnostic/DiagnosticPage.py:1419
 msgid "Bearing bore (mm)"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1392
+#: ui/Diagnostic/DiagnosticPage.py:1426
 msgid "Foundation"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1538
+#: ui/Diagnostic/DiagnosticPage.py:1572
 msgid ""
-"Chanel      A-Peak   A-PkPk   A-RMS   V-Peak   V-PkPk   V-RMS   D-Peak   D-"
+"Channel      A-Peak   A-PkPk   A-RMS   V-Peak   V-PkPk   V-RMS   D-Peak   D-"
 "PkPk   D-RMS   Crest   Kutorsis."
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1541
-msgid "Chanel1"
+#: ui/Diagnostic/DiagnosticPage.py:1575
+msgid "Channel1"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1543
-msgid "Chanel2"
+#: ui/Diagnostic/DiagnosticPage.py:1577
+msgid "Channel2"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1545
-msgid "Chanel3"
+#: ui/Diagnostic/DiagnosticPage.py:1579
+msgid "Channel3"
 msgstr ""
 
-#: ui/Settingpage/SettingPage.py:189
+#: ui/Settingpage/SettingPage.py:133
+msgid "Setting"
+msgstr ""
+
+#: ui/Settingpage/SettingPage.py:212
+msgid "Project config"
+msgstr ""
+
+#: ui/Settingpage/SettingPage.py:215
 msgid "Project Code*"
 msgstr ""
 
-#: ui/Settingpage/SettingPage.py:196
+#: ui/Settingpage/SettingPage.py:223
 msgid "Company Name"
 msgstr ""
 
-#: ui/Settingpage/SettingPage.py:202
-msgid "Note"
-msgstr ""
-
-#: ui/Settingpage/SettingPage.py:236
-msgid "GENERAL"
+#: ui/Settingpage/SettingPage.py:230
+msgid "Date"
 msgstr ""
 
 #: ui/Settingpage/SettingPage.py:237
+msgid "Get time now"
+msgstr ""
+
+#: ui/Settingpage/SettingPage.py:272
+msgid "GENERAL"
+msgstr ""
+
+#: ui/Settingpage/SettingPage.py:273
 msgid "WIFI"
 msgstr ""
 
-#: ui/Settingpage/SettingPage.py:238
+#: ui/Settingpage/SettingPage.py:274
 msgid "LANGUAGE"
 msgstr ""
 
-#: ui/Settingpage/SettingPage.py:239
+#: ui/Settingpage/SettingPage.py:275
 msgid "POWER"
 msgstr ""
 
-#: ui/Settingpage/SettingPage.py:295
+#: ui/Settingpage/SettingPage.py:311
+msgid "Wifi config"
+msgstr ""
+
+#: ui/Settingpage/SettingPage.py:331
 msgid "Password"
 msgstr ""
 
-#: ui/Settingpage/SettingPage.py:305
-msgid "Connect"
+#: ui/Settingpage/SettingPage.py:342
+msgid "CONNECT"
 msgstr ""
 
-#: ui/Settingpage/SettingPage.py:309
-msgid "Disconnect"
+#: ui/Settingpage/SettingPage.py:346
+msgid "DISCONNECT"
 msgstr ""
 
-#: ui/Settingpage/SettingPage.py:420
+#: ui/Settingpage/SettingPage.py:396
+msgid "SHUTDOWN"
+msgstr ""
+
+#: ui/Settingpage/SettingPage.py:402
+msgid "RESTART"
+msgstr ""
+
+#: ui/Settingpage/SettingPage.py:437
+msgid "Language config"
+msgstr ""
+
+#: ui/Settingpage/SettingPage.py:439
+msgid "Language"
+msgstr ""
+
+#: ui/Settingpage/SettingPage.py:458
 msgid "Restart is required to change the language. Do you want to restart now"
 msgstr ""
 

@@ -65,13 +65,19 @@ class Resonance(Tk.Frame):
         self.low_bat = imageAddress.low_bat
         self.half_bat = imageAddress.half_bat
         self.full_bat = imageAddress.full_bat
+        self.empty_bat = imageAddress.empty_bat
+        self.lowCharging = imageAddress.lowCharging
+        self.medCharging = imageAddress.medCharging
+        self.fullCharging = imageAddress.fullCharging
+        self.emptyCharging = imageAddress.emptyCharging
         self.arrowPhoto = imageAddress.arrowPhoto
         
         self.btstyle = ttk.Style()
-        self.btstyle.configure('normal.TButton', font=('Chakra Petch', 13), borderwidth=5, justify=Tk.CENTER)
+        self.btstyle.configure('normal.TButton', font=('Chakra Petch', 15), borderwidth=5, justify=Tk.CENTER)
         self.btstyle.map('normal.TButton', foreground=[('active', 'blue')])
-        self.btstyle.configure('custom.Accent.TButton', font=('Chakra Petch', 10), bordercolor='black', borderwidth=4,
+        self.btstyle.configure('custom.Accent.TButton', font=('Chakra Petch', 10), bordercolor='black', borderwidth=1,
                                justify=Tk.CENTER)
+        self.btstyle.configure('feature.Accent.TButton', font=('Chakra Petch', 15), borderwidth=1, justify=Tk.CENTER)
         self.btstyle.configure('bat.TLabel', font=('Chakra Petch', 13))
         self.btstyle.configure('normal.TLabel', font=('Chakra Petch', 13), background='white')
         self.btstyle.configure('red.TLabel', font=('Chakra Petch', 13), background='white', foreground='red')
@@ -84,9 +90,9 @@ class Resonance(Tk.Frame):
         self.featureFrame.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
         self.featureFrame.pack_propagate(0)
 
-        self.batFrame = Tk.Frame(self.featureFrame, bd=1, bg='grey95', width=117, height=35)
+        self.batFrame = Tk.Frame(self.featureFrame, bd=1, bg='grey95', width=130, height=35)
         self.batFrame.pack()
-        self.batFrame.place(relx=0.89, rely=0.0)
+        self.batFrame.place(relx=0.87, rely=0.0)
         self.batFrame.pack_propagate(0)
         self.creat_setting_feature_panel()
 
@@ -137,7 +143,7 @@ class Resonance(Tk.Frame):
         barrie=Tk.Frame(self.featureFrame, width=3, height=72, background='grey')
         barrie.place(relx=0.11, rely=0.018)
 
-        self.configBt = ttk.Button(self.featureFrame, style='Accent.TButton', text="Config",
+        self.configBt = ttk.Button(self.featureFrame, style='feature.Accent.TButton', text=_("Config"),
                                     command=self.on_config_button_clicked)
         self.configBt.place(relx=0.122, rely=0.018, width=115, height=72)
 
@@ -145,29 +151,29 @@ class Resonance(Tk.Frame):
         self.arrowLabel.place(relx=0.237, rely=0.25)
         self.arrowLabel.image = self.arrowPhoto
         
-        self.analysisBt = ttk.Button(self.featureFrame, style='normal.TButton', text="Resonance\nAnalysis",
+        self.analysisBt = ttk.Button(self.featureFrame, style='normal.TButton', text=_("Resonance\nAnalysis"),
                                    command=self.on_analysis_button_clicked)
-        self.analysisBt.place(relx=0.265, rely=0.018, width=115, height=72)
+        self.analysisBt.place(relx=0.265, rely=0.018, width=140, height=72)
 
         self.infoFrame= Tk.Frame(self.featureFrame, width=451, height=72, bg='white', bd=0)
         self.infoFrame.place(relx=0.41, rely=0.018)
 
-        self.infoLabel1=ttk.Label(self.infoFrame, text="Information", style="red.TLabel")
+        self.infoLabel1=ttk.Label(self.infoFrame, text=_("Information"), style="red.TLabel")
         self.infoLabel1.grid(column=0, row=0, padx=0, pady=5, sticky='w')
 
-        self.infoLabel2 = ttk.Label(self.infoFrame, text="Click the READ SENSOR and make a hit.", style="normal.TLabel")
+        self.infoLabel2 = ttk.Label(self.infoFrame, text=_("Click the READ SENSOR and make a hit."), style="normal.TLabel")
         self.infoLabel2.grid(column=0, row=1, padx=0, pady=5, sticky='w')
 
     def on_analysis_button_clicked(self):
         self.resonanceConfigFrame.pack_forget()
         self.resonanceAnalysisFrame.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
         self.configBt.configure(style="normal.TButton")
-        self.analysisBt.configure(style="Accent.TButton")
+        self.analysisBt.configure(style="feature.Accent.TButton")
 
     def on_config_button_clicked(self):
         self.resonanceConfigFrame.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
         self.resonanceAnalysisFrame.pack_forget()
-        self.configBt.configure(style="Accent.TButton")
+        self.configBt.configure(style="feature.Accent.TButton")
         self.analysisBt.configure(style="normal.TButton")
 
     def update_time(self):
@@ -189,11 +195,26 @@ class Resonance(Tk.Frame):
         t8.start()
         averageCapacity = remainCap
         if averageCapacity>=70:
-            self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.full_bat, compound=Tk.LEFT)
+            if stateOfCharge !="CHARGING":
+                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.full_bat, compound=Tk.LEFT)
+            else:
+                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.fullCharging, compound=Tk.LEFT)
         elif 30<=averageCapacity<70:
-            self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.half_bat, compound=Tk.LEFT)
+            if stateOfCharge !="CHARGING":
+                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.half_bat, compound=Tk.LEFT)
+            else:
+                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.medCharging, compound=Tk.LEFT)
+        elif 10<=averageCapacity<30:
+            if stateOfCharge !="CHARGING":
+                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.low_bat, compound=Tk.LEFT)
+            else:
+                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.lowCharging, compound=Tk.LEFT)
+
         else:
-            self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.low_bat, compound=Tk.LEFT)
+            if stateOfCharge !="CHARGING":
+                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.empty_bat, compound=Tk.LEFT)
+            else:
+                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.emptyCharging, compound=Tk.LEFT)
             if firstTime:
                 pms.general_warning(_("Low Battery! Plug in the charger to keep it running"))
                 firstTime = False
@@ -260,80 +281,91 @@ class ResonanceConfig(Tk.Frame):
         functionLabel = ttk.Label(resonanceConfigFrame, text=_('Function'), style="resonance.TLabel")
         functionLabel.grid(column=0, row=0, padx=10, pady=5, sticky="w")
         functionCombo = ttk.Combobox(resonanceConfigFrame, width=10, textvariable=self.resonanceParam0,
-                                     state="readonly")
+                                     state="readonly", font=('Chakra Petch', 13))
         functionCombo['value'] = ('Impact test', 'FRF')
         functionCombo.grid(column=1, row=0, padx=0, pady=5, sticky="e")
 
         sensorLabel = ttk.Label(resonanceConfigFrame, text=_('Sensor Port'), style="resonance.TLabel")
         sensorLabel.grid(column=0, row=1, padx=10, pady=5, sticky="w")
-        sensorCombo = ttk.Combobox(resonanceConfigFrame, width=10, textvariable=self.resonanceParam1, state="readonly")
+        sensorCombo = ttk.Combobox(resonanceConfigFrame, width=10, textvariable=self.resonanceParam1, 
+                                    state="readonly", font=('Chakra Petch', 13))
         sensorCombo['value'] = ('Port1', 'Port2', 'Port3')
         sensorCombo.grid(column=1, row=1, padx=0, pady=5, sticky="e")
 
         hamerLabel = ttk.Label(resonanceConfigFrame, text=_('Hammer Port'), style="resonance.TLabel")
         hamerLabel.grid(column=0, row=2, padx=10, pady=5, sticky="w")
-        hamerCombo = ttk.Combobox(resonanceConfigFrame, width=10, textvariable=self.resonanceParam10, state="readonly")
+        hamerCombo = ttk.Combobox(resonanceConfigFrame, width=10, textvariable=self.resonanceParam10, 
+                                    state="readonly", font=('Chakra Petch', 13))
         hamerCombo['value'] = ('Port1', 'Port2', 'Port3')
         hamerCombo.grid(column=1, row=2, padx=0, pady=5, sticky="e")
 
         windowLabel = ttk.Label(resonanceConfigFrame, text=_('Window Type'), style="resonance.TLabel")
         windowLabel.grid(column=0, row=3, padx=10, pady=5, sticky="w")
-        windowCombo = ttk.Combobox(resonanceConfigFrame, width=10, textvariable=self.resonanceParam2, state="readonly")
+        windowCombo = ttk.Combobox(resonanceConfigFrame, width=10, textvariable=self.resonanceParam2, 
+                                    state="readonly", font=('Chakra Petch', 13))
         windowCombo['value'] = ('Exponential')
         windowCombo.grid(column=1, row=3, padx=0, pady=5, sticky="e")
 
         factorLabel = ttk.Label(resonanceConfigFrame, text=_('Window Factor'), style="resonance.TLabel")
         factorLabel.grid(column=0, row=4, padx=10, pady=5, sticky="w")
 
-        factorCombo = ttk.Combobox(resonanceConfigFrame, width=10, textvariable=self.resonanceParam8, state="readonly")
+        factorCombo = ttk.Combobox(resonanceConfigFrame, width=10, textvariable=self.resonanceParam8, 
+                                    state="readonly", font=('Chakra Petch', 13))
         factorCombo['value'] = ('Length', "Damping ratio")
         factorCombo.grid(column=1, row=4, padx=0, pady=5, sticky="e")
 
         filterLabel = ttk.Label(resonanceConfigFrame, text=_('Filter Type'), style="resonance.TLabel")
         filterLabel.grid(column=0, row=5, padx=10, pady=5, sticky="w")
-        filterCombo = ttk.Combobox(resonanceConfigFrame, width=10, textvariable=self.resonanceParam3, state="readonly")
+        filterCombo = ttk.Combobox(resonanceConfigFrame, width=10, textvariable=self.resonanceParam3, 
+                                    state="readonly", font=('Chakra Petch', 13))
         filterCombo['value'] = ('BANDPASS')
         filterCombo.grid(column=1, row=5, padx=0, pady=5, sticky="e")
 
         filterFromLabel = ttk.Label(resonanceConfigFrame, text=_("Bandpass Filter From"), style="resonance.TLabel")
         filterFromLabel.grid(column=2, row=0, padx=20, pady=5, sticky='w')
-        filterFromEntry = ttk.Entry(resonanceConfigFrame, width=14, textvariable=self.resonanceParam4, validate="key")
+        filterFromEntry = ttk.Entry(resonanceConfigFrame, width=12, textvariable=self.resonanceParam4, validate="key",
+                                    font=('Chakra Petch', 13))
         filterFromEntry['validatecommand'] = (filterFromEntry.register(testVal), '%P', '%d')
         filterFromEntry.grid(column=3, row=0, padx=0, pady=5, sticky='e')
 
         filterToLabel = ttk.Label(resonanceConfigFrame, text=_("Bandpass Filter To"), style="resonance.TLabel")
         filterToLabel.grid(column=2, row=1, padx=20, pady=5, sticky='w')
-        filterToEntry = ttk.Entry(resonanceConfigFrame, width=14, textvariable=self.resonanceParam5, validate="key")
+        filterToEntry = ttk.Entry(resonanceConfigFrame, width=12, textvariable=self.resonanceParam5, validate="key",
+                                    font=('Chakra Petch', 13))
         filterToEntry['validatecommand'] = (filterToEntry.register(testVal), '%P', '%d')
         filterToEntry.grid(column=3, row=1, padx=0, pady=5, sticky='e')
 
         viewLabel = ttk.Label(resonanceConfigFrame, text=_("Sample rate"), style="resonance.TLabel")
         viewLabel.grid(column=2, row=2, padx=20, pady=5, sticky='w')
-        viewEntry = ttk.Entry(resonanceConfigFrame, width=14, textvariable=self.resonanceParam6, validate="key")
+        viewEntry = ttk.Entry(resonanceConfigFrame, width=12, textvariable=self.resonanceParam6, validate="key",
+                                    font=('Chakra Petch', 13))
         viewEntry['validatecommand'] = (viewEntry.register(testVal), '%P', '%d')
         viewEntry.grid(column=3, row=2, padx=0, pady=5, sticky='e')
 
         meshLabel = ttk.Label(resonanceConfigFrame, text=_("Sampling time"), style="resonance.TLabel")
         meshLabel.grid(column=2, row=3, padx=20, pady=5, sticky='w')
-        meshEntry = ttk.Entry(resonanceConfigFrame, width=14, textvariable=self.resonanceParam7, validate="key")
+        meshEntry = ttk.Entry(resonanceConfigFrame, width=12, textvariable=self.resonanceParam7, validate="key",
+                                    font=('Chakra Petch', 13))
         meshEntry['validatecommand'] = (meshEntry.register(testVal), '%P', '%d')
         meshEntry.grid(column=3, row=3, padx=0, pady=5, sticky='e')
 
         trackingLabel = ttk.Label(resonanceConfigFrame, text=_("Tracking resolution"), style="resonance.TLabel")
         trackingLabel.grid(column=2, row=4, padx=20, pady=5, sticky='w')
-        trackingEntry = ttk.Entry(resonanceConfigFrame, width=14, textvariable=self.resonanceParam9, validate="key")
+        trackingEntry = ttk.Entry(resonanceConfigFrame, width=12, textvariable=self.resonanceParam9, validate="key",
+                                    font=('Chakra Petch', 13))
         trackingEntry['validatecommand'] = (trackingEntry.register(testVal), '%P', '%d')
         trackingEntry.grid(column=3, row=4, padx=0, pady=5, sticky='e')
 
         numOfAverageLabel = ttk.Label(resonanceConfigFrame, text=_("Num of Average"), style="resonance.TLabel")
         numOfAverageLabel.grid(column=2, row=5, padx=20, pady=5, sticky='w')
-        numOfAverageEntry = ttk.Entry(resonanceConfigFrame, width=14, textvariable=self.resonanceParam11, validate="key")
+        numOfAverageEntry = ttk.Entry(resonanceConfigFrame, width=12, textvariable=self.resonanceParam11, validate="key",
+                                    font=('Chakra Petch', 13))
         numOfAverageEntry['validatecommand'] = (numOfAverageEntry.register(testVal), '%P', '%d')
         numOfAverageEntry.grid(column=3, row=5, padx=0, pady=5, sticky='e')
 
-        self.resonanceApplyButton = ttk.Button(resonanceConfigFrame, text=_("Apply"), style="Accent.TButton",
+        self.resonanceApplyButton = ttk.Button(resonanceConfigFrame, text=_("APPLY"), style="Accent.TButton",
                                     command=lambda: self.update_resonance_struct(resonance_config_struct))
-        self.resonanceApplyButton.grid(column=3, row=6, padx=0, pady=10, ipadx=40, ipady=5, sticky='w')
+        self.resonanceApplyButton.grid(column=4, row=6, padx=(160, 0), pady=(140, 0), ipadx=50, ipady=8, sticky='w')
 
 
     def update_resonance_struct(self, resonance_config_struct):
@@ -416,12 +448,13 @@ class SideButtonFrame(Tk.Frame):
         self.creat_button()
 
     def creat_button(self):
-        self.readSensorBt = ttk.Button(self, style='custom.Accent.TButton', text="READ\nSENSOR",
+        self.readSensorBt = ttk.Button(self, style='custom.Accent.TButton', text=_("READ\nSENSOR"),
                                 compound=Tk.TOP, command=self.on_read_sensor_clicked)
         self.readSensorBt.place(x=0, y=425, width=88, height=75)
 
-        self.freqZoomBt = ttk.Button(self, style='custom.Accent.TButton', text="ZOOM",
+        self.freqZoomBt = ttk.Button(self, style='custom.Accent.TButton', text="ZOOM", image=self.zoomPhoto,
                                 compound=Tk.TOP, command=lambda:self.on_zoom_button_clicked(827, 117))
+        self.freqZoomBt.image=self.zoomPhoto
         self.freqZoomBt.place(x=0, y=348, width=88, height=75)
 
         self.cursorLeftBt = ttk.Button(self, style='custom.Accent.TButton', text="CURSOR\nLEFT",
@@ -436,7 +469,7 @@ class SideButtonFrame(Tk.Frame):
                                       command=lambda:self.on_factor_button_clicked(827, 40))
         self.factorBt.place(x=0, y=117, width=88, height=75)
 
-        self.addBt = ttk.Button(self, style='custom.Accent.TButton', text="ADD",
+        self.addBt = ttk.Button(self, style='custom.Accent.TButton', text=_("ADD"),
                                          command=self.add_data)
         self.addBt.place(x=0, y=40, width=88, height=75)
 
@@ -506,7 +539,8 @@ class SideButtonFrame(Tk.Frame):
         button4.place(x=0, y=231, width=88, height=75)
         button4.image = self.panRight
 
-        button5 = ttk.Button(self.ZoomCanvas, text=_("RESET"), style='zoom.Accent.TButton', state='disable')
+        button5 = ttk.Button(self.ZoomCanvas, text=_("RESET"), style='zoom.Accent.TButton', state='normal',
+                            command=lambda: self.view_change(draw_canvas, _type='RESET'))
         button5.place(x=0, y=308, width=88, height=75)
 
     def view_change(self, canvas, _type):
@@ -536,6 +570,9 @@ class SideButtonFrame(Tk.Frame):
                 elif _type == "OUT":
                     [xleft, xright] = ax.get_xlim()
                     xright += 50
+                    ax.set_xlim(xleft, xright)
+                elif _type == "RESET":
+                    [xleft, xright] = [0, int(self.origin_config.resonance_config_struct["sampleRate"]/2.56)]
                     ax.set_xlim(xleft, xright)
             canvas.draw()
         except:

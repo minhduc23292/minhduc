@@ -36,6 +36,11 @@ class HomePage(Tk.Frame):
         self.low_bat = imageAddress.low_bat
         self.half_bat = imageAddress.half_bat
         self.full_bat = imageAddress.full_bat
+        self.empty_bat = imageAddress.empty_bat
+        self.lowCharging = imageAddress.lowCharging
+        self.medCharging = imageAddress.medCharging
+        self.fullCharging = imageAddress.fullCharging
+        self.emptyCharging = imageAddress.emptyCharging
         self.read_battery()
         self.creat_home_page(self.parent.origin_config)
 
@@ -44,14 +49,15 @@ class HomePage(Tk.Frame):
         self.style = ttk.Style(self.parent)
         self.style.configure('home.TLabel', background='white', font=('Chakra Petch', 40))
         self.style.configure('bat.TLabel', background='grey95', font=('Chakra Petch', 13))
-
+        self.style.configure('home.TButton', font=('Chakra Petch', 18), bordercolor='black', borderwidth=1,
+                             justify=Tk.CENTER)
         self.homeFrame = Tk.Frame(self.parent, bd=1, bg='white', width=1024, height=600)
         self.homeFrame.pack()
         self.homeFrame.pack_propagate(0)
 
-        self.batFrame = Tk.Frame(self.homeFrame, bd=1, bg='grey95', width=117, height=35)
+        self.batFrame = Tk.Frame(self.homeFrame, bd=1, bg='grey95', width=130, height=35)
         self.batFrame.pack()
-        self.batFrame.place(relx=0.89, rely=0.0)
+        self.batFrame.place(relx=0.87, rely=0.0)
         self.batFrame.pack_propagate(0)
 
         homeLabel = ttk.Label(self.homeFrame, style='home.TLabel', text="Otani Analyzer", image=self.settingPhoto,
@@ -63,34 +69,33 @@ class HomePage(Tk.Frame):
         self.timeLabel.place(relx=0.05, rely=0.1)
 
         self.batLabel = ttk.Label(self.batFrame, style='bat.TLabel', text=f"{str(remainCap)}%", image=self.full_bat, compound=Tk.LEFT)
+        self.batLabel.image = self.full_bat
         self.batLabel.after(10000, self.update_bat)
         self.batLabel.place(relx=0.5, rely=0.1)
 
-        self.diagnosticButton = ttk.Button(self.homeFrame, style='home.TButton', text="Diagnostic",
+        self.diagnosticButton = ttk.Button(self.homeFrame, style='home.TButton', text=_("Diagnostic"),
                                            image=self.resonacePhoto,
                                            compound=Tk.TOP, command=self.move_to_diagnostic_page)
         self.diagnosticButton.place(relx=0.21, rely=0.32, width=188, height=125)
 
-        self.balancingButton = ttk.Button(self.homeFrame, style='home.TButton', text="Dynamic\nBalancing",
+        self.balancingButton = ttk.Button(self.homeFrame, style='home.TButton', text=_("Dynamic\nBalancing"),
                                           image=self.balancePhoto,
                                           compound=Tk.TOP, command=self.move_to_balancing_page)
         self.balancingButton.place(relx=0.578, rely=0.32, width=188, height=125)
 
-        self.resonanceButton = ttk.Button(self.homeFrame, style='home.TButton', text="Resonance\nAnalysis",
+        self.resonanceButton = ttk.Button(self.homeFrame, style='home.TButton', text=_("Resonance\nAnalysis"),
                                           image=self.resonacePhoto,
                                           compound=Tk.TOP, command=self.move_to_resonance_page)
         self.resonanceButton.place(relx=0.21, rely=0.59, width=188, height=125)
 
-        self.historyButton = ttk.Button(self.homeFrame, style='home.TButton', text="History", image=self.historyPhoto,
+        self.historyButton = ttk.Button(self.homeFrame, style='home.TButton', text=_("History"), image=self.historyPhoto,
                                         compound=Tk.TOP, command=self.move_to_history_page)
         self.historyButton.place(relx=0.578, rely=0.59, width=188, height=125)
 
-        self.settingButton = ttk.Button(self.homeFrame, style='home.TButton', text="Settings", image=self.smallSePhoto,
+        self.settingButton = ttk.Button(self.homeFrame, style='home.TButton', text=_("Settings"), image=self.smallSePhoto,
                                         compound=Tk.LEFT, command=self.move_to_setting_page)
         self.settingButton.place(relx=0.76, rely=0.86, width=210, height=52)
 
-        self.style.configure('home.TButton', font=('Chakra Petch', 15), bordercolor='black', borderwidth=4,
-                             justify=Tk.CENTER)
 
     def move_to_diagnostic_page(self):
         self.homeFrame.destroy()
@@ -131,11 +136,26 @@ class HomePage(Tk.Frame):
         t8.start()
         averageCapacity = remainCap
         if averageCapacity>=70:
-            self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.full_bat, compound=Tk.LEFT)
+            if stateOfCharge !="CHARGING":
+                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.full_bat, compound=Tk.LEFT)
+            else:
+                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.fullCharging, compound=Tk.LEFT)
         elif 30<=averageCapacity<70:
-            self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.half_bat, compound=Tk.LEFT)
+            if stateOfCharge !="CHARGING":
+                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.half_bat, compound=Tk.LEFT)
+            else:
+                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.medCharging, compound=Tk.LEFT)
+        elif 10<=averageCapacity<30:
+            if stateOfCharge !="CHARGING":
+                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.low_bat, compound=Tk.LEFT)
+            else:
+                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.lowCharging, compound=Tk.LEFT)
+
         else:
-            self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.low_bat, compound=Tk.LEFT)
+            if stateOfCharge !="CHARGING":
+                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.empty_bat, compound=Tk.LEFT)
+            else:
+                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.emptyCharging, compound=Tk.LEFT)
             if firstTime:
                 pms.general_warning(_("Low Battery! Plug in the charger to keep it running"))
                 firstTime = False

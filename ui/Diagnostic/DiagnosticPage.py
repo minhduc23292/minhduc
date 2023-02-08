@@ -66,6 +66,11 @@ class DiagnosticPage(Tk.Frame):
         self.low_bat = imageAddress.low_bat
         self.half_bat = imageAddress.half_bat
         self.full_bat = imageAddress.full_bat
+        self.empty_bat = imageAddress.empty_bat
+        self.lowCharging = imageAddress.lowCharging
+        self.medCharging = imageAddress.medCharging
+        self.fullCharging = imageAddress.fullCharging
+        self.emptyCharging = imageAddress.emptyCharging
         self.waitingPhoto = imageAddress.waitingPhoto
         self.zoomPhoto = imageAddress.zoomPhoto
         self.savePhoto = imageAddress.savePhoto
@@ -73,11 +78,14 @@ class DiagnosticPage(Tk.Frame):
         self.zoomOut = imageAddress.zoomOut
         self.panLeft = imageAddress.panLeft
         self.panRight = imageAddress.panRight
+        self.cursorLeft = imageAddress.cursorLeft
+        self.cursorRight = imageAddress.cursorRight
         self.function1 = imageAddress.fuction1
         self.read_battery()
         self.btstyle = ttk.Style()
-        self.btstyle.configure('normal.TButton', font=('Chakra Petch', 13), borderwidth=1, justify=Tk.CENTER)
+        self.btstyle.configure('normal.TButton', font=('Chakra Petch', 15), borderwidth=1, justify=Tk.CENTER)
         self.btstyle.configure('custom.Accent.TButton', font=('Chakra Petch', 10), justify=Tk.CENTER)
+        self.btstyle.configure('feature.Accent.TButton', font=('Chakra Petch', 15), borderwidth=1, justify=Tk.CENTER)
         self.btstyle.configure('bat.TLabel', font=('Chakra Petch', 13))
         self.btstyle.configure('normal.TLabel', font=('Chakra Petch', 13), background='white')
         self.btstyle.configure('red.TLabel', font=('Chakra Petch', 13), background='white', foreground='red')
@@ -132,9 +140,9 @@ class DiagnosticPage(Tk.Frame):
         self.infoFrame= Tk.Frame(self.featureFrame, width=170, height=72, bg='white', bd=0)
         self.infoFrame.place(relx=0.711, rely=0.018)
 
-        self.batFrame = Tk.Frame(self.featureFrame, width=117, height=35, bd=1, bg='grey95')
+        self.batFrame = Tk.Frame(self.featureFrame, width=130, height=35, bd=1, bg='grey95')
         # self.batFrame.pack()
-        self.batFrame.place(relx=0.89, rely=0.0)
+        self.batFrame.place(relx=0.87, rely=0.0)
         self.batFrame.pack_propagate(0)
         self.creat_diagnostic_page()
 
@@ -186,7 +194,7 @@ class DiagnosticPage(Tk.Frame):
         barrie=Tk.Frame(self.featureFrame, width=3, height=72, background='grey')
         barrie.place(relx=0.11, rely=0.018)
 
-        self.configBt = ttk.Button(self.featureFrame, style='normal.TButton', text="Config", \
+        self.configBt = ttk.Button(self.featureFrame, style='normal.TButton', text=_("Config"), \
                                    command=lambda: self.on_config_button_clicked())
         self.configBt.place(relx=0.122, rely=0.018, width=115, height=72)
 
@@ -194,19 +202,19 @@ class DiagnosticPage(Tk.Frame):
         self.arrowLabel.place(relx=0.238, rely=0.25)
         self.arrowLabel.image = self.arrowPhoto
 
-        self.waveformBt = ttk.Button(self.featureFrame, style='normal.TButton', text="Waveform\nAnalysis", \
+        self.waveformBt = ttk.Button(self.featureFrame, style='normal.TButton', text=_("Waveform\nAnalysis"), \
                                      command=self.on_waveform_button_clicked)
         self.waveformBt.place(relx=0.265, rely=0.018, width=143, height=72)
 
-        self.frequencyBt = ttk.Button(self.featureFrame, style='normal.TButton', text="Frequency\nAnalysis", \
+        self.frequencyBt = ttk.Button(self.featureFrame, style='normal.TButton', text=_("Frequency\nAnalysis"), \
                                       command=self.on_frequency_button_clicked)
         self.frequencyBt.place(relx=0.413, rely=0.018, width=143, height=72)
 
-        self.generalBt = ttk.Button(self.featureFrame, style='normal.TButton', text="General\nMonitoring", \
+        self.generalBt = ttk.Button(self.featureFrame, style='normal.TButton', text=_("General\nMonitoring"), \
                                     command=self.on_general_button_clicked)
         self.generalBt.place(relx=0.562, rely=0.018, width=143, height=72)
 
-        self.infoLabel1=ttk.Label(self.infoFrame, text="Information", style="red.TLabel")
+        self.infoLabel1=ttk.Label(self.infoFrame, text=_("Information"), style="red.TLabel")
         self.infoLabel1.grid(column=0, row=0, padx=0, pady=5, sticky='w')
 
         self.infoLabel2 = ttk.Label(self.infoFrame, text="OK.", style="normal.TLabel", width=26)
@@ -228,7 +236,7 @@ class DiagnosticPage(Tk.Frame):
             self.waveformBt.configure(style="normal.TButton")
             self.frequencyBt.configure(style="normal.TButton")
             self.generalBt.configure(style="normal.TButton")
-            self.configBt.configure(style="Accent.TButton")
+            self.configBt.configure(style="feature.Accent.TButton")
 
         clean_frame_for_config_panel()
         self.config = ConfigFrame(self.configFrame, self.parent.origin_config)
@@ -241,7 +249,7 @@ class DiagnosticPage(Tk.Frame):
         self.applyBt.place(relx=0.6, rely=0.89, width=167, height=48)
 
     def creat_side_panel(self):
-        saveBt = ttk.Button(self.waveformSideButtonFrame, style='custom.Accent.TButton', text="SAVE",
+        saveBt = ttk.Button(self.waveformSideButtonFrame, style='custom.Accent.TButton', text=_("SAVE"),
                             image=self.savePhoto,
                             compound=Tk.TOP,
                             command=self.on_save_button_clicked)
@@ -258,12 +266,12 @@ class DiagnosticPage(Tk.Frame):
         #                        command=self.on_refresh_button_clicked)
         # channelBt.place(x=0, y=271, width=88, height=75)
 
-        readData = ttk.Button(self.waveformSideButtonFrame, style='custom.Accent.TButton', text="READ\nSENSOR",
+        readData = ttk.Button(self.waveformSideButtonFrame, style='custom.Accent.TButton', text=_("READ\nSENSOR"),
                               command=self.on_read_sensor_button_clicked)
         readData.place(x=0, y=425, width=88, height=75)
 ###
 
-        freqSaveBt = ttk.Button(self.freqSideButtonFrame, style='custom.Accent.TButton', text="SAVE",
+        freqSaveBt = ttk.Button(self.freqSideButtonFrame, style='custom.Accent.TButton', text=_("SAVE"),
                                 image=self.savePhoto,
                                 compound=Tk.TOP,
                                 command=self.on_save_button_clicked)
@@ -276,23 +284,23 @@ class DiagnosticPage(Tk.Frame):
         freqZoomBt.place(x=0, y=348, width=88, height=75)
         freqZoomBt.image = self.zoomPhoto
 
-        freqCursorLeftBt = ttk.Button(self.freqSideButtonFrame, style='custom.Accent.TButton', text="CURSOR\nLEFT",
+        freqCursorLeftBt = ttk.Button(self.freqSideButtonFrame, style='custom.Accent.TButton', text=_("CURSOR\nLEFT"),
                                       command=lambda: self.Tracking(False))
         freqCursorLeftBt.place(x=0, y=271, width=88, height=75)
 
-        freqCursorRightBt = ttk.Button(self.freqSideButtonFrame, style='custom.Accent.TButton', text="CURSOR\nRIGHT",
+        freqCursorRightBt = ttk.Button(self.freqSideButtonFrame, style='custom.Accent.TButton', text=_("CURSOR\nRIGHT"),
                                        command=lambda: self.Tracking(True))
         freqCursorRightBt.place(x=0, y=194, width=88, height=75)
 
-        self.freqGridtBt = ttk.Button(self.freqSideButtonFrame, style='custom.Accent.TButton', text="GRID ON",
+        self.freqGridtBt = ttk.Button(self.freqSideButtonFrame, style='custom.Accent.TButton', text=_("GRID ON"),
                                       command=self.on_grid_button)
         self.freqGridtBt.place(x=0, y=117, width=88, height=75)
 
-        self.freqFunctionBt = ttk.Button(self.freqSideButtonFrame, style='custom.Accent.TButton', text="FUNCTION\nNONE",
+        self.freqFunctionBt = ttk.Button(self.freqSideButtonFrame, style='custom.Accent.TButton', text=_("FUNCTION\nNONE"),
                                          command=lambda: self.creat_frequency_funtion_button_canvas(827, 40))
         self.freqFunctionBt.place(x=0, y=40, width=88, height=75)
 ##
-        generalSummatyBt = ttk.Button(self.generalSideButtonFrame, style='custom.Accent.TButton', text="SUMMARY",
+        generalSummatyBt = ttk.Button(self.generalSideButtonFrame, style='custom.Accent.TButton', text=_("SUMMARY"),
                                       command= self.on_summary_button_clicked)
         generalSummatyBt.place(x=0, y=425, width=88, height=75)
 
@@ -696,7 +704,7 @@ class DiagnosticPage(Tk.Frame):
                              command=self.on_filter_button_clicked)
         button2.place(x=0, y=77, width=88, height=75)
         button2.image = self.function1
-        button3 = ttk.Button(self.freqFuntionCanvas, text=_("ENVELOP"), style='custom.Accent.TButton',
+        button3 = ttk.Button(self.freqFuntionCanvas, text=_("ENVELOPED"), style='custom.Accent.TButton',
                              image=self.function1,
                              compound=Tk.TOP,
                              command=self.on_envelop_button_clicked)
@@ -743,7 +751,7 @@ class DiagnosticPage(Tk.Frame):
         grid_flag = True
         try:
             self.freqGridtBt.configure(text=_("GRID ON"))
-            self.freqFunctionBt.configure(text=_("FUNCTION\nENVELOP"))
+            self.freqFunctionBt.configure(text=_("FUNCTION\nENVELOPED"))
             _sample_rate = self.parent.origin_config.sensor_config["sample_rate"]
             win_var = self.parent.origin_config.frequency_config_struct["Window"]
             env_result = calculate_enveloped_signal(self.parent.origin_config)
@@ -947,7 +955,7 @@ class DiagnosticPage(Tk.Frame):
         self.waveformBt.configure(style="normal.TButton")
         self.frequencyBt.configure(style="normal.TButton")
         self.generalBt.configure(style="normal.TButton")
-        self.configBt.configure(style="Accent.TButton")
+        self.configBt.configure(style="feature.Accent.TButton")
 
     def on_waveform_button_clicked(self):
         self.waveformPlotFrame.pack(side=Tk.LEFT, fill=Tk.X, expand=1)
@@ -958,7 +966,7 @@ class DiagnosticPage(Tk.Frame):
         self.generalSideButtonFrame.pack_forget()
         self.configFrame.pack_forget()
         self.summaryPlotFrame.pack_forget()
-        self.waveformBt.configure(style="Accent.TButton")
+        self.waveformBt.configure(style="feature.Accent.TButton")
         self.frequencyBt.configure(style="normal.TButton")
         self.generalBt.configure(style="normal.TButton")
         self.configBt.configure(style="normal.TButton")
@@ -973,7 +981,7 @@ class DiagnosticPage(Tk.Frame):
         self.configFrame.pack_forget()
         self.summaryPlotFrame.pack_forget()
         self.waveformBt.configure(style="normal.TButton")
-        self.frequencyBt.configure(style="Accent.TButton")
+        self.frequencyBt.configure(style="feature.Accent.TButton")
         self.generalBt.configure(style="normal.TButton")
         self.configBt.configure(style="normal.TButton")
 
@@ -989,7 +997,7 @@ class DiagnosticPage(Tk.Frame):
         self.general_indicator_plot()
         self.waveformBt.configure(style="normal.TButton")
         self.frequencyBt.configure(style="normal.TButton")
-        self.generalBt.configure(style="Accent.TButton")
+        self.generalBt.configure(style="feature.Accent.TButton")
         self.configBt.configure(style="normal.TButton")
 
     def on_summary_button_clicked(self):
@@ -1003,7 +1011,7 @@ class DiagnosticPage(Tk.Frame):
         self.summaryPlotFrame.pack(side=Tk.LEFT, fill=Tk.X, expand=1)
         self.waveformBt.configure(style="normal.TButton")
         self.frequencyBt.configure(style="normal.TButton")
-        self.generalBt.configure(style="Accent.TButton")
+        self.generalBt.configure(style="feature.Accent.TButton")
         self.configBt.configure(style="normal.TButton")
         try:
             # self.summaryFrameCanvas = SummaryFrameCanvas(self.summaryPlotFrame)
@@ -1136,11 +1144,26 @@ class DiagnosticPage(Tk.Frame):
         t8.start()
         averageCapacity = remainCap
         if averageCapacity>=70:
-            self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.full_bat, compound=Tk.LEFT)
+            if stateOfCharge !="CHARGING":
+                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.full_bat, compound=Tk.LEFT)
+            else:
+                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.fullCharging, compound=Tk.LEFT)
         elif 30<=averageCapacity<70:
-            self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.half_bat, compound=Tk.LEFT)
+            if stateOfCharge !="CHARGING":
+                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.half_bat, compound=Tk.LEFT)
+            else:
+                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.medCharging, compound=Tk.LEFT)
+        elif 10<=averageCapacity<30:
+            if stateOfCharge !="CHARGING":
+                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.low_bat, compound=Tk.LEFT)
+            else:
+                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.lowCharging, compound=Tk.LEFT)
+
         else:
-            self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.low_bat, compound=Tk.LEFT)
+            if stateOfCharge !="CHARGING":
+                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.empty_bat, compound=Tk.LEFT)
+            else:
+                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.emptyCharging, compound=Tk.LEFT)
             if firstTime:
                 pms.general_warning(_("Low Battery! Plug in the charger to keep it running"))
                 firstTime = False
@@ -1167,9 +1190,11 @@ class ConfigFrame(Tk.Frame):
         self.parent = parent
         self.style = ttk.Style()
         self.style.configure('config.TLabel', font=('Chakra Petch', '13'))
-        self.style.configure('config.TLabelframe', font=('Chakra Petch', '15'), bg='white', borderwidth=1)
+        self.style.configure('config.TLabelframe', font=('Chakra Petch', '14'), bg='white', borderwidth=1)
         self.style.configure('config.TButton', font=('Chakra Petch', '15'))
         self.style.configure('config.TCombobox', font=('Chakra Petch', '15'))
+        self.style.configure('config.Switch.TCheckbutton', font=('Chakra Petch', '13'))
+        
         self.creat_config_frame(origin_config)
 
     def creat_config_frame(self, origin_config):
@@ -1224,7 +1249,7 @@ class ConfigFrame(Tk.Frame):
         self.frqParam7.set(origin_config.frequency_config_struct["unit"])
 
 
-        self.wfConfigFrame = Tk.LabelFrame(self.parent, text='', font=('Chakra Petch', 14), border=0, \
+        self.wfConfigFrame = Tk.LabelFrame(self.parent, text='', font=('Chakra Petch', 13), border=0, \
                                            bg='white')
         self.wfConfigFrame.pack(side=Tk.TOP, fill=Tk.BOTH)
 
@@ -1234,66 +1259,67 @@ class ConfigFrame(Tk.Frame):
         sensor1Label = ttk.Label(sensorFrame, text=_('Port1'), style='config.TLabel')
         sensor1Label.grid(column=0, row=0, padx=5, pady=5, sticky='w')
 
-        sensor1Combo = ttk.Combobox(sensorFrame, width=10, textvariable=self.wfParam1, state="readonly",
-                                    style="config.TCombobox")
+        sensor1Combo = ttk.Combobox(sensorFrame, width=8, textvariable=self.wfParam1, state="readonly",
+                                    font=('Chakra Petch', 13))
         sensor1Combo['value'] = ('NONE', 'HA', 'VA', 'AA', 'HV', 'VV', 'AV')
         sensor1Combo.grid(column=1, row=0, padx=0, pady=5, sticky='e')
 
         sensor2Label = ttk.Label(sensorFrame, text=_('Port2'), style='config.TLabel')
         sensor2Label.grid(column=0, row=1, padx=5, pady=5, sticky='w')
 
-        sensor2Combo = ttk.Combobox(sensorFrame, width=10, textvariable=self.wfParam2, state="readonly",
-                                    font=('Chakra Petch', 14))
+        sensor2Combo = ttk.Combobox(sensorFrame, width=8, textvariable=self.wfParam2, state="readonly",
+                                    font=('Chakra Petch', 13))
         sensor2Combo['value'] = ('NONE', 'HA', 'VA', 'AA', 'HV', 'VV', 'AV')
         sensor2Combo.grid(column=1, row=1, padx=0, pady=5, sticky='e')
 
         sensor3Label = ttk.Label(sensorFrame, text=_('Port3'), style='config.TLabel')
         sensor3Label.grid(column=0, row=2, padx=5, pady=5, sticky='w')
 
-        sensor3Combo = ttk.Combobox(sensorFrame, width=10, textvariable=self.wfParam3, state="readonly",
-                                    font=('Chakra Petch', 14))
+        sensor3Combo = ttk.Combobox(sensorFrame, width=8, textvariable=self.wfParam3, state="readonly",
+                                    font=('Chakra Petch', 13))
         sensor3Combo['value'] = ('NONE', 'HA', 'VA', 'AA', 'HV', 'VV', 'AV')
         sensor3Combo.grid(column=1, row=2, padx=0, pady=5, sticky='e')
 
         sensor4Label = ttk.Label(sensorFrame, text=_('Port4'), style='config.TLabel')
         sensor4Label.grid(column=0, row=3, padx=5, pady=5, sticky='w')
 
-        sensor4Combo = ttk.Combobox(sensorFrame, width=10, textvariable=self.wfParam4, state="readonly",
-                                    font=('Chakra Petch', 14))
+        sensor4Combo = ttk.Combobox(sensorFrame, width=8, textvariable=self.wfParam4, state="readonly",
+                                    font=('Chakra Petch', 13))
         sensor4Combo['value'] = ('NONE', 'TACHOMETER')
         sensor4Combo.grid(column=1, row=3, padx=0, pady=5, sticky='e')
 
         keyLabel = ttk.Label(sensorFrame, text=_('Key sensor'), style='config.TLabel')
         keyLabel.grid(column=0, row=4, padx=5, pady=5, sticky="w")
-        keyCombo = ttk.Combobox(sensorFrame, width=10, textvariable=self.wfParam5, state="readonly",
-                                font=('Chakra Petch', 14))
+        keyCombo = ttk.Combobox(sensorFrame, width=8, textvariable=self.wfParam5, state="readonly",
+                                font=('Chakra Petch', 13))
         keyCombo['value'] = ('Sensor1', 'Sensor2', 'Sensor3')
         # keyCombo.current(0)
         keyCombo.grid(column=1, row=4, padx=0, pady=5, sticky="e")
 
-        tsaCheckButton1 = ttk.Checkbutton(sensorFrame, text=_("    Use TSA"), offvalue=0, onvalue=1,
+        tsaCheckButton1 = ttk.Checkbutton(sensorFrame, text=_("  Use TSA"), offvalue=0, onvalue=1,
                                           variable=self.tsa_check, command=self.update_text_tsa,
-                                          style="Switch.TCheckbutton")
+                                          style="config.Switch.TCheckbutton")
         tsaCheckButton1.grid(column=1, row=5, padx=0, pady=5, sticky='w')
 
         tsaLabel = ttk.Label(sensorFrame, text=_("TSA times"), style='config.TLabel')
         tsaLabel.grid(column=0, row=6, padx=5, pady=5, sticky='w')
-        self.tsaEntry = ttk.Entry(sensorFrame, width=13, textvariable=self.wfParam6,
-                                  state="disable")
-        self.tsaEntry.grid(column=1, row=6, padx=0, pady=5, ipadx=2, sticky='e')
+        self.tsaEntry = ttk.Entry(sensorFrame, width=10, textvariable=self.wfParam6,
+                                  state="disable", font=('Chakra Petch', 13))
+        self.tsaEntry.grid(column=1, row=6, padx=0, pady=5, ipadx=3, sticky='e')
 
         fftLineLabel = ttk.Label(sensorFrame, text=_("FFT lines"), style='config.TLabel')
         fftLineLabel.grid(column=0, row=7, padx=5, pady=5, sticky='w')
-        fftLineCombo = ttk.Combobox(sensorFrame, width=10, textvariable=self.wfParam8, state="readonly", \
-                                    font=('Chakra Petch', 14))
+        fftLineCombo = ttk.Combobox(sensorFrame, width=8, textvariable=self.wfParam8, state="readonly", \
+                                    font=('Chakra Petch', 13))
         fftLineCombo['value'] = ('800','1600','3200','6400','12800', '25600', '51200')
         fftLineCombo.grid(column=1, row=7, padx=0, pady=5, sticky="e")
 
         sampleRateLabel = ttk.Label(sensorFrame, text=_("Fmax "), style='config.TLabel')
         sampleRateLabel.grid(column=0, row=8, padx=5, pady=5, sticky='w')
-        sampleRateEntry = ttk.Entry(sensorFrame, width=13, textvariable=self.wfParam7, validate="key")
+        sampleRateEntry = ttk.Entry(sensorFrame, width=10, textvariable=self.wfParam7, validate="key",
+                                    font=('Chakra Petch', 13))
         sampleRateEntry['validatecommand'] = (sampleRateEntry.register(testVal), '%P', '%d')
-        sampleRateEntry.grid(column=1, row=8, padx=0, pady=5, ipadx=2, sticky='e')
+        sampleRateEntry.grid(column=1, row=8, padx=0, pady=5, ipadx=3, sticky='e')
         ###
         frqConfigFrame = ttk.LabelFrame(self.wfConfigFrame, text=_('Filter configuration'), style='config.TLabelframe')
         frqConfigFrame.grid(column=2, row=0, padx=30, ipadx=5, pady=0, sticky='w')
@@ -1301,48 +1327,52 @@ class ConfigFrame(Tk.Frame):
         filterLabel = ttk.Label(frqConfigFrame, text=_('Filter type'), style='config.TLabel')
         filterLabel.grid(column=0, row=0, padx=5, pady=5, sticky="w")
 
-        filterCombo = ttk.Combobox(frqConfigFrame, width=10, textvariable=self.frqParam1, state="readonly",
-                                   font=('Chakra Petch', 14))
+        filterCombo = ttk.Combobox(frqConfigFrame, width=8, textvariable=self.frqParam1, state="readonly",
+                                   font=('Chakra Petch', 13))
         filterCombo['value'] = ('LOWPASS', 'HIGHPASS', 'BANDPASS')
         filterCombo.grid(column=1, row=0, padx=0, pady=5, sticky="e")
 
         windowLabel = ttk.Label(frqConfigFrame, text=_('Window type'), style='config.TLabel')
         windowLabel.grid(column=0, row=1, padx=5, pady=5, sticky="w")
 
-        windowCombo = ttk.Combobox(frqConfigFrame, width=10, textvariable=self.frqParam2, state="readonly",
-                                   font=('Chakra Petch', 14))
+        windowCombo = ttk.Combobox(frqConfigFrame, width=8, textvariable=self.frqParam2, state="readonly",
+                                   font=('Chakra Petch', 13))
         windowCombo['value'] = ('Hanning', 'Blackman', 'Flatop')
         # sensor1Combo.current(0)
         windowCombo.grid(column=1, row=1, padx=0, pady=5, sticky="e")
 
         highpassFrqLabel = ttk.Label(frqConfigFrame, text=_("Filter From (Hz)"), style='config.TLabel')
         highpassFrqLabel.grid(column=0, row=2, padx=5, pady=5, sticky='w')
-        highpassEntry = ttk.Entry(frqConfigFrame, width=13, textvariable=self.frqParam3, validate="key")
+        highpassEntry = ttk.Entry(frqConfigFrame, width=10, textvariable=self.frqParam3, validate="key",
+                                font=('Chakra Petch', 13))
         highpassEntry['validatecommand'] = (highpassEntry.register(testVal), '%P', '%d')
-        highpassEntry.grid(column=1, row=2, padx=0, pady=5, ipadx=2, sticky='e')
+        highpassEntry.grid(column=1, row=2, padx=0, pady=5, ipadx=3, sticky='e')
 
         lowpassFrqLabel = ttk.Label(frqConfigFrame, text=_("Filter To (Hz)"), style='config.TLabel')
         lowpassFrqLabel.grid(column=0, row=3, padx=5, pady=5, sticky='w')
-        lowpassEntry = ttk.Entry(frqConfigFrame, width=13, textvariable=self.frqParam4, validate="key")
+        lowpassEntry = ttk.Entry(frqConfigFrame, width=10, textvariable=self.frqParam4, validate="key",
+                                font=('Chakra Petch', 13))
         lowpassEntry['validatecommand'] = (lowpassEntry.register(testVal), '%P', '%d')
-        lowpassEntry.grid(column=1, row=3, padx=0, ipadx=2, pady=5, sticky='e')
+        lowpassEntry.grid(column=1, row=3, padx=0, ipadx=3, pady=5, sticky='e')
 
         trackLabel = ttk.Label(frqConfigFrame, text=_("Tracking resolution"), style='config.TLabel')
         trackLabel.grid(column=0, row=4, padx=5, pady=5, sticky='w')
-        trackEntry = ttk.Entry(frqConfigFrame, width=13, textvariable=self.frqParam5, validate="key")
+        trackEntry = ttk.Entry(frqConfigFrame, width=10, textvariable=self.frqParam5, validate="key",
+                                font=('Chakra Petch', 13))
         trackEntry['validatecommand'] = (trackEntry.register(testVal), '%P', '%d')
-        trackEntry.grid(column=1, row=4, padx=0, pady=5, ipadx=2, sticky='e')
+        trackEntry.grid(column=1, row=4, padx=0, pady=5, ipadx=3, sticky='e')
 
         meshLabel = ttk.Label(frqConfigFrame, text=_("Mesh grid"), style='config.TLabel')
         meshLabel.grid(column=0, row=5, padx=5, pady=5, sticky='w')
-        meshEntry = ttk.Entry(frqConfigFrame, width=13, textvariable=self.frqParam6, validate="key")
+        meshEntry = ttk.Entry(frqConfigFrame, width=10, textvariable=self.frqParam6, validate="key",
+                                font=('Chakra Petch', 13))
         meshEntry['validatecommand'] = (meshEntry.register(testVal), '%P', '%d')
-        meshEntry.grid(column=1, row=5, padx=0, pady=5, ipadx=2, sticky='e')
+        meshEntry.grid(column=1, row=5, padx=0, pady=5, ipadx=3, sticky='e')
 
         unitLabel = ttk.Label(frqConfigFrame, text=_('Unit show'), style='config.TLabel')
         unitLabel.grid(column=0, row=6, padx=5, pady=5, sticky="w")
-        unitCombo = ttk.Combobox(frqConfigFrame, width=10, textvariable=self.frqParam7, state="readonly",
-                                 font=('Chakra Petch', 14))
+        unitCombo = ttk.Combobox(frqConfigFrame, width=8, textvariable=self.frqParam7, state="readonly",
+                                 font=('Chakra Petch', 13))
         unitCombo['value'] = ('Original', 'dB')
         unitCombo.grid(column=1, row=6, padx=0, pady=5, sticky="e")
         ###
@@ -1352,13 +1382,14 @@ class ConfigFrame(Tk.Frame):
 
         machineNameLabel = ttk.Label(machineFrame, text=_("Machine name"), style='config.TLabel')
         machineNameLabel.grid(column=0, row=0, padx=5, pady=5, sticky='w')
-        machineNameEntry = ttk.Entry(machineFrame, width=13, textvariable=self.wfParam14)
-        machineNameEntry.grid(column=1, row=0, padx=0, pady=5, ipadx=2, sticky='e')
+        machineNameEntry = ttk.Entry(machineFrame, width=10, textvariable=self.wfParam14,
+                            font=('Chakra Petch', 13))
+        machineNameEntry.grid(column=1, row=0, padx=0, pady=5, ipadx=3, sticky='e')
 
         machineType = ttk.Label(machineFrame, text=_("Machine type"), style='config.TLabel')
         machineType.grid(column=0, row=1, padx=5, pady=5, sticky='w')
-        machineCombo = ttk.Combobox(machineFrame, width=10, textvariable=self.wfParam9, state="readonly",
-                                    font=('Chakra Petch', 14))
+        machineCombo = ttk.Combobox(machineFrame, width=8, textvariable=self.wfParam9, state="readonly",
+                                    font=('Chakra Petch', 13))
         machineCombo['value'] = (
             'GENERAL', 'STEAM TURBINE', "CRITICAL MACHINE", "GAS TURBINE", "HYDRO TURBINE", "PUMP", "COMPRESSOR",
             "WIND TURBINE")
@@ -1366,32 +1397,36 @@ class ConfigFrame(Tk.Frame):
 
         speedLabel = ttk.Label(machineFrame, text=_("Speed (RPM)"), style='config.TLabel')
         speedLabel.grid(column=0, row=2, padx=5, pady=5, sticky='w')
-        speedEntry = ttk.Entry(machineFrame, width=13, textvariable=self.wfParam10, validate="key")
+        speedEntry = ttk.Entry(machineFrame, width=10, textvariable=self.wfParam10, validate="key",
+                            font=('Chakra Petch', 13))
         speedEntry['validatecommand'] = (speedEntry.register(testVal), '%P', '%d')
-        speedEntry.grid(column=1, row=2, padx=0, pady=5, ipadx=2, sticky='e')
+        speedEntry.grid(column=1, row=2, padx=0, pady=5, ipadx=3, sticky='e')
 
         powerLabel = ttk.Label(machineFrame, text=_("Power (kW)"), style='config.TLabel')
         powerLabel.grid(column=0, row=3, padx=5, pady=5, sticky='w')
-        powerEntry = ttk.Entry(machineFrame, width=13, textvariable=self.wfParam11, validate="key")
+        powerEntry = ttk.Entry(machineFrame, width=10, textvariable=self.wfParam11, validate="key",
+                            font=('Chakra Petch', 13))
         powerEntry['validatecommand'] = (powerEntry.register(testVal), '%P', '%d')
-        powerEntry.grid(column=1, row=3, padx=0, pady=5, ipadx=2, sticky='e')
+        powerEntry.grid(column=1, row=3, padx=0, pady=5, ipadx=3, sticky='e')
 
         TeethLabel = ttk.Label(machineFrame, text=_("Gear teeth"), style='config.TLabel')
         TeethLabel.grid(column=0, row=4, padx=5, pady=5, sticky='w')
-        TeethEntry = ttk.Entry(machineFrame, width=13, textvariable=self.wfParam12, validate="key")
+        TeethEntry = ttk.Entry(machineFrame, width=10, textvariable=self.wfParam12, validate="key",
+                            font=('Chakra Petch', 13))
         TeethEntry['validatecommand'] = (TeethEntry.register(testVal), '%P', '%d')
-        TeethEntry.grid(column=1, row=4, padx=0, pady=5, ipadx=2, sticky='e')
+        TeethEntry.grid(column=1, row=4, padx=0, pady=5, ipadx=3, sticky='e')
 
         bearingBoreLabel = ttk.Label(machineFrame, text=_("Bearing bore (mm)"), style='config.TLabel')
         bearingBoreLabel.grid(column=0, row=5, padx=5, pady=5, sticky='w')
-        bearingBoreEntry = ttk.Entry(machineFrame, width=13, textvariable=self.wfParam13, validate="key")
+        bearingBoreEntry = ttk.Entry(machineFrame, width=10, textvariable=self.wfParam13, validate="key",
+                            font=('Chakra Petch', 13))
         bearingBoreEntry['validatecommand'] = (bearingBoreEntry.register(testVal), '%P', '%d')
-        bearingBoreEntry.grid(column=1, row=5, padx=0, pady=5, ipadx=2, sticky='e')
+        bearingBoreEntry.grid(column=1, row=5, padx=0, pady=5, ipadx=3, sticky='e')
 
         foundationType = ttk.Label(machineFrame, text=_("Foundation"), style='config.TLabel')
         foundationType.grid(column=0, row=6, padx=5, pady=5, sticky='w')
-        foundationCombo = ttk.Combobox(machineFrame, width=10, textvariable=self.wfParam15, state="readonly",
-                                       font=('Chakra Petch', 14))
+        foundationCombo = ttk.Combobox(machineFrame, width=8, textvariable=self.wfParam15, state="readonly",
+                                       font=('Chakra Petch', 13))
         foundationCombo['value'] = ('Rigid', "Flexible")
         foundationCombo.grid(column=1, row=6, padx=0, pady=5, sticky="e")
 
@@ -1534,14 +1569,14 @@ class SummaryFrameCanvas():
         self.detailFrame.pack(side=Tk.TOP, fill=Tk.BOTH)
 
         self.detailLabel1 = Tk.Label(self.detailFrame, text=_(
-            'Chanel      A-Peak   A-PkPk   A-RMS   V-Peak   V-PkPk   V-RMS   D-Peak   D-PkPk   D-RMS   Crest   Kutorsis.'),
+            'Channel      A-Peak   A-PkPk   A-RMS   V-Peak   V-PkPk   V-RMS   D-Peak   D-PkPk   D-RMS   Crest   Kutorsis.'),
                                 bg='white', fg="blue", font="Verdana 12")
         self.detailLabel1.grid(column=0, row=0, padx=0, pady=5, sticky='w')
-        self.detailLabel2 = Tk.Label(self.detailFrame, text=_('Chanel1'), bg='white', font="Verdana 12")
+        self.detailLabel2 = Tk.Label(self.detailFrame, text=_('Channel1'), bg='white', font="Verdana 12")
         self.detailLabel2.grid(column=0, row=1, padx=0, pady=5, sticky='w')
-        self.detailLabel3 = Tk.Label(self.detailFrame, text=_('Chanel2'), bg='white', font="Verdana 12")
+        self.detailLabel3 = Tk.Label(self.detailFrame, text=_('Channel2'), bg='white', font="Verdana 12")
         self.detailLabel3.grid(column=0, row=2, padx=0, pady=5, sticky='w')
-        self.detailLabel4 = Tk.Label(self.detailFrame, text=_('Chanel3'), bg='white', font="Verdana 12")
+        self.detailLabel4 = Tk.Label(self.detailFrame, text=_('Channel3'), bg='white', font="Verdana 12")
         self.detailLabel4.grid(column=0, row=3, padx=0, pady=5, sticky='w')
 
         self.graphFrame = Tk.LabelFrame(self.parent, bg='white', borderwidth=0)
