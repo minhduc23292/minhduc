@@ -71,7 +71,7 @@ class ImageAdrr():
         self.emptyCharging = PhotoImage(file=f"{current_directory}/emptyCharging.png")
 
         self.waitingPhoto = PhotoImage(file=f"{current_directory}/Waiting.png")
-        self.zoomPhoto = PhotoImage(file=f"{current_directory}/zoom.png")
+        self.zoomPhoto = PhotoImage(file=f"{current_directory}/ZoomIn.png")
         self.zoomIn = PhotoImage(file=f"{current_directory}/ZoomIn.png")
         self.zoomOut = PhotoImage(file=f"{current_directory}/ZoomOut.png")
         self.panLeft = PhotoImage(file=f"{current_directory}/PanLeft.png")

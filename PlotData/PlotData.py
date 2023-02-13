@@ -441,7 +441,89 @@ class PLT(FigureCanvasTkAgg):
             return
         self.draw()
 
-    def plot_velocity_spectral(self, arr, d_arr, sample_rate, viewRange, flag, tsa_use, tsa_bin, export_png=False):
+    def plot_velocity_spectrum(self, canal_1, canal_2, canal_3, sample_rate, ch):
+        axes_arr1 = self.figure.get_axes()
+        n=len(canal_1)
+        xf2 = np.linspace(0.0, 1.0 / (2.0/sample_rate), int(n / 2))
+        xf2=xf2[5:]
+        w = signal.hann(n, sym=False)  # Hann (Hanning) window
+        signalArr=[canal_1, canal_2, canal_3]
+        for i in range(3):
+            y = signalArr[i]
+            yf = fftpack.fft(y * w) * (4 / n)
+            yf2 = np.abs(yf[5:int(n / 2)])
+            for j in range(len(yf2)):
+                yf2[j]/=0.0002*np.pi*xf2[j]
+            axes_arr1[i].yaxis.set_major_formatter(FormatStrFormatter('%0.2f'))
+            axes_arr1[i].plot(xf2, yf2, color='blue', linewidth=0.5)
+            axes_arr1[i].grid(color='green', linestyle='--', linewidth=0.3, axis='y')
+            axes_arr1[i].set_ylabel(f"Ch{str(ch[i])}" + f' | mm/s')
+        for i in range(2):
+            axes_arr1[i].set_xticklabels([])
+        axes_arr1[-1].set_xlabel(_("Frequency [Hz]"))
+        self.draw()
+
+
+    def plot_velocity_spectral_kiem_tra_tich_phan(self, arr, d_arr, sample_rate, viewRange, export_png=False):
+        self.figure.set_size_inches(9.2, 5.2)
+        file_name='velocity_frequency.png'
+        completeName = os.path.join(save_path, file_name)
+        h_num = len(arr)
+        axes_arr = self.figure.get_axes()
+        cc=len(axes_arr)
+        while cc>0:
+            self.figure.delaxes(axes_arr[cc-1])
+            cc-=1
+        axes_arr = self.figure.get_axes()
+        cc=len(axes_arr)
+        while  cc<h_num:
+            self.figure.add_subplot(h_num,1,cc+1)
+            cc+=1
+        axes_arr1 = self.figure.get_axes()
+        self.figure.set_visible(True)
+        for i in axes_arr:
+            i.cla()
+            i.clear()
+        num_of_axes=len(axes_arr1)
+        if num_of_axes == 1:
+            self.figure.subplots_adjust(left=0.1, right=0.95, top=0.95, bottom=0.15)
+        if num_of_axes == 2:
+            self.figure.subplots_adjust(left=0.1, right=0.95, top=0.95, bottom=0.15)
+        if num_of_axes == 3:
+            self.figure.subplots_adjust(left=0.1, right=0.95, top=0.95, bottom=0.15)
+        if num_of_axes == 4:
+            self.figure.subplots_adjust(left=0.1, right=0.95, top=0.95, bottom=0.15)
+        if num_of_axes == 5:
+            self.figure.subplots_adjust(left=0.1, right=0.95, top=0.95, bottom=0.15)
+        if num_of_axes == 6:
+            self.figure.subplots_adjust(left=0.1, right=0.95, top=0.95, bottom= 0.15)
+  
+        for i in range(h_num):
+            y = acc2vel(arr[i], sample_rate[i])
+            y-=np.mean(y)
+            y=filter_data(y, "BANDPASS", dfc._RMS_HIGHPASS_FROM, dfc._RMS_LOWPASS_TO,
+                                  sample_rate[i], window="Hanning")
+            n = len(y)
+            w = signal.hann(n, sym=False)  # Hann (Hanning) window
+            xf2 = np.linspace(0.0, 1.0 / (2.0/sample_rate[i]), int(n / 2))
+            xf2=xf2[5:]
+            yf = fftpack.fft(y * w) * (4 / n)
+            yf2 = np.abs(yf[5:int(n / 2)])
+            axes_arr1[i].yaxis.set_major_formatter(FormatStrFormatter('%0.2f'))
+            axes_arr1[i].plot(xf2, yf2, color='blue', linewidth=0.5)
+            axes_arr1[i].grid()
+            axes_arr1[i].set_ylabel(d_arr[i]+'|')
+            axes_arr1[i].set_xlim(xmax=viewRange[1], xmin=viewRange[0])
+        for i in range(h_num-1):
+            axes_arr1[i].set_xticklabels([])
+        axes_arr1[-1].set_xlabel(_("Frequency [Hz]"))
+        
+        if export_png==True:
+            self.figure.savefig(completeName, bbox_inches='tight')
+            return
+        self.draw()
+
+    def plot_history_velocity_spectral(self, arr, d_arr, sample_rate, viewRange, tsa_use, tsa_bin, export_png=False):
         self.figure.set_size_inches(9.2, 5.2)
         file_name='velocity_frequency.png'
         completeName = os.path.join(save_path, file_name)
@@ -502,6 +584,7 @@ class PLT(FigureCanvasTkAgg):
             return
         self.draw()
 
+
     def plot_trend(self, data_arr, d_arr, sample_rate_arr, sensorPosition, isoStandard, rpm, bearing_bore, view_arr,
                    export_png=False):
         file_name = "trend.png"
@@ -541,6 +624,7 @@ class PLT(FigureCanvasTkAgg):
                 temp_vel_arr = data_arr[i]
             vel_arr = filter_data(temp_vel_arr, "BANDPASS", dfc._RMS_HIGHPASS_FROM, dfc._RMS_LOWPASS_TO,
                                   sample_rate_arr[i], window="Hanning")
+            vel_arr-=np.mean(vel_arr)
             rms_arr.append(rmsValue(vel_arr))
             date_arr.append(d_arr[i])
         rms_arr = np.flip(np.array(rms_arr))

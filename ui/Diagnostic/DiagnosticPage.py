@@ -33,6 +33,7 @@ from numpy.ctypeslib import ndpointer
 ad7609 = ctypes.CDLL(f'{current_directory}/ad7609BTZ.so')
 from bateryMonitor.powerManager import *
 from ds3231.ds3231B import DS3231
+from ui.home.HomePage import HomePage
 blink = 0
 blink1 = 0
 checkWidget = 'wasi'
@@ -42,6 +43,7 @@ remainCap = 50
 remainVolt = 3.8
 stateOfCharge = "CHARGING"
 firstTime = True
+summary_flag=0
 def testVal(inStr, acttyp):
     if acttyp == '1':  # insert
         if not inStr.isdigit():
@@ -302,12 +304,15 @@ class DiagnosticPage(Tk.Frame):
 ##
         generalSummatyBt = ttk.Button(self.generalSideButtonFrame, style='custom.Accent.TButton', text=_("SUMMARY"),
                                       command= self.on_summary_button_clicked)
-        generalSummatyBt.place(x=0, y=425, width=88, height=75)
+        generalSummatyBt.place(x=0, y=348, width=88, height=75)
 
-        generalGearIndicatorBt = ttk.Button(self.generalSideButtonFrame, style='custom.Accent.TButton',
-                                            text="RESERVE", state='disable',
-                                            command=self.side_band_energy_indicator)
-        generalGearIndicatorBt.place(x=0, y=348, width=88, height=75)
+        generalSaveBt = ttk.Button(self.generalSideButtonFrame, style='custom.Accent.TButton',
+                                            image=self.savePhoto,
+                                            compound=Tk.TOP,
+                                            text="SAVE",
+                                            command=self.on_save_button_clicked)
+        generalSaveBt.image=self.savePhoto
+        generalSaveBt.place(x=0, y=425, width=88, height=75)
 
     def go_home(self):
         self.mainFrame.destroy()
@@ -518,7 +523,7 @@ class DiagnosticPage(Tk.Frame):
                             self.infoLabel2.configure(text=_("Data is saved."), style="normal.TLabel")
 
                         else:
-                            print('nhap lai so lieu 1')
+                            print('Data is not save')
 
                     elif len(arr)==0 and len(arr1)==1:
                         pms.company_project_exist_error()
@@ -543,7 +548,7 @@ class DiagnosticPage(Tk.Frame):
                                 pass
                             self.infoLabel2.configure(text=_("Data is saved."), style="normal.TLabel")
                         else:
-                            print('nhap lai so lieu 3')
+                            print('Data is not saved')
                     elif len(arr) == 1 and len(arr1) == 1:
                         if arr[0][0]==arr1[0][1] :
                             if pms.company_project_existed_warning()==True:
@@ -690,32 +695,31 @@ class DiagnosticPage(Tk.Frame):
 
     def draw_frequency_function_button_canvas(self, widget, draw_canvas, x_pos, y_pos):
 
-        self.freqFuntionCanvas = Tk.Canvas(widget, width=90, height=308, bg='white')
+        self.freqFuntionCanvas = Tk.Canvas(widget, width=90, height=385, bg='white')
         self.freqFuntionCanvas.place(x=x_pos, y=y_pos)
-        button1 = ttk.Button(self.freqFuntionCanvas, text=_("NONE"), style='custom.Accent.TButton', image=self.function1,
+        button1 = ttk.Button(self.freqFuntionCanvas, text=_("NONE"), style='custom.Accent.TButton',
                              compound=Tk.TOP,
                              command=self.on_no_filter_button_clicked)
         button1.place(x=0, y=0, width=88, height=75)
-        button1.image = self.function1
 
         button2 = ttk.Button(self.freqFuntionCanvas, text=_("FILTER"), style='custom.Accent.TButton',
-                             image=self.function1,
                              compound=Tk.TOP,
                              command=self.on_filter_button_clicked)
         button2.place(x=0, y=77, width=88, height=75)
-        button2.image = self.function1
         button3 = ttk.Button(self.freqFuntionCanvas, text=_("ENVELOPED"), style='custom.Accent.TButton',
-                             image=self.function1,
                              compound=Tk.TOP,
                              command=self.on_envelop_button_clicked)
         button3.place(x=0, y=154, width=88, height=75)
-        button3.image = self.function1
 
-        button4 = ttk.Button(self.freqFuntionCanvas, text=_("PSD"), style='custom.Accent.TButton', image=self.function1,
+        button4 = ttk.Button(self.freqFuntionCanvas, text=_("PSD"), style='custom.Accent.TButton',
                              compound=Tk.TOP,
                              command=self.on_psd_button_click)
         button4.place(x=0, y=231, width=88, height=75)
-        button4.image = self.function1
+
+        button5 = ttk.Button(self.freqFuntionCanvas, text=_("VELOCITY\nSPECTRUM"), style='custom.Accent.TButton',
+                             compound=Tk.TOP,
+                             command=self.on_velocity_spectrum_button_click)
+        button5.place(x=0, y=308, width=88, height=75)
 
     def on_no_filter_button_clicked(self):
         global grid_flag
@@ -781,6 +785,21 @@ class DiagnosticPage(Tk.Frame):
             if (len(canal_1) != 0):
                 Pd.PLT.plot_psd(self.frequencyFrameCanvas.canvas2, canal_1, canal_2, canal_3, _sample_rate,
                                 self.parent.origin_config.sensor_config["unit"][:3], [1, 2, 3], unit, win_var)
+
+        except Exception as ex:
+            print("Exception: ", ex)
+    def on_velocity_spectrum_button_click(self):
+        global grid_flag
+        grid_flag = True
+        try:
+            self.freqGridtBt.configure(text=_("GRID ON"))
+            self.freqFunctionBt.configure(text=_("FUNCTION\nVELOCITY\nSPECTRUM"))
+            _sample_rate = self.parent.origin_config.sensor_config["sample_rate"]
+            canal_1 = self.parent.origin_config.sensor_config["sensor_data"][0]  # Copy list by value not by reference
+            canal_2 = self.parent.origin_config.sensor_config["sensor_data"][1]
+            canal_3 = self.parent.origin_config.sensor_config["sensor_data"][2]
+            if (len(canal_1) != 0):
+                Pd.PLT.plot_velocity_spectrum(self.frequencyFrameCanvas.canvas2, canal_1, canal_2, canal_3, _sample_rate, [1, 2, 3])
 
         except Exception as ex:
             print("Exception: ", ex)
@@ -944,6 +963,9 @@ class DiagnosticPage(Tk.Frame):
         except Exception as ex:
             print(ex)
     def on_config_button_clicked(self):
+        global summary_flag
+        if summary_flag==1:
+            summary_flag=not summary_flag
         self.waveformPlotFrame.pack_forget()
         self.waveformSideButtonFrame.pack_forget()
         self.freqPlotFrame.pack_forget()
@@ -958,6 +980,9 @@ class DiagnosticPage(Tk.Frame):
         self.configBt.configure(style="feature.Accent.TButton")
 
     def on_waveform_button_clicked(self):
+        global summary_flag
+        if summary_flag==1:
+            summary_flag=not summary_flag
         self.waveformPlotFrame.pack(side=Tk.LEFT, fill=Tk.X, expand=1)
         self.waveformSideButtonFrame.pack(side=Tk.RIGHT, fill=Tk.X, expand=1)
         self.freqPlotFrame.pack_forget()
@@ -972,6 +997,9 @@ class DiagnosticPage(Tk.Frame):
         self.configBt.configure(style="normal.TButton")
 
     def on_frequency_button_clicked(self):
+        global summary_flag
+        if summary_flag==1:
+            summary_flag=not summary_flag
         self.waveformPlotFrame.pack_forget()
         self.waveformSideButtonFrame.pack_forget()
         self.freqPlotFrame.pack(side=Tk.LEFT, fill=Tk.X, expand=1)
@@ -986,6 +1014,9 @@ class DiagnosticPage(Tk.Frame):
         self.configBt.configure(style="normal.TButton")
 
     def on_general_button_clicked(self):
+        global summary_flag
+        if summary_flag==1:
+            summary_flag=not summary_flag
         self.waveformPlotFrame.pack_forget()
         self.waveformSideButtonFrame.pack_forget()
         self.freqPlotFrame.pack_forget()
@@ -1001,23 +1032,31 @@ class DiagnosticPage(Tk.Frame):
         self.configBt.configure(style="normal.TButton")
 
     def on_summary_button_clicked(self):
-        self.waveformPlotFrame.pack_forget()
-        self.waveformSideButtonFrame.pack_forget()
-        self.freqPlotFrame.pack_forget()
-        self.freqSideButtonFrame.pack_forget()
-        self.generalPlotFrame.pack_forget()
-        self.generalSideButtonFrame.pack(side=Tk.RIGHT, fill=Tk.X, expand=1)
-        self.configFrame.pack_forget()
-        self.summaryPlotFrame.pack(side=Tk.LEFT, fill=Tk.X, expand=1)
-        self.waveformBt.configure(style="normal.TButton")
-        self.frequencyBt.configure(style="normal.TButton")
-        self.generalBt.configure(style="feature.Accent.TButton")
-        self.configBt.configure(style="normal.TButton")
-        try:
-            # self.summaryFrameCanvas = SummaryFrameCanvas(self.summaryPlotFrame)
-            self.summaryFrameCanvas.plot_summary(self.parent.origin_config)
-        except:
-            pass
+        global summary_flag
+        summary_flag=not summary_flag
+        if summary_flag==1:
+            self.waveformPlotFrame.pack_forget()
+            self.waveformSideButtonFrame.pack_forget()
+            self.freqPlotFrame.pack_forget()
+            self.freqSideButtonFrame.pack_forget()
+            self.generalPlotFrame.pack_forget()
+            self.generalSideButtonFrame.pack(side=Tk.RIGHT, fill=Tk.X, expand=1)
+            self.configFrame.pack_forget()
+            self.summaryPlotFrame.pack(side=Tk.LEFT, fill=Tk.X, expand=1)
+            self.waveformBt.configure(style="normal.TButton")
+            self.frequencyBt.configure(style="normal.TButton")
+            self.generalBt.configure(style="feature.Accent.TButton")
+            self.configBt.configure(style="normal.TButton")
+            try:
+                # self.summaryFrameCanvas = SummaryFrameCanvas(self.summaryPlotFrame)
+                self.summaryFrameCanvas.plot_summary(self.parent.origin_config)
+            except:
+                pass
+        else:
+            self.generalPlotFrame.pack(side=Tk.LEFT, fill=Tk.X, expand=1)
+            self.generalSideButtonFrame.pack(side=Tk.RIGHT, fill=Tk.X, expand=1)
+            self.summaryPlotFrame.pack_forget()
+
     def side_band_energy_indicator(self):
 
         try:

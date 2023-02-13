@@ -28,7 +28,7 @@ def build_filter(N, fc, window):
     return h / h.sum()
 
 
-def sinc_filter_data(
+def filter_data(
         samples: Sequence[float],
         filter_type: str,
         high_pass_cut_off_freq: int,
@@ -36,9 +36,17 @@ def sinc_filter_data(
         sample_rate: int,
         window: str
 ):
+    
+    if high_pass_cut_off_freq >= sample_rate / 3:
+        high_pass_cut_off_freq = sample_rate / 3
+    if low_pass_cut_off_freq >= sample_rate / 2.56:
+        low_pass_cut_off_freq = int(sample_rate / 2.56) - 1.0
+    if low_pass_cut_off_freq <= 0 or high_pass_cut_off_freq <= 0:
+        return samples
+
     if (filter_type == ''):
-        pms.empty_entry_error('sample rate or filter type')
-        return -1
+        return samples
+
     else:
         M = 200
         # Select the filter type
@@ -138,7 +146,7 @@ def highpass_firwin(ntaps, highcut, fs, window='hamming'):
     """FIR Filter"""
 
 
-def filter_data(
+def checking_filter_data(
         samples: Sequence[float],
         filter_type: str,
         high_pass_cut_off_freq: int,

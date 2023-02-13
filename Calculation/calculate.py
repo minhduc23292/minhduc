@@ -5,7 +5,7 @@ from scipy import fftpack, signal
 from scipy.signal import hilbert
 from digitalFilter.digitalFilter import filter_data
 import defaultConfig.default_config as dfc
-
+from scipy.integrate import cumulative_trapezoid, simpson
 
 def is_number(s):
     try:
@@ -22,6 +22,23 @@ def rmsValue(arr):
     # rms=np.sqrt(np.mean(np.square(arr)))
     return rms
 
+def rmsVelFromAccSpectrum(Acc, sample_rate):
+    n = len(Acc)
+    w = signal.hann(n, sym=False)  # Hann (Hanning) window
+    xf2 = np.linspace(0.0, 1.0 / (2.0/sample_rate), int(n / 2))
+    xf2=xf2[5:]
+    yf = fftpack.fft(Acc * w) * (4 / n)
+    yf2 = np.abs(yf[5:int(n / 2)])
+    for j in range(len(yf2)):
+        yf2[j]/=0.000204*np.pi*xf2[j]
+    k=0
+    sum=0
+    while(xf2[k]<1000):
+        sum+=np.square(yf2[k])
+        k+=1
+    sum/=k
+    
+    return np.sqrt(sum)
 
 def crest_factor(x):
     rms_val = rmsValue(x)
@@ -59,15 +76,6 @@ def pow2(a):
     while (2 ** i < a):
         i += 1
     return 2 ** i
-
-
-def battery_percent(voltage):
-    remain_bat = 47.36 * voltage * 1.07 - 497.36
-    if remain_bat > 100:
-        remain_bat = 100
-    if remain_bat < 0:
-        remain_bat = 0
-    return remain_bat
 
 
 def phase_shift2(arr1, arr2, sample_rate, speed):
@@ -163,10 +171,6 @@ def phase_shift(arr1, arr2, samples_per_second):
     return phase_shift1
 
 
-def a2v(a, f):
-    return a * 386.1 * 25.4 / (f * 6.28)  # mm/s
-
-
 def vtrial(a0, phi0, a1, phi1):
     z0 = a0 * np.cos(phi0) + (a0 * np.sin(phi0)) * 1j
     z1 = a1 * np.cos(phi1) + (a1 * np.sin(phi1)) * 1j
@@ -189,7 +193,7 @@ def tsa_convert(arr, pulse_position, tsa_value):
     return sum_arr  # mang 5 phan tu
 
 
-def acc2vel(accel_arr, sample_rate):
+def acc2vel_sai(accel_arr, sample_rate):
     vel_arr = []
     dt = 1 / sample_rate
     for i in range(len(accel_arr) - 2):
@@ -198,14 +202,41 @@ def acc2vel(accel_arr, sample_rate):
     return vel_arr
 
 
-def vel2disp(vel_arr, sample_rate):
-    disp_arr = []
-    dt = 1 / sample_rate
-    for i in range(len(vel_arr) - 2):
-        disp = 1000 * (vel_arr[i + 2] + 4 * vel_arr[i + 1] + vel_arr[i]) * dt / 3  # um
-        disp_arr.append(disp)  # um
-    return disp_arr
+def vel2disp(vel_arr, sample_rate): #mm/s->um
+    N = len(vel_arr)
+    xt = np.linspace(0.0, N/sample_rate, N)
+    d = cumulative_trapezoid(vel_arr, xt)*1000
+    d=filter_data(
+                            d,
+                            "BANDPASS",
+                            5,
+                            1000,
+                            sample_rate,
+                            window="Hanning"
+                            )
+    d-=np.mean(d)
+    return d
 
+def acc2vel(accel_arr, sample_rate): #g->mm/s
+    # dt=1/sample_rate
+    # velocity = np.zeros_like(accel_arr)
+    # velocity[0] = 0
+    # for i in range(1, len(accel_arr)):
+    #     velocity[i] = velocity[i-1] + 0.5 * (accel_arr[i-1] + accel_arr[i]) * dt
+    # return velocity*9800
+    N = len(accel_arr)
+    xt = np.linspace(0.0, N/sample_rate, N)
+    v = cumulative_trapezoid(accel_arr, xt)*9800
+    v=filter_data(
+                            v,
+                            "BANDPASS",
+                            5,
+                            1000,
+                            sample_rate,
+                            window="Hanning"
+                            )
+    v-=np.mean(v)
+    return v
 
 def gE(arr, filter_from: int, filter_to: int, sample_rate, window: str):
     gE_arr = []
@@ -333,9 +364,9 @@ def frequency_tsa(arr, step, sample_rate):
             yf = np.abs(yf)
             sum_fft += yf
         T = 1.0 / sample_rate
-        sum_fft = sum_fft[2:int(N / 2)] / (len(_index) - 2)
+        sum_fft = sum_fft[5:int(N / 2)] / (len(_index) - 2)
         xf = np.linspace(0.0, 1.0 / (2.0 * T), int(N / 2))
-        return [sum_fft, xf[2:]]
+        return [sum_fft, xf[5:]]
     else:
         N = len(arr)
         w = signal.hann(N, sym=False)  # Hann (Hanning) window
