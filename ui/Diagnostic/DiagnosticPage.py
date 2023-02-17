@@ -396,26 +396,29 @@ class DiagnosticPage(Tk.Frame):
                 self.parent.origin_config.sensor_config["sensor_data"][i] -= np.mean(
                     self.parent.origin_config.sensor_config["sensor_data"][i])
 
+                unit[i] = 'g'
+                self.parent.origin_config.sensor_config["accel"].append(i)
+                self.parent.origin_config.sensor_config["vel"].append(i)
+                self.parent.origin_config.sensor_config["dis"].append(i)
+                
+                self.parent.origin_config.sensor_config["vel_data"].append(
+                    acc2vel(self.parent.origin_config.sensor_config["sensor_data"][i],
+                            self.parent.origin_config.sensor_config["sample_rate"]))
+
+                self.parent.origin_config.sensor_config["displacement_data"].append(
+                    vel2disp(acc2vel(self.parent.origin_config.sensor_config["sensor_data"][i],
+                                     self.parent.origin_config.sensor_config["sample_rate"]),
+                             self.parent.origin_config.sensor_config["sample_rate"]))
+
                 self.parent.origin_config.sensor_config["sensor_data"][i] = \
                                         filter_data(self.parent.origin_config.sensor_config["sensor_data"][i], "BANDPASS",
                                         dfc._PRE_HIGHPASS_FROM,
                                         self.parent.origin_config.waveform_config_struct["Fmax"],
                                         self.parent.origin_config.sensor_config["sample_rate"],
                                         window="Hanning")
-                unit[i] = 'g'
-                self.parent.origin_config.sensor_config["accel"].append(i)
-                self.parent.origin_config.sensor_config["vel"].append(i)
-                self.parent.origin_config.sensor_config["dis"].append(i)
                 self.parent.origin_config.sensor_config["accel_data"].append(
-                    self.parent.origin_config.sensor_config["sensor_data"][i])
-                self.parent.origin_config.sensor_config["vel_data"].append(
-                    acc2vel(self.parent.origin_config.sensor_config["sensor_data"][i],
-                            self.parent.origin_config.sensor_config["sample_rate"]))
-                self.parent.origin_config.sensor_config["displacement_data"].append(
-                    vel2disp(acc2vel(self.parent.origin_config.sensor_config["sensor_data"][i],
-                                     self.parent.origin_config.sensor_config["sample_rate"]),
-                             self.parent.origin_config.sensor_config["sample_rate"]))
-                             
+                    self.parent.origin_config.sensor_config["sensor_data"][i])     
+
             elif self.parent.origin_config.sensor_config["sensor_input"][i][-1] == 'V':
                 self.parent.origin_config.sensor_config["sensor_data"][i] *= 254  # mm/s
                 self.parent.origin_config.sensor_config["sensor_data"][i] -= np.mean(
@@ -436,8 +439,10 @@ class DiagnosticPage(Tk.Frame):
                 self.parent.origin_config.sensor_config["displacement_data"].append(
                     vel2disp(self.parent.origin_config.sensor_config["sensor_data"][i],
                              self.parent.origin_config.sensor_config["sample_rate"]))
+                             
             elif self.parent.origin_config.sensor_config["sensor_input"][i][-1] == 'E':
                 self.parent.origin_config.sensor_config["sensor_data"][i] *= 0
+                self.parent.origin_config.sensor_config["sensor_data"][i]=self.parent.origin_config.sensor_config["sensor_data"][i][400:]
                 unit[i] = 'no sensor'
             else:
                 pass
