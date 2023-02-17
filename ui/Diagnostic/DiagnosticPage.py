@@ -430,6 +430,13 @@ class DiagnosticPage(Tk.Frame):
                 self.parent.origin_config.sensor_config["sensor_data"][i] *= 10  # g
                 self.parent.origin_config.sensor_config["sensor_data"][i] -= np.mean(
                     self.parent.origin_config.sensor_config["sensor_data"][i])
+
+                self.parent.origin_config.sensor_config["sensor_data"][i] = \
+                                        filter_data(self.parent.origin_config.sensor_config["sensor_data"][i], "BANDPASS",
+                                        dfc._PRE_HIGHPASS_FROM,
+                                        self.parent.origin_config.waveform_config_struct["Fmax"],
+                                        self.parent.origin_config.sensor_config["sample_rate"],
+                                        window="Hanning")
                 unit[i] = 'g'
                 self.parent.origin_config.sensor_config["accel"].append(i)
                 self.parent.origin_config.sensor_config["vel"].append(i)
@@ -443,10 +450,19 @@ class DiagnosticPage(Tk.Frame):
                     vel2disp(acc2vel(self.parent.origin_config.sensor_config["sensor_data"][i],
                                      self.parent.origin_config.sensor_config["sample_rate"]),
                              self.parent.origin_config.sensor_config["sample_rate"]))
+                             
             elif self.parent.origin_config.sensor_config["sensor_input"][i][-1] == 'V':
                 self.parent.origin_config.sensor_config["sensor_data"][i] *= 254  # mm/s
                 self.parent.origin_config.sensor_config["sensor_data"][i] -= np.mean(
                     self.parent.origin_config.sensor_config["sensor_data"][i])
+                
+                self.parent.origin_config.sensor_config["sensor_data"][i] = \
+                            filter_data(self.parent.origin_config.sensor_config["sensor_data"][i], "BANDPASS",
+                            dfc._PRE_HIGHPASS_FROM,
+                            dfc._RMS_LOWPASS_TO,
+                            self.parent.origin_config.sensor_config["sample_rate"],
+                            window="Hanning")
+
                 unit[i] = 'mm/s'
                 self.parent.origin_config.sensor_config["vel"].append(i)
                 self.parent.origin_config.sensor_config["dis"].append(i)
@@ -882,8 +898,7 @@ class DiagnosticPage(Tk.Frame):
         """This button callback is responsed get the data from sensor and execute the waveform callback function"""
         if from_config:
             self.config.update_diagnostic_struct(self.parent.origin_config)
-            self.configFrame.pack_forget()
-            # self.on_waveform_button_clicked()
+            # self.configFrame.pack_forget()
         self.read_sensor()
         self.on_waveform_button_clicked()
 
