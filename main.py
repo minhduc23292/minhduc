@@ -39,9 +39,9 @@ class TotalConfig(object):
             "remainCap": 50
         }
         self.waveform_config_struct = {
-            "Sensor1": 'HA',
-            "Sensor2": 'VA',
-            "Sensor3": 'AA',
+            "Sensor1": 'NONE',
+            "Sensor2": 'NONE',
+            "Sensor3": 'NONE',
             "Sensor4": 'NONE',
             "KeyPhase": "Sensor1",
             "UseTSA": 0,

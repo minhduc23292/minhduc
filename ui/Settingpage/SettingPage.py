@@ -304,7 +304,7 @@ class Power(Tk.Frame):
         self.style = ttk.Style()
         self.style.configure('power.TLabel', font=('Chakra Petch', 13))
         self.style.configure('power.TLabelframe', font=('Chakra Petch', 15))
-        self.style.configure('power.TButton', font=('Chakra Petch', 20))
+        self.style.configure('power.TButton', font=('Chakra Petch', 16))
         super().__init__(parent, width=1024, height=423, bg="white", bd=0)
         self.creat_power_page()
         self.focus()
