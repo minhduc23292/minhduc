@@ -23,8 +23,8 @@ save_path = f"{parent_directory}/storage/"
 
 
 class PLT(FigureCanvasTkAgg):
-    def plot1chanel(self, canal, ch, unit, sample_rate, win_var="Hanning"):
-        max_freq = sample_rate / 2
+    def plot1chanel(self, canal, unit, sample_rate, win_var="Hanning"):
+        max_freq = int(sample_rate / 2.56)
         N = len(canal)
         # ----------------- Plotting ---------------
         X1 = np.linspace(0, int((N / sample_rate) * 1000), N)  # X axis, 5000 sps, 1/5 ms.
@@ -55,8 +55,7 @@ class PLT(FigureCanvasTkAgg):
         elif (win_var == "Reactangular"):
             w = 1  # Rectangular window
         T = 1.0 / sample_rate
-        y = canal
-        yf = fftpack.fft(y * w) * (4 / N)
+        yf = fftpack.fft(canal * w) * (4 / N)
         yf1 = np.abs(yf[:(int(N // 2))])
         xf = fftpack.fftfreq(N, T)[0:int(N // 2)]
         ax_12.clear()

@@ -34,6 +34,7 @@ checkWidget = 'wasi'
 track_flag = 0
 grid_flag = True
 summary_flag=0
+view_flag=0
 def testVal(inStr, acttyp):
     if acttyp == '1':  # insert
         if not inStr.isdigit():
@@ -220,18 +221,18 @@ class DiagnosticPage(Tk.Frame):
                             image=self.savePhoto,
                             compound=Tk.TOP,
                             command=self.on_save_button_clicked)
-        saveBt.place(x=0, y=271, width=88, height=75)
+        saveBt.place(x=0, y=194, width=88, height=75)
         saveBt.image = self.savePhoto
+
+        self.laserBt = ttk.Button(self.waveformSideButtonFrame, style='custom.Accent.TButton', text="LASER\nVIEW",
+                               command=self.on_laser_button_clicked)
+        self.laserBt.place(x=0, y=271, width=88, height=75)
 
         zoomBt = ttk.Button(self.waveformSideButtonFrame, style='custom.Accent.TButton', text="ZOOM",
                             image=self.zoomPhoto,
                             compound=Tk.TOP, command=lambda: self.creat_zoom_frame(1, 827, 117))
         zoomBt.place(x=0, y=348, width=88, height=75)
         zoomBt.image = self.zoomPhoto
-
-        # channelBt = ttk.Button(self.waveformSideButtonFrame, style='custom.Accent.TButton', text="REFRESH",
-        #                        command=self.on_refresh_button_clicked)
-        # channelBt.place(x=0, y=271, width=88, height=75)
 
         readData = ttk.Button(self.waveformSideButtonFrame, style='custom.Accent.TButton', text=_("READ\nSENSOR"),
                               command=self.on_read_sensor_button_clicked)
@@ -449,6 +450,21 @@ class DiagnosticPage(Tk.Frame):
         self.parent.origin_config.sensor_config["unit"] = unit
         self.infoLabel2.configure(text=_("Actual sample rate:")+ f" {str(actual_sample_rate)}", style="normal.TLabel")
 
+
+    def on_laser_button_clicked(self): 
+        global view_flag
+        view_flag=not view_flag
+        try:
+            if view_flag==1:
+                self.laserBt.configure(text=_("NORMAL\nVIEW"))
+                _canal=self.parent.origin_config.sensor_config["sensor_data"][4]
+                _sample_rate=self.parent.origin_config.sensor_config["sample_rate"]
+                Pd.PLT.plot1chanel(self.waveformFrameCanvas.canvas1, _canal, self.parent.origin_config.sensor_config["unit"][4], _sample_rate, win_var="Hanning")
+            else:
+                self.laserBt.configure(text=_("LASER\nVIEW"))
+                self.on_refresh_button_clicked()
+        except:
+            self.infoLabel2.configure(text=_("Data errors"))
     def on_save_button_clicked(self):
         sample_rate = int(self.parent.origin_config.waveform_config_struct["Fmax"]*2.56)
         driveCheckVal = self.parent.origin_config.waveform_config_struct["MachineType"]
@@ -850,6 +866,10 @@ class DiagnosticPage(Tk.Frame):
         self.on_start_button_clicked(False)
 
     def on_refresh_button_clicked(self):
+        global view_flag
+        if view_flag==1:
+            self.laserBt.configure(text="LASER\nVIEW")
+            view_flag=0
         Pd.PLT.plot_all_chanel(self.waveformFrameCanvas.canvas1,
                                self.parent.origin_config.sensor_config["sensor_data"][0],
                                self.parent.origin_config.sensor_config["sensor_data"][1],
