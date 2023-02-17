@@ -16,7 +16,8 @@ firstTime = True
 class BatteryFrame(Tk.Frame):
     def __init__(self, master, **kwargs):
         super().__init__(master, bd=1, bg='grey95', width=130, height=35, **kwargs)
-        
+        self.style = ttk.Style()
+        self.style.configure('bat.TLabel', font=('Chakra Petch', 13))
         self.ds3231 = DS3231(1, 0x68)
         self.batery=BQ27510()
         self.lock=Lock()

@@ -1,5 +1,4 @@
 import tkinter as Tk
-# import sv_ttk
 from tkinter import ttk
 import matplotlib
 import matplotlib.pyplot as plt
@@ -8,12 +7,9 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import os
 from i18n import _
 from keyboard.keyboard import KeyBoard
-from ui.creatFigure.creatFigure import creatFig
 from image.image import ImageAdrr
-from datetime import datetime
 import threading
 from threading import Lock
-import time
 import numpy as np
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
@@ -28,14 +24,8 @@ from digitalFilter.digitalFilter import filter_data
 from Calculation.calculate import *
 import PlotData.PlotData as Pd
 import pms.popMessage as pms
-from bateryMonitor.powerManager import *
-from ds3231.ds3231B import DS3231
 balancingOrder=0
 click_stop_flag=False
-remainCap = 50
-remainVolt = 3.8
-stateOfCharge = "CHARGING"
-firstTime = True
 split_canvas_flag=0
 def testVal(inStr, acttyp):
     if acttyp == '1':  # insert
@@ -48,25 +38,14 @@ class Balancing(Tk.Frame):
         self.parent = parent
         imageAddress = ImageAdrr()
         self.homePhoto = imageAddress.homePhoto
-        self.low_bat = imageAddress.low_bat
-        self.half_bat = imageAddress.half_bat
-        self.full_bat = imageAddress.full_bat
-        self.empty_bat = imageAddress.empty_bat
-        self.lowCharging = imageAddress.lowCharging
-        self.medCharging = imageAddress.medCharging
-        self.fullCharging = imageAddress.fullCharging
-        self.emptyCharging = imageAddress.emptyCharging
         self.arrowPhoto = imageAddress.arrowPhoto
         self.lock = Lock()
-        self.batery=BQ27510()
-        self.read_battery()
         self.btstyle = ttk.Style()
         self.btstyle.configure('normal.TButton', font=('Chakra Petch', 15), borderwidth=5, justify=Tk.CENTER)
         self.btstyle.map('normal.TButton', foreground=[('active', 'blue')])
         self.btstyle.configure('custom.Accent.TButton', font=('Chakra Petch', 10), bordercolor='black', borderwidth=4,
                                justify=Tk.CENTER)
         self.btstyle.configure('feature.Accent.TButton', font=('Chakra Petch', 15), borderwidth=1, justify=Tk.CENTER)
-        self.btstyle.configure('bat.TLabel', font=('Chakra Petch', 13))
         self.btstyle.configure('normal.TLabel', font=('Chakra Petch', 13), background='white')
         self.btstyle.configure('red.TLabel', font=('Chakra Petch', 13), background='white', foreground='red')
 
@@ -77,11 +56,6 @@ class Balancing(Tk.Frame):
         self.featureFrame = Tk.Frame(self.mainFrame, bd=1, bg='white', width=1024, height=80)
         self.featureFrame.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
         self.featureFrame.pack_propagate(0)
-
-        self.batFrame = Tk.Frame(self.featureFrame, bd=1, bg='grey95', width=130, height=35)
-        self.batFrame.pack()
-        self.batFrame.place(relx=0.87, rely=0.0)
-        self.batFrame.pack_propagate(0)
 
         self.creat_setting_feature_panel()
         self.balancingConfigFrame = BalancingConfig(self.mainFrame, self.infoLabel2, self.parent.origin_config.balancing_config_struct)
@@ -112,16 +86,6 @@ class Balancing(Tk.Frame):
         self.balancingConfigFrame.balancingApplyButton.configure(state="normal")
 
     def creat_setting_feature_panel(self):
-        global remainCap
-        self.timeLabel = ttk.Label(self.batFrame, style='bat.TLabel', text=self.get_time_now())
-        self.timeLabel.after(5000, self.update_time)
-        self.timeLabel.place(relx=0.05, rely=0.1)
-
-        self.batLabel = ttk.Label(self.batFrame, style='bat.TLabel', text=f"{str(remainCap)}%", image=self.full_bat, compound=Tk.LEFT)
-        self.batLabel.image = self.full_bat
-        self.batLabel.after(10000, self.update_bat)
-        self.batLabel.place(relx=0.5, rely=0.1)
-
         self.homeBt = ttk.Button(self.featureFrame, style='normal.TButton', text="Home", image=self.homePhoto,
                                  compound=Tk.TOP,
                                  command=self.go_home)
@@ -163,65 +127,6 @@ class Balancing(Tk.Frame):
         self.balancingAnalysisFrame.pack_forget()
         self.configBt.configure(style="feature.Accent.TButton")
         self.analysisBt.configure(style="normal.TButton")
-
-    def update_time(self):
-        # now = datetime.now()
-        # current_time = now.strftime("%H:%M")
-        current_time=self.get_time_now()
-        self.timeLabel.configure(text=current_time)
-        self.timeLabel.after(5000, self.update_time)
-
-    def get_time_now(self):
-        ds3231 = DS3231(1, 0x68)
-        rtcTime=str(ds3231.read_datetime())
-        # rtcTime=time.strftime("%Y-%m-%d %H:%M:%S")
-        return rtcTime[11:16]
-
-    def update_bat(self):
-        global firstTime, remainCap, stateOfCharge, remainVolt
-        t8 = threading.Thread(target=self.read_battery)
-        t8.start()
-        averageCapacity = remainCap
-        if averageCapacity>=70:
-            if stateOfCharge !="CHARGING":
-                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.full_bat, compound=Tk.LEFT)
-            else:
-                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.fullCharging, compound=Tk.LEFT)
-        elif 30<=averageCapacity<70:
-            if stateOfCharge !="CHARGING":
-                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.half_bat, compound=Tk.LEFT)
-            else:
-                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.medCharging, compound=Tk.LEFT)
-        elif 10<=averageCapacity<30:
-            if stateOfCharge !="CHARGING":
-                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.low_bat, compound=Tk.LEFT)
-            else:
-                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.lowCharging, compound=Tk.LEFT)
-
-        else:
-            if stateOfCharge !="CHARGING":
-                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.empty_bat, compound=Tk.LEFT)
-            else:
-                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.emptyCharging, compound=Tk.LEFT)
-            if firstTime:
-                pms.general_warning(_("Low Battery! Plug in the charger to keep it running"))
-                firstTime = False
-            if remainVolt <= 2.85:
-                if stateOfCharge !="CHARGING":
-                    with self.lock:
-                        self.batery.i2c_send_turn_off()
-                    os.system("sudo shutdown -h now")
-        self.batLabel.after(10000, self.update_bat)
-
-    def read_battery(self):
-        global remainCap, stateOfCharge, remainVolt
-        with self.lock:
-            remainCap = round(self.batery.get_remaining_capacity())
-            remainVolt=self.batery.bq27510_battery_voltage()
-            if self.batery.bq27510_battery_current() > 0:
-                stateOfCharge = "CHARGING"
-            else:
-                stateOfCharge = "DISCHARGE"
 
     def go_home(self):
         self.mainFrame.destroy()
@@ -535,39 +440,41 @@ class SideButtonFrame(Tk.Frame):
                     temp_angle=i
                     break
             return[i-int(360/numofblades), i] 
-        if self.balancing_config_struct["num_planes"]=="Two" and len(self.balancing_config_struct["trim_run"])>0:
-            angle_mark1=separate_angle(self.balancing_config_struct["num_blades"], self.balancing_config_struct["trim_run"][-1][1])
-            angle_mark2=separate_angle(self.balancing_config_struct["num_blades"], self.balancing_config_struct["trim_run"][-1][3])
-            self.balParam15.set(angle_mark1[0])
-            self.balParam16.set(angle_mark1[1])
-            self.balParam17.set(angle_mark2[0])
-            self.balParam18.set(angle_mark2[1])
-            anpha1= (self.balancing_config_struct["trim_run"][-1][1]-angle_mark1[0])*np.pi/180
-            beta1= (angle_mark1[1]-self.balancing_config_struct["trim_run"][-1][1])*np.pi/180
-            gamma1= np.pi-anpha1-beta1
-            anpha2= (self.balancing_config_struct["trim_run"][-1][3]-angle_mark2[0])*np.pi/180
-            beta2=  (angle_mark2[1]-self.balancing_config_struct["trim_run"][-1][3])*np.pi/180
-            gamma2= np.pi-anpha2-beta2
-            smaller_angle_cw1= self.balancing_config_struct["trim_run"][-1][0]*np.sin(beta1)/np.sin(gamma1)
-            bigger_angle_cw1= self.balancing_config_struct["trim_run"][-1][0]*np.sin(anpha1)/np.sin(gamma1)
-            smaller_angle_cw2= self.balancing_config_struct["trim_run"][-1][2]*np.sin(beta2)/np.sin(gamma2)
-            bigger_angle_cw2= self.balancing_config_struct["trim_run"][-1][2]*np.sin(anpha2)/np.sin(gamma2)
-            self.balParam19.set(str(smaller_angle_cw1)[:4])
-            self.balParam20.set(str(bigger_angle_cw1)[:4])
-            self.balParam21.set(str(smaller_angle_cw2)[:4])
-            self.balParam22.set(str(bigger_angle_cw2)[:4])
-        elif self.balancing_config_struct["num_planes"]=="One" and len(self.balancing_config_struct["trim_run"])>0:
-            angle_mark1=separate_angle(self.balancing_config_struct["num_blades"], self.balancing_config_struct["trim_run"][-1][1])
-            self.balParam15.set(angle_mark1[0])
-            self.balParam16.set(angle_mark1[1])
-            anpha1= (self.balancing_config_struct["trim_run"][-1][1]-angle_mark1[0])*np.pi/180
-            beta1= (angle_mark1[1]-self.balancing_config_struct["trim_run"][-1][1])*np.pi/180
-            gamma1= np.pi-anpha1-beta1
-            smaller_angle_cw1= self.balancing_config_struct["trim_run"][-1][0]*np.sin(beta1)/np.sin(gamma1)
-            bigger_angle_cw1= self.balancing_config_struct["trim_run"][-1][0]*np.sin(anpha1)/np.sin(gamma1)
-            self.balParam19.set(str(smaller_angle_cw1)[:4])
-            self.balParam20.set(str(bigger_angle_cw1)[:4])
-
+        if self.balancing_config_struct["num_blades"]>0:
+            if self.balancing_config_struct["num_planes"]=="Two" and len(self.balancing_config_struct["trim_run"])>0:
+                angle_mark1=separate_angle(self.balancing_config_struct["num_blades"], self.balancing_config_struct["trim_run"][-1][1])
+                angle_mark2=separate_angle(self.balancing_config_struct["num_blades"], self.balancing_config_struct["trim_run"][-1][3])
+                self.balParam15.set(angle_mark1[0])
+                self.balParam16.set(angle_mark1[1])
+                self.balParam17.set(angle_mark2[0])
+                self.balParam18.set(angle_mark2[1])
+                anpha1= (self.balancing_config_struct["trim_run"][-1][1]-angle_mark1[0])*np.pi/180
+                beta1= (angle_mark1[1]-self.balancing_config_struct["trim_run"][-1][1])*np.pi/180
+                gamma1= np.pi-anpha1-beta1
+                anpha2= (self.balancing_config_struct["trim_run"][-1][3]-angle_mark2[0])*np.pi/180
+                beta2=  (angle_mark2[1]-self.balancing_config_struct["trim_run"][-1][3])*np.pi/180
+                gamma2= np.pi-anpha2-beta2
+                smaller_angle_cw1= self.balancing_config_struct["trim_run"][-1][0]*np.sin(beta1)/np.sin(gamma1)
+                bigger_angle_cw1= self.balancing_config_struct["trim_run"][-1][0]*np.sin(anpha1)/np.sin(gamma1)
+                smaller_angle_cw2= self.balancing_config_struct["trim_run"][-1][2]*np.sin(beta2)/np.sin(gamma2)
+                bigger_angle_cw2= self.balancing_config_struct["trim_run"][-1][2]*np.sin(anpha2)/np.sin(gamma2)
+                self.balParam19.set(str(smaller_angle_cw1)[:4])
+                self.balParam20.set(str(bigger_angle_cw1)[:4])
+                self.balParam21.set(str(smaller_angle_cw2)[:4])
+                self.balParam22.set(str(bigger_angle_cw2)[:4])
+            elif self.balancing_config_struct["num_planes"]=="One" and len(self.balancing_config_struct["trim_run"])>0:
+                angle_mark1=separate_angle(self.balancing_config_struct["num_blades"], self.balancing_config_struct["trim_run"][-1][1])
+                self.balParam15.set(angle_mark1[0])
+                self.balParam16.set(angle_mark1[1])
+                anpha1= (self.balancing_config_struct["trim_run"][-1][1]-angle_mark1[0])*np.pi/180
+                beta1= (angle_mark1[1]-self.balancing_config_struct["trim_run"][-1][1])*np.pi/180
+                gamma1= np.pi-anpha1-beta1
+                smaller_angle_cw1= self.balancing_config_struct["trim_run"][-1][0]*np.sin(beta1)/np.sin(gamma1)
+                bigger_angle_cw1= self.balancing_config_struct["trim_run"][-1][0]*np.sin(anpha1)/np.sin(gamma1)
+                self.balParam19.set(str(smaller_angle_cw1)[:4])
+                self.balParam20.set(str(bigger_angle_cw1)[:4])
+        else:
+            pass
 
     def change_state(self):
         global click_stop_flag

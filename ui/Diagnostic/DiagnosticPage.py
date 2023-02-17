@@ -6,7 +6,6 @@ from i18n import _
 import matplotlib
 
 matplotlib.use('TKAgg')
-import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 from mpl_toolkits.mplot3d import Axes3D, proj3d
@@ -19,9 +18,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from main import Application
-from datetime import datetime
 from scipy.stats import kurtosis
-import threading
 from threading import Lock
 import fileOperation.fileOperation as file_operation
 import pms.popMessage as pms
@@ -31,18 +28,11 @@ parent_directory = os.path.dirname(os.path.dirname(current_directory))
 import ctypes
 from numpy.ctypeslib import ndpointer
 ad7609 = ctypes.CDLL(f'{current_directory}/ad7609BTZ.so')
-from bateryMonitor.powerManager import *
-from ds3231.ds3231B import DS3231
-from ui.home.HomePage import HomePage
 blink = 0
 blink1 = 0
 checkWidget = 'wasi'
 track_flag = 0
 grid_flag = True
-remainCap = 50
-remainVolt = 3.8
-stateOfCharge = "CHARGING"
-firstTime = True
 summary_flag=0
 def testVal(inStr, acttyp):
     if acttyp == '1':  # insert
@@ -60,20 +50,10 @@ class DiagnosticPage(Tk.Frame):
         self.con = lite.connect(f'{current_directory}/company.db')
         ad7609.init()
         self.lock = Lock()
-        self.batery=BQ27510()
         imageAddress = ImageAdrr()
         self.settingPhoto = imageAddress.settingPhoto
         self.homePhoto = imageAddress.homePhoto
         self.arrowPhoto = imageAddress.arrowPhoto
-        self.low_bat = imageAddress.low_bat
-        self.half_bat = imageAddress.half_bat
-        self.full_bat = imageAddress.full_bat
-        self.empty_bat = imageAddress.empty_bat
-        self.lowCharging = imageAddress.lowCharging
-        self.medCharging = imageAddress.medCharging
-        self.fullCharging = imageAddress.fullCharging
-        self.emptyCharging = imageAddress.emptyCharging
-        self.waitingPhoto = imageAddress.waitingPhoto
         self.zoomPhoto = imageAddress.zoomPhoto
         self.savePhoto = imageAddress.savePhoto
         self.zoomIn = imageAddress.zoomIn
@@ -83,12 +63,10 @@ class DiagnosticPage(Tk.Frame):
         self.cursorLeft = imageAddress.cursorLeft
         self.cursorRight = imageAddress.cursorRight
         self.function1 = imageAddress.fuction1
-        self.read_battery()
         self.btstyle = ttk.Style()
         self.btstyle.configure('normal.TButton', font=('Chakra Petch', 15), borderwidth=1, justify=Tk.CENTER)
         self.btstyle.configure('custom.Accent.TButton', font=('Chakra Petch', 10), justify=Tk.CENTER)
         self.btstyle.configure('feature.Accent.TButton', font=('Chakra Petch', 15), borderwidth=1, justify=Tk.CENTER)
-        self.btstyle.configure('bat.TLabel', font=('Chakra Petch', 13))
         self.btstyle.configure('normal.TLabel', font=('Chakra Petch', 13), background='white')
         self.btstyle.configure('red.TLabel', font=('Chakra Petch', 13), background='white', foreground='red')
 
@@ -142,10 +120,6 @@ class DiagnosticPage(Tk.Frame):
         self.infoFrame= Tk.Frame(self.featureFrame, width=170, height=72, bg='white', bd=0)
         self.infoFrame.place(relx=0.711, rely=0.018)
 
-        self.batFrame = Tk.Frame(self.featureFrame, width=130, height=35, bd=1, bg='grey95')
-        # self.batFrame.pack()
-        self.batFrame.place(relx=0.87, rely=0.0)
-        self.batFrame.pack_propagate(0)
         self.creat_diagnostic_page()
 
         self.parent.bind_class('TEntry', "<FocusIn>", self.show_key_board)
@@ -177,15 +151,6 @@ class DiagnosticPage(Tk.Frame):
      
 
     def creat_diagnostic_feature_panel(self):
-        global remainCap
-        self.timeLabel = ttk.Label(self.batFrame, style='bat.TLabel', text=self.get_time_now())
-        self.timeLabel.after(5000, self.update_time)
-        self.timeLabel.place(relx=0.05, rely=0.1)
-
-        self.batLabel = ttk.Label(self.batFrame, style='bat.TLabel', text=f"{str(remainCap)}%", image=self.full_bat, compound=Tk.LEFT)
-        self.batLabel.image = self.full_bat
-        self.batLabel.after(10000, self.update_bat)
-        self.batLabel.place(relx=0.5, rely=0.1)
 
         self.homeBt = ttk.Button(self.featureFrame, style='normal.TButton', text="Home", image=self.homePhoto,
                                  compound=Tk.TOP, \
@@ -1179,64 +1144,6 @@ class DiagnosticPage(Tk.Frame):
             except:
                 pass
 
-    def update_time(self):
-        # now = datetime.now()
-        # current_time = now.strftime("%H:%M")
-        current_time=self.get_time_now()
-        self.timeLabel.configure(text=current_time)
-        self.timeLabel.after(5000, self.update_time)
-
-    def get_time_now(self):
-        ds3231 = DS3231(1, 0x68)
-        rtcTime=str(ds3231.read_datetime())
-        # rtcTime=time.strftime("%Y-%m-%d %H:%M:%S")
-        return rtcTime[11:16]
-
-    def update_bat(self):
-        global firstTime, remainCap, stateOfCharge, remainVolt
-        t8 = threading.Thread(target=self.read_battery)
-        t8.start()
-        averageCapacity = remainCap
-        if averageCapacity>=70:
-            if stateOfCharge !="CHARGING":
-                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.full_bat, compound=Tk.LEFT)
-            else:
-                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.fullCharging, compound=Tk.LEFT)
-        elif 30<=averageCapacity<70:
-            if stateOfCharge !="CHARGING":
-                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.half_bat, compound=Tk.LEFT)
-            else:
-                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.medCharging, compound=Tk.LEFT)
-        elif 10<=averageCapacity<30:
-            if stateOfCharge !="CHARGING":
-                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.low_bat, compound=Tk.LEFT)
-            else:
-                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.lowCharging, compound=Tk.LEFT)
-
-        else:
-            if stateOfCharge !="CHARGING":
-                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.empty_bat, compound=Tk.LEFT)
-            else:
-                self.batLabel.configure(text=f"{int(averageCapacity)}%", image=self.emptyCharging, compound=Tk.LEFT)
-            if firstTime:
-                pms.general_warning(_("Low Battery! Plug in the charger to keep it running"))
-                firstTime = False
-            if remainVolt <= 2.85:
-                if stateOfCharge !="CHARGING":
-                    with self.lock:
-                        self.batery.i2c_send_turn_off()
-                    os.system("sudo shutdown -h now")
-        self.batLabel.after(10000, self.update_bat)
-
-    def read_battery(self):
-        global remainCap, stateOfCharge, remainVolt
-        with self.lock:
-            remainCap = round(self.batery.get_remaining_capacity())
-            remainVolt=self.batery.bq27510_battery_voltage()
-            if self.batery.bq27510_battery_current() > 0:
-                stateOfCharge = "CHARGING"
-            else:
-                stateOfCharge = "DISCHARGE"
 
 class ConfigFrame(Tk.Frame):
     def __init__(self, parent: "self.configFrame", origin_config):
