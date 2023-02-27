@@ -6,8 +6,6 @@ from image.image import ImageAdrr
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from main import Application
-current_directory = os.getcwd()
-parent_directory = os.path.dirname(os.path.dirname(current_directory))
 
 class HomePage(Tk.Frame):
     def __init__(self, parent: "Application"):

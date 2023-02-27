@@ -23,7 +23,7 @@ remainCap = 50
 remainVolt = 3.8
 stateOfCharge = "CHARGING"
 firstTime = True
-current_directory = os.getcwd()
+current_directory = os.path.dirname(os.path.realpath(__file__))
 parent_directory = os.path.dirname(os.path.dirname(current_directory))
 ds3231 = DS3231(1, 0x68)
 def testVal(inStr, acttyp):
@@ -338,9 +338,9 @@ class Power(Tk.Frame):
 
 class LanguageConfig(Tk.Frame):
     def __init__(self, parent, language_config_struct):
-        json_filename = current_directory + '/i18n/language.json'
+        json_filename = parent_directory + '/i18n/language.json'
         self.json_pathname = Path(json_filename)
-        self.main_pathname = Path(current_directory + '/main.py')
+        self.main_pathname = Path(parent_directory + '/main.py')
         self.style = ttk.Style()
         self.style.configure('language.TLabel', font=('Chakra Petch', 13))
         self.style.configure('language.TLabelframe', font=('Chakra Petch', 15))

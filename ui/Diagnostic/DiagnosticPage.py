@@ -23,11 +23,11 @@ from threading import Lock
 import fileOperation.fileOperation as file_operation
 import pms.popMessage as pms
 import sqlite3 as lite
-current_directory = os.getcwd()
+current_directory = os.path.dirname(os.path.realpath(__file__))
 parent_directory = os.path.dirname(os.path.dirname(current_directory))
 import ctypes
 from numpy.ctypeslib import ndpointer
-ad7609 = ctypes.CDLL(f'{current_directory}/ad7609BTZ.so')
+ad7609 = ctypes.CDLL(f'{parent_directory}/ad7609BTZ.so')
 blink = 0
 blink1 = 0
 checkWidget = 'wasi'
@@ -48,7 +48,7 @@ class DiagnosticPage(Tk.Frame):
         self.parent = parent
         self.ZoomCanvas = Tk.Canvas()
         self.freqFuntionCanvas = Tk.Canvas()
-        self.con = lite.connect(f'{current_directory}/company.db')
+        self.con = lite.connect(f'{parent_directory}/company.db')
         ad7609.init()
         self.lock = Lock()
         imageAddress = ImageAdrr()
@@ -551,7 +551,7 @@ class DiagnosticPage(Tk.Frame):
                                 pass
                             self.infoLabel2.configure(text=_("Data is saved."), style="normal.TLabel")
                         else:
-                            print('Data is not saved')
+                            pass
                     elif len(arr) == 1 and len(arr1) == 1:
                         if arr[0][0]==arr1[0][1] :
                             if pms.company_project_existed_warning()==True:

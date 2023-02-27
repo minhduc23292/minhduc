@@ -5,7 +5,7 @@ from scipy import fftpack, signal
 from scipy.signal import hilbert
 from digitalFilter.digitalFilter import filter_data
 import defaultConfig.default_config as dfc
-from scipy.integrate import cumulative_trapezoid, simpson
+from scipy.integrate import cumulative_trapezoid
 
 def is_number(s):
     try:

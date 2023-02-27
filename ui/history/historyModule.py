@@ -13,11 +13,11 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from main import Application
 from tkinter import scrolledtext
-current_directory = os.getcwd()
+current_directory = os.path.dirname(os.path.realpath(__file__))
 parent_directory = os.path.dirname(os.path.dirname(current_directory))
 import ctypes
 from numpy.ctypeslib import ndpointer
-ad7609 = ctypes.CDLL(f'{current_directory}/ad7609BTZ.so')
+ad7609 = ctypes.CDLL(f'{parent_directory}/ad7609BTZ.so')
 from digitalFilter.digitalFilter import filter_data
 from Calculation.calculate import *
 import PlotData.PlotData as Pd
@@ -50,7 +50,7 @@ class History(Tk.Frame):
         self.style.configure('feature.Accent.TButton', font=('Chakra Petch', 15), borderwidth=1, justify=Tk.CENTER)
         self.style.configure('normal.TLabel', font=('Chakra Petch', 13), background='white')
         self.style.configure('red.TLabel', font=('Chakra Petch', 13), background='white', foreground='#C40069')
-        self.con = lite.connect(f'{current_directory}/company.db')
+        self.con = lite.connect(f'{parent_directory}/company.db')
         self.mainFrame = Tk.Frame(self.parent, bd=1, bg='white', width=1024, height=600)
         self.mainFrame.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
         self.mainFrame.pack_propagate(0)
@@ -658,7 +658,7 @@ class SideButtonFrame(Tk.Frame):
 
     def report(self):
         from docx.shared import Inches
-        save_path=f"{current_directory}/storage/"
+        save_path=f"{parent_directory}/storage/"
         document=rp.Report(save_path)
         try:
             if pms.general_warning(_("Do you want to export the report")):

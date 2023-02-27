@@ -805,7 +805,7 @@ msgstr ""
 
 #: ui/Diagnostic/DiagnosticPage.py:211
 msgid "APPLY and START"
-msgstr "XÁC NHẬN VÀ BẮT ĐẦU"
+msgstr "BẮT ĐẦU"
 
 #: ui/Diagnostic/DiagnosticPage.py:220 ui/Diagnostic/DiagnosticPage.py:242
 #: ui/Diagnostic/DiagnosticPage.py:278

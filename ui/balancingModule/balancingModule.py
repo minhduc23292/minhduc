@@ -15,11 +15,11 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from main import Application
 
-current_directory = os.getcwd()
+current_directory = os.path.dirname(os.path.realpath(__file__))
 parent_directory = os.path.dirname(os.path.dirname(current_directory))
 import ctypes
 from numpy.ctypeslib import ndpointer
-ad7609 = ctypes.CDLL(f'{current_directory}/ad7609BTZ.so')
+ad7609 = ctypes.CDLL(f'{parent_directory}/ad7609BTZ.so')
 from digitalFilter.digitalFilter import filter_data
 from Calculation.calculate import *
 import PlotData.PlotData as Pd
