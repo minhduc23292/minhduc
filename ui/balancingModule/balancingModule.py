@@ -47,7 +47,7 @@ class Balancing(Tk.Frame):
                                justify=Tk.CENTER)
         self.btstyle.configure('feature.Accent.TButton', font=('Chakra Petch', 15), borderwidth=1, justify=Tk.CENTER)
         self.btstyle.configure('normal.TLabel', font=('Chakra Petch', 13), background='white')
-        self.btstyle.configure('red.TLabel', font=('Chakra Petch', 13), background='white', foreground='red')
+        self.btstyle.configure('red.TLabel', font=('Chakra Petch', 13), background='white', foreground='#C40069')
 
         self.mainFrame = Tk.Frame(self.parent, bd=1, bg='white', width=1024, height=600)
         self.mainFrame.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
@@ -86,7 +86,7 @@ class Balancing(Tk.Frame):
         self.balancingConfigFrame.balancingApplyButton.configure(state="normal")
 
     def creat_setting_feature_panel(self):
-        self.homeBt = ttk.Button(self.featureFrame, style='normal.TButton', text="Home", image=self.homePhoto,
+        self.homeBt = ttk.Button(self.featureFrame, style='normal.TButton', text=_("Home"), image=self.homePhoto,
                                  compound=Tk.TOP,
                                  command=self.go_home)
         self.homeBt.place(relx=0.0, rely=0.018, width=100, height=72)
@@ -350,7 +350,7 @@ class SideButtonFrame(Tk.Frame):
         self.style = ttk.Style()
         self.calculateCanvas=Tk.Canvas()
         self.style.configure('custom.TLabel', font=('Chakra Petch', 13), bg='grey95')
-        self.style.configure('red.TLabel', font=('Chakra Petch', 13), bg='white', foreground='red')
+        self.style.configure('red.TLabel', font=('Chakra Petch', 13), bg='white', foreground='#C40069')
         self.style.configure('custom.TLabelframe', font=('Chakra Petch', 15), bg='white', borderwidth=0)
         self.style.configure('custom.TButton', font=('Chakra Petch', 15))
         imageAddress = ImageAdrr()

@@ -58,7 +58,7 @@ class Resonance(Tk.Frame):
                                justify=Tk.CENTER)
         self.btstyle.configure('feature.Accent.TButton', font=('Chakra Petch', 15), borderwidth=1, justify=Tk.CENTER)
         self.btstyle.configure('normal.TLabel', font=('Chakra Petch', 13), background='white')
-        self.btstyle.configure('red.TLabel', font=('Chakra Petch', 13), background='white', foreground='red')
+        self.btstyle.configure('red.TLabel', font=('Chakra Petch', 13), background='white', foreground='#C40069')
 
         self.mainFrame = Tk.Frame(self.parent, bd=1, bg='white', width=1024, height=600)
         self.mainFrame.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
@@ -103,7 +103,7 @@ class Resonance(Tk.Frame):
 
     def creat_setting_feature_panel(self):
 
-        self.homeBt = ttk.Button(self.featureFrame, style='normal.TButton', text="Home", image=self.homePhoto,
+        self.homeBt = ttk.Button(self.featureFrame, style='normal.TButton', text=_("Home"), image=self.homePhoto,
                                  compound=Tk.TOP,
                                  command=self.go_home)
         self.homeBt.place(relx=0.0, rely=0.018, width=100, height=72)
@@ -343,7 +343,7 @@ class SideButtonFrame(Tk.Frame):
         self.canvas=canvas
         self.style = ttk.Style()
         self.style.configure('custom.TLabel', font=('Chakra Petch', 13), bg='white')
-        self.style.configure('red.TLabel', font=('Chakra Petch', 13), bg='white', foreground='red')
+        self.style.configure('red.TLabel', font=('Chakra Petch', 13), bg='white', foreground='#C40069')
         self.style.configure('custom.TLabelframe', font=('Chakra Petch', 15), bg='white', borderwidth=0)
         self.style.configure('custom.TButton', font=('Chakra Petch', 15))
         imageAddress = ImageAdrr()
@@ -363,20 +363,20 @@ class SideButtonFrame(Tk.Frame):
                                 compound=Tk.TOP, command=self.on_read_sensor_clicked)
         self.readSensorBt.place(x=0, y=425, width=88, height=75)
 
-        self.freqZoomBt = ttk.Button(self, style='custom.Accent.TButton', text="ZOOM", image=self.zoomPhoto,
+        self.freqZoomBt = ttk.Button(self, style='custom.Accent.TButton', text=_("ZOOM"), image=self.zoomPhoto,
                                 compound=Tk.TOP, command=lambda:self.on_zoom_button_clicked(827, 117))
         self.freqZoomBt.image=self.zoomPhoto
         self.freqZoomBt.place(x=0, y=348, width=88, height=75)
 
-        self.cursorLeftBt = ttk.Button(self, style='custom.Accent.TButton', text="CURSOR\nLEFT",
+        self.cursorLeftBt = ttk.Button(self, style='custom.Accent.TButton', text=_("CURSOR\nLEFT"),
                                       command=lambda:self.Tracking(False))
         self.cursorLeftBt.place(x=0, y=271, width=88, height=75)
 
-        self.cursorRightBt = ttk.Button(self, style='custom.Accent.TButton', text="CURSOR\nRIGHT",
+        self.cursorRightBt = ttk.Button(self, style='custom.Accent.TButton', text=_("CURSOR\nRIGHT"),
                                        command=lambda:self.Tracking(True))
         self.cursorRightBt.place(x=0, y=194, width=88, height=75)
 
-        self.factorBt = ttk.Button(self, style='custom.Accent.TButton', text="FACTOR\n+-",
+        self.factorBt = ttk.Button(self, style='custom.Accent.TButton', text=_("FACTOR\n+-"),
                                       command=lambda:self.on_factor_button_clicked(827, 40))
         self.factorBt.place(x=0, y=117, width=88, height=75)
 

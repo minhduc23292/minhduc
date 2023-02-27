@@ -49,7 +49,7 @@ class History(Tk.Frame):
                                justify=Tk.CENTER)
         self.style.configure('feature.Accent.TButton', font=('Chakra Petch', 15), borderwidth=1, justify=Tk.CENTER)
         self.style.configure('normal.TLabel', font=('Chakra Petch', 13), background='white')
-        self.style.configure('red.TLabel', font=('Chakra Petch', 13), background='white', foreground='red')
+        self.style.configure('red.TLabel', font=('Chakra Petch', 13), background='white', foreground='#C40069')
         self.con = lite.connect(f'{current_directory}/company.db')
         self.mainFrame = Tk.Frame(self.parent, bd=1, bg='white', width=1024, height=600)
         self.mainFrame.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
@@ -89,7 +89,7 @@ class History(Tk.Frame):
 
     def creat_setting_feature_panel(self):
 
-        self.homeBt = ttk.Button(self.featureFrame, style='normal.TButton', text="Home", image=self.homePhoto,
+        self.homeBt = ttk.Button(self.featureFrame, style='normal.TButton', text=_("Home"), image=self.homePhoto,
                                  compound=Tk.TOP,
                                  command=self.go_home)
         self.homeBt.place(relx=0.0, rely=0.018, width=100, height=72)
@@ -340,7 +340,7 @@ class SideButtonFrame(Tk.Frame):
         self.con=db_connect
         self.style = ttk.Style()
         self.style.configure('custom.TLabel', font=('Chakra Petch', 13), bg='white')
-        self.style.configure('red.TLabel', font=('Chakra Petch', 13), bg='white', foreground='red')
+        self.style.configure('red.TLabel', font=('Chakra Petch', 13), bg='white', foreground='#C40069')
         self.style.configure('custom.TLabelframe', font=('Chakra Petch', 15), bg='white', borderwidth=0)
         self.style.configure('custom.Accent.TButton', font=('Chakra Petch', 10), justify=Tk.CENTER)
         self.style.configure('small.Accent.TButton', font=('Chakra Petch', 8), justify=Tk.CENTER)

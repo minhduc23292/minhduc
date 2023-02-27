@@ -67,9 +67,10 @@ class DiagnosticPage(Tk.Frame):
         self.btstyle = ttk.Style()
         self.btstyle.configure('normal.TButton', font=('Chakra Petch', 15), borderwidth=1, justify=Tk.CENTER)
         self.btstyle.configure('custom.Accent.TButton', font=('Chakra Petch', 10), justify=Tk.CENTER)
+        self.btstyle.configure('custom2.Accent.TButton', font=('Chakra Petch', 8), justify=Tk.CENTER)
         self.btstyle.configure('feature.Accent.TButton', font=('Chakra Petch', 15), borderwidth=1, justify=Tk.CENTER)
         self.btstyle.configure('normal.TLabel', font=('Chakra Petch', 13), background='white')
-        self.btstyle.configure('red.TLabel', font=('Chakra Petch', 13), background='white', foreground='red')
+        self.btstyle.configure('red.TLabel', font=('Chakra Petch', 13), background='white', foreground='#C40069')
 
         self.mainFrame = Tk.Frame(self.parent, bd=1, bg='white', width=1008, height=584)
         self.mainFrame.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
@@ -153,7 +154,7 @@ class DiagnosticPage(Tk.Frame):
 
     def creat_diagnostic_feature_panel(self):
 
-        self.homeBt = ttk.Button(self.featureFrame, style='normal.TButton', text="Home", image=self.homePhoto,
+        self.homeBt = ttk.Button(self.featureFrame, style='normal.TButton', text=_("Home"), image=self.homePhoto,
                                  compound=Tk.TOP, \
                                  command=self.go_home)
         self.homeBt.place(relx=0, rely=0.018, width=100, height=72)
@@ -208,13 +209,13 @@ class DiagnosticPage(Tk.Frame):
 
         clean_frame_for_config_panel()
         self.config = ConfigFrame(self.configFrame, self.parent.origin_config)
-        self.nextBt = ttk.Button(self.configFrame, text="APPLY and START", style='Accent.TButton',
+        self.nextBt = ttk.Button(self.configFrame, text=_("APPLY and START"), style='Accent.TButton',
                                  command=lambda: self.on_start_button_clicked(True))
-        self.nextBt.place(relx=0.8, rely=0.89, width=167, height=48)
+        self.nextBt.place(relx=0.8, rely=0.89, width=175, height=48)
 
-        self.applyBt = ttk.Button(self.configFrame, text="APPLY", style='Accent.TButton',
+        self.applyBt = ttk.Button(self.configFrame, text=_("APPLY"), style='Accent.TButton',
                                  command=lambda: self.on_apply_button_clicked(True))
-        self.applyBt.place(relx=0.6, rely=0.89, width=167, height=48)
+        self.applyBt.place(relx=0.6, rely=0.89, width=175, height=48)
 
     def creat_side_panel(self):
         saveBt = ttk.Button(self.waveformSideButtonFrame, style='custom.Accent.TButton', text=_("SAVE"),
@@ -224,11 +225,11 @@ class DiagnosticPage(Tk.Frame):
         saveBt.place(x=0, y=194, width=88, height=75)
         saveBt.image = self.savePhoto
 
-        self.laserBt = ttk.Button(self.waveformSideButtonFrame, style='custom.Accent.TButton', text="LASER\nVIEW",
+        self.laserBt = ttk.Button(self.waveformSideButtonFrame, style='custom.Accent.TButton', text=_("LASER\nVIEW"),
                                command=self.on_laser_button_clicked)
         self.laserBt.place(x=0, y=271, width=88, height=75)
 
-        zoomBt = ttk.Button(self.waveformSideButtonFrame, style='custom.Accent.TButton', text="ZOOM",
+        zoomBt = ttk.Button(self.waveformSideButtonFrame, style='custom.Accent.TButton', text=_("ZOOM"),
                             image=self.zoomPhoto,
                             compound=Tk.TOP, command=lambda: self.creat_zoom_frame(1, 827, 117))
         zoomBt.place(x=0, y=348, width=88, height=75)
@@ -246,7 +247,7 @@ class DiagnosticPage(Tk.Frame):
         freqSaveBt.place(x=0, y=425, width=88, height=75)
         freqSaveBt.image = self.savePhoto
 
-        freqZoomBt = ttk.Button(self.freqSideButtonFrame, style='custom.Accent.TButton', text="ZOOM",
+        freqZoomBt = ttk.Button(self.freqSideButtonFrame, style='custom.Accent.TButton', text=_("ZOOM"),
                                 image=self.zoomPhoto,
                                 compound=Tk.TOP, command=lambda: self.creat_zoom_frame(2, 827, 117))
         freqZoomBt.place(x=0, y=348, width=88, height=75)
@@ -275,7 +276,7 @@ class DiagnosticPage(Tk.Frame):
         generalSaveBt = ttk.Button(self.generalSideButtonFrame, style='custom.Accent.TButton',
                                             image=self.savePhoto,
                                             compound=Tk.TOP,
-                                            text="SAVE",
+                                            text=_("SAVE"),
                                             command=self.on_save_button_clicked)
         generalSaveBt.image=self.savePhoto
         generalSaveBt.place(x=0, y=425, width=88, height=75)
@@ -699,26 +700,26 @@ class DiagnosticPage(Tk.Frame):
 
         self.freqFuntionCanvas = Tk.Canvas(widget, width=90, height=385, bg='white')
         self.freqFuntionCanvas.place(x=x_pos, y=y_pos)
-        button1 = ttk.Button(self.freqFuntionCanvas, text=_("NONE"), style='custom.Accent.TButton',
+        button1 = ttk.Button(self.freqFuntionCanvas, text=_("NONE"), style='custom2.Accent.TButton',
                              compound=Tk.TOP,
                              command=self.on_no_filter_button_clicked)
         button1.place(x=0, y=0, width=88, height=75)
 
-        button2 = ttk.Button(self.freqFuntionCanvas, text=_("FILTER"), style='custom.Accent.TButton',
+        button2 = ttk.Button(self.freqFuntionCanvas, text=_("FILTER"), style='custom2.Accent.TButton',
                              compound=Tk.TOP,
                              command=self.on_filter_button_clicked)
         button2.place(x=0, y=77, width=88, height=75)
-        button3 = ttk.Button(self.freqFuntionCanvas, text=_("ENVELOPED"), style='custom.Accent.TButton',
+        button3 = ttk.Button(self.freqFuntionCanvas, text=_("ENVELOPED"), style='custom2.Accent.TButton',
                              compound=Tk.TOP,
                              command=self.on_envelop_button_clicked)
         button3.place(x=0, y=154, width=88, height=75)
 
-        button4 = ttk.Button(self.freqFuntionCanvas, text=_("PSD"), style='custom.Accent.TButton',
+        button4 = ttk.Button(self.freqFuntionCanvas, text=_("PSD"), style='custom2.Accent.TButton',
                              compound=Tk.TOP,
                              command=self.on_psd_button_click)
         button4.place(x=0, y=231, width=88, height=75)
 
-        button5 = ttk.Button(self.freqFuntionCanvas, text=_("VELOCITY\nSPECTRUM"), style='custom.Accent.TButton',
+        button5 = ttk.Button(self.freqFuntionCanvas, text=_("VELOCITY\nSPECTRAL"), style='custom2.Accent.TButton',
                              compound=Tk.TOP,
                              command=self.on_velocity_spectrum_button_click)
         button5.place(x=0, y=308, width=88, height=75)
@@ -868,7 +869,7 @@ class DiagnosticPage(Tk.Frame):
     def on_refresh_button_clicked(self):
         global view_flag
         if view_flag==1:
-            self.laserBt.configure(text="LASER\nVIEW")
+            self.laserBt.configure(text=_("LASER\nVIEW"))
             view_flag=0
         Pd.PLT.plot_all_chanel(self.waveformFrameCanvas.canvas1,
                                self.parent.origin_config.sensor_config["sensor_data"][0],

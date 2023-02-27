@@ -95,7 +95,7 @@ class SettingPage(Tk.Frame):
 
     def creat_setting_feature_panel(self):
         global remainCap
-        self.homeBt = ttk.Button(self.featureFrame, style='normal.TButton', text="Home", image=self.homePhoto,
+        self.homeBt = ttk.Button(self.featureFrame, style='normal.TButton', text=_("Home"), image=self.homePhoto,
                                  compound=Tk.TOP,
                                  command=self.go_home)
         self.homeBt.place(relx=0.0, rely=0.018, width=100, height=72)
