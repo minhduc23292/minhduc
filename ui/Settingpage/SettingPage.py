@@ -16,6 +16,7 @@ from pathlib import Path
 import json
 import sys
 from image.image import ImageAdrr
+import threading
 from threading import Lock
 from bateryMonitor.powerManager import *
 from ds3231.ds3231B import DS3231
@@ -52,7 +53,8 @@ class SettingPage(Tk.Frame):
         self.btstyle.configure('normal.TButton', font=('Chakra Petch', 15), borderwidth=5, justify=Tk.CENTER)
         self.btstyle.configure('custom.Accent.TButton', font=('Chakra Petch', 15), bordercolor='black', borderwidth=4,
                                justify=Tk.CENTER)
-        self.btstyle.configure('normal.TLabel', font=('Chakra Petch', 12), background='white')
+        self.btstyle.configure('normal.TLabel', font=('Chakra Petch', 13), background='white')
+        self.btstyle.configure('red.TLabel', font=('Chakra Petch', 13), background='white', foreground='#C40069')
 
         self.mainFrame = Tk.Frame(self.parent, bd=1, bg='white', width=1024, height=600)
         self.mainFrame.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
@@ -66,11 +68,14 @@ class SettingPage(Tk.Frame):
         self.settingFrame.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
         self.settingFrame.pack_propagate(0)
 
+        self.infoFrame= Tk.Frame(self.featureFrame, width=170, height=72, bg='white', bd=0)
+        self.infoFrame.place(relx=0.265, rely=0.018)
+
         self.creat_setting_feature_panel()
         self.notebook = CreatTab(self.settingFrame)
         self.generalConfigFrame=GeneralConfig(self.notebook.tab1, self.parent.origin_config)
         self.generalConfigFrame.pack(side=Tk.LEFT, fill=Tk.BOTH, expand=1)
-        self.wifiConfigFrame=WifiConfig(self.notebook.tab2).pack(side=Tk.LEFT, fill=Tk.BOTH, expand=1)
+        self.wifiConfigFrame=WifiConfig(self.notebook.tab2, self.infoLabel2).pack(side=Tk.LEFT, fill=Tk.BOTH, expand=1)
         self.powerConfigFrame=Power(self.notebook.tab4, self.lock, self.batery).pack(side=Tk.LEFT, fill=Tk.BOTH, expand=1)
         self.languageConfigFrame=LanguageConfig(self.notebook.tab3, self.parent.origin_config.language_config_struct)
         self.languageConfigFrame.pack(side=Tk.LEFT, fill=Tk.BOTH, expand=1)
@@ -106,6 +111,13 @@ class SettingPage(Tk.Frame):
 
         self.configBt = ttk.Button(self.featureFrame, style='custom.Accent.TButton', text=_("Setting"))
         self.configBt.place(relx=0.122, rely=0.018, width=115, height=72)
+
+        self.infoLabel1=ttk.Label(self.infoFrame, text=_("Information"), style="red.TLabel")
+        self.infoLabel1.grid(column=0, row=0, padx=0, pady=5, sticky='w')
+
+        self.infoLabel2 = ttk.Label(self.infoFrame, text=" N/A", style="normal.TLabel", width=26)
+        self.infoLabel2.grid(column=0, row=1, padx=0, pady=5, sticky='w')
+
 
     def go_home(self):
         self.mainFrame.destroy()
@@ -196,7 +208,8 @@ class CreatTab(ttk.Notebook):
 
 
 class WifiConfig(Tk.Frame):
-    def __init__(self, parent):
+    def __init__(self, parent, label):
+        self.label=label
         self.style = ttk.Style()
         self.style.configure('wifi.TLabel', font=('Chakra Petch', 14))
         self.style.configure('wifi.TLabelframe', font=('Chakra Petch', 15))
@@ -230,8 +243,8 @@ class WifiConfig(Tk.Frame):
         wifiLableFrame = ttk.LabelFrame(self, text=_('Wifi config'), style="wifi.TLabelframe")
         wifiLableFrame.grid(column=0, row=0, padx=10, pady=5, columnspan=2, sticky='wn')
 
-        wifiLabel = ttk.Label(wifiLableFrame, text=infoText, style="wifi.TLabel")
-        wifiLabel.grid(column=0, row=0, padx=10, pady=5, sticky='w')
+        self.wifiLabel = ttk.Label(wifiLableFrame, text=infoText, style="wifi.TLabel")
+        self.wifiLabel.grid(column=0, row=0, padx=10, pady=5, sticky='w')
 
         self.imageButton1 = ttk.Button(wifiLableFrame, text="", image=self.wifiImage, style="wifi.TButton")
         self.imageButton1.grid(column=1, row=0, padx=10, pady=5, sticky='e')
@@ -272,17 +285,47 @@ class WifiConfig(Tk.Frame):
             current_ssid = current_connection["ssid"]
             newSsid = self.wilessParam1.get()
             newPassword = self.wilessParam2.get()
-            if newSsid != current_ssid and newSsid != "" and newPassword != "":
+            if newSsid != "" and newPassword != "":
                 wifi.wiless._disconnect(current_ssid)
                 sleep(1)
                 wifi.wiless._connect(newSsid, newPassword)
+                self.label.configure(text=_("WIFI Successfull connection."))
+                tt1=threading.Thread(target=self.scan_wifi_button_change)
+                tt1.start()
             else:
-                pass
+                self.label.configure(text=_("WIFI Failure connection."))
 
         except Exception as ex:
-            print("wifi conection function error")
+            self.label.configure(text=_("WIFI Failure connection."))
             print(ex)
 
+
+    def scan_wifi_button_change(self):
+        imageAddress = ImageAdrr()
+        self.wifiImage = imageAddress.noWifiImage
+        connectingSsid = None
+        infoText = "No wifi connection"
+        waitingTime=7
+
+        while waitingTime>=0:
+            try:
+                connectingSsid = wifi.wiless._get_wifi_status()
+                infoText = f'WIFI: {connectingSsid["ssid"]}'
+
+                
+                if connectingSsid["ssid"] != "":
+                    if connectingSsid["quality"] > 0.7:
+                        self.wifiImage = imageAddress.strongWifiImage
+                    elif connectingSsid["quality"] <= 0.7 and connectingSsid["quality"] > 0.3:
+                        self.wifiImage = imageAddress.mediumWifiImage
+                    else:
+                        self.wifiImage = imageAddress.weakWifiImage
+            except:
+                self.wifiImage = imageAddress.noWifiImage
+            self.wifiLabel.configure(text=infoText)
+            self.imageButton1.configure(image=self.wifiImage)
+            waitingTime-=1
+            sleep(1)
     def disconnect(self):
         try:
             current_connection = wifi.wiless._get_wifi_status()
@@ -291,10 +334,14 @@ class WifiConfig(Tk.Frame):
             if current_ssid != "":
                 wifi.wiless._disconnect(current_ssid)
                 sleep(1)
+                tt2=threading.Thread(target=self.scan_wifi_button_change)
+                tt2.start()
+                self.label.configure(text=_("WIFI is disconnected."))
+
             else:
-                pass
+                self.label.configure(text=_("WIFI Failure."))
         except Exception as ex:
-            print("wifi conection function error")
+            self.label.configure(text=_("WIFI Failure."))
             print(ex)
 
 class Power(Tk.Frame):
