@@ -307,7 +307,7 @@ class WifiConfig(Tk.Frame):
         infoText = "No wifi connection"
         waitingTime=7
 
-        while waitingTime>=0:
+        while waitingTime>=0 or self.wifiImage!=imageAddress.noWifiImage:
             try:
                 connectingSsid = wifi.wiless._get_wifi_status()
                 infoText = f'WIFI: {connectingSsid["ssid"]}'
@@ -322,10 +322,13 @@ class WifiConfig(Tk.Frame):
                         self.wifiImage = imageAddress.weakWifiImage
             except:
                 self.wifiImage = imageAddress.noWifiImage
+            waitingTime-=1
             self.wifiLabel.configure(text=infoText)
             self.imageButton1.configure(image=self.wifiImage)
-            waitingTime-=1
             sleep(1)
+        
+
+
     def disconnect(self):
         try:
             current_connection = wifi.wiless._get_wifi_status()
