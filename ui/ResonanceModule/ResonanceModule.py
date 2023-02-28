@@ -380,7 +380,7 @@ class SideButtonFrame(Tk.Frame):
                                       command=lambda:self.on_factor_button_clicked(827, 40))
         self.factorBt.place(x=0, y=117, width=88, height=75)
 
-        self.addBt = ttk.Button(self, style='custom.Accent.TButton', text=_("ADD"),
+        self.addBt = ttk.Button(self, style='custom.Accent.TButton', text=_("ADD"), state="disable",
                                          command=self.add_data)
         self.addBt.place(x=0, y=40, width=88, height=75)
 
@@ -505,16 +505,13 @@ class SideButtonFrame(Tk.Frame):
 
         self.factorCanvas = Tk.Canvas(widget, width=90, height=152, bg='white')
         self.factorCanvas.place(x=x_pos, y=y_pos)
-        self.factorUp = ttk.Button(self.factorCanvas, text=_("FACTOR+"), style='custom.Accent.TButton', image=self.function1,
-                             compound=Tk.TOP, command=self.factor_up)
+        self.factorUp = ttk.Button(self.factorCanvas, text=_("FACTOR+"), style='custom.Accent.TButton',
+                             command=self.factor_up)
         self.factorUp.place(x=0, y=0, width=88, height=75)
-        self.factorUp.image = self.function1
 
         self.factorDown = ttk.Button(self.factorCanvas, text=_("FACTOR-"), style='custom.Accent.TButton',
-                             image=self.function1,
-                             compound=Tk.TOP, command=self.factor_down)
+                             command=self.factor_down)
         self.factorDown.place(x=0, y=77, width=88, height=75)
-        self.factorDown.image = self.function1
     
     def Tracking(self, dir:bool):
         global track_flag, resonance_data

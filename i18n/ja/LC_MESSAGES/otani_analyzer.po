@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-27 08:46+0700\n"
+"POT-Creation-Date: 2023-02-28 10:48+0700\n"
 "PO-Revision-Date: 2022-11-02 18:09+0900\n"
 "Last-Translator: Le Phuong <lephuong@phuonglh>\n"
 "Language-Team: Japanese\n"
@@ -54,13 +54,13 @@ msgstr "入力"
 
 #: ui/balancingModule/balancingModule.py:89 ui/history/historyModule.py:92
 #: ui/ResonanceModule/ResonanceModule.py:106
-#: ui/Diagnostic/DiagnosticPage.py:156 ui/Settingpage/SettingPage.py:98
+#: ui/Diagnostic/DiagnosticPage.py:157 ui/Settingpage/SettingPage.py:98
 msgid "Home"
 msgstr "ホーム"
 
 #: ui/balancingModule/balancingModule.py:98 ui/history/historyModule.py:101
 #: ui/ResonanceModule/ResonanceModule.py:115
-#: ui/Diagnostic/DiagnosticPage.py:165
+#: ui/Diagnostic/DiagnosticPage.py:166
 msgid "Config"
 msgstr "設定"
 
@@ -70,7 +70,7 @@ msgstr " バランス"
 
 #: ui/balancingModule/balancingModule.py:113 ui/history/historyModule.py:116
 #: ui/ResonanceModule/ResonanceModule.py:130
-#: ui/Diagnostic/DiagnosticPage.py:185
+#: ui/Diagnostic/DiagnosticPage.py:186
 msgid "Information"
 msgstr "情報"
 
@@ -124,7 +124,7 @@ msgid "Rotating dir"
 msgstr "回転方向"
 
 #: ui/balancingModule/balancingModule.py:252
-#: ui/Diagnostic/DiagnosticPage.py:1296
+#: ui/Diagnostic/DiagnosticPage.py:1297
 msgid "FFT lines"
 msgstr "FFT ライン"
 
@@ -137,9 +137,9 @@ msgstr "サンプルレート"
 msgid "Num of blades"
 msgstr "ブレード数"
 
-#: ui/balancingModule/balancingModule.py:273
+#: ui/balancingModule/balancingModule.py:273 ui/history/historyModule.py:232
 #: ui/ResonanceModule/ResonanceModule.py:277
-#: ui/Diagnostic/DiagnosticPage.py:215 ui/Settingpage/SettingPage.py:160
+#: ui/Diagnostic/DiagnosticPage.py:216 ui/Settingpage/SettingPage.py:160
 msgid "APPLY"
 msgstr "申し込み"
 
@@ -398,7 +398,7 @@ msgstr ""
 
 #: ui/balancingModule/balancingModule.py:938
 #: ui/balancingModule/balancingModule.py:1049 ui/history/historyModule.py:657
-#: ui/history/historyModule.py:782 ui/ResonanceModule/ResonanceModule.py:556
+#: ui/history/historyModule.py:782 ui/ResonanceModule/ResonanceModule.py:553
 msgid "Data errors."
 msgstr "データエラーです。"
 
@@ -407,7 +407,7 @@ msgid ""
 "History\n"
 "Analysis"
 msgstr ""
-"波形\n"
+"歴史\n"
 "分析"
 
 #: ui/history/historyModule.py:178 ui/history/historyModule.py:312
@@ -431,7 +431,7 @@ msgid "View Limit"
 msgstr "ビュー制限"
 
 #: ui/history/historyModule.py:215 ui/ResonanceModule/ResonanceModule.py:263
-#: ui/Diagnostic/DiagnosticPage.py:1344
+#: ui/Diagnostic/DiagnosticPage.py:1345
 msgid "Tracking resolution"
 msgstr "追跡の解像度"
 
@@ -469,30 +469,61 @@ msgid ""
 "REPORT"
 msgstr ""
 "レポート\n"
-"エクスポート"
+"出す"
+
+#: ui/history/historyModule.py:363 ui/ResonanceModule/ResonanceModule.py:366
+#: ui/Diagnostic/DiagnosticPage.py:232 ui/Diagnostic/DiagnosticPage.py:250
+msgid "ZOOM"
+msgstr "ズーム"
+
+#: ui/history/historyModule.py:370 ui/ResonanceModule/ResonanceModule.py:371
+#: ui/Diagnostic/DiagnosticPage.py:256
+msgid ""
+"CURSOR\n"
+"LEFT"
+msgstr ""
+"カーソル\n"
+"左"
+
+#: ui/history/historyModule.py:374 ui/ResonanceModule/ResonanceModule.py:375
+#: ui/Diagnostic/DiagnosticPage.py:260
+msgid ""
+"CURSOR\n"
+"RIGHT"
+msgstr ""
+"カーソル\n"
+"右"
+
+#: ui/history/historyModule.py:381
+msgid ""
+"PLOT\n"
+"NONE"
+msgstr ""
+"PLOT\n"
+"なし"
 
 #: ui/history/historyModule.py:404 ui/ResonanceModule/ResonanceModule.py:430
-#: ui/Diagnostic/DiagnosticPage.py:627
+#: ui/Diagnostic/DiagnosticPage.py:628
 msgid "ZOOM IN"
 msgstr "ズームイン "
 
 #: ui/history/historyModule.py:410 ui/ResonanceModule/ResonanceModule.py:436
-#: ui/Diagnostic/DiagnosticPage.py:633
+#: ui/Diagnostic/DiagnosticPage.py:634
 msgid "ZOOM OUT"
 msgstr "ズームアウト"
 
 #: ui/history/historyModule.py:415 ui/ResonanceModule/ResonanceModule.py:441
-#: ui/Diagnostic/DiagnosticPage.py:638
+#: ui/Diagnostic/DiagnosticPage.py:639
 msgid "PAN LEFT"
 msgstr "左パン"
 
 #: ui/history/historyModule.py:421 ui/ResonanceModule/ResonanceModule.py:447
-#: ui/Diagnostic/DiagnosticPage.py:644
+#: ui/Diagnostic/DiagnosticPage.py:645
 msgid "PAN RIGHT"
 msgstr "パン右"
 
 #: ui/history/historyModule.py:427 ui/ResonanceModule/ResonanceModule.py:453
-#: ui/Diagnostic/DiagnosticPage.py:650
+#: ui/Diagnostic/DiagnosticPage.py:651
 msgid "RESET"
 msgstr "リセット"
 
@@ -512,7 +543,7 @@ msgstr ""
 "速度\n"
 "周波数"
 
-#: ui/history/historyModule.py:496 ui/Diagnostic/DiagnosticPage.py:711
+#: ui/history/historyModule.py:496 ui/Diagnostic/DiagnosticPage.py:712
 msgid "ENVELOPED"
 msgstr ""
 
@@ -620,7 +651,7 @@ msgstr "図 5: エンベロープ スペクトル"
 msgid "Report is exported !"
 msgstr "エクスポートが完了しました。"
 
-#: ui/ResonanceModule/ResonanceModule.py:123 ui/home/HomePage.py:49
+#: ui/ResonanceModule/ResonanceModule.py:123 ui/home/HomePage.py:47
 msgid ""
 "Resonance\n"
 "Analysis"
@@ -665,36 +696,13 @@ msgid "Num of Average"
 msgstr "平均回数"
 
 #: ui/ResonanceModule/ResonanceModule.py:362
-#: ui/Diagnostic/DiagnosticPage.py:237
+#: ui/Diagnostic/DiagnosticPage.py:238
 msgid ""
 "READ\n"
 "SENSOR"
 msgstr ""
 "センサー\n"
 "読み取る"
-
-#: ui/ResonanceModule/ResonanceModule.py:366
-#: ui/Diagnostic/DiagnosticPage.py:231 ui/Diagnostic/DiagnosticPage.py:249
-msgid "ZOOM"
-msgstr "ズーム"
-
-#: ui/ResonanceModule/ResonanceModule.py:371
-#: ui/Diagnostic/DiagnosticPage.py:255
-msgid ""
-"CURSOR\n"
-"LEFT"
-msgstr ""
-"カーソル\n"
-"左"
-
-#: ui/ResonanceModule/ResonanceModule.py:375
-#: ui/Diagnostic/DiagnosticPage.py:259
-msgid ""
-"CURSOR\n"
-"RIGHT"
-msgstr ""
-"カーソル\n"
-"右"
 
 #: ui/ResonanceModule/ResonanceModule.py:379
 msgid ""
@@ -712,27 +720,27 @@ msgstr "追加"
 msgid "FACTOR+"
 msgstr "係数+"
 
-#: ui/ResonanceModule/ResonanceModule.py:513
+#: ui/ResonanceModule/ResonanceModule.py:512
 msgid "FACTOR-"
 msgstr "係数-"
 
-#: ui/ResonanceModule/ResonanceModule.py:574
+#: ui/ResonanceModule/ResonanceModule.py:571
 msgid "The averaged graph are shown in figure 1 and 2:"
 msgstr "平均振幅と位相が図1と図2に表示されます。"
 
-#: ui/ResonanceModule/ResonanceModule.py:635
+#: ui/ResonanceModule/ResonanceModule.py:632
 msgid "Time remain: "
 msgstr "残り時間: "
 
-#: ui/ResonanceModule/ResonanceModule.py:712
+#: ui/ResonanceModule/ResonanceModule.py:709
 msgid "This hit is invalid. Make a new hit."
 msgstr "ハンマーでこの叩きは無効です。もう一度叩いてください。"
 
-#: ui/home/HomePage.py:39
+#: ui/home/HomePage.py:37
 msgid "Diagnostic"
 msgstr "診断"
 
-#: ui/home/HomePage.py:44
+#: ui/home/HomePage.py:42
 msgid ""
 "Dynamic\n"
 "Balancing"
@@ -740,15 +748,15 @@ msgstr ""
 "ダイナミック\n"
 " バランス"
 
-#: ui/home/HomePage.py:54
+#: ui/home/HomePage.py:52
 msgid "History"
-msgstr "履歴"
+msgstr "歴史"
 
-#: ui/home/HomePage.py:58
+#: ui/home/HomePage.py:56
 msgid "Settings"
 msgstr "設定"
 
-#: ui/Diagnostic/DiagnosticPage.py:173
+#: ui/Diagnostic/DiagnosticPage.py:174
 msgid ""
 "Waveform\n"
 "Analysis"
@@ -756,7 +764,7 @@ msgstr ""
 "波形\n"
 "分析"
 
-#: ui/Diagnostic/DiagnosticPage.py:177
+#: ui/Diagnostic/DiagnosticPage.py:178
 msgid ""
 "Frequency\n"
 "Analysis"
@@ -764,7 +772,7 @@ msgstr ""
 "周波数\n"
 "分析"
 
-#: ui/Diagnostic/DiagnosticPage.py:181
+#: ui/Diagnostic/DiagnosticPage.py:182
 msgid ""
 "General\n"
 "Monitoring"
@@ -772,30 +780,30 @@ msgstr ""
 " 一般的な\n"
 "分析"
 
-#: ui/Diagnostic/DiagnosticPage.py:211
+#: ui/Diagnostic/DiagnosticPage.py:212
 msgid "APPLY and START"
 msgstr "申し込み & スタート "
 
-#: ui/Diagnostic/DiagnosticPage.py:220 ui/Diagnostic/DiagnosticPage.py:242
-#: ui/Diagnostic/DiagnosticPage.py:278
+#: ui/Diagnostic/DiagnosticPage.py:221 ui/Diagnostic/DiagnosticPage.py:243
+#: ui/Diagnostic/DiagnosticPage.py:279
 msgid "SAVE"
 msgstr "保存"
 
-#: ui/Diagnostic/DiagnosticPage.py:227 ui/Diagnostic/DiagnosticPage.py:464
-#: ui/Diagnostic/DiagnosticPage.py:871
+#: ui/Diagnostic/DiagnosticPage.py:228 ui/Diagnostic/DiagnosticPage.py:465
+#: ui/Diagnostic/DiagnosticPage.py:872
 msgid ""
 "LASER\n"
 "VIEW"
 msgstr "レーザ"
 
-#: ui/Diagnostic/DiagnosticPage.py:263 ui/Diagnostic/DiagnosticPage.py:729
-#: ui/Diagnostic/DiagnosticPage.py:748 ui/Diagnostic/DiagnosticPage.py:759
-#: ui/Diagnostic/DiagnosticPage.py:779 ui/Diagnostic/DiagnosticPage.py:797
-#: ui/Diagnostic/DiagnosticPage.py:1128
+#: ui/Diagnostic/DiagnosticPage.py:264 ui/Diagnostic/DiagnosticPage.py:730
+#: ui/Diagnostic/DiagnosticPage.py:749 ui/Diagnostic/DiagnosticPage.py:760
+#: ui/Diagnostic/DiagnosticPage.py:780 ui/Diagnostic/DiagnosticPage.py:798
+#: ui/Diagnostic/DiagnosticPage.py:1129
 msgid "GRID ON"
 msgstr "グリッドオン"
 
-#: ui/Diagnostic/DiagnosticPage.py:267 ui/Diagnostic/DiagnosticPage.py:730
+#: ui/Diagnostic/DiagnosticPage.py:268 ui/Diagnostic/DiagnosticPage.py:731
 msgid ""
 "FUNCTION\n"
 "NONE"
@@ -803,58 +811,58 @@ msgstr ""
 "機能\n"
 "NONE"
 
-#: ui/Diagnostic/DiagnosticPage.py:271
+#: ui/Diagnostic/DiagnosticPage.py:272
 msgid "SUMMARY"
 msgstr "概要"
 
-#: ui/Diagnostic/DiagnosticPage.py:326
+#: ui/Diagnostic/DiagnosticPage.py:327
 msgid "READING.....Please wait:"
 msgstr "READING....Please wait:"
 
-#: ui/Diagnostic/DiagnosticPage.py:326
+#: ui/Diagnostic/DiagnosticPage.py:327
 msgid "seconds."
 msgstr "seconds."
 
-#: ui/Diagnostic/DiagnosticPage.py:451
+#: ui/Diagnostic/DiagnosticPage.py:452
 msgid "Actual sample rate:"
 msgstr "実際のサンプルレート: "
 
-#: ui/Diagnostic/DiagnosticPage.py:459
+#: ui/Diagnostic/DiagnosticPage.py:460
 msgid ""
 "NORMAL\n"
 "VIEW"
 msgstr "普通"
 
-#: ui/Diagnostic/DiagnosticPage.py:467
+#: ui/Diagnostic/DiagnosticPage.py:468
 msgid "Data errors"
 msgstr "データエラーです。"
 
-#: ui/Diagnostic/DiagnosticPage.py:490 ui/Diagnostic/DiagnosticPage.py:583
+#: ui/Diagnostic/DiagnosticPage.py:491 ui/Diagnostic/DiagnosticPage.py:584
 msgid "There is no data !"
 msgstr "データがありません。"
 
-#: ui/Diagnostic/DiagnosticPage.py:525 ui/Diagnostic/DiagnosticPage.py:551
-#: ui/Diagnostic/DiagnosticPage.py:575
+#: ui/Diagnostic/DiagnosticPage.py:526 ui/Diagnostic/DiagnosticPage.py:552
+#: ui/Diagnostic/DiagnosticPage.py:576
 msgid "Data is saved."
 msgstr "データが保存されます。"
 
-#: ui/Diagnostic/DiagnosticPage.py:586
+#: ui/Diagnostic/DiagnosticPage.py:587
 msgid "Please input project code and company name !"
 msgstr "プロジェクトコードと会社名を入力してください。"
 
-#: ui/Diagnostic/DiagnosticPage.py:702
+#: ui/Diagnostic/DiagnosticPage.py:703
 msgid "NONE"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:707
+#: ui/Diagnostic/DiagnosticPage.py:708
 msgid "FILTER"
 msgstr "フィルター"
 
-#: ui/Diagnostic/DiagnosticPage.py:716
+#: ui/Diagnostic/DiagnosticPage.py:717
 msgid "PSD"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:721
+#: ui/Diagnostic/DiagnosticPage.py:722
 msgid ""
 "VELOCITY\n"
 "SPECTRAL"
@@ -863,7 +871,7 @@ msgstr ""
 "速度\n"
 "スペクトラム"
 
-#: ui/Diagnostic/DiagnosticPage.py:749
+#: ui/Diagnostic/DiagnosticPage.py:750
 msgid ""
 "FUNCTION\n"
 "FILTER"
@@ -871,7 +879,7 @@ msgstr ""
 "機能\n"
 "フィルター"
 
-#: ui/Diagnostic/DiagnosticPage.py:760
+#: ui/Diagnostic/DiagnosticPage.py:761
 msgid ""
 "FUNCTION\n"
 "ENVELOPED"
@@ -879,7 +887,7 @@ msgstr ""
 "機能\n"
 "ENVELOPED"
 
-#: ui/Diagnostic/DiagnosticPage.py:780
+#: ui/Diagnostic/DiagnosticPage.py:781
 msgid ""
 "FUNCTION\n"
 "PSD"
@@ -887,7 +895,7 @@ msgstr ""
 "機能\n"
 "PSD"
 
-#: ui/Diagnostic/DiagnosticPage.py:798
+#: ui/Diagnostic/DiagnosticPage.py:799
 msgid ""
 "FUNCTION\n"
 "VELOCITY\n"
@@ -897,103 +905,103 @@ msgstr ""
 "速度\n"
 "スペクトラム"
 
-#: ui/Diagnostic/DiagnosticPage.py:1124
+#: ui/Diagnostic/DiagnosticPage.py:1125
 msgid "GRID OFF"
 msgstr "グリッドオフ"
 
-#: ui/Diagnostic/DiagnosticPage.py:1245
+#: ui/Diagnostic/DiagnosticPage.py:1246
 msgid "Port1"
 msgstr "ポート1"
 
-#: ui/Diagnostic/DiagnosticPage.py:1253
+#: ui/Diagnostic/DiagnosticPage.py:1254
 msgid "Port2"
 msgstr "ポート2"
 
-#: ui/Diagnostic/DiagnosticPage.py:1261
+#: ui/Diagnostic/DiagnosticPage.py:1262
 msgid "Port3"
 msgstr "ポート3"
 
-#: ui/Diagnostic/DiagnosticPage.py:1269
+#: ui/Diagnostic/DiagnosticPage.py:1270
 msgid "Port4"
 msgstr "ポート4"
 
-#: ui/Diagnostic/DiagnosticPage.py:1277
+#: ui/Diagnostic/DiagnosticPage.py:1278
 msgid "Key sensor"
 msgstr "キーセンサー"
 
-#: ui/Diagnostic/DiagnosticPage.py:1285
+#: ui/Diagnostic/DiagnosticPage.py:1286
 msgid "  Use TSA"
 msgstr "  TSA使用"
 
-#: ui/Diagnostic/DiagnosticPage.py:1290
+#: ui/Diagnostic/DiagnosticPage.py:1291
 msgid "TSA times"
 msgstr "回数TSA"
 
-#: ui/Diagnostic/DiagnosticPage.py:1303
+#: ui/Diagnostic/DiagnosticPage.py:1304
 msgid "Fmax "
 msgstr "Fmax"
 
-#: ui/Diagnostic/DiagnosticPage.py:1310
+#: ui/Diagnostic/DiagnosticPage.py:1311
 msgid "Filter configuration"
 msgstr "フィルター設定"
 
-#: ui/Diagnostic/DiagnosticPage.py:1313
+#: ui/Diagnostic/DiagnosticPage.py:1314
 msgid "Filter type"
 msgstr "フィルタタイプ"
 
-#: ui/Diagnostic/DiagnosticPage.py:1321
+#: ui/Diagnostic/DiagnosticPage.py:1322
 msgid "Window type"
 msgstr "ウィンドウタイプ"
 
-#: ui/Diagnostic/DiagnosticPage.py:1330
+#: ui/Diagnostic/DiagnosticPage.py:1331
 msgid "Filter From (Hz)"
 msgstr "フィルターから (Hz)"
 
-#: ui/Diagnostic/DiagnosticPage.py:1337
+#: ui/Diagnostic/DiagnosticPage.py:1338
 msgid "Filter To (Hz)"
 msgstr "フィルターへ (Hz)"
 
-#: ui/Diagnostic/DiagnosticPage.py:1351
+#: ui/Diagnostic/DiagnosticPage.py:1352
 msgid "Mesh grid"
 msgstr "メッシュ グリッド"
 
-#: ui/Diagnostic/DiagnosticPage.py:1358
+#: ui/Diagnostic/DiagnosticPage.py:1359
 msgid "Unit show"
 msgstr "ユニットを表示"
 
-#: ui/Diagnostic/DiagnosticPage.py:1366
+#: ui/Diagnostic/DiagnosticPage.py:1367
 msgid "Machine configuration"
 msgstr "機械設定"
 
-#: ui/Diagnostic/DiagnosticPage.py:1369
+#: ui/Diagnostic/DiagnosticPage.py:1370
 msgid "Machine name"
 msgstr "機械名"
 
-#: ui/Diagnostic/DiagnosticPage.py:1375
+#: ui/Diagnostic/DiagnosticPage.py:1376
 msgid "Machine type"
 msgstr "機械タイプ"
 
-#: ui/Diagnostic/DiagnosticPage.py:1384
+#: ui/Diagnostic/DiagnosticPage.py:1385
 msgid "Speed (RPM)"
 msgstr "速度 (RPM)"
 
-#: ui/Diagnostic/DiagnosticPage.py:1391
+#: ui/Diagnostic/DiagnosticPage.py:1392
 msgid "Power (kW)"
 msgstr "電力 (kW)"
 
-#: ui/Diagnostic/DiagnosticPage.py:1398
+#: ui/Diagnostic/DiagnosticPage.py:1399
 msgid "Gear teeth"
 msgstr "歯車の歯"
 
-#: ui/Diagnostic/DiagnosticPage.py:1405
+#: ui/Diagnostic/DiagnosticPage.py:1406
 msgid "Bearing bore (mm)"
 msgstr "ベアリング内径 (mm)"
 
-#: ui/Diagnostic/DiagnosticPage.py:1412
+#: ui/Diagnostic/DiagnosticPage.py:1413
 msgid "Foundation"
 msgstr "基礎"
 
-#: ui/Diagnostic/DiagnosticPage.py:1558
+#: ui/Diagnostic/DiagnosticPage.py:1559
 msgid ""
 "Channel      A-Peak   A-PkPk   A-RMS   V-Peak   V-PkPk   V-RMS   D-Peak   D-"
 "PkPk   D-RMS   Crest   Kutorsis."
@@ -1001,15 +1009,15 @@ msgstr ""
 "チャンネル   A-Peak   A-PkPk   A-RMS   V-Peak   V-PkPk   V-RMS   D-Peak   D-"
 "PkPk   D-RMS   Crest   Kutorsis."
 
-#: ui/Diagnostic/DiagnosticPage.py:1561
+#: ui/Diagnostic/DiagnosticPage.py:1562
 msgid "Channel1"
 msgstr "チャンネル 1"
 
-#: ui/Diagnostic/DiagnosticPage.py:1563
+#: ui/Diagnostic/DiagnosticPage.py:1564
 msgid "Channel2"
 msgstr "チャンネル 2"
 
-#: ui/Diagnostic/DiagnosticPage.py:1565
+#: ui/Diagnostic/DiagnosticPage.py:1566
 msgid "Channel3"
 msgstr "チャンネル 3"
 

@@ -229,7 +229,7 @@ class historyConfig(Tk.Frame):
         self.tsaBin['value'] = ('2048','4096','8192','16384','32768')
         self.tsaBin.grid(column=1, row=8, padx=(0, 10), pady=5, ipadx=7, sticky='e')
 
-        self.applyBt = ttk.Button(historyFrame, style='Accent.TButton', text="APPLY",
+        self.applyBt = ttk.Button(historyFrame, style='Accent.TButton', text=_("APPLY"),
                                    command=lambda: self.update_config_struct(history_config_struct))
         self.applyBt.grid(column=1, row=9, padx=(0, 10), pady=(30,5), ipadx=52, ipady=5, sticky='w')
 
@@ -343,7 +343,7 @@ class SideButtonFrame(Tk.Frame):
         self.style.configure('red.TLabel', font=('Chakra Petch', 13), bg='white', foreground='#C40069')
         self.style.configure('custom.TLabelframe', font=('Chakra Petch', 15), bg='white', borderwidth=0)
         self.style.configure('custom.Accent.TButton', font=('Chakra Petch', 10), justify=Tk.CENTER)
-        self.style.configure('small.Accent.TButton', font=('Chakra Petch', 8), justify=Tk.CENTER)
+        self.style.configure('small.Accent.TButton', font=('Chakra Petch', 9), justify=Tk.CENTER)
         imageAddress = ImageAdrr()
         self.ZoomCanvas = Tk.Canvas()
         self.functionCanvas = Tk.Canvas()
@@ -360,27 +360,27 @@ class SideButtonFrame(Tk.Frame):
         saveBt = ttk.Button(self, style='custom.Accent.TButton', text=_("EXPORT\nREPORT"), command=self.report)
         saveBt.place(x=0, y=425, width=88, height=75)
 
-        freqZoomBt = ttk.Button(self, style='custom.Accent.TButton', text="ZOOM",
+        freqZoomBt = ttk.Button(self, style='custom.Accent.TButton', text=_("ZOOM"),
                                 image=self.zoomPhoto,
                                 compound=Tk.TOP,
                                 command=lambda: self.on_zoom_button_clicked(827, 117))
         freqZoomBt.place(x=0, y=348, width=88, height=75)
         freqZoomBt.image = self.zoomPhoto
 
-        self.freqCursorLeftBt = ttk.Button(self, style='custom.Accent.TButton', text="CURSOR\nLEFT",
+        self.freqCursorLeftBt = ttk.Button(self, style='custom.Accent.TButton', text=_("CURSOR\nLEFT"),
                                 command=lambda:self.Tracking(False))
         self.freqCursorLeftBt.place(x=0, y=271, width=88, height=75)
 
-        self.freqCursorRightBt = ttk.Button(self, style='custom.Accent.TButton', text="CURSOR\nRIGHT",
+        self.freqCursorRightBt = ttk.Button(self, style='custom.Accent.TButton', text=_("CURSOR\nRIGHT"),
                                 command=lambda:self.Tracking(True))
         self.freqCursorRightBt.place(x=0, y=194, width=88, height=75)
 
-        self.freqGridtBt = ttk.Button(self, style='custom.Accent.TButton', text="RESERVE", state="disable")
-        self.freqGridtBt.place(x=0, y=117, width=88, height=75)
+        # self.freqGridtBt = ttk.Button(self, style='custom.Accent.TButton', text="RESERVE", state="disable")
+        # self.freqGridtBt.place(x=0, y=117, width=88, height=75)
 
-        self.freqFunctionBt = ttk.Button(self, style='custom.Accent.TButton', text="PLOT\nNONE",
+        self.freqFunctionBt = ttk.Button(self, style='custom.Accent.TButton', text=_("PLOT\nNONE"),
                                 command=lambda:self.on_plot_button_clicked(827, 40))
-        self.freqFunctionBt.place(x=0, y=40, width=88, height=75)
+        self.freqFunctionBt.place(x=0, y=117, width=88, height=75)
 
     def on_zoom_button_clicked(self, x_pos, y_pos):
         global blink, blink1
@@ -477,7 +477,7 @@ class SideButtonFrame(Tk.Frame):
     def creat_plot_button_canvas(self, widget, draw_canvas, x_pos, y_pos):
 
         self.plotStyle=ttk.Style()
-        self.plotStyle.configure('plot.Accent.TButton', font=('Chakra Petch', 8), justify=Tk.CENTER)
+        self.plotStyle.configure('plot.Accent.TButton', font=('Chakra Petch', 9), justify=Tk.CENTER)
         self.functionCanvas = Tk.Canvas(widget, width=90, height=462, bg='white')
         self.functionCanvas.place(x=x_pos, y=y_pos)
 
