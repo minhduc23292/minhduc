@@ -650,7 +650,7 @@ msgstr "図 5: エンベロープ スペクトル"
 
 #: ui/history/historyModule.py:787
 msgid "Report is exported. Use QR code scanner to see the report."
-msgstr "レポートがエクスポートされます。 レポートを表示するには、QR コード スキャナーを使用します"
+msgstr "レポートを表示するには、QR コード スキャナーを使用します."
 
 #: ui/ResonanceModule/ResonanceModule.py:123 ui/home/HomePage.py:47
 msgid ""
