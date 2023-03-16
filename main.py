@@ -29,6 +29,11 @@ class TotalConfig(object):
             "displacement_data": []
         }
 
+        self.sensor_sensitivity= {
+            "acc_sensitivity": 100.0,
+            "vel_sensitivity":4.0
+        }
+
         self.project_struct = {
             "CompanyName": "No_name",
             "ProjectCode": "A1B2C3",

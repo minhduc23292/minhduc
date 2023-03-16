@@ -17,6 +17,7 @@ import defaultConfig.default_config as dfc
 from i18n import _
 import os
 from scipy.stats import kurtosis
+from tkinter import PhotoImage
 current_directory = os.path.dirname(os.path.realpath(__file__))
 parent_directory = os.path.dirname(current_directory)
 save_path = f"{parent_directory}/storage/"
@@ -1428,6 +1429,24 @@ class PLT(FigureCanvasTkAgg):
         ax_12.grid()  # Shows grid.
         self.draw()
 
+    def plot_image(self, file_name, link):
+        self.figure.set_size_inches(9.2, 5.2)
+        qrPhoto = plt.imread(save_path+file_name)
+        axes_arr = self.figure.get_axes()
+        cc=len(axes_arr)
+        while cc>0:
+            self.figure.delaxes(axes_arr[cc-1])
+            cc-=1
+
+        self.figure.add_subplot(1,1,1)
+        self.figure.subplots_adjust(left=0.1, right=0.95, top=0.95, bottom=0.15)
+        ax_11, = self.figure.get_axes()
+        ax_11.clear()
+        ax_11.set_title(link)
+        ax_11.imshow(qrPhoto)
+        ax_11.axis('off')
+        ax_11.set_visible(True)
+        self.draw()
 
 def calculate_corection(phi0, a0, phi1, a1, trial_mass_angle, trial_mass):
     z0 = a0 * np.cos(phi0) + (a0 * np.sin(phi0)) * 1j

@@ -33,6 +33,12 @@ def testVal(inStr, acttyp):
             return False
     return True
 
+def testFloat(inStr, acttyp):
+    if acttyp == '1':  # insert
+        if not is_number(inStr):
+            return False
+    return True
+
 class Balancing(Tk.Frame):
     def __init__(self, parent: "Application"):
         self.parent = parent

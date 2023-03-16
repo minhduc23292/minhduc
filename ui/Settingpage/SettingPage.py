@@ -20,6 +20,7 @@ import threading
 from threading import Lock
 from bateryMonitor.powerManager import *
 from ds3231.ds3231B import DS3231
+from Calculation.calculate import is_number
 remainCap = 50
 remainVolt = 3.8
 stateOfCharge = "CHARGING"
@@ -30,6 +31,12 @@ ds3231 = DS3231(1, 0x68)
 def testVal(inStr, acttyp):
     if acttyp == '1':  # insert
         if not inStr.isdigit():
+            return False
+    return True
+
+def testFloat(inStr, acttyp):
+    if acttyp == '1':  # insert
+        if not is_number(inStr):
             return False
     return True
 
@@ -75,6 +82,8 @@ class SettingPage(Tk.Frame):
         self.notebook = CreatTab(self.settingFrame)
         self.generalConfigFrame=GeneralConfig(self.notebook.tab1, self.parent.origin_config)
         self.generalConfigFrame.pack(side=Tk.LEFT, fill=Tk.BOTH, expand=1)
+        self.sensorConfigFrame=SensorConfig(self.notebook.tab5, self.parent.origin_config)
+        self.sensorConfigFrame.pack(side=Tk.LEFT, fill=Tk.BOTH, expand=1)
         self.wifiConfigFrame=WifiConfig(self.notebook.tab2, self.infoLabel2).pack(side=Tk.LEFT, fill=Tk.BOTH, expand=1)
         self.powerConfigFrame=Power(self.notebook.tab4, self.lock, self.batery).pack(side=Tk.LEFT, fill=Tk.BOTH, expand=1)
         self.languageConfigFrame=LanguageConfig(self.notebook.tab3, self.parent.origin_config.language_config_struct)
@@ -165,9 +174,9 @@ class GeneralConfig(Tk.Frame):
                                 font=('Chakra Petch', 14))
         self.noteEntry.grid(column=1, row=2, padx=10, pady=5, sticky='e')
 
-        self.applyButton = ttk.Button(projectFrame, text=_("Get time now"), style="Accent.TButton",
+        self.getTimeButton = ttk.Button(projectFrame, text=_("Get time now"), style="Accent.TButton",
                                       command=self.on_get_time_now_button_clicked)
-        self.applyButton.grid(column=2, row=2, padx=10, pady=20, sticky='ew')
+        self.getTimeButton.grid(column=2, row=2, padx=10, pady=20, sticky='ew')
 
         self.applyButton = ttk.Button(projectFrame, text=_("APPLY"), style="Accent.TButton",
                                       command=lambda: self.on_apply_button_clicked(origin_config))
@@ -187,6 +196,76 @@ class GeneralConfig(Tk.Frame):
         text=get_time_now(0)
         self.prjParam3.set(text)
 
+
+class SensorConfig(Tk.Frame):
+    def __init__(self, parent, origin_config):
+        super().__init__(parent, width=1024, height=350, bg="white")
+        json_filename = parent_directory + '/i18n/sensor_sensitivity.json'
+        self.json_pathname = Path(json_filename)
+        self.main_pathname = Path(parent_directory + '/main.py')
+        self.style = ttk.Style()
+        self.style.configure('gen.TLabel', font=('Chakra Petch', 14))
+        self.style.configure('gen.TLabelframe', font=('Chakra Petch', 10))
+        self.style.configure('gen.TButton', font=('Chakra Petch', 15), width=40, height=40)
+        self.creat_genral_config_page(origin_config)
+
+    def creat_genral_config_page(self, origin_config):
+        with open(self.json_pathname, 'r', encoding='utf-8') as f:
+            currentSensitivity = json.load(f)
+        self.sensorParam1 = Tk.StringVar()
+        self.sensorParam2 = Tk.StringVar()
+        self.sensorParam1.set(currentSensitivity["accSensitivity"])
+        self.sensorParam2.set(currentSensitivity["velSensitivity"])
+        origin_config.sensor_sensitivity["acc_sensitivity"]=float(currentSensitivity["accSensitivity"])
+        origin_config.sensor_sensitivity["vel_sensitivity"]=float(currentSensitivity["velSensitivity"])
+        sensorFrame = ttk.LabelFrame(self, text=_('Sensor config'))
+        sensorFrame.grid(column=0, row=0, padx=10, pady=10, columnspan=2, sticky='wn')
+
+        accLabel = ttk.Label(sensorFrame, text=_('Accelerometer Sensitivity(mmV/g)'), style='gen.TLabel')
+        accLabel.grid(column=0, row=0, padx=10, pady=5, sticky='w')
+
+        accEntry = ttk.Entry(sensorFrame, width=20, textvariable=self.sensorParam1, takefocus=False,
+                                font=('Chakra Petch', 14), validate="key")
+        accEntry['validatecommand'] = (accEntry.register(testFloat), '%P', '%d')
+        accEntry.grid(column=1, row=0, padx=10, pady=5, sticky='e')
+
+        velLabel = ttk.Label(sensorFrame, text=_('Velocity Transducer Sensitivity (mmV/m/s)'), style='gen.TLabel')
+        velLabel.grid(column=0, row=1, padx=10, pady=5, sticky='w')
+
+        velEntry = ttk.Entry(sensorFrame, width=20, textvariable=self.sensorParam2, takefocus=False,
+                                font=('Chakra Petch', 14), validate="key")
+        velEntry['validatecommand'] = (velEntry.register(testFloat), '%P', '%d')
+        velEntry.grid(column=1, row=1, padx=10, pady=5, sticky='e')
+
+        self.applyButton = ttk.Button(sensorFrame, text=_("APPLY"), style="Accent.TButton",
+                                      command=lambda: self.on_apply_button_clicked(origin_config))
+        self.applyButton.grid(column=1, row=3, padx=10, pady=20, ipady=5, sticky='ew')
+
+
+    def on_apply_button_clicked(self, origin_config):
+        try:
+            if self.sensorParam1.get()!='':
+                origin_config.sensor_sensitivity["acc_sensitivity"] = float(self.sensorParam1.get())
+            if self.sensorParam2.get()!='':
+                origin_config.sensor_sensitivity["vel_sensitivity"] = float(self.sensorParam2.get())
+
+            sensitivityJson = {"accSensitivity": float(origin_config.sensor_sensitivity["acc_sensitivity"]),
+                            "velSensitivity": float(origin_config.sensor_sensitivity["vel_sensitivity"])}
+            with open(self.json_pathname, 'r', encoding='utf-8') as f:
+                cauhinh = json.load(f)
+            preAccSen = float(cauhinh["accSensitivity"])
+            preVelSen = float(cauhinh["velSensitivity"])
+            with open(self.json_pathname, 'w', encoding='utf-8') as f:
+                json.dump(sensitivityJson, f)
+            if origin_config.sensor_sensitivity["acc_sensitivity"] != preAccSen or origin_config.sensor_sensitivity["vel_sensitivity"] !=preVelSen:
+                if pms.general_warning(_("Restart is required to change the sensor sensitivity. Do you want to restart now")):
+                    os.execl('/usr/bin/python', self.main_pathname, *sys.argv)
+                else:
+                    pass
+        except Exception as ex:
+            print(ex)
+
+
 class CreatTab(ttk.Notebook):
     def __init__(self, parent):
         self.style=ttk.Style()
@@ -200,7 +279,9 @@ class CreatTab(ttk.Notebook):
         self.tab2 = Tk.Frame(self, name="wifi", relief="raised", borderwidth=0)
         self.tab3 = Tk.Frame(self, name="power", relief="raised", borderwidth=0)
         self.tab4 = Tk.Frame(self, name="language", relief="raised", borderwidth=0)
+        self.tab5 = Tk.Frame(self, name="sensor", relief="raised", borderwidth=0)
         self.add(self.tab1, text=_("GENERAL"))
+        self.add(self.tab5, text=_("SENSOR"))
         self.add(self.tab2, text=_("WIFI"))
         self.add(self.tab3, text=_("LANGUAGE"))
         self.add(self.tab4, text=_("POWER"))
@@ -305,28 +386,39 @@ class WifiConfig(Tk.Frame):
         self.wifiImage = imageAddress.noWifiImage
         connectingSsid = None
         infoText = "No wifi connection"
-        waitingTime=7
+        waitingTime=6
 
-        while waitingTime>=0 or self.wifiImage!=imageAddress.noWifiImage:
+        while waitingTime>=0:
             try:
-                connectingSsid = wifi.wiless._get_wifi_status()
-                infoText = f'WIFI: {connectingSsid["ssid"]}'
+                if waitingTime%3==1:
+                    self.imageButton1.configure(image=imageAddress.mediumWifiImage)
+                    self.imageButton1.update_idletasks()
+                if waitingTime%3==2:
+                    self.imageButton1.configure(image=imageAddress.strongWifiImage)
+                    self.imageButton1.update_idletasks()
 
-                
-                if connectingSsid["ssid"] != "":
-                    if connectingSsid["quality"] > 0.7:
-                        self.wifiImage = imageAddress.strongWifiImage
-                    elif connectingSsid["quality"] <= 0.7 and connectingSsid["quality"] > 0.3:
-                        self.wifiImage = imageAddress.mediumWifiImage
-                    else:
-                        self.wifiImage = imageAddress.weakWifiImage
+                if waitingTime%3==0:
+                    self.imageButton1.configure(image=imageAddress.weakWifiImage)
+                    self.imageButton1.update_idletasks()
             except:
-                self.wifiImage = imageAddress.noWifiImage
+                pass
             waitingTime-=1
-            self.wifiLabel.configure(text=infoText)
-            self.imageButton1.configure(image=self.wifiImage)
             sleep(1)
-        
+        connectingSsid = wifi.wiless._get_wifi_status()
+        infoText = f'WIFI: {connectingSsid["ssid"]}'
+        if connectingSsid["ssid"] != "":
+            if connectingSsid["quality"] > 0.7:
+                self.wifiImage = imageAddress.strongWifiImage
+            elif connectingSsid["quality"] <= 0.7 and connectingSsid["quality"] > 0.3:
+                self.wifiImage = imageAddress.mediumWifiImage
+            else:
+                self.wifiImage = imageAddress.weakWifiImage
+        else:
+            self.wifiImage = imageAddress.noWifiImage
+        self.wifiLabel.configure(text=infoText)
+        self.wifiLabel.update_idletasks()
+        self.imageButton1.configure(image=self.wifiImage)
+        self.imageButton1.update_idletasks()
 
 
     def disconnect(self):

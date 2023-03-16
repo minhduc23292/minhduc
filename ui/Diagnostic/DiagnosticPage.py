@@ -25,8 +25,11 @@ import pms.popMessage as pms
 import sqlite3 as lite
 current_directory = os.path.dirname(os.path.realpath(__file__))
 parent_directory = os.path.dirname(os.path.dirname(current_directory))
+json_filename = parent_directory + '/i18n/sensor_sensitivity.json'
 import ctypes
 from numpy.ctypeslib import ndpointer
+import json
+from pathlib import Path
 ad7609 = ctypes.CDLL(f'{parent_directory}/ad7609BTZ.so')
 blink = 0
 blink1 = 0
@@ -64,6 +67,12 @@ class DiagnosticPage(Tk.Frame):
         self.cursorLeft = imageAddress.cursorLeft
         self.cursorRight = imageAddress.cursorRight
         self.function1 = imageAddress.fuction1
+        self.json_pathname = Path(json_filename)
+        with open(self.json_pathname, 'r', encoding='utf-8') as f:
+            currentSensitivity = json.load(f)
+        self.parent.origin_config.sensor_sensitivity["acc_sensitivity"]=float(currentSensitivity["accSensitivity"])
+        self.parent.origin_config.sensor_sensitivity["vel_sensitivity"]=float(currentSensitivity["velSensitivity"])
+
         self.btstyle = ttk.Style()
         self.btstyle.configure('normal.TButton', font=('Chakra Petch', 15), borderwidth=1, justify=Tk.CENTER)
         self.btstyle.configure('custom.Accent.TButton', font=('Chakra Petch', 10), justify=Tk.CENTER)
@@ -391,10 +400,11 @@ class DiagnosticPage(Tk.Frame):
 
         else:
             self.parent.origin_config.sensor_config["sensor_data"] = chaneln
-
+        accConvertFactor=1000/self.parent.origin_config.sensor_sensitivity["acc_sensitivity"]
+        velConvertFactor=1000/self.parent.origin_config.sensor_sensitivity["vel_sensitivity"]
         for i in range(3):
             if self.parent.origin_config.sensor_config["sensor_input"][i][-1] == 'A':
-                self.parent.origin_config.sensor_config["sensor_data"][i] *= 10  # g
+                self.parent.origin_config.sensor_config["sensor_data"][i] *= accConvertFactor  # g
                 self.parent.origin_config.sensor_config["sensor_data"][i] -= np.mean(
                     self.parent.origin_config.sensor_config["sensor_data"][i])
 
@@ -422,7 +432,7 @@ class DiagnosticPage(Tk.Frame):
                     self.parent.origin_config.sensor_config["sensor_data"][i])     
 
             elif self.parent.origin_config.sensor_config["sensor_input"][i][-1] == 'V':
-                self.parent.origin_config.sensor_config["sensor_data"][i] *= 254  # mm/s
+                self.parent.origin_config.sensor_config["sensor_data"][i] *= velConvertFactor  # mm/s
                 self.parent.origin_config.sensor_config["sensor_data"][i] -= np.mean(
                     self.parent.origin_config.sensor_config["sensor_data"][i])
                 

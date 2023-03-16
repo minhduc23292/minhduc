@@ -25,6 +25,7 @@ import pms.popMessage as pms
 import sqlite3 as lite
 import fileOperation.fileOperation as file_operation
 import report.report as rp
+import qrcode
 balancingOrder=0
 click_stop_flag=False
 blink=0
@@ -334,6 +335,7 @@ class SideButtonFrame(Tk.Frame):
     def __init__(self, parent, history_config_struct, db_connect, infoLabel, canvas):
         super().__init__(parent, bd=1, bg='white', width=90, height=504)
         self.parent=parent
+        self.link="https://dantri.com.vn/"
         self.history_config_struct=history_config_struct
         self.infoLabel=infoLabel
         self.canvas=canvas
@@ -775,7 +777,14 @@ class SideButtonFrame(Tk.Frame):
                     document._add_page_break()
                     new_file_name='demo.docx'
                     document._save(new_file_name)
-                    self.infoLabel.config(text=_("Report is exported !"))
+                    
+                    qr = qrcode.QRCode(version = 1, box_size = 10, border = 5)
+                    qr.add_data(self.link)
+                    qr.make(fit = True)
+                    img = qr.make_image(fill_color = 'black', back_color = 'white')
+                    img.save(save_path + 'MyQRCode2.png')
+                    Pd.PLT.plot_image(self.canvas, 'MyQRCode2.png', self.link)
+                    self.infoLabel.config(text=_("Report is exported. Use QR code scanner to see the report."))
                 else:
                     self.infoLabel.config(text=_("There is no data, please check SETTING !"))
         except:
