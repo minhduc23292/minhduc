@@ -56,7 +56,7 @@ class PLT(FigureCanvasTkAgg):
         elif (win_var == "Reactangular"):
             w = 1  # Rectangular window
         T = 1.0 / sample_rate
-        yf = fftpack.fft(canal * w) * (4 / N)
+        yf = fftpack.fft(canal * w) * (2*np.sqrt(2)/N)
         yf1 = np.abs(yf[:(int(N // 2))])
         xf = fftpack.fftfreq(N, T)[0:int(N // 2)]
         ax_12.clear()
@@ -260,7 +260,7 @@ class PLT(FigureCanvasTkAgg):
 
         T = 1.0 / sample_rate
         y = canal_1
-        yf = fftpack.fft(y * w) * (4 / N)
+        yf = fftpack.fft(y * w) * (2*np.sqrt(2)/N)
         yf = yf[2:(int(N / 2))]
         xf = np.linspace(0.0, 1.0 / (2.0 * T), int(N / 2))
         ax_21, ax_22, ax_23 = self.figure.get_axes()
@@ -280,7 +280,7 @@ class PLT(FigureCanvasTkAgg):
         N = len(canal_2)  # length of the signal
         T = 1.0 / sample_rate
         y = canal_2
-        yf = fftpack.fft(y * w) * (4 / N)
+        yf = fftpack.fft(y * w) * (2*np.sqrt(2)/N)
         yf = yf[2:int(N / 2)]
         xf = np.linspace(0.0, 1.0 / (2.0 * T), int(N / 2))
 
@@ -296,7 +296,7 @@ class PLT(FigureCanvasTkAgg):
         N = len(canal_3)  # length of the signal
         T = 1.0 / sample_rate
         y = canal_3
-        yf = fftpack.fft(y * w) * (4 / N)
+        yf = fftpack.fft(y * w) * (2*np.sqrt(2)/N)
         yf = yf[2:int(N / 2)]
         xf = np.linspace(0.0, 1.0 / (2.0 * T), int(N / 2))
         ax_23.clear()
@@ -331,18 +331,18 @@ class PLT(FigureCanvasTkAgg):
         ax_41.zaxis.set_major_formatter(FormatStrFormatter('%0.2f'))
 
         for i in range(h_num):
-            n = len(data_arr[i])
-            w = signal.hann(n, sym=False)  # Hann (Hanning) window
+            N = len(data_arr[i])
+            w = signal.hann(N, sym=False)  # Hann (Hanning) window
             # xf = np.linspace(0.0, viewRange[1], int(viewRange[1]*n/sample_rate[i]))
-            xf = np.linspace(0.0, sample_rate[i] / 2, int(n / 2))
+            xf = np.linspace(0.0, sample_rate[i] / 2, int(N / 2))
             y = data_arr[i]
-            yf = fftpack.fft(y * w) * (4 / n)
-            yf1 = np.abs(yf)[:int(n / 2)]
+            yf = fftpack.fft(y * w) * (2*np.sqrt(2) / N)
+            yf1 = np.abs(yf)[:int(N / 2)]
             zz = i * np.ones(len(yf1))
             if viewRange[1] < sample_rate[i] / 2.56:
-                plotRange = int(viewRange[1] * n / sample_rate[i])
+                plotRange = int(viewRange[1] * N / sample_rate[i])
             else:
-                plotRange = int(n / 2.56)
+                plotRange = int(N / 2.56)
             if plotRange < 100:
                 plotRange = 100
             ax_41.plot3D(xf[:plotRange], zz[:plotRange], yf1[:plotRange], color='black', linewidth=0.3)
@@ -403,12 +403,16 @@ class PLT(FigureCanvasTkAgg):
                     [yf2, xf2] = frequency_tsa(arr[i], tsa_bin, sample_rate[i])
                 else:
                     n = len(arr[i])
-                    w = signal.hann(n, sym=False)  # Hann (Hanning) window
-                    xf2 = np.linspace(0.0, 1.0 / (2.0 / sample_rate[i]), int(n / 2))
-                    xf2 = xf2[2:]
-                    y = arr[i]
-                    yf = fftpack.fft(y * w) * (4 / n)
-                    yf2 = np.abs(yf[2:int(n / 2)])
+                    if n>100:
+                        w = signal.hann(n, sym=False)  # Hann (Hanning) window
+                        xf2 = np.linspace(0.0, 1.0 / (2.0 / sample_rate[i]), int(n / 2))
+                        xf2 = xf2[2:]
+                        y = arr[i]
+                        yf = fftpack.fft(y * w) * (2*np.sqrt(2) / n)
+                        yf2 = np.abs(yf[2:int(n / 2)])
+                    else:
+                        xf2=np.zeros(10)
+                        yf2=np.zeros(10)
                 axes_arr1[i].yaxis.set_major_formatter(FormatStrFormatter('%0.2f'))
                 axes_arr1[i].plot(xf2, yf2, color='blue', linewidth=0.5)
                 axes_arr1[i].grid()
@@ -450,7 +454,7 @@ class PLT(FigureCanvasTkAgg):
         signalArr=[canal_1, canal_2, canal_3]
         for i in range(3):
             y = signalArr[i]
-            yf = fftpack.fft(y * w) * (4 / n)
+            yf = fftpack.fft(y * w) * (2*np.sqrt(2) / n)
             yf2 = np.abs(yf[5:int(n / 2)])
             for j in range(len(yf2)):
                 yf2[j]/=0.0002*np.pi*xf2[j]
@@ -500,14 +504,14 @@ class PLT(FigureCanvasTkAgg):
   
         for i in range(h_num):
             y = acc2vel(arr[i], sample_rate[i])
-            y-=np.mean(y)
-            y=filter_data(y, "BANDPASS", dfc._RMS_HIGHPASS_FROM, dfc._RMS_LOWPASS_TO,
-                                  sample_rate[i], window="Hanning")
+            # y-=np.mean(y)
+            # y=filter_data(y, "BANDPASS", dfc._RMS_HIGHPASS_FROM, dfc._RMS_LOWPASS_TO,
+            #                       sample_rate[i], window="Hanning")
             n = len(y)
             w = signal.hann(n, sym=False)  # Hann (Hanning) window
             xf2 = np.linspace(0.0, 1.0 / (2.0/sample_rate[i]), int(n / 2))
             xf2=xf2[5:]
-            yf = fftpack.fft(y * w) * (4 / n)
+            yf = fftpack.fft(y * w) * (2*np.sqrt(2) / n)
             yf2 = np.abs(yf[5:int(n / 2)])
             axes_arr1[i].yaxis.set_major_formatter(FormatStrFormatter('%0.2f'))
             axes_arr1[i].plot(xf2, yf2, color='blue', linewidth=0.5)
@@ -562,12 +566,16 @@ class PLT(FigureCanvasTkAgg):
                 [yf2, xf2] = frequency_tsa(arr[i], tsa_bin, sample_rate[i] )
             else:
                 n = len(arr[i])
-                w = signal.hann(n, sym=False)  # Hann (Hanning) window
-                xf2 = np.linspace(0.0, 1.0 / (2.0/sample_rate[i]), int(n / 2))
-                xf2=xf2[5:]
-                y = arr[i]
-                yf = fftpack.fft(y * w) * (4 / n)
-                yf2 = np.abs(yf[5:int(n / 2)])
+                if n>100:
+                    w = signal.hann(n, sym=False)  # Hann (Hanning) window
+                    xf2 = np.linspace(0.0, 1.0 / (2.0/sample_rate[i]), int(n / 2))
+                    xf2=xf2[5:]
+                    y = arr[i]
+                    yf = fftpack.fft(y * w) * (2*np.sqrt(2) / n)
+                    yf2 = np.abs(yf[5:int(n / 2)])
+                else:
+                    xf2=np.ones(100)
+                    yf2=np.zeros(100)
             for j in range(len(yf2)):
                 yf2[j]/=0.0002*np.pi*xf2[j]
             axes_arr1[i].yaxis.set_major_formatter(FormatStrFormatter('%0.2f'))
@@ -698,7 +706,7 @@ class PLT(FigureCanvasTkAgg):
                 ax_42.text(tick_arr1[-1] - 0.1, acc_danger[-1] + 0.1, str(acc_danger[-1])[0:3])
             if view_arr[2] == 1:
                 ax_43.plot(tick_arr, gE_arr, color="blue", linestyle='solid', marker='o', \
-                           markerfacecolor='red', markersize=5, label="gE")
+                           markerfacecolor='red', markersize=5, label="BRGs-gE")
                 ax_43.plot(tick_arr1, gE_alert_arr, linewidth=0.3, color="orange")
                 ax_43.plot(tick_arr1, gE_danger_arr, linewidth=0.3, color="red")
                 ax_43.text(tick_arr1[-1] - 0.1, gE_alert_arr[-1] + 0.1, str(gE_alert_arr[-1])[0:3])
@@ -707,7 +715,7 @@ class PLT(FigureCanvasTkAgg):
                 #     ax_43.text(index,value, str(value)[0:4])
             if view_arr[3] == 1:
                 ax_44.plot(tick_arr, hfcf_arr, color="blue", linestyle='solid', marker='o', \
-                           markerfacecolor='red', markersize=5, label="HFCF")
+                           markerfacecolor='red', markersize=5, label="BRGs-HFCF")
                 ax_44.plot(tick_arr1, hfcf_alert_arr, linewidth=0.3, color="orange")
                 ax_44.plot(tick_arr1, hfcf_danger_arr, linewidth=0.3, color="red")
                 ax_44.text(tick_arr1[-1] - 0.1, hfcf_alert_arr[-1] + 0.1, str(hfcf_alert_arr[-1])[0:3])

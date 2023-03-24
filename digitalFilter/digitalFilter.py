@@ -48,7 +48,7 @@ def filter_data(
         return samples
 
     else:
-        M = 200
+        M = 700
         # Select the filter type
         if filter_type == "LOWPASS":
             fc = low_pass_cut_off_freq / sample_rate
@@ -172,7 +172,7 @@ def checking_filter_data(
     if (filter_type == ''):
         return samples
     else:
-        ntaps = 129  # ntaps phai la so le
+        ntaps = 4097  # ntaps phai la so le
         if not ntaps % 2:
             ntaps += 1
         # Select the filter type

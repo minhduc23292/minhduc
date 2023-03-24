@@ -17,10 +17,11 @@ class TotalConfig(object):
         self.sensor_config = {
             "sensor_input": [],
             "sensor_data": [],
+            "store_sensor_data": [[],[],[]],
             "unit": [],
             "sensor_key": [],
             "sample_rate": 2560,
-            "fft_line": 2000,
+            "fft_line": 1600,
             "vel": [],
             "accel": [],
             "vel_data": [],

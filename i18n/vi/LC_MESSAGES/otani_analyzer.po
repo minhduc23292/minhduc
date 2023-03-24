@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-16 12:26+0700\n"
+"POT-Creation-Date: 2023-03-24 23:48+0700\n"
 "PO-Revision-Date: 2022-11-02 18:07+0900\n"
 "Last-Translator: Le Phuong <lephuong@phuonglh>\n"
 "Language-Team: Vietnamese\n"
@@ -59,7 +59,7 @@ msgstr ""
 #: ui/ResonanceModule/ResonanceModule.py:115
 #: ui/Diagnostic/DiagnosticPage.py:175
 msgid "Config"
-msgstr "Cấu hình"
+msgstr "Cài đặt"
 
 #: ui/balancingModule/balancingModule.py:112
 msgid "Balancing"
@@ -78,7 +78,7 @@ msgstr "Click vào RUN để bắt đầu"
 #: ui/balancingModule/balancingModule.py:184 ui/history/historyModule.py:175
 #: ui/ResonanceModule/ResonanceModule.py:190
 msgid "Configuration"
-msgstr "Cấu hình"
+msgstr "Cài đặt"
 
 #: ui/balancingModule/balancingModule.py:187
 msgid "Num of planes"
@@ -426,8 +426,9 @@ msgid "Next step: Initial Run, Mount the sensor on two planes and execute"
 msgstr "Bước tiếp theo: Chạy thô, gắn cảm biến ở cả hai mặt phẳng."
 
 #: ui/balancingModule/balancingModule.py:944
-#: ui/balancingModule/balancingModule.py:1055 ui/history/historyModule.py:659
-#: ui/history/historyModule.py:791 ui/ResonanceModule/ResonanceModule.py:553
+#: ui/balancingModule/balancingModule.py:1055 ui/history/historyModule.py:622
+#: ui/history/historyModule.py:659 ui/history/historyModule.py:791
+#: ui/ResonanceModule/ResonanceModule.py:553
 msgid "Data errors."
 msgstr "Lỗi dữ liệu"
 
@@ -941,6 +942,10 @@ msgstr ""
 msgid "GRID OFF"
 msgstr "GRID OFF"
 
+#: ui/Diagnostic/DiagnosticPage.py:1253 ui/Settingpage/SettingPage.py:221
+msgid "Sensor config"
+msgstr "Cài đặt cảm biến: "
+
 #: ui/Diagnostic/DiagnosticPage.py:1256
 msgid "Port1"
 msgstr "Cổng 1"
@@ -975,7 +980,7 @@ msgstr "Fmax"
 
 #: ui/Diagnostic/DiagnosticPage.py:1321
 msgid "Filter configuration"
-msgstr "Cấu hình bộ lọc"
+msgstr "Cài đặt bộ lọc"
 
 #: ui/Diagnostic/DiagnosticPage.py:1324
 msgid "Filter type"
@@ -1003,7 +1008,7 @@ msgstr "Đơn vị"
 
 #: ui/Diagnostic/DiagnosticPage.py:1377
 msgid "Machine configuration"
-msgstr "Cấu hình máy"
+msgstr "Cài đặt máy"
 
 #: ui/Diagnostic/DiagnosticPage.py:1380
 msgid "Machine name"
@@ -1077,10 +1082,6 @@ msgstr "Ngày tháng năm"
 msgid "Get time now"
 msgstr "Lấy thời gian"
 
-#: ui/Settingpage/SettingPage.py:221
-msgid "Sensor config"
-msgstr "Cài đặt cảm biến: "
-
 #: ui/Settingpage/SettingPage.py:224
 msgid "Accelerometer Sensitivity(mmV/g)"
 msgstr "Cảm biến gia tốc(mmV/g)"
@@ -1094,8 +1095,8 @@ msgid ""
 "Restart is required to change the sensor sensitivity. Do you want to restart "
 "now"
 msgstr ""
-"Cần khởi động lại ứng dụng để thay đổi độ nhạy cảm biến. Bạn có muốn khởi động lại "
-"không"
+"Cần khởi động lại ứng dụng để thay đổi độ nhạy cảm biến. Bạn có muốn khởi "
+"động lại không"
 
 #: ui/Settingpage/SettingPage.py:283
 msgid "GENERAL"
@@ -1103,8 +1104,7 @@ msgstr "CHUNG"
 
 #: ui/Settingpage/SettingPage.py:284
 msgid "SENSOR"
-msgstr ""
-"CẢM BIẾN"
+msgstr "CẢM BIẾN"
 
 #: ui/Settingpage/SettingPage.py:285
 msgid "WIFI"
@@ -1241,7 +1241,7 @@ msgid "Details"
 msgstr "Chi tiết"
 
 #: PlotData/PlotData.py:32 PlotData/PlotData.py:67 PlotData/PlotData.py:355
-#: PlotData/PlotData.py:662 PlotData/PlotData.py:671
+#: PlotData/PlotData.py:666 PlotData/PlotData.py:675
 msgid "Amplitude"
 msgstr "Biên độ"
 
@@ -1249,74 +1249,74 @@ msgstr "Biên độ"
 msgid "Frequency(Hz)"
 msgstr "Tần số (Hz)"
 
-#: PlotData/PlotData.py:419 PlotData/PlotData.py:463 PlotData/PlotData.py:519
-#: PlotData/PlotData.py:580 PlotData/PlotData.py:1248
+#: PlotData/PlotData.py:423 PlotData/PlotData.py:467 PlotData/PlotData.py:523
+#: PlotData/PlotData.py:584 PlotData/PlotData.py:1252
 msgid "Frequency [Hz]"
 msgstr "Tần số [Hz]"
 
-#: PlotData/PlotData.py:438 PlotData/PlotData.py:1249
+#: PlotData/PlotData.py:442 PlotData/PlotData.py:1253
 msgid "Time [ms]"
 msgstr "Thời gian [ms]"
 
-#: PlotData/PlotData.py:682
+#: PlotData/PlotData.py:686
 msgid "Velocity RMS (mm/s)"
 msgstr "Vận tốc RMS (mm/s)"
 
-#: PlotData/PlotData.py:694
+#: PlotData/PlotData.py:698
 msgid "Accelleration Pk (g)"
 msgstr "Gear-Gia tốc đỉnh (g)"
 
-#: PlotData/PlotData.py:755
+#: PlotData/PlotData.py:759
 msgid "ISO-10816 Displacement (um)"
 msgstr "ISO-10816 Chuyển vị(um)"
 
-#: PlotData/PlotData.py:799
+#: PlotData/PlotData.py:803
 msgid "ISO-10816 Velocity (mm/s)"
 msgstr "ISO-10816 Vận tốc(mm/s)"
 
-#: PlotData/PlotData.py:842
+#: PlotData/PlotData.py:846
 msgid "gE/HFCF for bearing"
 msgstr "gE/HFCF của vòng bi"
 
-#: PlotData/PlotData.py:887
+#: PlotData/PlotData.py:891
 msgid "Sideband ratio/ Acc-Peak Gearbox"
 msgstr "Hệ số giải biên/ Gia tốc Pk hộp số"
 
-#: PlotData/PlotData.py:938
+#: PlotData/PlotData.py:942
 msgid "Dynamic balancing"
 msgstr "Cân bằng động"
 
-#: PlotData/PlotData.py:938
+#: PlotData/PlotData.py:942
 msgid "Compensation mass = "
 msgstr "Khối lượng bù"
 
-#: PlotData/PlotData.py:939
+#: PlotData/PlotData.py:943
 msgid "at angle ="
 msgstr "tại góc"
 
-#: PlotData/PlotData.py:969 PlotData/PlotData.py:1038 PlotData/PlotData.py:1113
-#: PlotData/PlotData.py:1223
+#: PlotData/PlotData.py:973 PlotData/PlotData.py:1042 PlotData/PlotData.py:1117
+#: PlotData/PlotData.py:1227
 msgid "1st plane"
 msgstr "Mặt phẳng thứ nhất"
 
-#: PlotData/PlotData.py:970 PlotData/PlotData.py:1039 PlotData/PlotData.py:1224
+#: PlotData/PlotData.py:974 PlotData/PlotData.py:1043 PlotData/PlotData.py:1228
 msgid "2nd plane"
 msgstr "Mặt phẳng thứ 2"
 
-#: PlotData/PlotData.py:1230
+#: PlotData/PlotData.py:1234
 msgid "Dynamic balancing 2nd plane"
 msgstr "Cân bằng động 2 mặt phẳng"
 
-#: PlotData/PlotData.py:1247
+#: PlotData/PlotData.py:1251
 msgid "STFT Magnitude-"
 msgstr "STFT Cường độ -"
 
-#: PlotData/PlotData.py:1343 PlotData/PlotData.py:1398
+#: PlotData/PlotData.py:1347 PlotData/PlotData.py:1402
 msgid "Amplitude-g"
 msgstr "Biên độ(g)"
 
-#: PlotData/PlotData.py:1353 PlotData/PlotData.py:1408
-#: PlotData/PlotData.py:1428
+#: PlotData/PlotData.py:1357 PlotData/PlotData.py:1412
+#: PlotData/PlotData.py:1432
 msgid "Phase-degree"
 msgstr "Pha(độ)"
 

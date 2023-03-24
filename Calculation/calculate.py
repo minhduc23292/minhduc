@@ -85,7 +85,7 @@ def phase_shift2(arr1, arr2, sample_rate, speed):
     x = int(speed / (sample_rate / 2) * (N / 2))
     T = 1 / sample_rate
     xf = np.linspace(0.0, 1.0 / (2.0 * T), int(N / 2))
-    w = signal.hann(N)
+    w = signal.hann(N, sym=False)
     yf1 = fftpack.fft(arr1 * w) * (4 / N)
     yf2 = fftpack.fft(arr2 * w) * (4 / N)
     # yf = yf[:(int(N / 2))]
@@ -106,10 +106,10 @@ def tracking_signal(sensor_dict, range_freq):
     arr3 = sensor_dict["sensor_data"][2]
     _sample_rate = sensor_dict["sample_rate"]
     N = len(arr1)
-    w = signal.hann(N)
-    yf1 = fftpack.fft(arr1 * w) * (4 / N)
-    yf2 = fftpack.fft(arr2 * w) * (4 / N)
-    yf3 = fftpack.fft(arr3 * w) * (4 / N)
+    w = signal.hann(N, sym=False)
+    yf1 = fftpack.fft(arr1 * w) * (2*np.sqrt(2) / N)
+    yf2 = fftpack.fft(arr2 * w) * (2*np.sqrt(2) / N)
+    yf3 = fftpack.fft(arr3 * w) * (2*np.sqrt(2) / N)
     # yf = yf[:(int(N / 2))]
     module3 = np.abs(yf3[:(int(N / 2))])
     module2 = np.abs(yf2[:(int(N / 2))])
@@ -142,8 +142,8 @@ def tracking_signal(sensor_dict, range_freq):
 
 def tab4_tracking_signal(data_arr, _sample_rate, range_freq):
     N = len(data_arr)
-    w = signal.hann(N)
-    yf1 = fftpack.fft(data_arr * w) * (4 / N)
+    w = signal.hann(N, sym=False)
+    yf1 = fftpack.fft(data_arr * w) * (2*np.sqrt(2) / N)
     module1 = np.abs(yf1[:(int(N / 2))])
     resolution = _sample_rate / N
     [key_pos, key_max] = find_max(module1[int(range_freq[0] / resolution): int(range_freq[1] / resolution)])
@@ -285,14 +285,35 @@ def high_frequency_crest_factor(arr, filter_from: int, filter_to: int, sample_ra
     return hfcf_arr
 
 
+# def fresh_laser_pulse(laserArr):
+#     for i in range(len(laserArr)):
+#         if laserArr[i] <= 1:
+#             laserArr[i] = 0
+#         else:
+#             laserArr[i] = 2.5
+#     return laserArr
+
 def fresh_laser_pulse(laserArr):
+    mean=np.mean(laserArr)
     for i in range(len(laserArr)):
-        if laserArr[i] <= 1:
-            laserArr[i] = 0
+        if laserArr[i]<= mean:
+            laserArr[i]=0
         else:
-            laserArr[i] = 2.5
+            laserArr[i]=1
     return laserArr
 
+def fresh_tacho_pulse(tachoArr, symCheck):
+    if symCheck==1:
+        tachoArr*=-1
+    tachoArr-=np.min(tachoArr)
+    # mean=np.mean(tachoArr)
+    # for i in range(len(tachoArr)):
+    #     if tachoArr[i]< mean:
+    #         tachoArr[i]=mean
+    #     else:
+    #         pass
+    # tachoArr-=mean
+    return tachoArr
 
 def iso10816_judge(machineType, tocdo, congsuat, foundation="Rigid"):
     if foundation == None:
@@ -353,28 +374,39 @@ def Acc_Pk_indicator(data_arr, sample_rate_arr):
 
 
 def frequency_tsa(arr, step, sample_rate):
-    _index = np.arange(0, len(arr) + 1, step, dtype=int)
-    if len(_index) > 4:
-        N = 2 * step
-        sum_fft = np.zeros(N)
-        w = signal.hann(N, sym=False)
-        for i in range(len(_index) - 2):
-            temp_arr = arr[_index[i]:_index[i + 2]]
-            yf = fftpack.fft(temp_arr * w) * (4 / N)
-            yf = np.abs(yf)
-            sum_fft += yf
-        T = 1.0 / sample_rate
-        sum_fft = sum_fft[5:int(N / 2)] / (len(_index) - 2)
-        xf = np.linspace(0.0, 1.0 / (2.0 * T), int(N / 2))
-        return [sum_fft, xf[5:]]
+    if len(arr)>1000:
+        try:
+            _index = np.arange(0, len(arr) + 1, step, dtype=int)
+            if len(_index) > 4:
+                N = 2 * step
+                sum_fft = np.zeros(N)
+                w = signal.hann(N, sym=False)
+                for i in range(len(_index) - 2):
+                    temp_arr = arr[_index[i]:_index[i + 2]]
+                    yf = fftpack.fft(temp_arr * w) * (2*np.sqrt(2) / N)
+                    yf = np.abs(yf)
+                    sum_fft += yf
+                T = 1.0 / sample_rate
+                sum_fft = sum_fft[5:int(N / 2)] / (len(_index) - 2)
+                xf = np.linspace(0.0, 1.0 / (2.0 * T), int(N / 2))
+                return [sum_fft, xf[5:]]
+            else:
+                N = len(arr)
+                w = signal.hann(N, sym=False)  # Hann (Hanning) window
+                xf = np.linspace(0.0, 1.0 / (2.0 / sample_rate), int(N / 2))
+                xf = xf[2:]
+                yf = fftpack.fft(arr * w) * (2*np.sqrt(2) / N)
+                yf = np.abs(yf[2:int(N / 2)])
+                return [yf, xf]
+        except:
+            yf=np.zeros(100)
+            xf=np.ones(100)
+            return[yf, xf]
     else:
-        N = len(arr)
-        w = signal.hann(N, sym=False)  # Hann (Hanning) window
-        xf = np.linspace(0.0, 1.0 / (2.0 / sample_rate), int(N / 2))
-        xf = xf[2:]
-        yf = fftpack.fft(arr * w) * (4 / N)
-        yf = np.abs(yf[2:int(N / 2)])
-        return [yf, xf]
+        yf=np.zeros(100)
+        xf=np.ones(100)
+        return[yf, xf]
+
 
 def calculate_enveloped_signal(origin_config):
     try:

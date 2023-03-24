@@ -298,6 +298,7 @@ class DiagnosticPage(Tk.Frame):
         self.parent.origin_config.sensor_config = {
             "sensor_input": [],
             "sensor_data": [],
+            "store_sensor_data": [[],[],[]],
             "unit": [],
             "sensor_key": [],
             "sample_rate": 2560,
@@ -380,7 +381,7 @@ class DiagnosticPage(Tk.Frame):
             chaneln.append(np.array(chanelm[i][2:]))
 
         if n == 6:
-            chaneln[4] /= 2  # 0
+            chaneln[4] /= 2
             chaneln[4] = fresh_laser_pulse(chaneln[4])
             unit[3] = 'laser sensor'
         if self.parent.origin_config.waveform_config_struct["UseTSA"] == 1 and n == 6:
@@ -421,8 +422,7 @@ class DiagnosticPage(Tk.Frame):
                     vel2disp(acc2vel(self.parent.origin_config.sensor_config["sensor_data"][i],
                                      self.parent.origin_config.sensor_config["sample_rate"]),
                              self.parent.origin_config.sensor_config["sample_rate"]))
-
-                self.parent.origin_config.sensor_config["sensor_data"][i] = \
+                self.parent.origin_config.sensor_config["store_sensor_data"][i]=\
                                         filter_data(self.parent.origin_config.sensor_config["sensor_data"][i], "BANDPASS",
                                         dfc._PRE_HIGHPASS_FROM,
                                         self.parent.origin_config.waveform_config_struct["Fmax"],
@@ -435,8 +435,7 @@ class DiagnosticPage(Tk.Frame):
                 self.parent.origin_config.sensor_config["sensor_data"][i] *= velConvertFactor  # mm/s
                 self.parent.origin_config.sensor_config["sensor_data"][i] -= np.mean(
                     self.parent.origin_config.sensor_config["sensor_data"][i])
-                
-                self.parent.origin_config.sensor_config["sensor_data"][i] = \
+                self.parent.origin_config.sensor_config["store_sensor_data"][i]=\
                             filter_data(self.parent.origin_config.sensor_config["sensor_data"][i], "BANDPASS",
                             dfc._PRE_HIGHPASS_FROM,
                             dfc._RMS_LOWPASS_TO,
@@ -454,7 +453,7 @@ class DiagnosticPage(Tk.Frame):
                              
             elif self.parent.origin_config.sensor_config["sensor_input"][i][-1] == 'E':
                 self.parent.origin_config.sensor_config["sensor_data"][i] *= 0
-                self.parent.origin_config.sensor_config["sensor_data"][i]=self.parent.origin_config.sensor_config["sensor_data"][i][400:]
+                self.parent.origin_config.sensor_config["store_sensor_data"][i]=self.parent.origin_config.sensor_config["sensor_data"][i][1400:] #1400 relate to bandpass filter order
                 unit[i] = 'no sensor'
             else:
                 pass
@@ -493,10 +492,10 @@ class DiagnosticPage(Tk.Frame):
             ss1=self.parent.origin_config.waveform_config_struct["Sensor1"]
             ss2=self.parent.origin_config.waveform_config_struct["Sensor2"]
             ss3=self.parent.origin_config.waveform_config_struct["Sensor3"]
-            if len(self.parent.origin_config.sensor_config["sensor_data"])!=0:
-                canal1 = self.parent.origin_config.sensor_config["sensor_data"][0]
-                canal2 = self.parent.origin_config.sensor_config["sensor_data"][1]
-                canal3 = self.parent.origin_config.sensor_config["sensor_data"][2]
+            if len(self.parent.origin_config.sensor_config["store_sensor_data"])!=0:
+                canal1 = self.parent.origin_config.sensor_config["store_sensor_data"][0]
+                canal2 = self.parent.origin_config.sensor_config["store_sensor_data"][1]
+                canal3 = self.parent.origin_config.sensor_config["store_sensor_data"][2]
             else:
                 pms.show_error(_('There is no data !'))
                 return
@@ -741,9 +740,9 @@ class DiagnosticPage(Tk.Frame):
         self.freqFunctionBt.configure(text=_("FUNCTION\nNONE"))
         win_var = self.parent.origin_config.frequency_config_struct["Window"]
         try:
-            canal1 = self.parent.origin_config.sensor_config["sensor_data"][0]
-            canal2 = self.parent.origin_config.sensor_config["sensor_data"][1]
-            canal3 = self.parent.origin_config.sensor_config["sensor_data"][2]
+            canal1 = self.parent.origin_config.sensor_config["store_sensor_data"][0]
+            canal2 = self.parent.origin_config.sensor_config["store_sensor_data"][1]
+            canal3 = self.parent.origin_config.sensor_config["store_sensor_data"][2]
             _sample_rate = self.parent.origin_config.sensor_config["sample_rate"]
             Pd.PLT.plot_fft(self.frequencyFrameCanvas.canvas2, canal1, canal2, canal3, _sample_rate,
                             self.parent.origin_config.sensor_config["unit"][:3], [1, 2, 3],
@@ -790,9 +789,9 @@ class DiagnosticPage(Tk.Frame):
             self.freqGridtBt.configure(text=_("GRID ON"))
             self.freqFunctionBt.configure(text=_("FUNCTION\nPSD"))
             _sample_rate = self.parent.origin_config.sensor_config["sample_rate"]
-            canal_1 = self.parent.origin_config.sensor_config["sensor_data"][0]  # Copy list by value not by reference
-            canal_2 = self.parent.origin_config.sensor_config["sensor_data"][1]
-            canal_3 = self.parent.origin_config.sensor_config["sensor_data"][2]
+            canal_1 = self.parent.origin_config.sensor_config["store_sensor_data"][0]  # Copy list by value not by reference
+            canal_2 = self.parent.origin_config.sensor_config["store_sensor_data"][1]
+            canal_3 = self.parent.origin_config.sensor_config["store_sensor_data"][2]
             win_var = self.parent.origin_config.frequency_config_struct["Window"]
             unit = self.parent.origin_config.frequency_config_struct["unit"]
             if (len(canal_1) != 0):
@@ -808,9 +807,9 @@ class DiagnosticPage(Tk.Frame):
             self.freqGridtBt.configure(text=_("GRID ON"))
             self.freqFunctionBt.configure(text=_("FUNCTION\nVELOCITY\nSPECTRUM"))
             _sample_rate = self.parent.origin_config.sensor_config["sample_rate"]
-            canal_1 = self.parent.origin_config.sensor_config["sensor_data"][0]  # Copy list by value not by reference
-            canal_2 = self.parent.origin_config.sensor_config["sensor_data"][1]
-            canal_3 = self.parent.origin_config.sensor_config["sensor_data"][2]
+            canal_1 = self.parent.origin_config.sensor_config["store_sensor_data"][0]  # Copy list by value not by reference
+            canal_2 = self.parent.origin_config.sensor_config["store_sensor_data"][1]
+            canal_3 = self.parent.origin_config.sensor_config["store_sensor_data"][2]
             if (len(canal_1) != 0):
                 Pd.PLT.plot_velocity_spectrum(self.frequencyFrameCanvas.canvas2, canal_1, canal_2, canal_3, _sample_rate, [1, 2, 3])
 
@@ -819,9 +818,9 @@ class DiagnosticPage(Tk.Frame):
 
     def filterCallback(self):
         _sample_rate = self.parent.origin_config.sensor_config["sample_rate"]
-        canal_1 = self.parent.origin_config.sensor_config["sensor_data"][0]  # Copy list by value not by reference
-        canal_2 = self.parent.origin_config.sensor_config["sensor_data"][1]
-        canal_3 = self.parent.origin_config.sensor_config["sensor_data"][2]
+        canal_1 = self.parent.origin_config.sensor_config["store_sensor_data"][0]  # Copy list by value not by reference
+        canal_2 = self.parent.origin_config.sensor_config["store_sensor_data"][1]
+        canal_3 = self.parent.origin_config.sensor_config["store_sensor_data"][2]
         filter_type = self.parent.origin_config.frequency_config_struct["FilterType"]
         filter_from = self.parent.origin_config.frequency_config_struct["FilterFrom"]  # high pass cutoff freq
         filter_to = self.parent.origin_config.frequency_config_struct["FilterTo"]  # low pass cutoff freq
@@ -882,9 +881,9 @@ class DiagnosticPage(Tk.Frame):
             self.laserBt.configure(text=_("LASER\nVIEW"))
             view_flag=0
         Pd.PLT.plot_all_chanel(self.waveformFrameCanvas.canvas1,
-                               self.parent.origin_config.sensor_config["sensor_data"][0],
-                               self.parent.origin_config.sensor_config["sensor_data"][1],
-                               self.parent.origin_config.sensor_config["sensor_data"][2],
+                               self.parent.origin_config.sensor_config["store_sensor_data"][0],
+                               self.parent.origin_config.sensor_config["store_sensor_data"][1],
+                               self.parent.origin_config.sensor_config["store_sensor_data"][2],
                                self.parent.origin_config.sensor_config["unit"][:3],
                                self.parent.origin_config.sensor_config["sample_rate"])
 
@@ -902,16 +901,16 @@ class DiagnosticPage(Tk.Frame):
             # self.configFrame.pack_forget()
         self.read_sensor()
         self.on_waveform_button_clicked()
-
+     
         Pd.PLT.plot_all_chanel(self.waveformFrameCanvas.canvas1,
-                               self.parent.origin_config.sensor_config["sensor_data"][0],
-                               self.parent.origin_config.sensor_config["sensor_data"][1],
-                               self.parent.origin_config.sensor_config["sensor_data"][2],
+                               self.parent.origin_config.sensor_config["store_sensor_data"][0],
+                               self.parent.origin_config.sensor_config["store_sensor_data"][1],
+                               self.parent.origin_config.sensor_config["store_sensor_data"][2],
                                self.parent.origin_config.sensor_config["unit"][:3],
                                self.parent.origin_config.sensor_config["sample_rate"])
-        Pd.PLT.plot_fft(self.frequencyFrameCanvas.canvas2, self.parent.origin_config.sensor_config["sensor_data"][0],
-                        self.parent.origin_config.sensor_config["sensor_data"][1],
-                        self.parent.origin_config.sensor_config["sensor_data"][2],
+        Pd.PLT.plot_fft(self.frequencyFrameCanvas.canvas2, self.parent.origin_config.sensor_config["store_sensor_data"][0],
+                        self.parent.origin_config.sensor_config["store_sensor_data"][1],
+                        self.parent.origin_config.sensor_config["store_sensor_data"][2],
                         self.parent.origin_config.sensor_config["sample_rate"],
                         self.parent.origin_config.sensor_config["unit"][:3],
                         [1, 2, 3], win_var="Hanning")
@@ -1250,7 +1249,7 @@ class ConfigFrame(Tk.Frame):
                                            bg='white')
         self.wfConfigFrame.pack(side=Tk.TOP, fill=Tk.BOTH)
 
-        sensorFrame = ttk.LabelFrame(self.wfConfigFrame, text='Sensor configuration', style='config.TLabelframe')
+        sensorFrame = ttk.LabelFrame(self.wfConfigFrame, text=_('Sensor config'), style='config.TLabelframe')
         sensorFrame.grid(column=0, row=0, padx=10, pady=0, ipadx=5, rowspan=9, columnspan=2, sticky='wn')
 
         sensor1Label = ttk.Label(sensorFrame, text=_('Port1'), style='config.TLabel')
@@ -1308,7 +1307,7 @@ class ConfigFrame(Tk.Frame):
         fftLineLabel.grid(column=0, row=7, padx=5, pady=5, sticky='w')
         fftLineCombo = ttk.Combobox(sensorFrame, width=8, textvariable=self.wfParam8, state="readonly", \
                                     font=('Chakra Petch', 13))
-        fftLineCombo['value'] = ('800','1600','3200','6400','12800', '25600', '51200')
+        fftLineCombo['value'] = ('1600','3200','6400','12800', '25600', '51200')
         fftLineCombo.grid(column=1, row=7, padx=0, pady=5, sticky="e")
 
         sampleRateLabel = ttk.Label(sensorFrame, text=_("Fmax "), style='config.TLabel')
