@@ -492,6 +492,9 @@ class DiagnosticPage(Tk.Frame):
             ss1=self.parent.origin_config.waveform_config_struct["Sensor1"]
             ss2=self.parent.origin_config.waveform_config_struct["Sensor2"]
             ss3=self.parent.origin_config.waveform_config_struct["Sensor3"]
+            p1=self.parent.origin_config.waveform_config_struct["Port1Pos"]
+            p2=self.parent.origin_config.waveform_config_struct["Port2Pos"]
+            p3=self.parent.origin_config.waveform_config_struct["Port3Pos"]
             if len(self.parent.origin_config.sensor_config["store_sensor_data"])!=0:
                 canal1 = self.parent.origin_config.sensor_config["store_sensor_data"][0]
                 canal2 = self.parent.origin_config.sensor_config["store_sensor_data"][1]
@@ -521,15 +524,15 @@ class DiagnosticPage(Tk.Frame):
                                         ({len(companylistarr)+1},'{prjCode}', {powerVal}, {rpmVal}, 
                                         '{driveCheckVal}','{machineName}', '{foundationVal}', {gearToothVal}, {bearingBoreVal})""")
                             if ss1 != 'NONE':
-                                cur.execute(f""" INSERT INTO DATA (CODE, DATE, POS, DATA, Sample_rate) VALUES ('{prjCode}', '{date}','{ss1}','{canal1_str}',{sample_rate})""")
+                                cur.execute(f""" INSERT INTO DATA (CODE, DATE, POS, DATA, Sample_rate) VALUES ('{prjCode}', '{date}','{p1+ss1}','{canal1_str}',{sample_rate})""")
                             else:
                                 pass
                             if ss2 != 'NONE':
-                                cur.execute(f""" INSERT INTO DATA (CODE, DATE, POS, DATA, Sample_rate) VALUES ('{prjCode}', '{date}','{ss2}','{canal2_str}',{sample_rate})""")
+                                cur.execute(f""" INSERT INTO DATA (CODE, DATE, POS, DATA, Sample_rate) VALUES ('{prjCode}', '{date}','{p2+ss2}','{canal2_str}',{sample_rate})""")
                             else:
                                 pass
                             if ss3 != 'NONE':
-                                cur.execute(f""" INSERT INTO DATA (CODE, DATE, POS, DATA, Sample_rate) VALUES ('{prjCode}', '{date}','{ss3}','{canal3_str}',{sample_rate})""")
+                                cur.execute(f""" INSERT INTO DATA (CODE, DATE, POS, DATA, Sample_rate) VALUES ('{prjCode}', '{date}','{p3+ss3}','{canal3_str}',{sample_rate})""")
                             else:
                                 pass
                             self.infoLabel2.configure(text=_("Data is saved."), style="normal.TLabel")
@@ -545,17 +548,17 @@ class DiagnosticPage(Tk.Frame):
                             cur.execute(f"""INSERT INTO Project_ID (COM_ID, CODE, POWER, RPM, DRIVEN, NOTE, FOUNDATION, GEARTOOTH, BEARINGBORE) 
                             VALUES ({arr[0][0]},'{prjCode}',{powerVal},{rpmVal},'{driveCheckVal}','{machineName}', '{foundationVal}', {gearToothVal}, {bearingBoreVal})""")
                             if ss1 != 'NONE':
-                                cur.execute(f""" INSERT INTO DATA (CODE, DATE, POS, DATA, Sample_rate) VALUES ('{prjCode}', '{date}', '{ss1}', '{canal1_str}',{sample_rate})""")
+                                cur.execute(f""" INSERT INTO DATA (CODE, DATE, POS, DATA, Sample_rate) VALUES ('{prjCode}', '{date}', '{p1+ss1}', '{canal1_str}',{sample_rate})""")
                             else:
                                 pass
                             if ss2 != 'NONE':
                                 cur.execute(f""" INSERT INTO DATA (CODE, DATE, POS, DATA, Sample_rate) VALUES ('{prjCode}', 
-                                            '{date}','{ss2}','{canal2_str}',{sample_rate})""")
+                                            '{date}','{p2+ss2}','{canal2_str}',{sample_rate})""")
                             else:
                                 pass
                             if ss3 != 'NONE':
                                 cur.execute(f""" INSERT INTO DATA (CODE, DATE, POS, DATA, Sample_rate) VALUES ('{prjCode}', 
-                                            '{date}','{ss3}','{canal3_str}',{sample_rate})""")
+                                            '{date}','{p3+ss3}','{canal3_str}',{sample_rate})""")
                             else:
                                 pass
                             self.infoLabel2.configure(text=_("Data is saved."), style="normal.TLabel")
@@ -567,19 +570,19 @@ class DiagnosticPage(Tk.Frame):
                                 if ss1 != 'NONE':
                                     cur.execute(
                                         f""" INSERT INTO DATA (CODE, DATE, POS, DATA, Sample_rate) VALUES ('{prjCode}', 
-                                                '{date}','{ss1}','{canal1_str}',{sample_rate})""")
+                                                '{date}','{p1+ss1}','{canal1_str}',{sample_rate})""")
                                 else:
                                     pass
                                 if ss2 != 'NONE':
                                     cur.execute(
                                         f""" INSERT INTO DATA (CODE, DATE, POS, DATA, Sample_rate) VALUES ('{prjCode}', 
-                                                '{date}','{ss2}','{canal2_str}',{sample_rate})""")
+                                                '{date}','{p2+ss2}','{canal2_str}',{sample_rate})""")
                                 else:
                                     pass
                                 if ss3 != 'NONE':
                                     cur.execute(
                                         f""" INSERT INTO DATA (CODE, DATE, POS, DATA, Sample_rate) VALUES ('{prjCode}', 
-                                                '{date}','{ss3}','{canal3_str}',{sample_rate})""")
+                                                '{date}','{p3+ss3}','{canal3_str}',{sample_rate})""")
                                 else:
                                     pass
                                 self.infoLabel2.configure(text=_("Data is saved."), style="normal.TLabel")
@@ -1209,6 +1212,10 @@ class ConfigFrame(Tk.Frame):
         self.wfParam13 = Tk.StringVar()
         self.wfParam14 = Tk.StringVar()
         self.wfParam15 = Tk.StringVar()
+        self.wfParam16 = Tk.StringVar()
+        self.wfParam17 = Tk.StringVar()
+        self.wfParam18 = Tk.StringVar()
+
         self.tsa_check = Tk.IntVar()
         self.frqParam1 = Tk.StringVar()
         self.frqParam2 = Tk.StringVar()
@@ -1252,73 +1259,97 @@ class ConfigFrame(Tk.Frame):
         sensorFrame = ttk.LabelFrame(self.wfConfigFrame, text=_('Sensor config'), style='config.TLabelframe')
         sensorFrame.grid(column=0, row=0, padx=10, pady=0, ipadx=5, rowspan=9, columnspan=2, sticky='wn')
 
+        directionLabel = ttk.Label(sensorFrame, text=_('Direction'), style='config.TLabel')
+        directionLabel.grid(column=1, row=0, padx=5, pady=5, sticky='w')
+
+        positionLabel = ttk.Label(sensorFrame, text=_('Position'), style='config.TLabel')
+        positionLabel.grid(column=2, row=0, padx=5, pady=5, sticky='e')
+
         sensor1Label = ttk.Label(sensorFrame, text=_('Port1'), style='config.TLabel')
-        sensor1Label.grid(column=0, row=0, padx=5, pady=5, sticky='w')
+        sensor1Label.grid(column=0, row=1, padx=5, pady=5, sticky='w')
 
         sensor1Combo = ttk.Combobox(sensorFrame, width=8, textvariable=self.wfParam1, state="readonly",
                                     font=('Chakra Petch', 13))
         sensor1Combo['value'] = ('NONE', 'HA', 'VA', 'AA', 'HV', 'VV', 'AV')
-        sensor1Combo.grid(column=1, row=0, padx=0, pady=5, sticky='e')
+        sensor1Combo.grid(column=1, row=1, padx=0, pady=5, sticky='e')
+
+        port1PosCombo = ttk.Combobox(sensorFrame, width=2, textvariable=self.wfParam16, state="readonly",
+                                    font=('Chakra Petch', 13))
+        port1PosCombo['value'] = ('A', 'B', 'C', 'D', 'E')
+        port1PosCombo.current(0)
+        port1PosCombo.grid(column=2, row=1, padx=0, pady=5, sticky='e')
 
         sensor2Label = ttk.Label(sensorFrame, text=_('Port2'), style='config.TLabel')
-        sensor2Label.grid(column=0, row=1, padx=5, pady=5, sticky='w')
+        sensor2Label.grid(column=0, row=2, padx=5, pady=5, sticky='w')
 
         sensor2Combo = ttk.Combobox(sensorFrame, width=8, textvariable=self.wfParam2, state="readonly",
                                     font=('Chakra Petch', 13))
         sensor2Combo['value'] = ('NONE', 'HA', 'VA', 'AA', 'HV', 'VV', 'AV')
-        sensor2Combo.grid(column=1, row=1, padx=0, pady=5, sticky='e')
+        sensor2Combo.grid(column=1, row=2, padx=0, pady=5, sticky='e')
+
+        port2PosCombo = ttk.Combobox(sensorFrame, width=2, textvariable=self.wfParam17, state="readonly",
+                                    font=('Chakra Petch', 13))
+        port2PosCombo['value'] = ('A', 'B', 'C', 'D', 'E')
+        port2PosCombo.current(0)
+        port2PosCombo.grid(column=2, row=2, padx=0, pady=5, sticky='e')
 
         sensor3Label = ttk.Label(sensorFrame, text=_('Port3'), style='config.TLabel')
-        sensor3Label.grid(column=0, row=2, padx=5, pady=5, sticky='w')
+        sensor3Label.grid(column=0, row=3, padx=5, pady=5, sticky='w')
 
         sensor3Combo = ttk.Combobox(sensorFrame, width=8, textvariable=self.wfParam3, state="readonly",
                                     font=('Chakra Petch', 13))
         sensor3Combo['value'] = ('NONE', 'HA', 'VA', 'AA', 'HV', 'VV', 'AV')
-        sensor3Combo.grid(column=1, row=2, padx=0, pady=5, sticky='e')
+        sensor3Combo.grid(column=1, row=3, padx=0, pady=5, sticky='e')
+
+        port3PosCombo = ttk.Combobox(sensorFrame, width=2, textvariable=self.wfParam18, state="readonly",
+                                    font=('Chakra Petch', 13))
+        port3PosCombo['value'] = ('A', 'B', 'C', 'D', 'E')
+        port3PosCombo.current(0)
+        port3PosCombo.grid(column=2, row=3, padx=0, pady=5, sticky='e')
 
         sensor4Label = ttk.Label(sensorFrame, text=_('Port4'), style='config.TLabel')
-        sensor4Label.grid(column=0, row=3, padx=5, pady=5, sticky='w')
+        sensor4Label.grid(column=0, row=4, padx=5, pady=5, sticky='w')
 
         sensor4Combo = ttk.Combobox(sensorFrame, width=8, textvariable=self.wfParam4, state="readonly",
                                     font=('Chakra Petch', 13))
         sensor4Combo['value'] = ('NONE', 'TACHOMETER')
-        sensor4Combo.grid(column=1, row=3, padx=0, pady=5, sticky='e')
+        sensor4Combo.grid(column=1, row=4, padx=0, pady=5, sticky='e')
 
         keyLabel = ttk.Label(sensorFrame, text=_('Key sensor'), style='config.TLabel')
-        keyLabel.grid(column=0, row=4, padx=5, pady=5, sticky="w")
+        keyLabel.grid(column=0, row=5, padx=5, pady=5, sticky="w")
         keyCombo = ttk.Combobox(sensorFrame, width=8, textvariable=self.wfParam5, state="readonly",
                                 font=('Chakra Petch', 13))
         keyCombo['value'] = ('Sensor1', 'Sensor2', 'Sensor3')
         # keyCombo.current(0)
-        keyCombo.grid(column=1, row=4, padx=0, pady=5, sticky="e")
+        keyCombo.grid(column=1, row=5, padx=0, pady=5, sticky="e")
 
         tsaCheckButton1 = ttk.Checkbutton(sensorFrame, text=_("  Use TSA"), offvalue=0, onvalue=1,
                                           variable=self.tsa_check, command=self.update_text_tsa,
                                           style="config.Switch.TCheckbutton")
-        tsaCheckButton1.grid(column=1, row=5, padx=0, pady=5, sticky='w')
+        tsaCheckButton1.grid(column=1, row=6, padx=0, pady=5, sticky='w')
 
         tsaLabel = ttk.Label(sensorFrame, text=_("TSA times"), style='config.TLabel')
-        tsaLabel.grid(column=0, row=6, padx=5, pady=5, sticky='w')
+        tsaLabel.grid(column=0, row=7, padx=5, pady=5, sticky='w')
         self.tsaEntry = ttk.Entry(sensorFrame, width=10, textvariable=self.wfParam6,
                                   state="disable", font=('Chakra Petch', 13))
-        self.tsaEntry.grid(column=1, row=6, padx=0, pady=5, ipadx=3, sticky='e')
+        self.tsaEntry.grid(column=1, row=7, padx=0, pady=5, ipadx=3, sticky='e')
 
         fftLineLabel = ttk.Label(sensorFrame, text=_("FFT lines"), style='config.TLabel')
-        fftLineLabel.grid(column=0, row=7, padx=5, pady=5, sticky='w')
+        fftLineLabel.grid(column=0, row=8, padx=5, pady=5, sticky='w')
         fftLineCombo = ttk.Combobox(sensorFrame, width=8, textvariable=self.wfParam8, state="readonly", \
                                     font=('Chakra Petch', 13))
         fftLineCombo['value'] = ('1600','3200','6400','12800', '25600', '51200')
-        fftLineCombo.grid(column=1, row=7, padx=0, pady=5, sticky="e")
+        fftLineCombo.grid(column=1, row=8, padx=0, pady=5, sticky="e")
 
         sampleRateLabel = ttk.Label(sensorFrame, text=_("Fmax "), style='config.TLabel')
-        sampleRateLabel.grid(column=0, row=8, padx=5, pady=5, sticky='w')
+        sampleRateLabel.grid(column=0, row=9, padx=5, pady=5, sticky='w')
         sampleRateEntry = ttk.Entry(sensorFrame, width=10, textvariable=self.wfParam7, validate="key",
                                     font=('Chakra Petch', 13))
         sampleRateEntry['validatecommand'] = (sampleRateEntry.register(testVal), '%P', '%d')
-        sampleRateEntry.grid(column=1, row=8, padx=0, pady=5, ipadx=3, sticky='e')
+        sampleRateEntry.grid(column=1, row=9, padx=0, pady=5, ipadx=3, sticky='e')
         ###
         frqConfigFrame = ttk.LabelFrame(self.wfConfigFrame, text=_('Filter configuration'), style='config.TLabelframe')
-        frqConfigFrame.grid(column=2, row=0, padx=30, ipadx=5, pady=0, sticky='w')
+        frqConfigFrame.grid(column=2, row=0, padx=20, ipadx=5, pady=0, sticky='w')
 
         filterLabel = ttk.Label(frqConfigFrame, text=_('Filter type'), style='config.TLabel')
         filterLabel.grid(column=0, row=0, padx=5, pady=5, sticky="w")
@@ -1443,6 +1474,9 @@ class ConfigFrame(Tk.Frame):
         origin_config.waveform_config_struct["Sensor2"] = self.wfParam2.get()
         origin_config.waveform_config_struct["Sensor3"] = self.wfParam3.get()
         origin_config.waveform_config_struct["Sensor4"] = self.wfParam4.get()
+        origin_config.waveform_config_struct["Port1Pos"] = self.wfParam16.get()
+        origin_config.waveform_config_struct["Port2Pos"] = self.wfParam17.get()
+        origin_config.waveform_config_struct["Port3Pos"] = self.wfParam18.get()
         origin_config.waveform_config_struct["KeyPhase"] = self.wfParam5.get()
         origin_config.waveform_config_struct["UseTSA"] = self.tsa_check.get()
         origin_config.waveform_config_struct["MachineType"] = self.wfParam9.get()

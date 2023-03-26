@@ -49,6 +49,9 @@ class TotalConfig(object):
             "Sensor2": 'NONE',
             "Sensor3": 'NONE',
             "Sensor4": 'NONE',
+            "Port1Pos": 'A',
+            "Port2Pos": 'A',
+            "Port3Pos": 'A',
             "KeyPhase": "Sensor1",
             "UseTSA": 0,
             "TSATimes": 10,
@@ -93,7 +96,7 @@ class TotalConfig(object):
         }
         self.history_config_struct={
                     "ProjectID":"",
-                    "SensorPosition":"HA",
+                    "SensorPosition":"",
                     "PlotType":"TREND",
                     "FilterFrom":1400,
                     "FilterTo":14000,

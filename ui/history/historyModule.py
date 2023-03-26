@@ -184,16 +184,10 @@ class historyConfig(Tk.Frame):
 
         positionLabel = ttk.Label(historyFrame, text=_('Sensor Position'), style="history.TLabel")
         positionLabel.grid(column=0, row=1, padx=5, pady=5, sticky="w")
-        positionCombo=ttk.Combobox(historyFrame, width=10, textvariable=self.historyParam2, state="readonly",
+        self.positionCombo=ttk.Combobox(historyFrame, width=10, textvariable=self.historyParam2, state="readonly",
                                     font=('Chakra Petch', 13))
-        positionCombo['value'] = ('HA','VA','AA','HV','VV','AV')
-        positionCombo.grid(column=1, row=1, padx=(0, 10), pady=5, ipadx=7, sticky="e")
-
-        # plotLabel = ttk.Label(historyFrame, text=_('Plot Type'), style="history.TLabel")
-        # plotLabel.grid(column=0, row=2, padx=5, pady=5, sticky="w")
-        # plotCombo=ttk.Combobox(historyFrame, width=10, textvariable=self.historyParam3, state="readonly")
-        # plotCombo['value'] = ('WAVEFORM','FREQUENCY', 'VEL FREQUENCY','ENVELOPED','WATERFALL','STFT', 'TREND')
-        # plotCombo.grid(column=1, row=2, padx=0, pady=5, ipadx=3, sticky="e")
+        self.positionCombo.bind("<Button-1>", self.find_position_list)
+        self.positionCombo.grid(column=1, row=1, padx=(0, 10), pady=5, ipadx=7, sticky="e")
 
         filterFromLabel = ttk.Label(historyFrame, text=_("Bandpass Filter From"), style="history.TLabel")
         filterFromLabel.grid(column=0, row=3, padx=5, pady=5, sticky='w')
@@ -221,7 +215,7 @@ class historyConfig(Tk.Frame):
         
         tsaCheckButton=ttk.Checkbutton(historyFrame, text=_("Use Average"), offvalue=0, onvalue=1, 
                             variable=self.tsa_var, command=self.update_text_tsa, style="history.Switch.TCheckbutton")
-        tsaCheckButton.grid(column=1,row=7, padx=0, pady=5, sticky='w')
+        tsaCheckButton.grid(column=1,row=7, padx=(0,5), pady=5, sticky='e')
 
         tsaLabel = ttk.Label(historyFrame, text=_("Average Bin"), style="history.TLabel")
         tsaLabel.grid(column=0, row=8, padx=5, pady=5, sticky='w')
@@ -232,7 +226,7 @@ class historyConfig(Tk.Frame):
 
         self.applyBt = ttk.Button(historyFrame, style='Accent.TButton', text=_("APPLY"),
                                    command=lambda: self.update_config_struct(history_config_struct))
-        self.applyBt.grid(column=1, row=9, padx=(0, 10), pady=(30,5), ipadx=52, ipady=5, sticky='w')
+        self.applyBt.grid(column=1, row=9, padx=(0, 10), pady=(30,5), ipadx=32, ipady=5, sticky='w')
 
         databaseConfigFrame = ttk.LabelFrame(self, text=_('Project Table'), style="history.TLabelframe")
         databaseConfigFrame.grid(column=1, row=0, padx=60, pady=0, sticky='ne')
@@ -292,7 +286,23 @@ class historyConfig(Tk.Frame):
                 showstring+= str(load_data_arr[k][0])+'\t'+'   '+ str(load_data_arr[k][1])+'\t'+ '\t'+ str(load_data_arr[k][2])+\
                 '\t'+ str(load_data_arr[k][3])+'\n'
             return showstring
+        
 
+    def find_position_list(self, event):
+        prjCode=self.historyParam1.get()
+        self.historyParam2.set("")
+        with self.con:
+            cur=self.con.cursor()
+            cur.execute(f"SELECT POS FROM DATA WHERE CODE = '{prjCode}' ORDER BY DATE ASC")
+            load_data = cur.fetchall()
+            load_data_arr = [i for i in load_data]
+        posList=[]
+        for i in range(len(load_data)):
+            posList.append(load_data_arr[i][0])
+        new_list = []
+        [new_list.append(item) for item in posList if item not in new_list]
+        self.positionCombo['value'] = tuple(new_list)
+        
     def delete_project(self):
         try:
             prjCode = self.historyParam1.get()
@@ -362,27 +372,30 @@ class SideButtonFrame(Tk.Frame):
         saveBt = ttk.Button(self, style='custom.Accent.TButton', text=_("EXPORT\nREPORT"), command=self.report)
         saveBt.place(x=0, y=425, width=88, height=75)
 
+        exportDataBt = ttk.Button(self, style='custom.Accent.TButton', text=_("EXPORT\n.CSV"), command=self.export_from_db)
+        exportDataBt.place(x=0, y=348, width=88, height=75)
+
         freqZoomBt = ttk.Button(self, style='custom.Accent.TButton', text=_("ZOOM"),
                                 image=self.zoomPhoto,
                                 compound=Tk.TOP,
                                 command=lambda: self.on_zoom_button_clicked(827, 117))
-        freqZoomBt.place(x=0, y=348, width=88, height=75)
+        freqZoomBt.place(x=0, y=271, width=88, height=75)
         freqZoomBt.image = self.zoomPhoto
 
         self.freqCursorLeftBt = ttk.Button(self, style='custom.Accent.TButton', text=_("CURSOR\nLEFT"),
                                 command=lambda:self.Tracking(False))
-        self.freqCursorLeftBt.place(x=0, y=271, width=88, height=75)
+        self.freqCursorLeftBt.place(x=0, y=194, width=88, height=75)
 
         self.freqCursorRightBt = ttk.Button(self, style='custom.Accent.TButton', text=_("CURSOR\nRIGHT"),
                                 command=lambda:self.Tracking(True))
-        self.freqCursorRightBt.place(x=0, y=194, width=88, height=75)
+        self.freqCursorRightBt.place(x=0, y=117, width=88, height=75)
 
         # self.freqGridtBt = ttk.Button(self, style='custom.Accent.TButton', text="RESERVE", state="disable")
         # self.freqGridtBt.place(x=0, y=117, width=88, height=75)
 
         self.freqFunctionBt = ttk.Button(self, style='custom.Accent.TButton', text=_("PLOT\nNONE"),
                                 command=lambda:self.on_plot_button_clicked(827, 40))
-        self.freqFunctionBt.place(x=0, y=117, width=88, height=75)
+        self.freqFunctionBt.place(x=0, y=40, width=88, height=75)
 
     def on_zoom_button_clicked(self, x_pos, y_pos):
         global blink, blink1
@@ -658,6 +671,60 @@ class SideButtonFrame(Tk.Frame):
             except:
                 self.infoLabel.config(text=_("Data errors."))
 
+
+    def export_from_db(self):
+        try:
+            if pms.general_warning(_("Do you want to export data to .CSV file")):
+                result_arr2=[]
+                pos_arr=[]
+                date_arr=[]
+                
+                file_name = ''
+                save_path=f"{parent_directory}/storage/"
+                ProjectCode=self.history_config_struct["ProjectID"]
+                
+                with self.con:
+                    cur = self.con.cursor()
+                    cur.execute(f"SELECT DATA, POS, DATE FROM DATA WHERE CODE = '{ProjectCode}' ORDER BY DATE ASC")
+                    load_data = cur.fetchall()
+                    cur.execute(f"SELECT COM_ID FROM Project_ID WHERE CODE = '{ProjectCode}'")
+                    machineParam = cur.fetchall()
+                load_data_arr = [i for i in load_data]
+                machine_param_arr = [i for i in machineParam]
+                comId=machine_param_arr[0][0]
+                
+                with self.con:
+                    cur = self.con.cursor()
+                    cur.execute(f"SELECT NAME FROM Company_ID WHERE COM_ID = '{comId}'")
+                    companyTuple=cur.fetchall()
+                companyName= companyTuple[0][0]
+                name=companyName + '_' + ProjectCode+'__'
+                if name =='':
+                    file_name +='NONAME_DATA__-__-__'
+                else:
+                    file_name += name
+
+                if len(load_data_arr)!=0:
+                    for ari in load_data_arr:
+                        result_arr2.append(file_operation.extract_str(ari[0]))
+                        pos_arr.append(ari[1])
+                        date_arr.append(ari[2])
+                    
+
+                    for i in range(len(pos_arr)):
+                        new_file_name= f'_{str(i+1)}_' + file_name + date_arr[i] + pos_arr[i] + '.csv'
+                        completeName = os.path.join(save_path, new_file_name)  
+                        file_operation.store_data(result_arr2[i], completeName)
+                    
+                    self.infoLabel.configure(text=_("Export CSV is completed"))
+                else:
+                    self.infoLabel.configure(text=_("There is no data, please check input value !"))
+            else:
+                pass
+        except Exception as ex:
+            print("Export from db error", ex)
+
+
     def report(self):
         from docx.shared import Inches
         save_path=f"{parent_directory}/storage/"
@@ -728,7 +795,7 @@ class SideButtonFrame(Tk.Frame):
                     if filter_from >= filter_to:
                         filter_from= dfc._ENV_BANDPASS_FROM
                         filter_to= dfc._ENV_BANDPASS_TO
-                        self.infoLabel.config(text=_("Filter bandpass frequency is wrong. Use the default value."))
+                        self.infoLabel.configure(text=_("Filter bandpass frequency is wrong. Use the default value."))
                     else:
                         pass
                     temp_result_arr=[]
@@ -784,11 +851,11 @@ class SideButtonFrame(Tk.Frame):
                     img = qr.make_image(fill_color = 'black', back_color = 'white')
                     img.save(save_path + 'MyQRCode2.png')
                     Pd.PLT.plot_image(self.canvas, 'MyQRCode2.png', self.link)
-                    self.infoLabel.config(text=_("Report is exported. Use QR code scanner to see the report."))
+                    self.infoLabel.configure(text=_("Report is exported. Use QR code scanner to see the report."))
                 else:
-                    self.infoLabel.config(text=_("There is no data, please check SETTING !"))
+                    self.infoLabel.configure(text=_("There is no data, please check SETTING !"))
         except:
-            self.infoLabel.config(text=_("Data errors."))
+            self.infoLabel.configure(text=_("Data errors."))
 
 class HistoryPlotCanvas(Tk.Frame):
     def __init__(self, parent):
