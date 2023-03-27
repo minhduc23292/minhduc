@@ -102,9 +102,14 @@ class BatteryFrame(Tk.Frame):
     def read_battery(self):
         global remainCap, stateOfCharge, remainVolt
         with self.lock:
-            remainCap = round(self.batery.get_remaining_capacity())
-            remainVolt=self.batery.bq27510_battery_voltage()
-            if self.batery.bq27510_battery_current() > 0:
-                stateOfCharge = "CHARGING"
-            else:
+            try:
+                remainCap = round(self.batery.get_remaining_capacity())
+                remainVolt=self.batery.bq27510_battery_voltage()
+                if self.batery.bq27510_battery_current() > 0:
+                    stateOfCharge = "CHARGING"
+                else:
+                    stateOfCharge = "DISCHARGE"
+            except:
+                remainCap = 30
+                remainVolt = 3.0
                 stateOfCharge = "DISCHARGE"
