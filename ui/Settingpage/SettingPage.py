@@ -27,7 +27,7 @@ stateOfCharge = "CHARGING"
 firstTime = True
 current_directory = os.path.dirname(os.path.realpath(__file__))
 parent_directory = os.path.dirname(os.path.dirname(current_directory))
-ds3231 = DS3231(1, 0x68)
+
 def testVal(inStr, acttyp):
     if acttyp == '1':  # insert
         if not inStr.isdigit():
@@ -40,13 +40,16 @@ def testFloat(inStr, acttyp):
             return False
     return True
 
-def get_time_now(date_time_flag):
-        rtcTime=str(ds3231.read_datetime())
-        # rtcTime=time.strftime("%Y-%m-%d %H:%M:%S")
-        if (date_time_flag==1):
-            return rtcTime[11:16]
-        else:
+def get_time_now():
+        try:
+            ds3231 = DS3231(1, 0x69)
+            rtcTime=str(ds3231.read_datetime())
             return rtcTime[:10]
+        except Exception as ex:
+            print(ex)
+            now = datetime.now()
+            current_time = now.strftime("%Y-%m-%d")
+            return current_time
 
 class SettingPage(Tk.Frame):
     def __init__(self, parent: "Application"):
@@ -193,7 +196,7 @@ class GeneralConfig(Tk.Frame):
         self.applyButton.configure(state="disable")
 
     def on_get_time_now_button_clicked(self):
-        text=get_time_now(0)
+        text=get_time_now()
         self.prjParam3.set(text)
 
 
@@ -467,8 +470,11 @@ class Power(Tk.Frame):
 
     def on_shutdown_button_clicked(self):
         if (pms.company_project_shutdown_warning()):
-            with self.lock:
-                self.batery.i2c_send_turn_off()
+            try:
+                with self.lock:
+                    self.batery.i2c_send_turn_off()
+            except:
+                pass
             os.system("sudo shutdown -h now")
         else:
             pass

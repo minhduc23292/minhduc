@@ -3,7 +3,7 @@ from tkinter import ttk
 import threading
 from threading import Lock
 import os
-
+from datetime import datetime
 from bateryMonitor.powerManager import BQ27510
 from ds3231.ds3231B import DS3231
 from image.image import ImageAdrr
@@ -18,7 +18,6 @@ class BatteryFrame(Tk.Frame):
         super().__init__(master, bd=1, bg='grey95', width=130, height=35, **kwargs)
         self.style = ttk.Style()
         self.style.configure('bat.TLabel', font=('Chakra Petch', 13))
-        self.ds3231 = DS3231(1, 0x68)
         self.batery=BQ27510()
         self.lock=Lock()
         imageAddress = ImageAdrr()
@@ -51,10 +50,16 @@ class BatteryFrame(Tk.Frame):
         self.timeLabel.after(5000, self.update_time)
 
     def get_time_now(self):
-        ds3231 = DS3231(1, 0x68)
-        rtcTime=str(ds3231.read_datetime())
-        # rtcTime=time.strftime("%Y-%m-%d %H:%M:%S")
-        return rtcTime[11:16]
+        try:
+            ds3231 = DS3231(1, 0x69)
+            rtcTime=str(ds3231.read_datetime())
+            # rtcTime=time.strftime("%Y-%m-%d %H:%M:%S")
+            return rtcTime[11:16]
+        except Exception as ex:
+            print(ex)
+            now = datetime.now()
+            current_time = now.strftime("%H:%M")
+            return current_time
 
     def update_bat(self):
         global firstTime, remainCap, stateOfCharge, remainVolt
@@ -87,8 +92,11 @@ class BatteryFrame(Tk.Frame):
                 firstTime = False
             if remainVolt <= 2.85:
                 if stateOfCharge !="CHARGING":
-                    with self.lock:
-                        self.batery.i2c_send_turn_off()
+                    try:
+                        with self.lock:
+                            self.batery.i2c_send_turn_off()
+                    except:
+                        pass
                     os.system("sudo shutdown -h now")
         self.batLabel.after(10000, self.update_bat)
 
