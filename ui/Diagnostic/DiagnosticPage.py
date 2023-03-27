@@ -1242,6 +1242,9 @@ class ConfigFrame(Tk.Frame):
         self.wfParam13.set(origin_config.waveform_config_struct["BearingBore"])
         self.wfParam14.set(origin_config.waveform_config_struct["MachineName"])
         self.wfParam15.set(origin_config.waveform_config_struct["Foundation"])
+        self.wfParam16.set(origin_config.waveform_config_struct["Port1Pos"])
+        self.wfParam17.set(origin_config.waveform_config_struct["Port2Pos"])
+        self.wfParam18.set(origin_config.waveform_config_struct["Port3Pos"])
 
         self.frqParam1.set(origin_config.frequency_config_struct["FilterType"])
         self.frqParam2.set(origin_config.frequency_config_struct["Window"])
@@ -1276,7 +1279,6 @@ class ConfigFrame(Tk.Frame):
         port1PosCombo = ttk.Combobox(sensorFrame, width=2, textvariable=self.wfParam16, state="readonly",
                                     font=('Chakra Petch', 13))
         port1PosCombo['value'] = ('A', 'B', 'C', 'D', 'E')
-        port1PosCombo.current(0)
         port1PosCombo.grid(column=2, row=1, padx=0, pady=5, sticky='e')
 
         sensor2Label = ttk.Label(sensorFrame, text=_('Port2'), style='config.TLabel')
@@ -1290,7 +1292,7 @@ class ConfigFrame(Tk.Frame):
         port2PosCombo = ttk.Combobox(sensorFrame, width=2, textvariable=self.wfParam17, state="readonly",
                                     font=('Chakra Petch', 13))
         port2PosCombo['value'] = ('A', 'B', 'C', 'D', 'E')
-        port2PosCombo.current(0)
+
         port2PosCombo.grid(column=2, row=2, padx=0, pady=5, sticky='e')
 
         sensor3Label = ttk.Label(sensorFrame, text=_('Port3'), style='config.TLabel')
@@ -1304,7 +1306,7 @@ class ConfigFrame(Tk.Frame):
         port3PosCombo = ttk.Combobox(sensorFrame, width=2, textvariable=self.wfParam18, state="readonly",
                                     font=('Chakra Petch', 13))
         port3PosCombo['value'] = ('A', 'B', 'C', 'D', 'E')
-        port3PosCombo.current(0)
+
         port3PosCombo.grid(column=2, row=3, padx=0, pady=5, sticky='e')
 
         sensor4Label = ttk.Label(sensorFrame, text=_('Port4'), style='config.TLabel')
