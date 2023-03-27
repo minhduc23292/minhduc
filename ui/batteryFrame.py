@@ -56,7 +56,6 @@ class BatteryFrame(Tk.Frame):
             # rtcTime=time.strftime("%Y-%m-%d %H:%M:%S")
             return rtcTime[11:16]
         except Exception as ex:
-            print(ex)
             now = datetime.now()
             current_time = now.strftime("%H:%M")
             return current_time

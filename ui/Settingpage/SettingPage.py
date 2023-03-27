@@ -46,7 +46,6 @@ def get_time_now():
             rtcTime=str(ds3231.read_datetime())
             return rtcTime[:10]
         except Exception as ex:
-            print(ex)
             now = datetime.now()
             current_time = now.strftime("%Y-%m-%d")
             return current_time
