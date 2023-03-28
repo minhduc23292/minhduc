@@ -139,8 +139,18 @@ def tracking_signal(sensor_dict, range_freq):
     phase_shift3 = phase_arr3[key_pos] - key_phase[key_pos]
     return [max1, max2, max3, phase_shift1, phase_shift2, phase_shift3, key_pos * resolution]
 
+def tracking_signal_no_phase_shift(x1, y1, y2, y3, range_freq):
+    temXarray=x1[find_nearest_element(x1, range_freq[0]): find_nearest_element(x1, range_freq[1])]
+    temY2array=y2[find_nearest_element(x1, range_freq[0]): find_nearest_element(x1, range_freq[1])]    
+    temY3array=y3[find_nearest_element(x1, range_freq[0]): find_nearest_element(x1, range_freq[1])]    
 
-def tab4_tracking_signal(data_arr, _sample_rate, range_freq):
+    [key_pos1, key_max1] = find_max(y1[find_nearest_element(x1, range_freq[0]): find_nearest_element(x1, range_freq[1])])
+    key_max2=temY2array[key_pos1]
+    key_max3=temY3array[key_pos1]
+
+    return [key_max1, key_max2, key_max3, temXarray[key_pos1]]
+
+def tab4_tracking_signal_old(data_arr, _sample_rate, range_freq):
     N = len(data_arr)
     w = signal.hann(N, sym=False)
     yf1 = fftpack.fft(data_arr * w) * (2*np.sqrt(2) / N)
@@ -150,6 +160,18 @@ def tab4_tracking_signal(data_arr, _sample_rate, range_freq):
     key_pos += int(range_freq[0] / resolution)
     max1 = float(module1[key_pos])
     return [max1, key_pos * resolution]
+
+def find_nearest_element(arr, value):
+    i=0
+    while(arr[i]<value):
+        i+=1
+    return i
+
+def tab4_tracking_signal(data_arrY, data_arrX, _sample_rate, range_freq):
+    temXarray=data_arrX[find_nearest_element(data_arrX, range_freq[0]): find_nearest_element(data_arrX, range_freq[1])]
+    [key_pos, key_max] = find_max(data_arrY[find_nearest_element(data_arrX, range_freq[0]): find_nearest_element(data_arrX, range_freq[1])])
+    return [key_max, temXarray[key_pos]]
+
 
 
 def phase_shift(arr1, arr2, samples_per_second):

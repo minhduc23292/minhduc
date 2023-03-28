@@ -518,6 +518,11 @@ class SideButtonFrame(Tk.Frame):
         tracking_freq=self.origin_config.resonance_config_struct["Tracking"]
         axes_arr = self.parent.resonancePlotFrame.canvas1.figure.get_axes()
         if len(axes_arr)>0:
+            if axes_arr[0].name=='3d':
+                return
+            else:
+                x_data=axes_arr[0].lines[0].get_xdata()
+                y_data=axes_arr[0].lines[0].get_ydata()
             [xleft, xright] = axes_arr[1].get_xlim()
             
             if dir==True:
@@ -543,7 +548,7 @@ class SideButtonFrame(Tk.Frame):
             try:
                 
                 _sample_rate=self.origin_config.resonance_config_struct["sampleRate"]
-                [max1, freq]=tab4_tracking_signal(resonance_data, _sample_rate, [start_freq, stop_freq])
+                [max1, freq]=tab4_tracking_signal(y_data, x_data, _sample_rate, [start_freq, stop_freq])
                 title= 'Frequency: '+ f'{str(freq)[:4]}'+' hz'
                 Pd.PLT.plot_grid_specific(self.parent.resonancePlotFrame.canvas1, freq, title, False)
                 

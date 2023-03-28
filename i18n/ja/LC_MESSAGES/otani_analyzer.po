@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-27 10:06+0700\n"
+"POT-Creation-Date: 2023-03-27 14:45+0700\n"
 "PO-Revision-Date: 2022-11-02 18:09+0900\n"
 "Last-Translator: Le Phuong <lephuong@phuonglh>\n"
 "Language-Team: Japanese\n"
@@ -54,7 +54,7 @@ msgstr "入力"
 
 #: ui/balancingModule/balancingModule.py:95 ui/history/historyModule.py:93
 #: ui/ResonanceModule/ResonanceModule.py:106
-#: ui/Diagnostic/DiagnosticPage.py:166 ui/Settingpage/SettingPage.py:112
+#: ui/Diagnostic/DiagnosticPage.py:166 ui/Settingpage/SettingPage.py:114
 msgid "Home"
 msgstr "ホーム"
 
@@ -70,7 +70,7 @@ msgstr " バランス"
 
 #: ui/balancingModule/balancingModule.py:119 ui/history/historyModule.py:117
 #: ui/ResonanceModule/ResonanceModule.py:130
-#: ui/Diagnostic/DiagnosticPage.py:195 ui/Settingpage/SettingPage.py:124
+#: ui/Diagnostic/DiagnosticPage.py:195 ui/Settingpage/SettingPage.py:126
 msgid "Information"
 msgstr "情報"
 
@@ -139,8 +139,8 @@ msgstr "ブレード数"
 
 #: ui/balancingModule/balancingModule.py:279 ui/history/historyModule.py:227
 #: ui/ResonanceModule/ResonanceModule.py:277
-#: ui/Diagnostic/DiagnosticPage.py:225 ui/Settingpage/SettingPage.py:181
-#: ui/Settingpage/SettingPage.py:240
+#: ui/Diagnostic/DiagnosticPage.py:225 ui/Settingpage/SettingPage.py:183
+#: ui/Settingpage/SettingPage.py:242
 msgid "APPLY"
 msgstr "申し込み"
 
@@ -433,7 +433,6 @@ msgid "View Limit"
 msgstr "ビュー制限"
 
 #: ui/history/historyModule.py:210 ui/ResonanceModule/ResonanceModule.py:263
-#: ui/Diagnostic/DiagnosticPage.py:1387
 msgid "Tracking resolution"
 msgstr "追跡の解像度"
 
@@ -801,8 +800,8 @@ msgstr ""
 "分析"
 
 #: ui/Diagnostic/DiagnosticPage.py:221
-msgid "APPLY and START"
-msgstr "申し込み & スタート "
+msgid "APPLY & START"
+msgstr "スタート "
 
 #: ui/Diagnostic/DiagnosticPage.py:230 ui/Diagnostic/DiagnosticPage.py:252
 #: ui/Diagnostic/DiagnosticPage.py:288
@@ -929,7 +928,7 @@ msgstr ""
 msgid "GRID OFF"
 msgstr "グリッドオフ"
 
-#: ui/Diagnostic/DiagnosticPage.py:1262 ui/Settingpage/SettingPage.py:221
+#: ui/Diagnostic/DiagnosticPage.py:1262 ui/Settingpage/SettingPage.py:223
 msgid "Sensor config"
 msgstr "センサー設定: "
 
@@ -993,6 +992,10 @@ msgstr "フィルターから (Hz)"
 msgid "Filter To (Hz)"
 msgstr "フィルターへ (Hz)"
 
+#: ui/Diagnostic/DiagnosticPage.py:1387
+msgid "Tracking step"
+msgstr "追跡の解像度"
+
 #: ui/Diagnostic/DiagnosticPage.py:1394
 msgid "Mesh grid"
 msgstr "メッシュ グリッド"
@@ -1053,113 +1056,113 @@ msgstr "チャンネル 2"
 msgid "Channel3"
 msgstr "チャンネル 3"
 
-#: ui/Settingpage/SettingPage.py:121
+#: ui/Settingpage/SettingPage.py:123
 msgid "Setting"
 msgstr "設定"
 
-#: ui/Settingpage/SettingPage.py:152
+#: ui/Settingpage/SettingPage.py:154
 msgid "Project config"
 msgstr "プロジェクト設定"
 
-#: ui/Settingpage/SettingPage.py:155
+#: ui/Settingpage/SettingPage.py:157
 msgid "Project Code*"
 msgstr "プロジェクトコード*"
 
-#: ui/Settingpage/SettingPage.py:163
+#: ui/Settingpage/SettingPage.py:165
 msgid "Company Name"
 msgstr "会社"
 
-#: ui/Settingpage/SettingPage.py:170
+#: ui/Settingpage/SettingPage.py:172
 msgid "Date"
 msgstr ""
 
-#: ui/Settingpage/SettingPage.py:177
+#: ui/Settingpage/SettingPage.py:179
 msgid "Get time now"
 msgstr "現在の時刻を取得"
 
-#: ui/Settingpage/SettingPage.py:224
+#: ui/Settingpage/SettingPage.py:226
 msgid "Accelerometer Sensitivity(mmV/g)"
 msgstr "加速振動センサー(mmV/g)"
 
-#: ui/Settingpage/SettingPage.py:232
+#: ui/Settingpage/SettingPage.py:234
 msgid "Velocity Transducer Sensitivity (mmV/m/s)"
 msgstr "速度振動センサー(mmV/m/s)"
 
-#: ui/Settingpage/SettingPage.py:261
+#: ui/Settingpage/SettingPage.py:263
 msgid ""
 "Restart is required to change the sensor sensitivity. Do you want to restart "
 "now"
 msgstr "センサーの感度を変更するには再起動が必要です。 今すぐ再起動しますか"
 
-#: ui/Settingpage/SettingPage.py:283
+#: ui/Settingpage/SettingPage.py:285
 msgid "GENERAL"
 msgstr "全般"
 
-#: ui/Settingpage/SettingPage.py:284
+#: ui/Settingpage/SettingPage.py:286
 msgid "SENSOR"
 msgstr "センサー"
 
-#: ui/Settingpage/SettingPage.py:285
+#: ui/Settingpage/SettingPage.py:287
 msgid "WIFI"
 msgstr ""
 
-#: ui/Settingpage/SettingPage.py:286
+#: ui/Settingpage/SettingPage.py:288
 msgid "LANGUAGE"
 msgstr "言語"
 
-#: ui/Settingpage/SettingPage.py:287
+#: ui/Settingpage/SettingPage.py:289
 msgid "POWER"
 msgstr "パワー"
 
-#: ui/Settingpage/SettingPage.py:324
+#: ui/Settingpage/SettingPage.py:326
 msgid "Wifi config"
 msgstr "WIFI設定"
 
-#: ui/Settingpage/SettingPage.py:344
+#: ui/Settingpage/SettingPage.py:346
 msgid "Password"
 msgstr "パスワード"
 
-#: ui/Settingpage/SettingPage.py:355
+#: ui/Settingpage/SettingPage.py:357
 msgid "CONNECT"
 msgstr "接続"
 
-#: ui/Settingpage/SettingPage.py:359
+#: ui/Settingpage/SettingPage.py:361
 msgid "DISCONNECT"
 msgstr "切断"
 
-#: ui/Settingpage/SettingPage.py:373
+#: ui/Settingpage/SettingPage.py:375
 msgid "WIFI Successfull connection."
 msgstr ""
 
-#: ui/Settingpage/SettingPage.py:377 ui/Settingpage/SettingPage.py:380
+#: ui/Settingpage/SettingPage.py:379 ui/Settingpage/SettingPage.py:382
 msgid "WIFI Failure connection."
 msgstr ""
 
-#: ui/Settingpage/SettingPage.py:434
+#: ui/Settingpage/SettingPage.py:436
 msgid "WIFI is disconnected."
 msgstr ""
 
-#: ui/Settingpage/SettingPage.py:437 ui/Settingpage/SettingPage.py:439
+#: ui/Settingpage/SettingPage.py:439 ui/Settingpage/SettingPage.py:441
 msgid "WIFI Failure."
 msgstr ""
 
-#: ui/Settingpage/SettingPage.py:457
+#: ui/Settingpage/SettingPage.py:459
 msgid "SHUTDOWN"
 msgstr "シャットダウン"
 
-#: ui/Settingpage/SettingPage.py:463
+#: ui/Settingpage/SettingPage.py:465
 msgid "RESTART"
 msgstr "リスタート"
 
-#: ui/Settingpage/SettingPage.py:498
+#: ui/Settingpage/SettingPage.py:503
 msgid "Language config"
 msgstr "言語設定"
 
-#: ui/Settingpage/SettingPage.py:500
+#: ui/Settingpage/SettingPage.py:505
 msgid "Language"
 msgstr "言語"
 
-#: ui/Settingpage/SettingPage.py:519
+#: ui/Settingpage/SettingPage.py:524
 msgid "Restart is required to change the language. Do you want to restart now"
 msgstr "言語を変更するには再起動が必要です。 今すぐ再起動しますか"
 

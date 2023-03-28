@@ -1282,7 +1282,7 @@ class PLT(FigureCanvasTkAgg):
             self.draw()
 
     def plot_grid_specific(self, grid_val: float, title, set_title_flag):
-        hfont = {'fontname': 'Chakra Petch', 'fontsize': 10}
+        hfont = {'fontsize': 10}
         axes_arr = self.figure.get_axes()
         [left, right] = axes_arr[0].get_xlim()
         if grid_val > right:

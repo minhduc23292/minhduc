@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-27 10:08+0700\n"
+"POT-Creation-Date: 2023-03-27 14:46+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -51,7 +51,7 @@ msgstr ""
 
 #: ui/balancingModule/balancingModule.py:95 ui/history/historyModule.py:93
 #: ui/ResonanceModule/ResonanceModule.py:106
-#: ui/Diagnostic/DiagnosticPage.py:166 ui/Settingpage/SettingPage.py:112
+#: ui/Diagnostic/DiagnosticPage.py:166 ui/Settingpage/SettingPage.py:114
 msgid "Home"
 msgstr ""
 
@@ -67,7 +67,7 @@ msgstr ""
 
 #: ui/balancingModule/balancingModule.py:119 ui/history/historyModule.py:117
 #: ui/ResonanceModule/ResonanceModule.py:130
-#: ui/Diagnostic/DiagnosticPage.py:195 ui/Settingpage/SettingPage.py:124
+#: ui/Diagnostic/DiagnosticPage.py:195 ui/Settingpage/SettingPage.py:126
 msgid "Information"
 msgstr ""
 
@@ -136,8 +136,8 @@ msgstr ""
 
 #: ui/balancingModule/balancingModule.py:279 ui/history/historyModule.py:227
 #: ui/ResonanceModule/ResonanceModule.py:277
-#: ui/Diagnostic/DiagnosticPage.py:225 ui/Settingpage/SettingPage.py:181
-#: ui/Settingpage/SettingPage.py:240
+#: ui/Diagnostic/DiagnosticPage.py:225 ui/Settingpage/SettingPage.py:183
+#: ui/Settingpage/SettingPage.py:242
 msgid "APPLY"
 msgstr ""
 
@@ -418,7 +418,6 @@ msgid "View Limit"
 msgstr ""
 
 #: ui/history/historyModule.py:210 ui/ResonanceModule/ResonanceModule.py:263
-#: ui/Diagnostic/DiagnosticPage.py:1387
 msgid "Tracking resolution"
 msgstr ""
 
@@ -752,7 +751,7 @@ msgid ""
 msgstr ""
 
 #: ui/Diagnostic/DiagnosticPage.py:221
-msgid "APPLY and START"
+msgid "APPLY & START"
 msgstr ""
 
 #: ui/Diagnostic/DiagnosticPage.py:230 ui/Diagnostic/DiagnosticPage.py:252
@@ -866,7 +865,7 @@ msgstr ""
 msgid "GRID OFF"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1262 ui/Settingpage/SettingPage.py:221
+#: ui/Diagnostic/DiagnosticPage.py:1262 ui/Settingpage/SettingPage.py:223
 msgid "Sensor config"
 msgstr ""
 
@@ -930,6 +929,10 @@ msgstr ""
 msgid "Filter To (Hz)"
 msgstr ""
 
+#: ui/Diagnostic/DiagnosticPage.py:1387
+msgid "Tracking step"
+msgstr ""
+
 #: ui/Diagnostic/DiagnosticPage.py:1394
 msgid "Mesh grid"
 msgstr ""
@@ -988,113 +991,113 @@ msgstr ""
 msgid "Channel3"
 msgstr ""
 
-#: ui/Settingpage/SettingPage.py:121
+#: ui/Settingpage/SettingPage.py:123
 msgid "Setting"
 msgstr ""
 
-#: ui/Settingpage/SettingPage.py:152
+#: ui/Settingpage/SettingPage.py:154
 msgid "Project config"
 msgstr ""
 
-#: ui/Settingpage/SettingPage.py:155
+#: ui/Settingpage/SettingPage.py:157
 msgid "Project Code*"
 msgstr ""
 
-#: ui/Settingpage/SettingPage.py:163
+#: ui/Settingpage/SettingPage.py:165
 msgid "Company Name"
 msgstr ""
 
-#: ui/Settingpage/SettingPage.py:170
+#: ui/Settingpage/SettingPage.py:172
 msgid "Date"
 msgstr ""
 
-#: ui/Settingpage/SettingPage.py:177
+#: ui/Settingpage/SettingPage.py:179
 msgid "Get time now"
 msgstr ""
 
-#: ui/Settingpage/SettingPage.py:224
+#: ui/Settingpage/SettingPage.py:226
 msgid "Accelerometer Sensitivity(mmV/g)"
 msgstr ""
 
-#: ui/Settingpage/SettingPage.py:232
+#: ui/Settingpage/SettingPage.py:234
 msgid "Velocity Transducer Sensitivity (mmV/m/s)"
 msgstr ""
 
-#: ui/Settingpage/SettingPage.py:261
+#: ui/Settingpage/SettingPage.py:263
 msgid ""
 "Restart is required to change the sensor sensitivity. Do you want to restart "
 "now"
 msgstr ""
 
-#: ui/Settingpage/SettingPage.py:283
+#: ui/Settingpage/SettingPage.py:285
 msgid "GENERAL"
 msgstr ""
 
-#: ui/Settingpage/SettingPage.py:284
+#: ui/Settingpage/SettingPage.py:286
 msgid "SENSOR"
 msgstr ""
 
-#: ui/Settingpage/SettingPage.py:285
+#: ui/Settingpage/SettingPage.py:287
 msgid "WIFI"
 msgstr ""
 
-#: ui/Settingpage/SettingPage.py:286
+#: ui/Settingpage/SettingPage.py:288
 msgid "LANGUAGE"
 msgstr ""
 
-#: ui/Settingpage/SettingPage.py:287
+#: ui/Settingpage/SettingPage.py:289
 msgid "POWER"
 msgstr ""
 
-#: ui/Settingpage/SettingPage.py:324
+#: ui/Settingpage/SettingPage.py:326
 msgid "Wifi config"
 msgstr ""
 
-#: ui/Settingpage/SettingPage.py:344
+#: ui/Settingpage/SettingPage.py:346
 msgid "Password"
 msgstr ""
 
-#: ui/Settingpage/SettingPage.py:355
+#: ui/Settingpage/SettingPage.py:357
 msgid "CONNECT"
 msgstr ""
 
-#: ui/Settingpage/SettingPage.py:359
+#: ui/Settingpage/SettingPage.py:361
 msgid "DISCONNECT"
 msgstr ""
 
-#: ui/Settingpage/SettingPage.py:373
+#: ui/Settingpage/SettingPage.py:375
 msgid "WIFI Successfull connection."
 msgstr ""
 
-#: ui/Settingpage/SettingPage.py:377 ui/Settingpage/SettingPage.py:380
+#: ui/Settingpage/SettingPage.py:379 ui/Settingpage/SettingPage.py:382
 msgid "WIFI Failure connection."
 msgstr ""
 
-#: ui/Settingpage/SettingPage.py:434
+#: ui/Settingpage/SettingPage.py:436
 msgid "WIFI is disconnected."
 msgstr ""
 
-#: ui/Settingpage/SettingPage.py:437 ui/Settingpage/SettingPage.py:439
+#: ui/Settingpage/SettingPage.py:439 ui/Settingpage/SettingPage.py:441
 msgid "WIFI Failure."
 msgstr ""
 
-#: ui/Settingpage/SettingPage.py:457
+#: ui/Settingpage/SettingPage.py:459
 msgid "SHUTDOWN"
 msgstr ""
 
-#: ui/Settingpage/SettingPage.py:463
+#: ui/Settingpage/SettingPage.py:465
 msgid "RESTART"
 msgstr ""
 
-#: ui/Settingpage/SettingPage.py:498
+#: ui/Settingpage/SettingPage.py:503
 msgid "Language config"
 msgstr ""
 
-#: ui/Settingpage/SettingPage.py:500
+#: ui/Settingpage/SettingPage.py:505
 msgid "Language"
 msgstr ""
 
-#: ui/Settingpage/SettingPage.py:519
+#: ui/Settingpage/SettingPage.py:524
 msgid "Restart is required to change the language. Do you want to restart now"
 msgstr ""
 

@@ -38,6 +38,7 @@ track_flag = 0
 grid_flag = True
 summary_flag=0
 view_flag=0
+plot_flag=0
 def testVal(inStr, acttyp):
     if acttyp == '1':  # insert
         if not inStr.isdigit():
@@ -218,7 +219,7 @@ class DiagnosticPage(Tk.Frame):
 
         clean_frame_for_config_panel()
         self.config = ConfigFrame(self.configFrame, self.parent.origin_config)
-        self.nextBt = ttk.Button(self.configFrame, text=_("APPLY and START"), style='Accent.TButton',
+        self.nextBt = ttk.Button(self.configFrame, text=_("APPLY & START"), style='Accent.TButton',
                                  command=lambda: self.on_start_button_clicked(True))
         self.nextBt.place(relx=0.8, rely=0.89, width=175, height=48)
 
@@ -737,7 +738,9 @@ class DiagnosticPage(Tk.Frame):
         button5.place(x=0, y=308, width=88, height=75)
 
     def on_no_filter_button_clicked(self):
-        global grid_flag
+        global grid_flag, plot_flag, track_flag
+        track_flag=0
+        plot_flag=0
         grid_flag = True
         self.freqGridtBt.configure(text=_("GRID ON"))
         self.freqFunctionBt.configure(text=_("FUNCTION\nNONE"))
@@ -755,7 +758,9 @@ class DiagnosticPage(Tk.Frame):
             # self.inforLabel2.config(text=_("Data errors."), bg="lavender", fg="red", font="Verdana 13")
 
     def on_filter_button_clicked(self):
-        global grid_flag
+        global grid_flag, plot_flag, track_flag
+        plot_flag=1
+        track_flag=0
         grid_flag = True
         try:
             self.freqGridtBt.configure(text=_("GRID ON"))
@@ -766,7 +771,9 @@ class DiagnosticPage(Tk.Frame):
             # self.inforLabel2.config(text=_("Data errors."), bg="lavender", fg="red", font="Verdana 13")
 
     def on_envelop_button_clicked(self):
-        global grid_flag
+        global grid_flag, plot_flag, track_flag
+        track_flag=0
+        plot_flag=1
         grid_flag = True
         try:
             self.freqGridtBt.configure(text=_("GRID ON"))
@@ -786,7 +793,9 @@ class DiagnosticPage(Tk.Frame):
             pass
 
     def on_psd_button_click(self):
-        global grid_flag
+        global grid_flag, plot_flag, track_flag
+        track_flag=0
+        plot_flag=1
         grid_flag = True
         try:
             self.freqGridtBt.configure(text=_("GRID ON"))
@@ -804,7 +813,9 @@ class DiagnosticPage(Tk.Frame):
         except Exception as ex:
             print("Exception: ", ex)
     def on_velocity_spectrum_button_click(self):
-        global grid_flag
+        global grid_flag, plot_flag, track_flag
+        track_flag=0
+        plot_flag=1
         grid_flag = True
         try:
             self.freqGridtBt.configure(text=_("GRID ON"))
@@ -1144,10 +1155,16 @@ class DiagnosticPage(Tk.Frame):
             pass
 
     def Tracking(self, dir: bool):
-        global track_flag
+        global track_flag, plot_flag
         tracking_freq = self.parent.origin_config.frequency_config_struct["TrackRange"]
         axes_arr = self.frequencyFrameCanvas.canvas2.figure.get_axes()
+        x_data=None
+        y_data=None
         if len(axes_arr) > 0:
+            x1_data=axes_arr[0].lines[0].get_xdata()
+            y1_data=axes_arr[0].lines[0].get_ydata()
+            y2_data=axes_arr[1].lines[0].get_ydata()
+            y3_data=axes_arr[2].lines[0].get_ydata()
             [xleft, xright] = axes_arr[0].get_xlim()
             if dir == True:
                 if xleft >= track_flag:
@@ -1169,15 +1186,27 @@ class DiagnosticPage(Tk.Frame):
                 start_freq = track_flag
                 stop_freq = track_flag + tracking_freq
             try:
+                if plot_flag==0:
+                    [max1, max2, max3, phase_shift1, phase_shift2, phase_shift3, freq] = tracking_signal(
+                        self.parent.origin_config.sensor_config,
+                        [start_freq,
+                        stop_freq])
 
-                [max1, max2, max3, phase_shift1, phase_shift2, phase_shift3, freq] = tracking_signal(
-                    self.parent.origin_config.sensor_config,
-                    [start_freq,
-                     stop_freq])
-
-                title = f'{str(freq)[:4]}' + 'hz |' + f'Ch1 {str(max1)[:5]} <{str(phase_shift1 * 180 / 3.14)[:3]}°> | Ch2 {str(max2)[:5]} <{str(phase_shift2 * 180 / 3.14)[:3]}°> | Ch3 {str(max3)[:5]} <{str(phase_shift3 * 180 / 3.14)[:3]}°>'
-                Pd.PLT.plot_grid_specific(self.frequencyFrameCanvas.canvas2, freq, title, True)
-                # self.inforLabel2.config(text=title, bg="lavender", fg="red", font="Verdana 13")
+                    title = f'{str(freq)[:4]}' + 'hz |' + f'Ch1 {str(max1)[:5]} <{str(phase_shift1 * 180 / 3.14)[:3]}°> | Ch2 {str(max2)[:5]} <{str(phase_shift2 * 180 / 3.14)[:3]}°> | Ch3 {str(max3)[:5]} <{str(phase_shift3 * 180 / 3.14)[:3]}°>'
+                    Pd.PLT.plot_grid_specific(self.frequencyFrameCanvas.canvas2, freq, title, True)
+                else:
+                    [max1, max2, max3, freq] = tracking_signal_no_phase_shift(
+                        x1_data, y1_data, y2_data, y3_data,
+                        [start_freq,
+                        stop_freq])
+                    if max1<0.001:
+                        max1=0.000
+                    if max2<0.01:
+                        max2=0.000
+                    if max3<0.01:
+                        max3=0.000
+                    title = f'{str(freq)[:4]}' + 'hz |' + f'Ch1 {str(max1)[:5]}  | Ch2 {str(max2)[:5]}  | Ch3 {str(max3)[:5]}'
+                    Pd.PLT.plot_grid_specific(self.frequencyFrameCanvas.canvas2, freq, title, True)
 
             except:
                 pass
@@ -1260,7 +1289,7 @@ class ConfigFrame(Tk.Frame):
         self.wfConfigFrame.pack(side=Tk.TOP, fill=Tk.BOTH)
 
         sensorFrame = ttk.LabelFrame(self.wfConfigFrame, text=_('Sensor config'), style='config.TLabelframe')
-        sensorFrame.grid(column=0, row=0, padx=10, pady=0, ipadx=5, rowspan=9, columnspan=2, sticky='wn')
+        sensorFrame.grid(column=0, row=0, padx=5, pady=0, ipadx=5, rowspan=9, columnspan=2, sticky='wn')
 
         directionLabel = ttk.Label(sensorFrame, text=_('Direction'), style='config.TLabel')
         directionLabel.grid(column=1, row=0, padx=5, pady=5, sticky='w')
@@ -1351,7 +1380,7 @@ class ConfigFrame(Tk.Frame):
         sampleRateEntry.grid(column=1, row=9, padx=0, pady=5, ipadx=3, sticky='e')
         ###
         frqConfigFrame = ttk.LabelFrame(self.wfConfigFrame, text=_('Filter configuration'), style='config.TLabelframe')
-        frqConfigFrame.grid(column=2, row=0, padx=20, ipadx=5, pady=0, sticky='w')
+        frqConfigFrame.grid(column=2, row=0, padx=12, ipadx=5, pady=0, sticky='w')
 
         filterLabel = ttk.Label(frqConfigFrame, text=_('Filter type'), style='config.TLabel')
         filterLabel.grid(column=0, row=0, padx=5, pady=5, sticky="w")
@@ -1384,7 +1413,7 @@ class ConfigFrame(Tk.Frame):
         lowpassEntry['validatecommand'] = (lowpassEntry.register(testVal), '%P', '%d')
         lowpassEntry.grid(column=1, row=3, padx=0, ipadx=3, pady=5, sticky='e')
 
-        trackLabel = ttk.Label(frqConfigFrame, text=_("Tracking resolution"), style='config.TLabel')
+        trackLabel = ttk.Label(frqConfigFrame, text=_("Tracking step"), style='config.TLabel')
         trackLabel.grid(column=0, row=4, padx=5, pady=5, sticky='w')
         trackEntry = ttk.Entry(frqConfigFrame, width=10, textvariable=self.frqParam5, validate="key",
                                 font=('Chakra Petch', 13))
@@ -1407,7 +1436,7 @@ class ConfigFrame(Tk.Frame):
         ###
 
         machineFrame = ttk.LabelFrame(self.wfConfigFrame, text=_('Machine configuration'), style="config.TLabelframe")
-        machineFrame.grid(column=4, row=0, padx=8, pady=0, ipadx=5, sticky='e')
+        machineFrame.grid(column=4, row=0, padx=6, pady=0, ipadx=5, sticky='e')
 
         machineNameLabel = ttk.Label(machineFrame, text=_("Machine name"), style='config.TLabel')
         machineNameLabel.grid(column=0, row=0, padx=5, pady=5, sticky='w')

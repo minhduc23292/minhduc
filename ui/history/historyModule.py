@@ -637,8 +637,15 @@ class SideButtonFrame(Tk.Frame):
     def Tracking(self, dir:bool):
         global track_flag
         tracking_freq=self.history_config_struct["TrackingResolution"]
-        axes_arr = self.canvas.figure.get_axes()
+        axes_arr = self.canvas.figure.get_axes()     
+                       
         if len(axes_arr)>0:
+            if axes_arr[0].name=='3d':
+                return
+            else:
+                x_data=axes_arr[0].lines[0].get_xdata()
+                y_data=axes_arr[0].lines[0].get_ydata()
+
             [xleft, xright] = axes_arr[0].get_xlim()
             
             if dir==True:
@@ -663,8 +670,7 @@ class SideButtonFrame(Tk.Frame):
                 stop_freq=track_flag+tracking_freq
             try:     
                 _sample_rate=self.history_config_struct["sampleRate"][0]
-                _data=self.history_config_struct["dataSample"][0]
-                [max1, freq]=tab4_tracking_signal(_data, _sample_rate, [start_freq, stop_freq])
+                [max1, freq]=tab4_tracking_signal(y_data, x_data, _sample_rate, [start_freq, stop_freq])
                 Pd.PLT.plot_grid_only(self.canvas, freq)
                 title= _('Frequency:')+ f' {str(freq)[:4]}'+' hz'
                 self.infoLabel.config(text=title)
