@@ -49,9 +49,8 @@ def crest_factor(x):
 
 def find_max(arr):
     pos = 0
-    n = len(arr)
     _max = arr[0]
-    for i in range(1, n):
+    for i in range(len(arr)):
         if (arr[i] > _max):
             _max = arr[i]
             pos = i
@@ -78,13 +77,11 @@ def pow2(a):
     return 2 ** i
 
 
-def phase_shift2(arr1, arr2, sample_rate, speed):
+def phase_shift_calculate(arr1, arr2, sample_rate, speed):
     arr1 = arr1 - np.mean(arr1)
     arr2 = arr2 - np.mean(arr2)
     N = len(arr1)
     x = int(speed / (sample_rate / 2) * (N / 2))
-    T = 1 / sample_rate
-    xf = np.linspace(0.0, 1.0 / (2.0 * T), int(N / 2))
     w = signal.hann(N, sym=False)
     yf1 = fftpack.fft(arr1 * w) * (4 / N)
     yf2 = fftpack.fft(arr2 * w) * (4 / N)
@@ -93,11 +90,13 @@ def phase_shift2(arr1, arr2, sample_rate, speed):
     module1 = np.abs(yf1[:(int(N / 2))])
     phase_arr1 = np.angle(yf1)[:(int(N / 2))]
     phase_arr2 = np.angle(yf2)[:(int(N / 2))]
+    selected_phase1=phase_arr1[int(x / 2): int(x * 3 / 2)]
+    selected_phase2=phase_arr2[int(x / 2): int(x * 3 / 2)]
     pos2, max2 = find_max(module2[int(x / 2): int(x * 3 / 2)])
-    pos22 = find_pos(module2[0:int(x * 3 / 2)], max2)
+    # pos22 = find_pos(module2[0:int(x * 3 / 2)], max2)
     pos1, max1 = find_max(module1[int(x / 2): int(x * 3 / 2)])
-    pos11 = find_pos(module1[0:int(x * 3 / 2)], max1)
-    return (phase_arr2[pos22] - phase_arr1[pos11])
+    # pos11 = find_pos(module1[0:int(x * 3 / 2)], max1)
+    return (selected_phase2[pos2] - selected_phase1[pos1])
 
 
 def tracking_signal(sensor_dict, range_freq):

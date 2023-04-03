@@ -684,14 +684,14 @@ class DiagnosticPage(Tk.Frame):
 
                 elif _type == "IN":
                     [xleft, xright] = ax.get_xlim()
-                    xright -= 50
+                    xright -= 100
                     if xright < xleft + 100:
                         xright = xleft + 100
                     ax.set_xlim(xleft, xright)
 
                 elif _type == "OUT":
                     [xleft, xright] = ax.get_xlim()
-                    xright += 50
+                    xright += 100
                     ax.set_xlim(xleft, xright)
             canvas.draw()
         except:

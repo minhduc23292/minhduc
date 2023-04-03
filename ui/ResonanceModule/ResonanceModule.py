@@ -19,11 +19,14 @@ parent_directory = os.path.dirname(os.path.dirname(current_directory))
 import ctypes
 from numpy.ctypeslib import ndpointer
 ad7609 = ctypes.CDLL(f'{parent_directory}/ad7609BTZ.so')
+json_filename = parent_directory + '/i18n/sensor_sensitivity.json'
 from digitalFilter.digitalFilter import filter_data
 from Calculation.calculate import *
 import PlotData.PlotData as Pd
 import threading
 from threading import Lock
+from pathlib import Path
+import json
 blink = 0
 blink1 = 0
 checkWidget = 'wasi'
@@ -37,7 +40,7 @@ amplitude_add_arr=[]
 phase_add_arr=[]
 x_arr=[]
 factor_change_permission=True
-
+confirm_flag=0
 def testVal(inStr, acttyp):
     if acttyp == '1':  # insert
         if not inStr.isdigit():
@@ -50,7 +53,11 @@ class Resonance(Tk.Frame):
         imageAddress = ImageAdrr()
         self.homePhoto = imageAddress.homePhoto
         self.arrowPhoto = imageAddress.arrowPhoto
-        
+        self.json_pathname = Path(json_filename)
+        with open(self.json_pathname, 'r', encoding='utf-8') as f:
+            currentSensitivity = json.load(f)
+        self.parent.origin_config.sensor_sensitivity["hammer_sensitivity"]=float(currentSensitivity["hammerSensitivity"])
+        self.parent.origin_config.sensor_sensitivity["acc_sensitivity"]=float(currentSensitivity["accSensitivity"])
         self.btstyle = ttk.Style()
         self.btstyle.configure('normal.TButton', font=('Chakra Petch', 15), borderwidth=5, justify=Tk.CENTER)
         self.btstyle.map('normal.TButton', foreground=[('active', 'blue')])
@@ -87,6 +94,8 @@ class Resonance(Tk.Frame):
         self.parent.bind_class('TCombobox', "<<ComboboxSelected>>", self.change_state)
 
     def show_key_board(self, event):
+        global confirm_flag
+        confirm_flag=0
         self.resonanceConfigFrame.resonanceApplyButton.configure(state='normal')
         self.widget = self.get_focus_widget()
         self.keyboardFrame = KeyBoard(self.widget)
@@ -99,6 +108,8 @@ class Resonance(Tk.Frame):
         return widget
 
     def change_state(self, event):
+        global confirm_flag
+        confirm_flag=0
         self.resonanceConfigFrame.resonanceApplyButton.configure(state="normal")
 
     def creat_setting_feature_panel(self):
@@ -134,10 +145,14 @@ class Resonance(Tk.Frame):
         self.infoLabel2.grid(column=0, row=1, padx=0, pady=5, sticky='w')
 
     def on_analysis_button_clicked(self):
-        self.resonanceConfigFrame.pack_forget()
-        self.resonanceAnalysisFrame.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
-        self.configBt.configure(style="normal.TButton")
-        self.analysisBt.configure(style="feature.Accent.TButton")
+        global confirm_flag
+        if confirm_flag==1:
+            self.resonanceConfigFrame.pack_forget()
+            self.resonanceAnalysisFrame.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
+            self.configBt.configure(style="normal.TButton")
+            self.analysisBt.configure(style="feature.Accent.TButton")
+        else:
+            self.infoLabel2.configure(text=_("Click APPLY button before using this funtion."))
 
     def on_config_button_clicked(self):
         self.resonanceConfigFrame.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
@@ -246,19 +261,19 @@ class ResonanceConfig(Tk.Frame):
         filterToEntry['validatecommand'] = (filterToEntry.register(testVal), '%P', '%d')
         filterToEntry.grid(column=3, row=1, padx=0, pady=5, sticky='e')
 
-        viewLabel = ttk.Label(resonanceConfigFrame, text=_("Sample rate"), style="resonance.TLabel")
-        viewLabel.grid(column=2, row=2, padx=20, pady=5, sticky='w')
-        viewEntry = ttk.Entry(resonanceConfigFrame, width=12, textvariable=self.resonanceParam6, validate="key",
-                                    font=('Chakra Petch', 13))
-        viewEntry['validatecommand'] = (viewEntry.register(testVal), '%P', '%d')
-        viewEntry.grid(column=3, row=2, padx=0, pady=5, sticky='e')
+        sampleRateLabel = ttk.Label(resonanceConfigFrame, text=_("Sample rate"), style="resonance.TLabel")
+        sampleRateLabel.grid(column=2, row=2, padx=20, pady=5, sticky='w')
 
-        meshLabel = ttk.Label(resonanceConfigFrame, text=_("Sampling time"), style="resonance.TLabel")
-        meshLabel.grid(column=2, row=3, padx=20, pady=5, sticky='w')
-        meshEntry = ttk.Entry(resonanceConfigFrame, width=12, textvariable=self.resonanceParam7, validate="key",
-                                    font=('Chakra Petch', 13))
-        meshEntry['validatecommand'] = (meshEntry.register(testVal), '%P', '%d')
-        meshEntry.grid(column=3, row=3, padx=0, pady=5, sticky='e')
+        SampleRateEntry=ttk.Combobox(resonanceConfigFrame, width=10, textvariable=self.resonanceParam6, state="readonly", font=('Chakra Petch', 13))
+        SampleRateEntry['value'] = ('2048', '4096', '8192')
+        SampleRateEntry.grid(column=3, row=2, padx=0, pady=5, sticky="e")
+
+        samplingTimeLabel = ttk.Label(resonanceConfigFrame, text=_("Sampling time"), style="resonance.TLabel")
+        samplingTimeLabel.grid(column=2, row=3, padx=20, pady=5, sticky='w')
+
+        samplingTimeEntry=ttk.Combobox(resonanceConfigFrame, width=10, textvariable=self.resonanceParam7, state="readonly", font=('Chakra Petch', 13))
+        samplingTimeEntry['value'] = ('4', '8', '16')
+        samplingTimeEntry.grid(column=3, row=3, padx=0, pady=5, sticky="e")
 
         trackingLabel = ttk.Label(resonanceConfigFrame, text=_("Tracking resolution"), style="resonance.TLabel")
         trackingLabel.grid(column=2, row=4, padx=20, pady=5, sticky='w')
@@ -280,30 +295,22 @@ class ResonanceConfig(Tk.Frame):
 
 
     def update_resonance_struct(self, resonance_config_struct):
+        global confirm_flag
+        confirm_flag=1
         resonance_config_struct["Function"] = self.resonanceParam0.get()
         resonance_config_struct["Factor"] = self.resonanceParam8.get()
         resonance_config_struct["Sensor"] = self.resonanceParam1.get()
         resonance_config_struct["Hport"] = self.resonanceParam10.get()
         resonance_config_struct["Window"] = self.resonanceParam2.get()
         resonance_config_struct["FilterType"] = self.resonanceParam3.get()
+        resonance_config_struct["sampleRate"] = int(self.resonanceParam6.get())
+        resonance_config_struct["sampling_time"]= int(self.resonanceParam7.get())
 
-        tempSamplerate = self.resonanceParam6.get()
-        tempSamplingtime = self.resonanceParam7.get()
         tempFilterFrom = self.resonanceParam4.get()
         tempFilterTo = self.resonanceParam5.get()
         tempTracking = self.resonanceParam9.get()
         tempAverage = self.resonanceParam11.get()
 
-        if tempSamplerate!='':
-            if int(tempSamplerate) <= 10000:
-                resonance_config_struct["sampleRate"] = int(tempSamplerate)
-            else:
-                resonance_config_struct["sampleRate"] = 10000
-        if tempSamplingtime!='':
-            if int(tempSamplingtime) < 10:
-                resonance_config_struct["sampling_time"] = int(tempSamplingtime)
-            else:
-                resonance_config_struct["sampling_time"] = 10
         if tempFilterFrom!='':
             resonance_config_struct["FilterFrom"] = int(tempFilterFrom)
         if tempFilterTo!='':
@@ -647,6 +654,8 @@ class SideButtonFrame(Tk.Frame):
         self.readSensorBt.update_idletasks()
         numOfChanel = 4
         chaneln = []
+        accConvertFactor=1000/self.parent.origin_config.sensor_sensitivity["acc_sensitivity"]
+        hamerConvertFactor=1000/self.origin_config.sensor_sensitivity["hammer_sensitivity"]
         data_length = self.origin_config.resonance_config_struct["sampleRate"] * \
                       self.origin_config.resonance_config_struct["sampling_time"]
         total_length = data_length * numOfChanel + 1  # 4 cong , +1 là acctual sampling rate
@@ -691,7 +700,7 @@ class SideButtonFrame(Tk.Frame):
             pass
 
         sampleData -= np.mean(sampleData)
-        sampleData *= 10.0
+        sampleData *= accConvertFactor
         if self.origin_config.resonance_config_struct["Hport"] == 'Port1':
             hamerData = chaneln[0]
         elif self.origin_config.resonance_config_struct["Hport"] == 'Port2':
@@ -701,7 +710,7 @@ class SideButtonFrame(Tk.Frame):
         else:
             pass
         hamerData -= np.mean(hamerData)
-        hamerData *= 83.3
+        hamerData *= hamerConvertFactor
         try:
             if flag == 0:
                 bp_filter_data = filter_data(sampleData, "BANDPASS",

@@ -20,13 +20,18 @@ parent_directory = os.path.dirname(os.path.dirname(current_directory))
 import ctypes
 from numpy.ctypeslib import ndpointer
 ad7609 = ctypes.CDLL(f'{parent_directory}/ad7609BTZ.so')
+json_filename = parent_directory + '/i18n/sensor_sensitivity.json'
 from digitalFilter.digitalFilter import filter_data
 from Calculation.calculate import *
 import PlotData.PlotData as Pd
 import pms.popMessage as pms
+from pathlib import Path
+import json
+
 balancingOrder=0
 click_stop_flag=False
 split_canvas_flag=0
+confirm_flag=0
 def testVal(inStr, acttyp):
     if acttyp == '1':  # insert
         if not inStr.isdigit():
@@ -45,6 +50,12 @@ class Balancing(Tk.Frame):
         imageAddress = ImageAdrr()
         self.homePhoto = imageAddress.homePhoto
         self.arrowPhoto = imageAddress.arrowPhoto
+        self.json_pathname = Path(json_filename)
+        with open(self.json_pathname, 'r', encoding='utf-8') as f:
+            currentSensitivity = json.load(f)
+        self.parent.origin_config.sensor_sensitivity["acc_sensitivity"]=float(currentSensitivity["accSensitivity"])
+        self.parent.origin_config.sensor_sensitivity["vel_sensitivity"]=float(currentSensitivity["velSensitivity"])
+
         self.lock = Lock()
         self.btstyle = ttk.Style()
         self.btstyle.configure('normal.TButton', font=('Chakra Petch', 15), borderwidth=5, justify=Tk.CENTER)
@@ -68,15 +79,18 @@ class Balancing(Tk.Frame):
         self.balancingConfigFrame.pack(side=Tk.TOP, fill=Tk.X, expand=1)
         self.balancingConfigFrame.pack_propagate(0)
 
-        self.balancingAnalysisFrame = BalancingAnalysis(self.mainFrame, self.infoLabel2, self.parent.origin_config.balancing_config_struct, self.lock)
+        self.balancingAnalysisFrame = BalancingAnalysis(self.mainFrame, self.infoLabel2, self.parent.origin_config.balancing_config_struct,\
+                                                         self.parent.origin_config.sensor_sensitivity,  self.lock)
         self.balancingAnalysisFrame.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
         self.balancingAnalysisFrame.pack_propagate(0)
         self.balancingAnalysisFrame.pack_forget()
 
         self.parent.bind_class('TEntry', "<FocusIn>", self.show_key_board)
-        self.parent.bind_class('TCombobox', "<<ComboboxSelected>>", self.change_state)
+        self.parent.bind_class('TCombobox', "<<ComboboxSelected>>", self.combobox_change_state)
 
     def show_key_board(self, event):
+        global confirm_flag
+        confirm_flag=0
         self.balancingConfigFrame.balancingApplyButton.configure(state='normal')
         self.widget = self.get_focus_widget()
         self.keyboardFrame = KeyBoard(self.widget)
@@ -88,7 +102,9 @@ class Balancing(Tk.Frame):
         widget = self.parent.focus_get()
         return widget
 
-    def change_state(self, event):
+    def combobox_change_state(self, event):
+        global confirm_flag
+        confirm_flag=0
         self.balancingConfigFrame.balancingApplyButton.configure(state="normal")
 
     def creat_setting_feature_panel(self):
@@ -123,10 +139,14 @@ class Balancing(Tk.Frame):
         self.infoLabel2.grid(column=0, row=1, padx=0, pady=5, sticky='w')
 
     def on_analysis_button_clicked(self):
-        self.balancingConfigFrame.pack_forget()
-        self.balancingAnalysisFrame.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
-        self.configBt.configure(style="normal.TButton")
-        self.analysisBt.configure(style="feature.Accent.TButton")
+        global confirm_flag
+        if confirm_flag==1:
+            self.balancingConfigFrame.pack_forget()
+            self.balancingAnalysisFrame.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
+            self.configBt.configure(style="normal.TButton")
+            self.analysisBt.configure(style="feature.Accent.TButton")
+        else:
+            self.infoLabel2.configure(text=_("Click APPLY button before using this funtion."))
 
     def on_config_button_clicked(self):
         self.balancingConfigFrame.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
@@ -164,6 +184,7 @@ class BalancingConfig(Tk.Frame):
         self.balParam12=Tk.StringVar()
         self.balParam13=Tk.StringVar()
         self.balParam14=Tk.StringVar()
+        self.balParam15=Tk.StringVar()
 
         # self.balParam1.set(balancing_config_struct["roto_type"])
         self.balParam2.set(balancing_config_struct["num_planes"])
@@ -179,6 +200,7 @@ class BalancingConfig(Tk.Frame):
         self.balParam12.set(balancing_config_struct["sensor2"])
         self.balParam13.set(balancing_config_struct["angle1"])
         self.balParam14.set(balancing_config_struct["angle2"])
+        self.balParam15.set(balancing_config_struct["balancing_speed"])
 
 
         BalancingFrame = ttk.LabelFrame(self, text=_('Configuration'), style='balancing.TLabelframe')
@@ -258,16 +280,16 @@ class BalancingConfig(Tk.Frame):
         fftLine = ttk.Label(BalancingFrame, text=_('FFT lines'), style='balancing.TLabel')
         fftLine.grid(column=2, row=2, padx=(30, 0), pady=5, sticky="w")
         numLineCombo=ttk.Combobox(BalancingFrame, width=10, textvariable=self.balParam8, state="readonly", font=('Chakra Petch', 13))
-        numLineCombo['value'] = ('1000','1200','1500','2000','4000','8000','16000')
+        numLineCombo['value'] = ('1024','2048','4096')
         numLineCombo.grid(column=3, row=2, padx=0, pady=5, ipadx=2, sticky="w")
         # self.numLineCombo.current(2)
         
         balancingSampleRate = ttk.Label(BalancingFrame, text=_("Sample rate"), style='balancing.TLabel')
         balancingSampleRate.grid(column=2, row=3, padx=(30, 0), pady=5, sticky="w")
-        SampleRateEntry = ttk.Entry(BalancingFrame, width=13, textvariable=self.balParam9, font=('Chakra Petch', 13),
-                                    validate="key")
-        SampleRateEntry['validatecommand'] = (SampleRateEntry.register(testVal), '%P', '%d')
-        SampleRateEntry.grid(column=3, row=3, padx=0, pady=5, sticky="w")
+
+        SampleRateEntry=ttk.Combobox(BalancingFrame, width=10, textvariable=self.balParam9, state="readonly", font=('Chakra Petch', 13))
+        SampleRateEntry['value'] = ('2048', '4096')
+        SampleRateEntry.grid(column=3, row=3, padx=0, pady=5, ipadx=2, sticky="w")
 
         numOfBlades = ttk.Label(BalancingFrame, text=_('Num of blades'), style='balancing.TLabel')
         numOfBlades.grid(column=2, row=4, padx=(30, 0), pady=5, sticky="w")
@@ -276,17 +298,27 @@ class BalancingConfig(Tk.Frame):
         numBladeEntry['validatecommand'] = (numBladeEntry.register(testVal), '%P', '%d')
         numBladeEntry.grid(column=3, row=4, padx=0, pady=5, sticky="w")
 
+        balancingSpeedLabel = ttk.Label(BalancingFrame, text=_('Balancing speed(RPM)'), style='balancing.TLabel')
+        balancingSpeedLabel.grid(column=2, row=5, padx=(30, 0), pady=5, sticky="w")
+        balancingSpeedEntry = ttk.Entry(BalancingFrame, width=13, textvariable=self.balParam15, font=('Chakra Petch', 13),
+                                    validate="key")
+        balancingSpeedEntry['validatecommand'] = (balancingSpeedEntry.register(testVal), '%P', '%d')
+        balancingSpeedEntry.grid(column=3, row=5, padx=0, pady=5, sticky="w")
+
         self.balancingApplyButton = ttk.Button(BalancingFrame, text=_("APPLY"), style="Accent.TButton",
                                     command=lambda:self.update_config_struct(balancing_config_struct))
-        self.balancingApplyButton.grid(column=4, row=8, padx=(200, 0), pady=(90, 0), ipadx=50, ipady=8, sticky='w')
+        self.balancingApplyButton.grid(column=4, row=8, padx=(120, 0), pady=(90, 0), ipadx=50, ipady=8, sticky='w')
 
 
     def update_config_struct(self, balancing_config_struct):
+        global confirm_flag
+        confirm_flag=1
         self.balancingApplyButton.configure(state='disable')
         balancing_config_struct["num_planes"]=self.balParam2.get()
         balancing_config_struct["num_sensors"]=self.balParam3.get()
         balancing_config_struct["direction"]=self.balParam7.get()
         balancing_config_struct["num_fft_line"]=int(self.balParam8.get())
+        balancing_config_struct["sample_rate"]=int(self.balParam9.get())
         balancing_config_struct["sensor_type"]=self.balParam10.get()
         balancing_config_struct["sensor1"]=self.balParam11.get()
         balancing_config_struct["sensor2"]=self.balParam12.get()
@@ -294,43 +326,43 @@ class BalancingConfig(Tk.Frame):
         tempBlades=self.balParam4.get()
         tempMass1=self.balParam5.get()
         tempMass2=self.balParam6.get()
-        tempSampleRate=self.balParam9.get()
         tempAngle1=int(self.balParam13.get())
         tempAngle2=int(self.balParam14.get())
+        tempSpeed=int(self.balParam15.get())
+
         if balancing_config_struct["num_planes"]=="One":
-            if is_number(tempBlades)==False or is_number(tempMass1)==False or is_number(tempSampleRate)==False or is_number(tempAngle1)==False:
+            if is_number(tempBlades)==False or is_number(tempMass1)==False or is_number(tempAngle1)==False or is_number(tempSpeed)==False:
                 self.infoLabel.config(text=_("Parameter errors. Check the input type."))
                 return
             else:
                 balancing_config_struct["num_blades"]=int(tempBlades)
                 balancing_config_struct["trial_mass1"]=float(tempMass1)
                 balancing_config_struct["trial_mass2"]=float(tempMass2)
-                if int(tempSampleRate)<=5000:
-                    balancing_config_struct["sample_rate"]=int(tempSampleRate)
-                else:
-                    balancing_config_struct["sample_rate"]=5000
                 balancing_config_struct["angle1"] = int(tempAngle1)
+                balancing_config_struct["balancing_speed"] = tempSpeed
+
                 self.infoLabel.config(text=_("OK"))
         else:
-            if is_number(tempBlades)==False or is_number(tempMass1)==False or is_number(tempMass2)==False or is_number(tempSampleRate)==False\
-             or is_number(tempAngle1)==False or is_number(tempAngle2)==False:
+            if is_number(tempBlades)==False or is_number(tempMass1)==False or is_number(tempMass2)==False\
+                or is_number(tempAngle1)==False or is_number(tempAngle2)==False or is_number(tempSpeed)==False:
                 self.infoLabel.config(text=_("Parameter errors. Check the input type."))
                 return
             else:
                 balancing_config_struct["num_blades"]=int(tempBlades)
                 balancing_config_struct["trial_mass1"]=float(tempMass1)
                 balancing_config_struct["trial_mass2"]=float(tempMass2)
-                balancing_config_struct["sample_rate"]=int(tempSampleRate)
                 balancing_config_struct["angle1"] = int(tempAngle1)
                 balancing_config_struct["angle2"] = int(tempAngle2)
+                balancing_config_struct["balancing_speed"] = tempSpeed
                 self.infoLabel.config(text=_("OK")) 
 
 
 class BalancingAnalysis(Tk.Frame):
-    def __init__(self, parent:"mainFrame", infoLabel, balancing_config_struct, lock):
+    def __init__(self, parent:"mainFrame", infoLabel, balancing_config_struct, sensor_sensitivity, lock):
         super().__init__(parent, width=1008 , height=504 , bg='white')
         self.parent = parent
         self.balancing_config_struct = balancing_config_struct
+        self.sensor_sensitivity=sensor_sensitivity
         self.lock = lock
         ad7609.init()
         self.infoLabel = infoLabel
@@ -340,16 +372,18 @@ class BalancingAnalysis(Tk.Frame):
         self.balancingPlotFrame.pack(side=Tk.LEFT, fill=Tk.BOTH, expand=1)
         self.balancingPlotFrame.pack_propagate(0)
 
-        self.balancingSideFrame = SideButtonFrame(self, self.balancing_config_struct, self.infoLabel, self.lock,
+        self.balancingSideFrame = SideButtonFrame(self, self.balancing_config_struct, self.sensor_sensitivity, self.infoLabel, self.lock,
                                                  self.balancingPlotFrame.canvas5)
         self.balancingSideFrame.pack(side=Tk.RIGHT, fill=Tk.Y, expand=1)
         self.balancingSideFrame.pack_propagate(0)
 
 class SideButtonFrame(Tk.Frame):
-    def __init__(self, parent, balancing_config_struct, infoLabel, lock, canvas):
+    def __init__(self, parent, balancing_config_struct, sensor_sensitivity,  infoLabel, lock, canvas):
         super().__init__(parent, bd=1, bg='white', width=90, height=504)
         self.parent=parent
         self.balancing_config_struct=balancing_config_struct
+        self.accConvertFactor=1000/sensor_sensitivity["acc_sensitivity"]
+        self.velConvertFactor=1000/sensor_sensitivity["vel_sensitivity"]
         self.infoLabel=infoLabel
         self.lock = lock
         self.canvas=canvas
@@ -864,7 +898,9 @@ class SideButtonFrame(Tk.Frame):
             chanelm=[[],[],[],[],[]]
             chaneln=[]
             numADCChanel=6
-            data_length = pow2(self.balancing_config_struct["num_fft_line"]) + 2
+            
+            balancing_speed=self.balancing_config_struct["balancing_speed"]/60
+            data_length = self.balancing_config_struct["num_fft_line"] + 2
             total_length=numADCChanel*data_length+1
             ttl=[]
             with lock:
@@ -898,11 +934,11 @@ class SideButtonFrame(Tk.Frame):
 
             for i in range(3):
                 if self.balancing_config_struct["sensor_type"]=='Acceleration':
-                    chanelv[i]=chaneln[i][2:]*10 #g
+                    chanelv[i]=chaneln[i][2:]*self.accConvertFactor #g
                     chanelv[i]-=np.mean(chanelv[i])
                     unit='g'
                 elif self.balancing_config_struct["sensor_type"]=='Velocity':
-                    chanelv[i]=chaneln[i][2:]*254  # mm/s
+                    chanelv[i]=chaneln[i][2:]*self.velConvertFactor  # mm/s
                     chanelv[i]-=np.mean(chanelv[i])
                     unit='mm/s'
                 else:
@@ -925,7 +961,7 @@ class SideButtonFrame(Tk.Frame):
                                             self.balancing_config_struct["sample_rate"], window="Hanning")
             _laserSample=fresh_laser_pulse(_laserSample)
             _amplitude = rmsValue(_samplePlaneData)
-            _phase = phase_shift2(_laserSample, _samplePlaneData, self.balancing_config_struct["sample_rate"], 25)%(2*np.pi)
+            _phase = phase_shift_calculate(_laserSample, _samplePlaneData, self.balancing_config_struct["sample_rate"], balancing_speed)%(2*np.pi)
             current_run = {
                 "label": label,
                 "amplitude": _amplitude,
@@ -965,7 +1001,8 @@ class SideButtonFrame(Tk.Frame):
             chanelm=[[],[],[],[],[]]
             chaneln=[]
             numADCChanel=6
-            data_length = pow2(self.balancing_config_struct["num_fft_line"]) + 2
+            balancing_speed=self.balancing_config_struct["balancing_speed"]/60
+            data_length = self.balancing_config_struct["num_fft_line"] + 2
             total_length=numADCChanel*data_length+1
             ttl=[]
             with lock:
@@ -998,10 +1035,10 @@ class SideButtonFrame(Tk.Frame):
                 chaneln.append(np.array(chanelm[i][2:]))            
             for i in range(3):
                 if self.balancing_config_struct["sensor_type"]=='Acceleration':
-                    chanelv[i]=chaneln[i][2:]*10 #g
+                    chanelv[i]=chaneln[i][2:]*self.accConvertFactor #g
                     chanelv[i]-=np.mean(chanelv[i])
                 elif self.balancing_config_struct["sensor_type"]=='Velocity':
-                    chanelv[i]=chaneln[i][2:]*254  # mm/s
+                    chanelv[i]=chaneln[i][2:]*self.velConvertFactor  # mm/s
                     chanelv[i]-=np.mean(chanelv[i])
                 else:
                     pass
@@ -1031,8 +1068,8 @@ class SideButtonFrame(Tk.Frame):
             _laserSample=fresh_laser_pulse(_laserSample)
             _amplitude1 = rmsValue(_samplePlane1Data)
             _amplitude2 = rmsValue(_samplePlane2Data)   
-            _phase1 = phase_shift2(_laserSample, _samplePlane1Data, self.balancing_config_struct["sample_rate"], 25)%(2*np.pi)
-            _phase2 = phase_shift2(_laserSample, _samplePlane2Data, self.balancing_config_struct["sample_rate"], 25)%(2*np.pi)
+            _phase1 = phase_shift_calculate(_laserSample, _samplePlane1Data, self.balancing_config_struct["sample_rate"], balancing_speed)%(2*np.pi)
+            _phase2 = phase_shift_calculate(_laserSample, _samplePlane2Data, self.balancing_config_struct["sample_rate"], balancing_speed)%(2*np.pi)
             current_run = {
                 "label": label,
                 "amplitude1": _amplitude1,

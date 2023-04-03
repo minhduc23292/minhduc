@@ -31,7 +31,7 @@ click_stop_flag=False
 blink=0
 blink1=0
 track_flag=0
-
+confirm_flag=0
 def testVal(inStr, acttyp):
     if acttyp == '1':  # insert
         if not inStr.isdigit():
@@ -74,6 +74,8 @@ class History(Tk.Frame):
         self.parent.bind_class('TCombobox', "<<ComboboxSelected>>", self.change_state)
 
     def show_key_board(self, event):
+        global confirm_flag
+        confirm_flag=0
         self.historyConfigFrame.applyBt.configure(state="normal")
         self.widget = self.get_focus_widget()
         self.keyboardFrame = KeyBoard(self.widget)
@@ -86,6 +88,8 @@ class History(Tk.Frame):
         return widget
 
     def change_state(self, event):
+        global confirm_flag
+        confirm_flag=0
         self.historyConfigFrame.applyBt.configure(state="normal")
 
     def creat_setting_feature_panel(self):
@@ -121,10 +125,14 @@ class History(Tk.Frame):
         self.infoLabel2.grid(column=0, row=1, padx=0, pady=5, sticky='w')
 
     def on_analysis_button_clicked(self):
-        self.historyConfigFrame.pack_forget()
-        self.historyAnalysisFrame.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
-        self.configBt.configure(style="normal.TButton")
-        self.analysisBt.configure(style="feature.Accent.TButton")
+        global confirm_flag
+        if confirm_flag==1:
+            self.historyConfigFrame.pack_forget()
+            self.historyAnalysisFrame.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
+            self.configBt.configure(style="normal.TButton")
+            self.analysisBt.configure(style="feature.Accent.TButton")
+        else:
+            self.infoLabel2.configure(text=_("Click APPLY button before using this funtion."))
 
     def on_config_button_clicked(self):
         self.historyConfigFrame.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
@@ -244,6 +252,8 @@ class historyConfig(Tk.Frame):
         deletePrjButton.grid(column=0, row=1, padx=10, pady=(10, 5), ipadx=10, ipady=5, sticky='e')
 
     def update_text_tsa(self):
+        global confirm_flag
+        confirm_flag=0
         self.applyBt.configure(state='normal')
         txt=self.tsa_var.get()
         if txt==1:
@@ -252,6 +262,8 @@ class historyConfig(Tk.Frame):
             self.tsaBin.configure(state='disabled')
 
     def update_config_struct(self, history_config_struct):
+        global confirm_flag
+        confirm_flag=1
         history_config_struct["ProjectID"]=self.historyParam1.get()
         history_config_struct["SensorPosition"]=self.historyParam2.get()
         history_config_struct["PlotType"]=self.historyParam3.get()
@@ -462,14 +474,14 @@ class SideButtonFrame(Tk.Frame):
 
                 elif _type == "IN":
                     [xleft, xright] = ax.get_xlim()
-                    xright -= 50
+                    xright -= 100
                     if xright < xleft + 100:
                         xright = xleft + 100
                     ax.set_xlim(xleft, xright)
 
                 elif _type == "OUT":
                     [xleft, xright] = ax.get_xlim()
-                    xright += 50
+                    xright += 100
                     ax.set_xlim(xleft, xright)
                 elif _type == "RESET":
                     [xleft, xright] = [0, self.history_config_struct["ViewLimit"]]

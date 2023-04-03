@@ -216,10 +216,13 @@ class SensorConfig(Tk.Frame):
             currentSensitivity = json.load(f)
         self.sensorParam1 = Tk.StringVar()
         self.sensorParam2 = Tk.StringVar()
+        self.sensorParam3 = Tk.StringVar()
         self.sensorParam1.set(currentSensitivity["accSensitivity"])
         self.sensorParam2.set(currentSensitivity["velSensitivity"])
+        self.sensorParam3.set(currentSensitivity["hammerSensitivity"])
         origin_config.sensor_sensitivity["acc_sensitivity"]=float(currentSensitivity["accSensitivity"])
         origin_config.sensor_sensitivity["vel_sensitivity"]=float(currentSensitivity["velSensitivity"])
+        origin_config.sensor_sensitivity["hammer_sensitivity"]=float(currentSensitivity["hammerSensitivity"])
         sensorFrame = ttk.LabelFrame(self, text=_('Sensor config'))
         sensorFrame.grid(column=0, row=0, padx=10, pady=10, columnspan=2, sticky='wn')
 
@@ -239,6 +242,15 @@ class SensorConfig(Tk.Frame):
         velEntry['validatecommand'] = (velEntry.register(testFloat), '%P', '%d')
         velEntry.grid(column=1, row=1, padx=10, pady=5, sticky='e')
 
+        hammerLabel = ttk.Label(sensorFrame, text=_('Hammer Sensitivity (mmV/N)'), style='gen.TLabel')
+        hammerLabel.grid(column=0, row=2, padx=10, pady=5, sticky='w')
+
+        hammerEntry = ttk.Entry(sensorFrame, width=20, textvariable=self.sensorParam3, takefocus=False,
+                                font=('Chakra Petch', 14), validate="key")
+        hammerEntry['validatecommand'] = (hammerEntry.register(testFloat), '%P', '%d')
+        hammerEntry.grid(column=1, row=2, padx=10, pady=5, sticky='e')
+
+
         self.applyButton = ttk.Button(sensorFrame, text=_("APPLY"), style="Accent.TButton",
                                       command=lambda: self.on_apply_button_clicked(origin_config))
         self.applyButton.grid(column=1, row=3, padx=10, pady=20, ipady=5, sticky='ew')
@@ -250,16 +262,21 @@ class SensorConfig(Tk.Frame):
                 origin_config.sensor_sensitivity["acc_sensitivity"] = float(self.sensorParam1.get())
             if self.sensorParam2.get()!='':
                 origin_config.sensor_sensitivity["vel_sensitivity"] = float(self.sensorParam2.get())
+            if self.sensorParam3.get()!='':
+                origin_config.sensor_sensitivity["hammer_sensitivity"] = float(self.sensorParam3.get())
 
             sensitivityJson = {"accSensitivity": float(origin_config.sensor_sensitivity["acc_sensitivity"]),
-                            "velSensitivity": float(origin_config.sensor_sensitivity["vel_sensitivity"])}
+                            "velSensitivity": float(origin_config.sensor_sensitivity["vel_sensitivity"]),
+                            "hammerSensitivity": float(origin_config.sensor_sensitivity["hammer_sensitivity"])}
             with open(self.json_pathname, 'r', encoding='utf-8') as f:
                 cauhinh = json.load(f)
             preAccSen = float(cauhinh["accSensitivity"])
             preVelSen = float(cauhinh["velSensitivity"])
+            preHamSen = float(cauhinh["hammerSensitivity"])
             with open(self.json_pathname, 'w', encoding='utf-8') as f:
                 json.dump(sensitivityJson, f)
-            if origin_config.sensor_sensitivity["acc_sensitivity"] != preAccSen or origin_config.sensor_sensitivity["vel_sensitivity"] !=preVelSen:
+            if origin_config.sensor_sensitivity["acc_sensitivity"] != preAccSen or origin_config.sensor_sensitivity["vel_sensitivity"] !=preVelSen\
+                or origin_config.sensor_sensitivity["hammer_sensitivity"] != preHamSen:
                 if pms.general_warning(_("Restart is required to change the sensor sensitivity. Do you want to restart now")):
                     os.execl('/usr/bin/python', self.main_pathname, *sys.argv)
                 else:

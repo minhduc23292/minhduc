@@ -32,7 +32,8 @@ class TotalConfig(object):
 
         self.sensor_sensitivity= {
             "acc_sensitivity": 100.0,
-            "vel_sensitivity":4.0
+            "vel_sensitivity":4.0,
+            "hammer_sensitivity":12.0
         }
 
         self.project_struct = {
@@ -80,14 +81,15 @@ class TotalConfig(object):
                     # "roto_type":'Overhang',
                     "num_planes":'One',
                     "num_sensors":'One',
-                    "num_blades" :0,
+                    "num_blades" :4,
                     "trial_mass1":5.0,
                     "trial_mass2":5.0,
                     "angle1":0,
                     "angle2":0,
+                    "balancing_speed":1500,
                     "direction":"Clockwise",
-                    "num_fft_line":2000,
-                    "sample_rate":2560,
+                    "num_fft_line":2048,
+                    "sample_rate":2048,
                     "sensor_type":'Velocity',
                     "sensor1":'Port1',
                     "sensor2":'Port2',
@@ -121,8 +123,8 @@ class TotalConfig(object):
                     "FilterType":'BANDPASS',
                     "FilterFrom":5,
                     "FilterTo":3000,
-                    "sampleRate":5000,
-                    "sampling_time":5,
+                    "sampleRate":4096,
+                    "sampling_time":4,
                     "num_of_average":3,
                     "Tracking":25
         }
