@@ -302,8 +302,8 @@ class DiagnosticPage(Tk.Frame):
             "store_sensor_data": [[],[],[]],
             "unit": [],
             "sensor_key": [],
-            "sample_rate": 2560,
-            "fft_line": 1000,
+            "sample_rate": 5120,
+            "fft_line": 3200,
             "vel": [],
             "accel": [],
             "vel_data": [],
@@ -315,10 +315,8 @@ class DiagnosticPage(Tk.Frame):
         unit = ['', '', '', '', '', '']
         chanelv = [[], [], [], []]
         chaneln = []
-        self.parent.origin_config.sensor_config["sample_rate"] = int(
-            self.parent.origin_config.waveform_config_struct["Fmax"] * 2.56)
-        self.parent.origin_config.sensor_config["fft_line"] = self.parent.origin_config.waveform_config_struct[
-            "num_fft_line"]
+        self.parent.origin_config.sensor_config["sample_rate"] = int(self.parent.origin_config.waveform_config_struct["Fmax"] * 2.56)
+        self.parent.origin_config.sensor_config["fft_line"] = self.parent.origin_config.waveform_config_struct["num_fft_line"]
         self.parent.origin_config.sensor_config["sensor_input"].append(
             self.parent.origin_config.waveform_config_struct["Sensor1"])
         self.parent.origin_config.sensor_config["sensor_input"].append(
@@ -339,14 +337,14 @@ class DiagnosticPage(Tk.Frame):
         self.infoLabel2.update_idletasks()
         total_length=data_length*n+1
         ttl=[]
-        with self.lock:
-            ad7609.ADCread.restype = ctypes.POINTER(ctypes.c_float * total_length)
-            ad7609.ADCread.argtypes = [ctypes.c_int, ctypes.c_int, ctypes.c_int]
-            ad7609.freeme.argtypes = ctypes.c_void_p,
-            ad7609.freeme.restype = None
-            kq=ad7609.ADCread(data_length, self.parent.origin_config.sensor_config["sample_rate"], n)
-            ttl=[i for i in kq.contents]
-            ad7609.freeme(kq)
+        # with self.lock:
+        ad7609.ADCread.restype = ctypes.POINTER(ctypes.c_float * total_length)
+        ad7609.ADCread.argtypes = [ctypes.c_int, ctypes.c_int, ctypes.c_int]
+        ad7609.freeme.argtypes = ctypes.c_void_p,
+        ad7609.freeme.restype = None
+        kq=ad7609.ADCread(data_length, self.parent.origin_config.sensor_config["sample_rate"], n)
+        ttl=[i for i in kq.contents]
+        ad7609.freeme(kq)
         actual_sample_rate= int(ttl[-1])
         chanelm=[[],[],[],[],[]]
         if n==4:
@@ -1536,10 +1534,10 @@ class ConfigFrame(Tk.Frame):
 
 
         if origin_config.waveform_config_struct["Sensor4"] == "NONE":
-            if int(tempFmax) <= 14500:
+            if int(tempFmax) <= 15000:
                 origin_config.waveform_config_struct["Fmax"] = int(tempFmax)
             else:
-                origin_config.waveform_config_struct["Fmax"] = 14500
+                origin_config.waveform_config_struct["Fmax"] = 15000
         else:
             if int(tempFmax) <= 11000:
                 origin_config.waveform_config_struct["Fmax"] = int(tempFmax)

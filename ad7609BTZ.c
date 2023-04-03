@@ -132,7 +132,7 @@ void wake_up(){
     digitalWrite(p_range,LOW);
 	digitalWrite(p_range,LOW);
 
-    delay_ns(200000);
+    delay_ns(500000);
 
 }
 
@@ -155,29 +155,29 @@ float * ADCread(int num_samples, int sample_rate, int num_chanel){
             {}
         digitalWrite(p_convstab,LOW);
         digitalWrite(p_convstab,LOW);
-        delay_ns(25);
+        delay_ns(26);
         digitalWrite(p_convstab,HIGH);
         digitalWrite(p_convstab,HIGH);
-        delay_ns(20);
+        delay_ns(45);
 
         while (digitalRead(p_busy) == 1)
                 {}
 
         digitalWrite(p_cs,LOW);
         digitalWrite(p_cs,LOW);
-        delay_ns(10);
+        // delay_ns(10);
 
         for(int _c=0; _c<_half; _c++){
             long long _A = 0, _B = 0;
             for(int _i=0; _i<18; _i++){ //Clock low to cleck the data to DoutA/B
                 digitalWrite(p_clock,LOW);
                 digitalWrite(p_clock,LOW);
-                delay_ns(10);
+                // delay_ns(10);
                 _A +=  digitalRead(p_dataA)<<(17-_i);
                 _B +=  digitalRead(p_dataB)<<(17-_i);
                 digitalWrite(p_clock,HIGH);
                 digitalWrite(p_clock,HIGH);
-                delay_ns(26);
+                delay_ns(2);
             }
             containerA[_c] = transferFunction(_A);
             containerB[_c] = transferFunction(_B);
@@ -185,7 +185,7 @@ float * ADCread(int num_samples, int sample_rate, int num_chanel){
 
         digitalWrite(p_cs,HIGH);
         digitalWrite(p_cs,HIGH);
-        delay_ns(10);
+        // delay_ns(10);
         memcpy(result_arr,containerA, _half*sizeof(float));
         memcpy(&result_arr[_half],containerB, _half*sizeof(float)); // can test lai
 
