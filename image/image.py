@@ -104,3 +104,5 @@ class ImageAdrr():
         self.iso8vPhoto = plt.imread(f"{current_directory}/Iso10816-8v.png")
         self.iso21Photo = plt.imread(f"{current_directory}/iso10816-21.png")
         self.iso21Photo = plt.imread(f"{current_directory}/iso10816-21.png")
+
+        self.bearingPhoto = plt.imread(f"{current_directory}/bearing.png")

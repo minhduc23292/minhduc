@@ -4,6 +4,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 matplotlib.use('TKAgg')
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from matplotlib.figure import Figure
 import os
 from i18n import _
 from keyboard.keyboard import KeyBoard
@@ -70,6 +71,11 @@ class History(Tk.Frame):
         self.historyAnalysisFrame.pack_propagate(0)
         self.historyAnalysisFrame.pack_forget()
 
+        self.bearingFrequencyFrame = bearingFrequency(self.mainFrame, self.infoLabel2)
+        self.bearingFrequencyFrame.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
+        self.bearingFrequencyFrame.pack_propagate(0)
+        self.bearingFrequencyFrame.pack_forget()
+
         self.parent.bind_class('TEntry', "<FocusIn>", self.show_key_board)
         self.parent.bind_class('TCombobox', "<<ComboboxSelected>>", self.change_state)
 
@@ -115,8 +121,13 @@ class History(Tk.Frame):
                                    command=self.on_analysis_button_clicked)
         self.analysisBt.place(relx=0.265, rely=0.018, width=115, height=72)
 
+        self.bearingBt = ttk.Button(self.featureFrame, style='normal.TButton', text=_("Bearing\nFrequency"),
+                                   command=self.on_bearing_button_clicked)
+        self.bearingBt.place(relx=0.385, rely=0.018, width=125, height=72)
+
+
         self.infoFrame= Tk.Frame(self.featureFrame, width=451, height=72, bg='white', bd=0)
-        self.infoFrame.place(relx=0.41, rely=0.018)
+        self.infoFrame.place(relx=0.52, rely=0.018)
 
         self.infoLabel1=ttk.Label(self.infoFrame, text=_("Information"), style="red.TLabel")
         self.infoLabel1.grid(column=0, row=0, padx=0, pady=5, sticky='w')
@@ -128,17 +139,29 @@ class History(Tk.Frame):
         global confirm_flag
         if confirm_flag==1:
             self.historyConfigFrame.pack_forget()
+            self.bearingFrequencyFrame.pack_forget()
             self.historyAnalysisFrame.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
             self.configBt.configure(style="normal.TButton")
             self.analysisBt.configure(style="feature.Accent.TButton")
+            self.bearingBt.configure(style="normal.TButton")
         else:
             self.infoLabel2.configure(text=_("Click APPLY button before using this funtion."))
 
     def on_config_button_clicked(self):
         self.historyConfigFrame.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
         self.historyAnalysisFrame.pack_forget()
+        self.bearingFrequencyFrame.pack_forget()
         self.configBt.configure(style="feature.Accent.TButton")
         self.analysisBt.configure(style="normal.TButton")
+        self.bearingBt.configure(style="normal.TButton")
+
+    def on_bearing_button_clicked(self):
+        self.bearingFrequencyFrame.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
+        self.historyAnalysisFrame.pack_forget()
+        self.historyConfigFrame.pack_forget()
+        self.configBt.configure(style="normal.TButton")
+        self.analysisBt.configure(style="normal.TButton")
+        self.bearingBt.configure(style="feature.Accent.TButton")
 
     def go_home(self):
         self.mainFrame.destroy()
@@ -181,8 +204,7 @@ class historyConfig(Tk.Frame):
 
 
         historyFrame = ttk.LabelFrame(self, text=_('Configuration'), style='history.TLabelframe')
-        historyFrame.grid(column=0, row=0, padx=0, pady=0, sticky="nw")
-
+        historyFrame.pack(side="left", fill='y')
 
         projectIDLabel = ttk.Label(historyFrame, text=_('Project Code'), style="history.TLabel")
         projectIDLabel.grid(column=0, row=0, padx=5, pady=5, sticky="w")
@@ -236,20 +258,44 @@ class historyConfig(Tk.Frame):
                                    command=lambda: self.update_config_struct(history_config_struct))
         self.applyBt.grid(column=1, row=9, padx=(0, 10), pady=(30,5), ipadx=32, ipady=5, sticky='w')
 
-        databaseConfigFrame = ttk.LabelFrame(self, text=_('Project Table'), style="history.TLabelframe")
-        databaseConfigFrame.grid(column=1, row=0, padx=60, pady=0, sticky='ne')
-
-        self.textbox=Tk.scrolledtext.ScrolledText(databaseConfigFrame, 
-                                      wrap = Tk.WORD, 
-                                      width = 50, 
-                                      height = 15, 
-                                      font = ("Chakra Petch",13))
-        self.textbox.delete("1.0", Tk.END)
-        self.textbox.insert("1.0", self.load_project())
-        self.textbox.grid(column=0, row=0, padx=0, pady=0, sticky='e')
+        databaseConfigFrame = ttk.LabelFrame(self, text=(''), style="history.TLabelframe")
+        databaseConfigFrame.pack(side="left", fill='y')
         deletePrjButton = ttk.Button(databaseConfigFrame, text=_("Delete Project"), style='Accent.TButton',
                             command=self.delete_project)
-        deletePrjButton.grid(column=0, row=1, padx=10, pady=(10, 5), ipadx=10, ipady=5, sticky='e')
+        deletePrjButton.grid(column=0, row=1, padx=10, pady=(5, 5), ipadx=10, ipady=5, sticky='e')
+
+        self.scrollbar = ttk.Scrollbar(self)
+        self.scrollbar.pack(side="right", fill="y")
+
+        self.PrjTable = ttk.Treeview(self, yscrollcommand=self.scrollbar.set,)
+        self.PrjTable.bind('<<TreeviewSelect>>', self.get_selected_cell)
+        self.PrjTable.pack(side="left", expand=True, fill="both")
+        self.PrjTable['columns'] = ('PrjID', 'Date', 'Pos', 'SampleRate')
+        self.PrjTable.column("#0", width=0,  stretch=Tk.NO)
+        self.PrjTable.column("PrjID",anchor='w', width=100)
+        self.PrjTable.column("Date",anchor=Tk.CENTER,width=100)
+        self.PrjTable.column("Pos",anchor=Tk.CENTER,width=100)
+        self.PrjTable.column("SampleRate",anchor=Tk.CENTER,width=100)
+
+        self.PrjTable.heading("#0",text="",anchor=Tk.CENTER)
+        self.PrjTable.heading("PrjID",text="ID",anchor=Tk.CENTER)
+        self.PrjTable.heading("Date",text=_("Date"),anchor=Tk.CENTER)
+        self.PrjTable.heading("Pos",text=_("Position"),anchor=Tk.CENTER)
+        self.PrjTable.heading("SampleRate",text=_("Sample rate"),anchor=Tk.CENTER)
+        self.scrollbar.config(command=self.PrjTable.yview)
+        load_data_arr=self.load_project()
+        for i in range(len(load_data_arr)):
+                        self.PrjTable.insert(parent='',index='end',iid=i,text='', values=(str(load_data_arr[i][0]),str(load_data_arr[i][1]), \
+                                            str(load_data_arr[i][2]), str(load_data_arr[i][3])))
+
+        
+
+    def get_selected_cell(self, event):
+        selected_item = self.PrjTable.focus() # get the selected item
+        prjID = self.PrjTable.item(selected_item)['values'][0] # get the value of the cell
+        position=self.PrjTable.item(selected_item)['values'][2]
+        self.historyParam1.set(prjID)
+        self.historyParam2.set(position)
 
     def update_text_tsa(self):
         global confirm_flag
@@ -290,14 +336,8 @@ class historyConfig(Tk.Frame):
             cur=self.con.cursor()
             cur.execute(f"SELECT CODE, DATE, POS, Sample_rate FROM DATA ORDER BY DATE ASC;")
             load_data = cur.fetchall()
-            # cur.execute(f"SELECT NOTE FROM Project_ID WHERE CODE = '9991';")
-            # note = cur.fetchall()
             load_data_arr = [i for i in load_data]
-            showstring='PrjID' +'\t'+ '      '+ 'DATE' + '\t' +'              ' +'POSITION'+ '\t'+'    '+'SAMPLE RATE'+'\n'+'\n'
-            for k in range(len(load_data)):
-                showstring+= str(load_data_arr[k][0])+'\t'+'   '+ str(load_data_arr[k][1])+'\t'+ '\t'+ str(load_data_arr[k][2])+\
-                '\t'+ str(load_data_arr[k][3])+'\n'
-            return showstring
+            return load_data_arr
         
 
     def find_position_list(self, event):
@@ -326,15 +366,19 @@ class historyConfig(Tk.Frame):
                         cur.execute(f"""DELETE FROM DATA WHERE CODE = '{prjCode}' """)
                         cur.execute(f"""DELETE FROM Project_ID WHERE CODE = '{prjCode}' """)
                         self.infoLabel.configure(text=_("Selected project is deleted."))
-                        self.textbox.delete("1.0", Tk.END)
-                        self.textbox.insert("1.0", self.load_project())
-                        self.textbox.grid(column=0, row=0, padx=0, pady=0, sticky='e')
+                        for row in self.PrjTable.get_children():
+                            self.PrjTable.delete(row)
+                        load_data_arr=self.load_project()
+                        for i in range(len(load_data_arr)):
+                            self.PrjTable.insert(parent='',index='end',iid=i,text='', values=(str(load_data_arr[i][0]),str(load_data_arr[i][1]), \
+                                            str(load_data_arr[i][2]), str(load_data_arr[i][3])))
                     else:
                         pass
             else:
                 pms.empty_entry_error(_("Project Code"))
         except:
             self.infoLabel.configure(text=_("Delete project errors"))
+
 class historyAnalysis(Tk.Frame):
     def __init__(self, parent:"mainFrame", infoLabel, db_connect, history_config_struct):
         super().__init__(parent, width=1008 , height=504 , bg='white')
@@ -353,6 +397,101 @@ class historyAnalysis(Tk.Frame):
         self.historySideFrame.pack(side=Tk.RIGHT, fill=Tk.Y, expand=1)
         self.historySideFrame.pack_propagate(0)
 
+class bearingFrequency(Tk.Frame):
+    def __init__(self, parent:"mainFrame", infoLabel):
+        super().__init__(parent, width=1008 , height=504 , bg='white')
+        self.parent = parent
+        self.infoLabel = infoLabel
+        self.con = lite.connect(f'{parent_directory}/brgfreq.db')
+        
+        self.bearingDetailConfig()
+    
+    def bearingDetailConfig(self):
+        self.brgParam1 = Tk.StringVar()
+        self.brgParam2 = Tk.StringVar()
+
+        self.brgParam2.set(1500)
+        parentFrame = Tk.LabelFrame(self, text='', font=('Chakra Petch', 13), border=0, bg='white')
+        parentFrame.pack(side=Tk.TOP, fill=Tk.BOTH)
+        imputFrame = ttk.LabelFrame(parentFrame, text=_('Input'))
+        imputFrame.grid(column=0, row=0, padx=5, pady=0, sticky='wn')
+        imageFrame = ttk.LabelFrame(parentFrame, text=(''))
+        imageFrame.grid(column=0, row=1, padx=5, pady=0, sticky='wn')
+        tableFrame = ttk.LabelFrame(parentFrame, text=_('Bearing frequency table'))
+        tableFrame.grid(column=2, row=0, rowspan=2, padx=5, pady=0, sticky='wn')
+        
+        imageAdress=ImageAdrr()
+        image = imageAdress.bearingPhoto
+        self.fig5 = Figure(figsize=(4,3))
+        self.ax_41 = self.fig5.add_subplot()
+        self.ax_41.set_position([0.01, 0.01, 1, 1])
+        self.ax_41.set_xticks([])
+        self.ax_41.set_yticks([])
+        self.ax_41.imshow(image)
+        self.ax_41.axis('off')
+        self.ax_41.set_visible(True)
+        self.fig5.set_visible(True)
+        self.canvas4 = FigureCanvasTkAgg(self.fig5, master=imageFrame)
+        self.canvas4.get_tk_widget().pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
+
+        bearingNameLabel = ttk.Label(imputFrame, text=_('Bearing Name'), style='config.TLabel')
+        bearingNameLabel.grid(column=0, row=0, padx=(10, 10), pady=5, sticky='w')
+
+        self.nameEntry = ttk.Entry(imputFrame, width=10, textvariable=self.brgParam1,
+                                  state="normal", font=('Chakra Petch', 13))
+        self.nameEntry.grid(column=1, row=0, padx=(10, 10), pady=5, ipadx=3, sticky='e')  
+
+        speedLabel = ttk.Label(imputFrame, text=_("Speed(RPM)"), style='config.TLabel')
+        speedLabel.grid(column=0, row=1, padx=(10, 10), pady=5, sticky='w')
+        self.speedEntry = ttk.Entry(imputFrame, width=10, textvariable=self.brgParam2,
+                                  state="normal", font=('Chakra Petch', 13))
+        self.speedEntry.grid(column=1, row=1, padx=(10, 10), pady=5, ipadx=3, sticky='e')
+
+        self.searchBt = ttk.Button(imputFrame, text=_("SEARCH"), style='Accent.TButton',
+                                 command=self.on_search_button_clicked)
+        self.searchBt.grid(column=2, row=3, padx=5, pady=5, ipadx=10, sticky='e')
+
+        self.myTable = ttk.Treeview(tableFrame)
+        self.myTable.grid(column=0, row=0, padx=5, pady=5, sticky='e')
+        self.myTable['columns'] = ('name', 'BPFO', 'BPFI', 'BSF', 'FTF')
+        self.myTable.column("#0", width=0,  stretch=Tk.NO)
+        self.myTable.column("name",anchor=Tk.CENTER, width=100)
+        self.myTable.column("BPFO",anchor=Tk.CENTER,width=100)
+        self.myTable.column("BPFI",anchor=Tk.CENTER,width=100)
+        self.myTable.column("BSF",anchor=Tk.CENTER,width=100)
+        self.myTable.column("FTF",anchor=Tk.CENTER,width=100)
+        self.myTable.heading("#0",text="",anchor=Tk.CENTER)
+        self.myTable.heading("name",text="Name",anchor=Tk.CENTER)
+        self.myTable.heading("BPFO",text="BPFO",anchor=Tk.CENTER)
+        self.myTable.heading("BPFI",text="BPFI",anchor=Tk.CENTER)
+        self.myTable.heading("BSF",text="BSF",anchor=Tk.CENTER)
+        self.myTable.heading("FTF",text="FTF",anchor=Tk.CENTER)
+
+    def on_search_button_clicked(self):
+        global confirm_flag
+        confirm_flag=1
+        try:
+            bearingName=self.brgParam1.get()
+            tempSpeed=self.brgParam2.get()
+            speed=1
+            if is_number(tempSpeed)==False:
+                speed=1
+            else:
+                speed=int(tempSpeed)/60.0
+            if bearingName!='':
+                for row in self.myTable.get_children():
+                    self.myTable.delete(row)
+                with self.con:
+                    cur=self.con.cursor()
+                    cur.execute(f"SELECT Brg_Number, BPFO, BPFI, BSF, FTF FROM Brg_Freqs WHERE Brg_Number = '{bearingName}'")
+                    load_data = cur.fetchall()
+                    load_data_arr = [i for i in load_data]
+                    for i in range(len(load_data_arr)):
+                        self.myTable.insert(parent='',index='end',iid=i,text='', values=(str(load_data_arr[i][0]),str(load_data_arr[i][1]*speed)[:6], \
+                                            str(load_data_arr[i][2]*speed)[:6], str(load_data_arr[i][3]*speed)[:6], str(load_data_arr[i][4]*speed)[:6]))
+                    
+        except:
+            pass
 class SideButtonFrame(Tk.Frame):
     def __init__(self, parent, history_config_struct, db_connect, infoLabel, canvas):
         super().__init__(parent, bd=1, bg='white', width=90, height=504)
