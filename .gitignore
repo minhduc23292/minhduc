@@ -7,4 +7,3 @@ test.py
 *.mo
 *~
 .venv
-*.db
