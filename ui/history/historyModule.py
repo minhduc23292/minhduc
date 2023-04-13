@@ -629,7 +629,8 @@ class SideButtonFrame(Tk.Frame):
                                 window="Hanning"
                                 )
                             analytical_signal1 = hilbert(_samples_1)
-                            amplitude_envelope1 = np.abs(analytical_signal1)
+                            enveloped_signal1=_samples_1 + 1j*analytical_signal1
+                            amplitude_envelope1 = np.abs(enveloped_signal1)
                             amplitude_envelope1 = filter_data(
                                 amplitude_envelope1,
                                 "LOWPASS",
@@ -828,7 +829,8 @@ class SideButtonFrame(Tk.Frame):
                                 window="Hanning"
                                 )
                             analytical_signal1 = hilbert(_samples_1)
-                            amplitude_envelope1 = np.abs(analytical_signal1)
+                            enveloped_signal1=_samples_1 + 1j*analytical_signal1
+                            amplitude_envelope1 = np.abs(enveloped_signal1)
                             amplitude_envelope1 = filter_data(
                                 amplitude_envelope1,
                                 "LOWPASS",

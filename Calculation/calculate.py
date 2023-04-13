@@ -475,9 +475,13 @@ def calculate_enveloped_signal(origin_config):
         analytical_signal1 = hilbert(_samples_1)
         analytical_signal2 = hilbert(_samples_2)
         analytical_signal3 = hilbert(_samples_3)
-        amplitude_envelope1 = np.abs(analytical_signal1)
-        amplitude_envelope2 = np.abs(analytical_signal2)
-        amplitude_envelope3 = np.abs(analytical_signal3)
+        enveloped_signal1= _samples_1 + 1j*analytical_signal1
+        enveloped_signal2= _samples_2 + 1j*analytical_signal2
+        enveloped_signal3= _samples_3 + 1j*analytical_signal3
+
+        amplitude_envelope1 = np.abs(enveloped_signal1)
+        amplitude_envelope2 = np.abs(enveloped_signal2)
+        amplitude_envelope3 = np.abs(enveloped_signal3)
 
         amplitude_envelope1 = filter_data(
             amplitude_envelope1,
