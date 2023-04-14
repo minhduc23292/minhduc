@@ -291,11 +291,17 @@ class historyConfig(Tk.Frame):
         
 
     def get_selected_cell(self, event):
-        selected_item = self.PrjTable.focus() # get the selected item
-        prjID = self.PrjTable.item(selected_item)['values'][0] # get the value of the cell
-        position=self.PrjTable.item(selected_item)['values'][2]
-        self.historyParam1.set(prjID)
-        self.historyParam2.set(position)
+        global confirm_flag
+        confirm_flag=0
+        self.applyBt.configure(state='normal')
+        try:
+            selected_item = self.PrjTable.focus() # get the selected item
+            prjID = self.PrjTable.item(selected_item)['values'][0] # get the value of the cell
+            position=self.PrjTable.item(selected_item)['values'][2]
+            self.historyParam1.set(prjID)
+            self.historyParam2.set(position)
+        except:
+            pass
 
     def update_text_tsa(self):
         global confirm_flag
@@ -483,7 +489,7 @@ class bearingFrequency(Tk.Frame):
                     self.myTable.delete(row)
                 with self.con:
                     cur=self.con.cursor()
-                    cur.execute(f"SELECT Brg_Number, BPFO, BPFI, BSF, FTF FROM Brg_Freqs WHERE Brg_Number = '{bearingName}'")
+                    cur.execute(f"SELECT DISTINCT Brg_Number, BPFO, BPFI, BSF, FTF FROM Brg_Freqs WHERE Brg_Number = '{bearingName}' ORDER BY BPFO, BPFI, BSF, FTF")
                     load_data = cur.fetchall()
                     load_data_arr = [i for i in load_data]
                     for i in range(len(load_data_arr)):

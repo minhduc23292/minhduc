@@ -514,11 +514,9 @@ msgid "Delete project errors"
 msgstr "Lỗi trong khi xóa dự án."
 
 #: ui/history/historyModule.py:420
-#, fuzzy
 msgid "Bearing frequency table"
 msgstr ""
-"Tần số\n"
-"Vòng bi"
+"Bảng tần số đặc trưng vòng bi"
 
 #: ui/history/historyModule.py:437
 msgid "Bearing Name"
