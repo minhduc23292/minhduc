@@ -1626,17 +1626,36 @@ class SummaryFrameCanvas():
     def creat_summary_canvas(self):
         self.detailFrame = Tk.LabelFrame(self.parent, bg='white')
         self.detailFrame.pack(side=Tk.TOP, fill=Tk.BOTH)
-
-        self.detailLabel1 = Tk.Label(self.detailFrame, text=_(
-            'Channel      A-Peak   A-PkPk   A-RMS   V-Peak   V-PkPk   V-RMS   D-Peak   D-PkPk   D-RMS   Crest   Kutorsis.'),
-                                bg='white', fg="blue", font="Verdana 12")
-        self.detailLabel1.grid(column=0, row=0, padx=0, pady=5, sticky='w')
-        self.detailLabel2 = Tk.Label(self.detailFrame, text=_('Channel1'), bg='white', font="Verdana 12")
-        self.detailLabel2.grid(column=0, row=1, padx=0, pady=5, sticky='w')
-        self.detailLabel3 = Tk.Label(self.detailFrame, text=_('Channel2'), bg='white', font="Verdana 12")
-        self.detailLabel3.grid(column=0, row=2, padx=0, pady=5, sticky='w')
-        self.detailLabel4 = Tk.Label(self.detailFrame, text=_('Channel3'), bg='white', font="Verdana 12")
-        self.detailLabel4.grid(column=0, row=3, padx=0, pady=5, sticky='w')
+        self.myTable = ttk.Treeview(self.detailFrame, height=3)
+        self.myTable.grid(column=0, row=0, padx=(5, 5), pady=5, sticky='e')
+        self.myTable['columns'] = ('Channel', 'A-Peak', 'A-PkPk', 'A-RMS', 'V-Peak', 'V-PkPk', 'V-RMS', 'D-Peak', 'D-PkPk', 'D-RMS', 'Crest', 'Kutorsis')
+        self.myTable.column("#0", width=0,  stretch=Tk.NO)
+        self.myTable.column("Channel", anchor=Tk.CENTER, width=80)
+        self.myTable.column("A-Peak", anchor=Tk.CENTER, width=73)
+        self.myTable.column("A-PkPk", anchor=Tk.CENTER, width=73)
+        self.myTable.column("A-RMS", anchor=Tk.CENTER, width=73)
+        self.myTable.column("V-Peak", anchor=Tk.CENTER, width=73)
+        self.myTable.column("V-PkPk", anchor=Tk.CENTER, width=73)
+        self.myTable.column("V-RMS", anchor=Tk.CENTER, width=73)
+        self.myTable.column("D-Peak", anchor=Tk.CENTER, width=73)
+        self.myTable.column("D-PkPk", anchor=Tk.CENTER, width=73)
+        self.myTable.column("D-RMS", anchor=Tk.CENTER, width=73)
+        self.myTable.column("Crest", anchor=Tk.CENTER, width=73)
+        self.myTable.column("Kutorsis", anchor=Tk.CENTER, width=78)
+    
+        self.myTable.heading("#0",text="",anchor=Tk.CENTER)
+        self.myTable.heading("Channel",text="Channel",anchor=Tk.CENTER)
+        self.myTable.heading("A-Peak",text="A-Peak",anchor=Tk.CENTER)
+        self.myTable.heading("A-PkPk",text="A-PkPk",anchor=Tk.CENTER)
+        self.myTable.heading("A-RMS",text="A-RMS",anchor=Tk.CENTER)
+        self.myTable.heading("V-Peak",text="V-Peak",anchor=Tk.CENTER)
+        self.myTable.heading("V-PkPk",text="V-PkPk",anchor=Tk.CENTER)
+        self.myTable.heading("V-RMS",text="V-RMS",anchor=Tk.CENTER)
+        self.myTable.heading("D-Peak",text="D-Peak",anchor=Tk.CENTER)
+        self.myTable.heading("D-PkPk",text="D-PkPk",anchor=Tk.CENTER)
+        self.myTable.heading("D-RMS",text="D-RMS",anchor=Tk.CENTER)
+        self.myTable.heading("Crest",text="Crest",anchor=Tk.CENTER)
+        self.myTable.heading("Kutorsis",text="Kutorsis",anchor=Tk.CENTER)
 
         self.graphFrame = Tk.LabelFrame(self.parent, bg='white', borderwidth=0)
         self.graphFrame.pack(side=Tk.TOP, fill=Tk.BOTH)
@@ -1657,7 +1676,8 @@ class SummaryFrameCanvas():
 
     def plot_summary(self, origin_config):
         imageAdress=ImageAdrr()
-        textLabel = []
+        for row in self.myTable.get_children():
+            self.myTable.delete(row)
         for i in range(3):
             try:
                 a_index = origin_config.sensor_config["accel"].index(i)
@@ -1705,11 +1725,10 @@ class SummaryFrameCanvas():
                 Drms = "None "
                 # Dcrest = "None "
                 # Dkutor = "None "
-            textLabel.append(
-                f'Chanel{i + 1}     {str(Apeak)[:5]}     {str(APp)[0:5]}    {str(Arms)[0:5]}    {str(Vpeak)[0:5]}     {str(VPp)[0:5]}    {str(Vrms)[0:5]}    {str(Dpeak)[0:5]}     {str(DPp)[0:5]}    {str(Drms)[0:5]}    {str(Acrest)[0:5]}    {str(Akutor)[0:5]}')
-        self.detailLabel2.configure(text=textLabel[0])
-        self.detailLabel3.configure(text=textLabel[1])
-        self.detailLabel4.configure(text=textLabel[2])
+                
+            self.myTable.insert(parent='', index='end', iid=i, text='', values=("Channel " + str(i+1), str(Apeak)[:5], str(APp)[0:5], str(Arms)[0:5],\
+                                                                                str(Vpeak)[0:5], str(VPp)[0:5], str(Vrms)[0:5],\
+                                                                                str(Dpeak)[0:5], str(DPp)[0:5], str(Drms)[0:5], str(Acrest)[0:5], str(Akutor)[0:5]))
 
         if origin_config.waveform_config_struct["MachineType"] == "GENERAL":
             image = imageAdress.iso1Photo
