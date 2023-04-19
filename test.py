@@ -147,6 +147,10 @@ class PanedDemo(ttk.PanedWindow):
 
         for item in tree_data:
             parent, iid, text, values = item
+            print("parent=",parent)
+            print("iid=", iid)
+            print("text=", text)
+            print("value=", values)
             self.tree.insert(parent=parent, index="end", iid=iid, text=text, values=values)
 
             if not parent or iid in {8, 21}:

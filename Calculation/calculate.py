@@ -166,7 +166,7 @@ def find_nearest_element(arr, value):
         i+=1
     return i
 
-def tab4_tracking_signal(data_arrY, data_arrX, _sample_rate, range_freq):
+def tab4_tracking_signal(data_arrY, data_arrX, range_freq):
     temXarray=data_arrX[find_nearest_element(data_arrX, range_freq[0]): find_nearest_element(data_arrX, range_freq[1])]
     [key_pos, key_max] = find_max(data_arrY[find_nearest_element(data_arrX, range_freq[0]): find_nearest_element(data_arrX, range_freq[1])])
     return [key_max, temXarray[key_pos]]
@@ -339,7 +339,7 @@ def fresh_tacho_pulse(tachoArr, symCheck):
 def iso10816_judge(machineType, tocdo, congsuat, foundation="Rigid"):
     if foundation == None:
         foundation = "Rigid"
-    if machineType == "GENERAL":
+    if machineType == "GENERAL" or machineType == "PUMP" or machineType == "GEARBOX" or machineType == "FAN":
         if congsuat <= 15.0:
             return dfc.iso10816["iso108161"]["class1"]
         elif 15.0 < congsuat <= 75.0:
@@ -475,13 +475,13 @@ def calculate_enveloped_signal(origin_config):
         analytical_signal1 = hilbert(_samples_1)
         analytical_signal2 = hilbert(_samples_2)
         analytical_signal3 = hilbert(_samples_3)
-        enveloped_signal1= _samples_1 + 1j*analytical_signal1
-        enveloped_signal2= _samples_2 + 1j*analytical_signal2
-        enveloped_signal3= _samples_3 + 1j*analytical_signal3
+        # enveloped_signal1= _samples_1 + 1j*analytical_signal1
+        # enveloped_signal2= _samples_2 + 1j*analytical_signal2
+        # enveloped_signal3= _samples_3 + 1j*analytical_signal3
 
-        amplitude_envelope1 = np.abs(enveloped_signal1)
-        amplitude_envelope2 = np.abs(enveloped_signal2)
-        amplitude_envelope3 = np.abs(enveloped_signal3)
+        amplitude_envelope1 = np.abs(analytical_signal1)
+        amplitude_envelope2 = np.abs(analytical_signal2)
+        amplitude_envelope3 = np.abs(analytical_signal3)
 
         amplitude_envelope1 = filter_data(
             amplitude_envelope1,

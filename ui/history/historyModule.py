@@ -351,7 +351,7 @@ class historyConfig(Tk.Frame):
         self.historyParam2.set("")
         with self.con:
             cur=self.con.cursor()
-            cur.execute(f"SELECT POS FROM DATA WHERE CODE = '{prjCode}' ORDER BY DATE ASC")
+            cur.execute(f"SELECT POS FROM DATA WHERE CODE = ? ORDER BY DATE ASC", (prjCode,))
             load_data = cur.fetchall()
             load_data_arr = [i for i in load_data]
         posList=[]
@@ -369,8 +369,8 @@ class historyConfig(Tk.Frame):
                     cur=self.con.cursor()
                     if pms.general_warning(_("Do you want to delete this project?"))==True:
                         
-                        cur.execute(f"""DELETE FROM DATA WHERE CODE = '{prjCode}' """)
-                        cur.execute(f"""DELETE FROM Project_ID WHERE CODE = '{prjCode}' """)
+                        cur.execute(f"""DELETE FROM DATA WHERE CODE = ? """, (prjCode,))
+                        cur.execute(f"""DELETE FROM Project_ID WHERE CODE = ? """, (prjCode,))
                         self.infoLabel.configure(text=_("Selected project is deleted."))
                         for row in self.PrjTable.get_children():
                             self.PrjTable.delete(row)
@@ -489,7 +489,7 @@ class bearingFrequency(Tk.Frame):
                     self.myTable.delete(row)
                 with self.con:
                     cur=self.con.cursor()
-                    cur.execute(f"SELECT DISTINCT Brg_Number, BPFO, BPFI, BSF, FTF FROM Brg_Freqs WHERE Brg_Number = '{bearingName}' ORDER BY BPFO, BPFI, BSF, FTF")
+                    cur.execute(f"SELECT DISTINCT Brg_Number, BPFO, BPFI, BSF, FTF FROM Brg_Freqs WHERE Brg_Number = ? ORDER BY BPFO, BPFI, BSF, FTF", (bearingName,))
                     load_data = cur.fetchall()
                     load_data_arr = [i for i in load_data]
                     for i in range(len(load_data_arr)):
@@ -606,27 +606,27 @@ class SideButtonFrame(Tk.Frame):
             for ax in axes_arr:
                 if _type == "RIGHT":
                     [xleft, xright] = ax.get_xlim()
-                    xright -= 50
-                    xleft -= 50
+                    xright -= 0.05*(xright-xleft)
+                    xleft -= 0.05*(xright-xleft)
                     ax.set_xlim(xleft, xright)
 
                 elif _type == "LEFT":
                     [xleft, xright] = ax.get_xlim()
-                    xright += 50
-                    xleft += 50
+                    xright += 0.05*(xright-xleft)
+                    xleft += 0.05*(xright-xleft)
                     if xright >= 0:
                         ax.set_xlim(xleft, xright)
 
                 elif _type == "IN":
                     [xleft, xright] = ax.get_xlim()
-                    xright -= 100
-                    if xright < xleft + 100:
-                        xright = xleft + 100
+                    xright -= 0.05*(xright-xleft)
+                    if xright < xleft*1.1:
+                        xright = xleft*1.1
                     ax.set_xlim(xleft, xright)
 
                 elif _type == "OUT":
                     [xleft, xright] = ax.get_xlim()
-                    xright += 100
+                    xright += 0.05*(xright-xleft)
                     ax.set_xlim(xleft, xright)
                 elif _type == "RESET":
                     [xleft, xright] = [0, self.history_config_struct["ViewLimit"]]
@@ -687,6 +687,8 @@ class SideButtonFrame(Tk.Frame):
         try:
             prjCode = self.history_config_struct["ProjectID"]
             sensorPosition = self.history_config_struct["SensorPosition"]
+            codeTuple=(prjCode,)
+            dataTuple=(prjCode, sensorPosition,)
             viewRange=[0, self.history_config_struct["ViewLimit"]]
             tsaUse = self.history_config_struct["TSA"]
             tsaBin = self.history_config_struct["TsaBin"]
@@ -695,9 +697,9 @@ class SideButtonFrame(Tk.Frame):
             sample_rate_arr=[]
             with self.con:
                 cur=self.con.cursor()
-                cur.execute(f"SELECT DATA, DATE, Sample_rate FROM DATA WHERE CODE = '{prjCode}' AND POS='{sensorPosition}' ORDER BY DATE DESC;")
+                cur.execute(f"SELECT DATA, DATE, Sample_rate FROM DATA WHERE CODE = ? AND POS=? ORDER BY DATE DESC;", dataTuple)
                 load_data = cur.fetchall()
-                cur.execute(f"SELECT POWER, RPM, DRIVEN, BEARINGBORE, GEARTOOTH, FOUNDATION, NOTE FROM Project_ID WHERE CODE = '{prjCode}';")
+                cur.execute(f"SELECT POWER, RPM, DRIVEN, BEARINGBORE, GEARTOOTH, FOUNDATION, NOTE FROM Project_ID WHERE CODE = ?", codeTuple)
                 machineParam = cur.fetchall()
             load_data_arr = [i for i in load_data] #mang cac chuoi data, date [data,date,sample_rate; data, date, sample_rate]
             machine_param_arr = [i for i in machineParam]
@@ -774,8 +776,8 @@ class SideButtonFrame(Tk.Frame):
                                 window="Hanning"
                                 )
                             analytical_signal1 = hilbert(_samples_1)
-                            enveloped_signal1=_samples_1 + 1j*analytical_signal1
-                            amplitude_envelope1 = np.abs(enveloped_signal1)
+                            # enveloped_signal1=_samples_1 + 1j*analytical_signal1
+                            amplitude_envelope1 = np.abs(analytical_signal1)
                             amplitude_envelope1 = filter_data(
                                 amplitude_envelope1,
                                 "LOWPASS",
@@ -789,7 +791,8 @@ class SideButtonFrame(Tk.Frame):
                 self.infoLabel.config(text=_("Project: ")+ str(prjCode) + '. ')
             else:
                 self.infoLabel.config(text=_("There is no data, please check SETTING !"))
-        except:
+        except Exception as ex:
+            print(ex)
             self.infoLabel.config(text=_("Data errors."))
 
     def Tracking(self, dir:bool):
@@ -828,7 +831,7 @@ class SideButtonFrame(Tk.Frame):
                 stop_freq=track_flag+tracking_freq
             try:     
                 _sample_rate=self.history_config_struct["sampleRate"][0]
-                [max1, freq]=tab4_tracking_signal(y_data, x_data, _sample_rate, [start_freq, stop_freq])
+                [max1, freq]=tab4_tracking_signal(y_data, x_data, [start_freq, stop_freq])
                 Pd.PLT.plot_grid_only(self.canvas, freq)
                 title= _('Frequency:')+ f' {str(freq)[:4]}'+' hz'
                 self.infoLabel.config(text=title)
@@ -849,9 +852,9 @@ class SideButtonFrame(Tk.Frame):
                 
                 with self.con:
                     cur = self.con.cursor()
-                    cur.execute(f"SELECT DATA, POS, DATE FROM DATA WHERE CODE = '{ProjectCode}' ORDER BY DATE ASC")
+                    cur.execute(f"SELECT DATA, POS, DATE FROM DATA WHERE CODE = ? ORDER BY DATE ASC", (ProjectCode,))
                     load_data = cur.fetchall()
-                    cur.execute(f"SELECT COM_ID FROM Project_ID WHERE CODE = '{ProjectCode}'")
+                    cur.execute(f"SELECT COM_ID FROM Project_ID WHERE CODE = ?", (ProjectCode,))
                     machineParam = cur.fetchall()
                 load_data_arr = [i for i in load_data]
                 machine_param_arr = [i for i in machineParam]
@@ -859,7 +862,7 @@ class SideButtonFrame(Tk.Frame):
                 
                 with self.con:
                     cur = self.con.cursor()
-                    cur.execute(f"SELECT NAME FROM Company_ID WHERE COM_ID = '{comId}'")
+                    cur.execute(f"SELECT NAME FROM Company_ID WHERE COM_ID = ?", (str(comId),))
                     companyTuple=cur.fetchall()
                 companyName= companyTuple[0][0]
                 name=companyName + '_' + ProjectCode+'__'
@@ -905,9 +908,9 @@ class SideButtonFrame(Tk.Frame):
                 sample_rate_arr=[]
                 with self.con:
                     cur=self.con.cursor()
-                    cur.execute(f"SELECT DATA, DATE, Sample_rate FROM DATA WHERE CODE = '{prjCode}' AND POS='{sensorPosition}' ORDER BY DATE DESC;")
+                    cur.execute(f"SELECT DATA, DATE, Sample_rate FROM DATA WHERE CODE = ? AND POS= ? ORDER BY DATE DESC", (prjCode, sensorPosition,))
                     load_data = cur.fetchall()
-                    cur.execute(f"SELECT POWER, RPM, DRIVEN, BEARINGBORE, GEARTOOTH, FOUNDATION, NOTE FROM Project_ID WHERE CODE = '{prjCode}';")
+                    cur.execute(f"SELECT POWER, RPM, DRIVEN, BEARINGBORE, GEARTOOTH, FOUNDATION, NOTE FROM Project_ID WHERE CODE = ?", (prjCode,))
                     machineParam = cur.fetchall()
                 load_data_arr = [i for i in load_data] #mang cac chuoi data, date [data,date,sample_rate; data, date, sample_rate]
                 machine_param_arr = [i for i in machineParam]
@@ -974,8 +977,8 @@ class SideButtonFrame(Tk.Frame):
                                 window="Hanning"
                                 )
                             analytical_signal1 = hilbert(_samples_1)
-                            enveloped_signal1=_samples_1 + 1j*analytical_signal1
-                            amplitude_envelope1 = np.abs(enveloped_signal1)
+                            # enveloped_signal1=_samples_1 + 1j*analytical_signal1
+                            amplitude_envelope1 = np.abs(analytical_signal1)
                             amplitude_envelope1 = filter_data(
                                 amplitude_envelope1,
                                 "LOWPASS",

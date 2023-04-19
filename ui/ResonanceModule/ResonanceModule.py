@@ -555,7 +555,7 @@ class SideButtonFrame(Tk.Frame):
             try:
                 
                 _sample_rate=self.origin_config.resonance_config_struct["sampleRate"]
-                [max1, freq]=tab4_tracking_signal(y_data, x_data, _sample_rate, [start_freq, stop_freq])
+                [max1, freq]=tab4_tracking_signal(y_data, x_data, [start_freq, stop_freq])
                 title= 'Frequency: '+ f'{str(freq)[:4]}'+' hz'
                 Pd.PLT.plot_grid_specific(self.parent.resonancePlotFrame.canvas1, freq, title, False)
                 

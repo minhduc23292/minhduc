@@ -6,6 +6,7 @@ from i18n import _
 import matplotlib
 
 matplotlib.use('TKAgg')
+import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 from mpl_toolkits.mplot3d import Axes3D, proj3d
@@ -48,8 +49,8 @@ def testVal(inStr, acttyp):
 
 class DiagnosticPage(Tk.Frame):
     def __init__(self, parent: "Application"):
-        # sv_ttk.set_theme("light")
         self.parent = parent
+        self.origin_config=parent.origin_config
         self.ZoomCanvas = Tk.Canvas()
         self.freqFuntionCanvas = Tk.Canvas()
         self.con = lite.connect(f'{parent_directory}/company.db')
@@ -71,8 +72,8 @@ class DiagnosticPage(Tk.Frame):
         self.json_pathname = Path(json_filename)
         with open(self.json_pathname, 'r', encoding='utf-8') as f:
             currentSensitivity = json.load(f)
-        self.parent.origin_config.sensor_sensitivity["acc_sensitivity"]=float(currentSensitivity["accSensitivity"])
-        self.parent.origin_config.sensor_sensitivity["vel_sensitivity"]=float(currentSensitivity["velSensitivity"])
+        self.origin_config.sensor_sensitivity["acc_sensitivity"]=float(currentSensitivity["accSensitivity"])
+        self.origin_config.sensor_sensitivity["vel_sensitivity"]=float(currentSensitivity["velSensitivity"])
 
         self.btstyle = ttk.Style()
         self.btstyle.configure('normal.TButton', font=('Chakra Petch', 15), borderwidth=1, justify=Tk.CENTER)
@@ -90,7 +91,7 @@ class DiagnosticPage(Tk.Frame):
         self.featureFrame.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
         self.featureFrame.pack_propagate(0)
 
-        self.configFrame = Tk.Frame(self.mainFrame, bd=1, bg='white', width=918, height=504)
+        self.configFrame = Tk.Frame(self.mainFrame, name="trang cai dat chinh", bd=1, bg='white', width=918, height=504)
         self.configFrame.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
         self.configFrame.pack_propagate(0)
 
@@ -161,7 +162,6 @@ class DiagnosticPage(Tk.Frame):
         self.generalFrameCanvas = GeneralFrameCanvas(self.generalPlotFrame)
         self.summaryFrameCanvas = SummaryFrameCanvas(self.summaryPlotFrame)
      
-
     def creat_diagnostic_feature_panel(self):
 
         self.homeBt = ttk.Button(self.featureFrame, style='normal.TButton', text=_("Home"), image=self.homePhoto,
@@ -199,7 +199,6 @@ class DiagnosticPage(Tk.Frame):
         self.infoLabel2 = ttk.Label(self.infoFrame, text="OK.", style="normal.TLabel", width=26)
         self.infoLabel2.grid(column=0, row=1, padx=0, pady=5, sticky='w')
 
-
     def creat_diagnostic_config_panel(self):
         def clean_frame_for_config_panel():
             for widget in self.configFrame.winfo_children():
@@ -216,9 +215,9 @@ class DiagnosticPage(Tk.Frame):
             self.frequencyBt.configure(style="normal.TButton")
             self.generalBt.configure(style="normal.TButton")
             self.configBt.configure(style="feature.Accent.TButton")
-
         clean_frame_for_config_panel()
-        self.config = ConfigFrame(self.configFrame, self.parent.origin_config)
+        self.config1 = ConfigFrame(self)
+        self.config1.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
         self.nextBt = ttk.Button(self.configFrame, text=_("APPLY & START"), style='Accent.TButton',
                                  command=lambda: self.on_start_button_clicked(True))
         self.nextBt.place(relx=0.8, rely=0.89, width=175, height=48)
@@ -296,7 +295,7 @@ class DiagnosticPage(Tk.Frame):
         self.parent.go_to_home_page()
 
     def read_sensor(self):
-        self.parent.origin_config.sensor_config = {
+        self.origin_config.sensor_config = {
             "sensor_input": [],
             "sensor_data": [],
             "store_sensor_data": [[],[],[]],
@@ -315,24 +314,24 @@ class DiagnosticPage(Tk.Frame):
         unit = ['', '', '', '', '', '']
         chanelv = [[], [], [], []]
         chaneln = []
-        self.parent.origin_config.sensor_config["sample_rate"] = int(self.parent.origin_config.waveform_config_struct["Fmax"] * 2.56)
-        self.parent.origin_config.sensor_config["fft_line"] = self.parent.origin_config.waveform_config_struct["num_fft_line"]
-        self.parent.origin_config.sensor_config["sensor_input"].append(
-            self.parent.origin_config.waveform_config_struct["Sensor1"])
-        self.parent.origin_config.sensor_config["sensor_input"].append(
-            self.parent.origin_config.waveform_config_struct["Sensor2"])
-        self.parent.origin_config.sensor_config["sensor_input"].append(
-            self.parent.origin_config.waveform_config_struct["Sensor3"])
-        self.parent.origin_config.sensor_config["sensor_input"].append(
-            self.parent.origin_config.waveform_config_struct["Sensor4"])
-        self.parent.origin_config.sensor_config["sensor_key"].append(
-            self.parent.origin_config.waveform_config_struct["KeyPhase"])
-        if self.parent.origin_config.sensor_config["sensor_input"][3] == "TACHOMETER":
+        self.origin_config.sensor_config["sample_rate"] = int(self.origin_config.waveform_config_struct["Fmax"] * 2.56)
+        self.origin_config.sensor_config["fft_line"] = self.origin_config.waveform_config_struct["num_fft_line"]
+        self.origin_config.sensor_config["sensor_input"].append(
+            self.origin_config.waveform_config_struct["Sensor1"])
+        self.origin_config.sensor_config["sensor_input"].append(
+            self.origin_config.waveform_config_struct["Sensor2"])
+        self.origin_config.sensor_config["sensor_input"].append(
+            self.origin_config.waveform_config_struct["Sensor3"])
+        self.origin_config.sensor_config["sensor_input"].append(
+            self.origin_config.waveform_config_struct["Sensor4"])
+        self.origin_config.sensor_config["sensor_key"].append(
+            self.origin_config.waveform_config_struct["KeyPhase"])
+        if self.origin_config.sensor_config["sensor_input"][3] == "TACHOMETER":
             n = 6
         else:
             n = 4
-        data_length = pow2(int(self.parent.origin_config.sensor_config["fft_line"]*2.56))+2
-        waitingTime=int(data_length/self.parent.origin_config.sensor_config["sample_rate"])+2
+        data_length = pow2(int(self.origin_config.sensor_config["fft_line"]*2.56))+2
+        waitingTime=int(data_length/self.origin_config.sensor_config["sample_rate"])+2
         self.infoLabel2.configure(text=_("READING.....Please wait:")+ f" {str(waitingTime)} " +_("seconds."), style="red.TLabel")
         self.infoLabel2.update_idletasks()
         total_length=data_length*n+1
@@ -342,7 +341,7 @@ class DiagnosticPage(Tk.Frame):
         ad7609.ADCread.argtypes = [ctypes.c_int, ctypes.c_int, ctypes.c_int]
         ad7609.freeme.argtypes = ctypes.c_void_p,
         ad7609.freeme.restype = None
-        kq=ad7609.ADCread(data_length, self.parent.origin_config.sensor_config["sample_rate"], n)
+        kq=ad7609.ADCread(data_length, self.origin_config.sensor_config["sample_rate"], n)
         ttl=[i for i in kq.contents]
         ad7609.freeme(kq)
         actual_sample_rate= int(ttl[-1])
@@ -383,82 +382,81 @@ class DiagnosticPage(Tk.Frame):
             chaneln[4] /= 2
             chaneln[4] = fresh_laser_pulse(chaneln[4])
             unit[3] = 'laser sensor'
-        if self.parent.origin_config.waveform_config_struct["UseTSA"] == 1 and n == 6:
+        if self.origin_config.waveform_config_struct["UseTSA"] == 1 and n == 6:
             mark = []
             chanelk = []
             for i in range(len(chaneln[4]) - 1):
                 if chaneln[4][i] < 0.5 and chaneln[4][i + 1] > 0.7:
                     mark.append(i + 1)
-            tsa_temp_value = self.parent.origin_config.waveform_config_struct["TSATimes"]
+            tsa_temp_value = self.origin_config.waveform_config_struct["TSATimes"]
             if tsa_temp_value >= len(mark):
                 tsa_temp_value = len(mark) - 1
             if len(mark) > 5:
                 chanelk = tsa_convert(chaneln, mark, tsa_temp_value)
-                self.parent.origin_config.sensor_config["sensor_data"] = chanelk
+                self.origin_config.sensor_config["sensor_data"] = chanelk
             else:
-                self.parent.origin_config.sensor_config["sensor_data"] = chaneln
+                self.origin_config.sensor_config["sensor_data"] = chaneln
 
         else:
-            self.parent.origin_config.sensor_config["sensor_data"] = chaneln
-        accConvertFactor=1000/self.parent.origin_config.sensor_sensitivity["acc_sensitivity"]
-        velConvertFactor=1000/self.parent.origin_config.sensor_sensitivity["vel_sensitivity"]
+            self.origin_config.sensor_config["sensor_data"] = chaneln
+        accConvertFactor=1000/self.origin_config.sensor_sensitivity["acc_sensitivity"]
+        velConvertFactor=1000/self.origin_config.sensor_sensitivity["vel_sensitivity"]
         for i in range(3):
-            if self.parent.origin_config.sensor_config["sensor_input"][i][-1] == 'A':
-                self.parent.origin_config.sensor_config["sensor_data"][i] *= accConvertFactor  # g
-                self.parent.origin_config.sensor_config["sensor_data"][i] -= np.mean(
-                    self.parent.origin_config.sensor_config["sensor_data"][i])
+            if self.origin_config.sensor_config["sensor_input"][i] == 'Acceleration':
+                self.origin_config.sensor_config["sensor_data"][i] *= accConvertFactor  # g
+                self.origin_config.sensor_config["sensor_data"][i] -= np.mean(
+                    self.origin_config.sensor_config["sensor_data"][i])
 
                 unit[i] = 'g'
-                self.parent.origin_config.sensor_config["accel"].append(i)
-                self.parent.origin_config.sensor_config["vel"].append(i)
-                self.parent.origin_config.sensor_config["dis"].append(i)
+                self.origin_config.sensor_config["accel"].append(i)
+                self.origin_config.sensor_config["vel"].append(i)
+                self.origin_config.sensor_config["dis"].append(i)
                 
-                self.parent.origin_config.sensor_config["vel_data"].append(
-                    acc2vel(self.parent.origin_config.sensor_config["sensor_data"][i],
-                            self.parent.origin_config.sensor_config["sample_rate"]))
+                self.origin_config.sensor_config["vel_data"].append(
+                    acc2vel(self.origin_config.sensor_config["sensor_data"][i],
+                            self.origin_config.sensor_config["sample_rate"]))
 
-                self.parent.origin_config.sensor_config["displacement_data"].append(
-                    vel2disp(acc2vel(self.parent.origin_config.sensor_config["sensor_data"][i],
-                                     self.parent.origin_config.sensor_config["sample_rate"]),
-                             self.parent.origin_config.sensor_config["sample_rate"]))
-                self.parent.origin_config.sensor_config["store_sensor_data"][i]=\
-                                        filter_data(self.parent.origin_config.sensor_config["sensor_data"][i], "BANDPASS",
+                self.origin_config.sensor_config["displacement_data"].append(
+                    vel2disp(acc2vel(self.origin_config.sensor_config["sensor_data"][i],
+                                     self.origin_config.sensor_config["sample_rate"]),
+                             self.origin_config.sensor_config["sample_rate"]))
+                self.origin_config.sensor_config["store_sensor_data"][i]=\
+                                        filter_data(self.origin_config.sensor_config["sensor_data"][i], "BANDPASS",
                                         dfc._PRE_HIGHPASS_FROM,
-                                        self.parent.origin_config.waveform_config_struct["Fmax"],
-                                        self.parent.origin_config.sensor_config["sample_rate"],
+                                        self.origin_config.waveform_config_struct["Fmax"],
+                                        self.origin_config.sensor_config["sample_rate"],
                                         window="Hanning")
-                self.parent.origin_config.sensor_config["accel_data"].append(
-                    self.parent.origin_config.sensor_config["sensor_data"][i])     
+                self.origin_config.sensor_config["accel_data"].append(
+                    self.origin_config.sensor_config["sensor_data"][i])     
 
-            elif self.parent.origin_config.sensor_config["sensor_input"][i][-1] == 'V':
-                self.parent.origin_config.sensor_config["sensor_data"][i] *= velConvertFactor  # mm/s
-                self.parent.origin_config.sensor_config["sensor_data"][i] -= np.mean(
-                    self.parent.origin_config.sensor_config["sensor_data"][i])
-                self.parent.origin_config.sensor_config["store_sensor_data"][i]=\
-                            filter_data(self.parent.origin_config.sensor_config["sensor_data"][i], "BANDPASS",
+            elif self.origin_config.sensor_config["sensor_input"][i] == 'Velocity':
+                self.origin_config.sensor_config["sensor_data"][i] *= velConvertFactor  # mm/s
+                self.origin_config.sensor_config["sensor_data"][i] -= np.mean(
+                    self.origin_config.sensor_config["sensor_data"][i])
+                self.origin_config.sensor_config["store_sensor_data"][i]=\
+                            filter_data(self.origin_config.sensor_config["sensor_data"][i], "BANDPASS",
                             dfc._PRE_HIGHPASS_FROM,
                             dfc._RMS_LOWPASS_TO,
-                            self.parent.origin_config.sensor_config["sample_rate"],
+                            self.origin_config.sensor_config["sample_rate"],
                             window="Hanning")
 
                 unit[i] = 'mm/s'
-                self.parent.origin_config.sensor_config["vel"].append(i)
-                self.parent.origin_config.sensor_config["dis"].append(i)
-                self.parent.origin_config.sensor_config["vel_data"].append(
-                    self.parent.origin_config.sensor_config["sensor_data"][i])
-                self.parent.origin_config.sensor_config["displacement_data"].append(
-                    vel2disp(self.parent.origin_config.sensor_config["sensor_data"][i],
-                             self.parent.origin_config.sensor_config["sample_rate"]))
+                self.origin_config.sensor_config["vel"].append(i)
+                self.origin_config.sensor_config["dis"].append(i)
+                self.origin_config.sensor_config["vel_data"].append(
+                    self.origin_config.sensor_config["sensor_data"][i])
+                self.origin_config.sensor_config["displacement_data"].append(
+                    vel2disp(self.origin_config.sensor_config["sensor_data"][i],
+                             self.origin_config.sensor_config["sample_rate"]))
                              
-            elif self.parent.origin_config.sensor_config["sensor_input"][i][-1] == 'E':
-                self.parent.origin_config.sensor_config["sensor_data"][i] *= 0
-                self.parent.origin_config.sensor_config["store_sensor_data"][i]=self.parent.origin_config.sensor_config["sensor_data"][i][1400:] #1400 relate to bandpass filter order
+            elif self.origin_config.sensor_config["sensor_input"][i] == 'NONE':
+                self.origin_config.sensor_config["sensor_data"][i] *= 0
+                self.origin_config.sensor_config["store_sensor_data"][i]=self.origin_config.sensor_config["sensor_data"][i][1400:] #1400 relate to bandpass filter order
                 unit[i] = 'no sensor'
             else:
                 pass
-        self.parent.origin_config.sensor_config["unit"] = unit
+        self.origin_config.sensor_config["unit"] = unit
         self.infoLabel2.configure(text=_("Actual sample rate:")+ f" {str(actual_sample_rate)}", style="normal.TLabel")
-
 
     def on_laser_button_clicked(self): 
         global view_flag
@@ -466,38 +464,40 @@ class DiagnosticPage(Tk.Frame):
         try:
             if view_flag==1:
                 self.laserBt.configure(text=_("NORMAL\nVIEW"))
-                _canal=self.parent.origin_config.sensor_config["sensor_data"][4]
-                _sample_rate=self.parent.origin_config.sensor_config["sample_rate"]
-                Pd.PLT.plot1chanel(self.waveformFrameCanvas.canvas1, _canal, self.parent.origin_config.sensor_config["unit"][4], _sample_rate, win_var="Hanning")
+                _canal=self.origin_config.sensor_config["sensor_data"][4]
+                _sample_rate=self.origin_config.sensor_config["sample_rate"]
+                Pd.PLT.plot1chanel(self.waveformFrameCanvas.canvas1, _canal, self.origin_config.sensor_config["unit"][4], _sample_rate, win_var="Hanning")
             else:
                 self.laserBt.configure(text=_("LASER\nVIEW"))
                 self.on_refresh_button_clicked()
         except:
             self.infoLabel2.configure(text=_("Data errors"))
     def on_save_button_clicked(self):
-        sample_rate = int(self.parent.origin_config.waveform_config_struct["Fmax"]*2.56)
-        driveCheckVal = self.parent.origin_config.waveform_config_struct["MachineType"]
-        companyName = self.parent.origin_config.project_struct["CompanyName"]
-        prjCode = self.parent.origin_config.project_struct["ProjectCode"]
+        sample_rate = int(self.origin_config.waveform_config_struct["Fmax"]*2.56)
+        driveCheckVal = self.origin_config.waveform_config_struct["MachineType"]
+        companyName = self.origin_config.project_struct["CompanyName"]
+        prjCode = self.origin_config.project_struct["ProjectCode"]
         if companyName!="" and prjCode!="":
-            rpmVal = self.parent.origin_config.waveform_config_struct["Speed"]
-            powerVal = self.parent.origin_config.waveform_config_struct["Power"]
-            foundationVal = self.parent.origin_config.waveform_config_struct["Foundation"]
-            bearingBoreVal = self.parent.origin_config.waveform_config_struct["BearingBore"]
-            gearToothVal = self.parent.origin_config.waveform_config_struct["GearTeeth"]
-            date = self.parent.origin_config.project_struct["Date"]
-            machineName = self.parent.origin_config.waveform_config_struct["MachineName"]
+            companyNameTuple=(companyName,)
+            prjCodeTuple=(prjCode,)
+            rpmVal = self.origin_config.waveform_config_struct["Speed"]
+            powerVal = self.origin_config.waveform_config_struct["Power"]
+            foundationVal = self.origin_config.waveform_config_struct["Foundation"]
+            bearingBoreVal = self.origin_config.waveform_config_struct["BearingBore"]
+            gearToothVal = self.origin_config.waveform_config_struct["GearTeeth"]
+            date = self.origin_config.project_struct["Date"]
+            machineName = self.origin_config.waveform_config_struct["MachineName"]
 
-            ss1=self.parent.origin_config.waveform_config_struct["Sensor1"]
-            ss2=self.parent.origin_config.waveform_config_struct["Sensor2"]
-            ss3=self.parent.origin_config.waveform_config_struct["Sensor3"]
-            p1=self.parent.origin_config.waveform_config_struct["Port1Pos"]
-            p2=self.parent.origin_config.waveform_config_struct["Port2Pos"]
-            p3=self.parent.origin_config.waveform_config_struct["Port3Pos"]
-            if len(self.parent.origin_config.sensor_config["store_sensor_data"])!=0:
-                canal1 = self.parent.origin_config.sensor_config["store_sensor_data"][0]
-                canal2 = self.parent.origin_config.sensor_config["store_sensor_data"][1]
-                canal3 = self.parent.origin_config.sensor_config["store_sensor_data"][2]
+            ss1=self.origin_config.waveform_config_struct["Sensor1"][0]
+            ss2=self.origin_config.waveform_config_struct["Sensor2"][0]
+            ss3=self.origin_config.waveform_config_struct["Sensor3"][0]
+            p1=self.origin_config.waveform_config_struct["Port1Pos"]
+            p2=self.origin_config.waveform_config_struct["Port2Pos"]
+            p3=self.origin_config.waveform_config_struct["Port3Pos"]
+            if len(self.origin_config.sensor_config["store_sensor_data"])!=0:
+                canal1 = self.origin_config.sensor_config["store_sensor_data"][0]
+                canal2 = self.origin_config.sensor_config["store_sensor_data"][1]
+                canal3 = self.origin_config.sensor_config["store_sensor_data"][2]
             else:
                 pms.show_error(_('There is no data !'))
                 return
@@ -506,32 +506,70 @@ class DiagnosticPage(Tk.Frame):
                 canal2_str = file_operation.conv_str_tag(canal2)
                 canal3_str = file_operation.conv_str_tag(canal3)
                 # canal4_str = file_operation.conv_str_tag(canal4)
+
                 with self.con:
                     cur = self.con.cursor()
-                    exist_name=cur.execute(f"SELECT * FROM Company_ID WHERE NAME = '{companyName}'")
+                    exist_name=cur.execute(f"SELECT * FROM Company_ID WHERE NAME = ?", companyNameTuple)
                     arr=[b for b in exist_name]
-                    exist_code=cur.execute(f"SELECT * FROM Project_ID WHERE CODE = '{prjCode}'")
+                    exist_code=cur.execute(f"SELECT * FROM Project_ID WHERE CODE = ?", prjCodeTuple)
                     arr1=[b for b in exist_code]
                     companylist = cur.execute("SELECT * FROM Company_ID")
                     companylistarr = [b for b in companylist]
-                    projectlist = cur.execute("SELECT * FROM Project_ID")
-                    projectlistarr = [b for b in projectlist]
+                    # projectlist = cur.execute("SELECT * FROM Project_ID")
+                    # projectlistarr = [b for b in projectlist]
+                    companyData={
+                        "id":len(companylistarr)+1,
+                        "name": companyName,
+                        "address":''
+                    }
+                    projectData={
+                        "id":len(companylistarr)+1,
+                        "code":str(prjCode),
+                        "power":powerVal,
+                        "rpm":rpmVal,
+                        "driven":str(driveCheckVal),
+                        "note":str(machineName),
+                        "foundation":str(foundationVal),
+                        "gearTooth":gearToothVal,
+                        "bearingBore":bearingBoreVal
+                    }
+
+                    channel1Data={
+                        "prjCode":str(prjCode),
+                        "date":str(date),
+                        "position":str(p1+ss1),
+                        "chanelData":str(canal1_str),
+                        "sampleRate":sample_rate
+                    }
+                    channel2Data={
+                        "prjCode":str(prjCode),
+                        "date":str(date),
+                        "position":str(p2+ss2),
+                        "chanelData":str(canal2_str),
+                        "sampleRate":sample_rate
+                    }
+                    channel3Data={
+                        "prjCode":str(prjCode),
+                        "date":str(date),
+                        "position":str(p3+ss3),
+                        "chanelData":str(canal3_str),
+                        "sampleRate":sample_rate
+                    }
                     if len(arr)==0 and len(arr1)==0:
                         if pms.company_project_dont_exist_warning()==True:
-                            cur.execute(f"INSERT INTO Company_ID (COM_ID, NAME, ADR) VALUES ({len(companylistarr)+1},'{companyName}','')")
+                            cur.execute(f"INSERT INTO Company_ID (COM_ID, NAME, ADR) VALUES (:id, :name, :address)", companyData)
                             cur.execute(f"""INSERT INTO Project_ID (COM_ID, CODE, POWER, RPM, DRIVEN, NOTE, FOUNDATION, GEARTOOTH, BEARINGBORE) VALUES 
-                                        ({len(companylistarr)+1},'{prjCode}', {powerVal}, {rpmVal}, 
-                                        '{driveCheckVal}','{machineName}', '{foundationVal}', {gearToothVal}, {bearingBoreVal})""")
-                            if ss1 != 'NONE':
-                                cur.execute(f""" INSERT INTO DATA (CODE, DATE, POS, DATA, Sample_rate) VALUES ('{prjCode}', '{date}','{p1+ss1}','{canal1_str}',{sample_rate})""")
+                                        (:id, :code, :power, :rpm, :driven, :note, :foundation, :gearTooth, :bearingBore)""", projectData)
+                            if ss1 != 'N':
+                                cur.execute(f""" INSERT INTO DATA (CODE, DATE, POS, DATA, Sample_rate) VALUES (:prjCode, :date, :position, :chanelData, :sampleRate)""", channel1Data)
                             else:
                                 pass
-                            if ss2 != 'NONE':
-                                cur.execute(f""" INSERT INTO DATA (CODE, DATE, POS, DATA, Sample_rate) VALUES ('{prjCode}', '{date}','{p2+ss2}','{canal2_str}',{sample_rate})""")
+                            if ss2 != 'N':
+                                cur.execute(f""" INSERT INTO DATA (CODE, DATE, POS, DATA, Sample_rate) VALUES (:prjCode, :date, :position, :chanelData, :sampleRate)""", channel2Data)
                             else:
                                 pass
-                            if ss3 != 'NONE':
-                                cur.execute(f""" INSERT INTO DATA (CODE, DATE, POS, DATA, Sample_rate) VALUES ('{prjCode}', '{date}','{p3+ss3}','{canal3_str}',{sample_rate})""")
+                            if ss3 != 'N':
+                                cur.execute(f""" INSERT INTO DATA (CODE, DATE, POS, DATA, Sample_rate) VALUES (:prjCode, :date, :position, :chanelData, :sampleRate)""", channel3Data)
                             else:
                                 pass
                             self.infoLabel2.configure(text=_("Data is saved."), style="normal.TLabel")
@@ -544,20 +582,29 @@ class DiagnosticPage(Tk.Frame):
 
                     elif len(arr) == 1 and len(arr1) == 0:
                         if(pms.company_or_project_existed_warning())==True:
+                            projectData1={
+                            "id":arr[0][0],
+                            "code":str(prjCode),
+                            "power":powerVal,
+                            "rpm":rpmVal,
+                            "driven":str(driveCheckVal),
+                            "note":str(machineName),
+                            "foundation":str(foundationVal),
+                            "gearTooth":gearToothVal,
+                            "bearingBore":bearingBoreVal
+                            }
                             cur.execute(f"""INSERT INTO Project_ID (COM_ID, CODE, POWER, RPM, DRIVEN, NOTE, FOUNDATION, GEARTOOTH, BEARINGBORE) 
-                            VALUES ({arr[0][0]},'{prjCode}',{powerVal},{rpmVal},'{driveCheckVal}','{machineName}', '{foundationVal}', {gearToothVal}, {bearingBoreVal})""")
-                            if ss1 != 'NONE':
-                                cur.execute(f""" INSERT INTO DATA (CODE, DATE, POS, DATA, Sample_rate) VALUES ('{prjCode}', '{date}', '{p1+ss1}', '{canal1_str}',{sample_rate})""")
+                            VALUES (:id, :code, :power, :rpm, :driven, :note, :foundation, :gearTooth, :bearingBore)""", projectData1)
+                            if ss1 != 'N':
+                                cur.execute(f""" INSERT INTO DATA (CODE, DATE, POS, DATA, Sample_rate) VALUES (:prjCode, :date, :position, :chanelData, :sampleRate)""", channel1Data)
                             else:
                                 pass
-                            if ss2 != 'NONE':
-                                cur.execute(f""" INSERT INTO DATA (CODE, DATE, POS, DATA, Sample_rate) VALUES ('{prjCode}', 
-                                            '{date}','{p2+ss2}','{canal2_str}',{sample_rate})""")
+                            if ss2 != 'N':
+                                cur.execute(f""" INSERT INTO DATA (CODE, DATE, POS, DATA, Sample_rate) VALUES (:prjCode, :date, :position, :chanelData, :sampleRate)""", channel2Data)
                             else:
                                 pass
-                            if ss3 != 'NONE':
-                                cur.execute(f""" INSERT INTO DATA (CODE, DATE, POS, DATA, Sample_rate) VALUES ('{prjCode}', 
-                                            '{date}','{p3+ss3}','{canal3_str}',{sample_rate})""")
+                            if ss3 != 'N':
+                                cur.execute(f""" INSERT INTO DATA (CODE, DATE, POS, DATA, Sample_rate) VALUES (:prjCode, :date, :position, :chanelData, :sampleRate)""", channel3Data)
                             else:
                                 pass
                             self.infoLabel2.configure(text=_("Data is saved."), style="normal.TLabel")
@@ -566,22 +613,19 @@ class DiagnosticPage(Tk.Frame):
                     elif len(arr) == 1 and len(arr1) == 1:
                         if arr[0][0]==arr1[0][1] :
                             if pms.company_project_existed_warning()==True:
-                                if ss1 != 'NONE':
+                                if ss1 != 'N':
                                     cur.execute(
-                                        f""" INSERT INTO DATA (CODE, DATE, POS, DATA, Sample_rate) VALUES ('{prjCode}', 
-                                                '{date}','{p1+ss1}','{canal1_str}',{sample_rate})""")
+                                        f""" INSERT INTO DATA (CODE, DATE, POS, DATA, Sample_rate) VALUES (:prjCode, :date, :position, :chanelData, :sampleRate)""", channel1Data)
                                 else:
                                     pass
-                                if ss2 != 'NONE':
+                                if ss2 != 'N':
                                     cur.execute(
-                                        f""" INSERT INTO DATA (CODE, DATE, POS, DATA, Sample_rate) VALUES ('{prjCode}', 
-                                                '{date}','{p2+ss2}','{canal2_str}',{sample_rate})""")
+                                        f""" INSERT INTO DATA (CODE, DATE, POS, DATA, Sample_rate) VALUES (:prjCode, :date, :position, :chanelData, :sampleRate)""", channel2Data)
                                 else:
                                     pass
-                                if ss3 != 'NONE':
+                                if ss3 != 'N':
                                     cur.execute(
-                                        f""" INSERT INTO DATA (CODE, DATE, POS, DATA, Sample_rate) VALUES ('{prjCode}', 
-                                                '{date}','{p3+ss3}','{canal3_str}',{sample_rate})""")
+                                        f""" INSERT INTO DATA (CODE, DATE, POS, DATA, Sample_rate) VALUES (:prjCode, :date, :position, :chanelData, :sampleRate)""", channel3Data)
                                 else:
                                     pass
                                 self.infoLabel2.configure(text=_("Data is saved."), style="normal.TLabel")
@@ -742,14 +786,14 @@ class DiagnosticPage(Tk.Frame):
         grid_flag = True
         self.freqGridtBt.configure(text=_("GRID ON"))
         self.freqFunctionBt.configure(text=_("FUNCTION\nNONE"))
-        win_var = self.parent.origin_config.frequency_config_struct["Window"]
+        win_var = self.origin_config.frequency_config_struct["Window"]
         try:
-            canal1 = self.parent.origin_config.sensor_config["store_sensor_data"][0]
-            canal2 = self.parent.origin_config.sensor_config["store_sensor_data"][1]
-            canal3 = self.parent.origin_config.sensor_config["store_sensor_data"][2]
-            _sample_rate = self.parent.origin_config.sensor_config["sample_rate"]
+            canal1 = self.origin_config.sensor_config["store_sensor_data"][0]
+            canal2 = self.origin_config.sensor_config["store_sensor_data"][1]
+            canal3 = self.origin_config.sensor_config["store_sensor_data"][2]
+            _sample_rate = self.origin_config.sensor_config["sample_rate"]
             Pd.PLT.plot_fft(self.frequencyFrameCanvas.canvas2, canal1, canal2, canal3, _sample_rate,
-                            self.parent.origin_config.sensor_config["unit"][:3], [1, 2, 3],
+                            self.origin_config.sensor_config["unit"][:3], [1, 2, 3],
                             win_var)
         except:
             pass
@@ -776,9 +820,9 @@ class DiagnosticPage(Tk.Frame):
         try:
             self.freqGridtBt.configure(text=_("GRID ON"))
             self.freqFunctionBt.configure(text=_("FUNCTION\nENVELOPED"))
-            _sample_rate = self.parent.origin_config.sensor_config["sample_rate"]
-            win_var = self.parent.origin_config.frequency_config_struct["Window"]
-            env_result = calculate_enveloped_signal(self.parent.origin_config)
+            _sample_rate = self.origin_config.sensor_config["sample_rate"]
+            win_var = self.origin_config.frequency_config_struct["Window"]
+            env_result = calculate_enveloped_signal(self.origin_config)
             if len(env_result) != -1:
                 amplitude_envelope1 = env_result[0]
                 amplitude_envelope2 = env_result[1]
@@ -786,7 +830,7 @@ class DiagnosticPage(Tk.Frame):
                 Pd.PLT.plot_fft(self.frequencyFrameCanvas.canvas2, amplitude_envelope1, amplitude_envelope2,
                                 amplitude_envelope3,
                                 _sample_rate,
-                                self.parent.origin_config.sensor_config["unit"][:3], [1, 2, 3], win_var)
+                                self.origin_config.sensor_config["unit"][:3], [1, 2, 3], win_var)
         except:
             pass
 
@@ -798,15 +842,15 @@ class DiagnosticPage(Tk.Frame):
         try:
             self.freqGridtBt.configure(text=_("GRID ON"))
             self.freqFunctionBt.configure(text=_("FUNCTION\nPSD"))
-            _sample_rate = self.parent.origin_config.sensor_config["sample_rate"]
-            canal_1 = self.parent.origin_config.sensor_config["store_sensor_data"][0]  # Copy list by value not by reference
-            canal_2 = self.parent.origin_config.sensor_config["store_sensor_data"][1]
-            canal_3 = self.parent.origin_config.sensor_config["store_sensor_data"][2]
-            win_var = self.parent.origin_config.frequency_config_struct["Window"]
-            unit = self.parent.origin_config.frequency_config_struct["unit"]
+            _sample_rate = self.origin_config.sensor_config["sample_rate"]
+            canal_1 = self.origin_config.sensor_config["store_sensor_data"][0]  # Copy list by value not by reference
+            canal_2 = self.origin_config.sensor_config["store_sensor_data"][1]
+            canal_3 = self.origin_config.sensor_config["store_sensor_data"][2]
+            win_var = self.origin_config.frequency_config_struct["Window"]
+            unit = self.origin_config.frequency_config_struct["unit"]
             if (len(canal_1) != 0):
                 Pd.PLT.plot_psd(self.frequencyFrameCanvas.canvas2, canal_1, canal_2, canal_3, _sample_rate,
-                                self.parent.origin_config.sensor_config["unit"][:3], [1, 2, 3], unit, win_var)
+                                self.origin_config.sensor_config["unit"][:3], [1, 2, 3], unit, win_var)
 
         except Exception as ex:
             print("Exception: ", ex)
@@ -818,10 +862,10 @@ class DiagnosticPage(Tk.Frame):
         try:
             self.freqGridtBt.configure(text=_("GRID ON"))
             self.freqFunctionBt.configure(text=_("FUNCTION\nVELOCITY\nSPECTRUM"))
-            _sample_rate = self.parent.origin_config.sensor_config["sample_rate"]
-            canal_1 = self.parent.origin_config.sensor_config["store_sensor_data"][0]  # Copy list by value not by reference
-            canal_2 = self.parent.origin_config.sensor_config["store_sensor_data"][1]
-            canal_3 = self.parent.origin_config.sensor_config["store_sensor_data"][2]
+            _sample_rate = self.origin_config.sensor_config["sample_rate"]
+            canal_1 = self.origin_config.sensor_config["store_sensor_data"][0]  # Copy list by value not by reference
+            canal_2 = self.origin_config.sensor_config["store_sensor_data"][1]
+            canal_3 = self.origin_config.sensor_config["store_sensor_data"][2]
             if (len(canal_1) != 0):
                 Pd.PLT.plot_velocity_spectrum(self.frequencyFrameCanvas.canvas2, canal_1, canal_2, canal_3, _sample_rate, [1, 2, 3])
 
@@ -829,14 +873,14 @@ class DiagnosticPage(Tk.Frame):
             print("Exception: ", ex)
 
     def filterCallback(self):
-        _sample_rate = self.parent.origin_config.sensor_config["sample_rate"]
-        canal_1 = self.parent.origin_config.sensor_config["store_sensor_data"][0]  # Copy list by value not by reference
-        canal_2 = self.parent.origin_config.sensor_config["store_sensor_data"][1]
-        canal_3 = self.parent.origin_config.sensor_config["store_sensor_data"][2]
-        filter_type = self.parent.origin_config.frequency_config_struct["FilterType"]
-        filter_from = self.parent.origin_config.frequency_config_struct["FilterFrom"]  # high pass cutoff freq
-        filter_to = self.parent.origin_config.frequency_config_struct["FilterTo"]  # low pass cutoff freq
-        window = self.parent.origin_config.frequency_config_struct["Window"]
+        _sample_rate = self.origin_config.sensor_config["sample_rate"]
+        canal_1 = self.origin_config.sensor_config["store_sensor_data"][0]  # Copy list by value not by reference
+        canal_2 = self.origin_config.sensor_config["store_sensor_data"][1]
+        canal_3 = self.origin_config.sensor_config["store_sensor_data"][2]
+        filter_type = self.origin_config.frequency_config_struct["FilterType"]
+        filter_from = self.origin_config.frequency_config_struct["FilterFrom"]  # high pass cutoff freq
+        filter_to = self.origin_config.frequency_config_struct["FilterTo"]  # low pass cutoff freq
+        window = self.origin_config.frequency_config_struct["Window"]
         if is_number(filter_from) == False or is_number(filter_to) == False:
             # self.inforLabel2.config(text=_("Filter value errors. Default cutoff frequency value is used."),
             #                         bg="lavender", fg="red", font="Verdana 13")
@@ -882,7 +926,7 @@ class DiagnosticPage(Tk.Frame):
 
         if (n_samples != 0):
             Pd.PLT.plot_fft(self.frequencyFrameCanvas.canvas2, _samples_1, _samples_2, _samples_3, _sample_rate,
-                            self.parent.origin_config.sensor_config["unit"][:3], [1, 2, 3], window)
+                            self.origin_config.sensor_config["unit"][:3], [1, 2, 3], window)
 
     def on_read_sensor_button_clicked(self):
         self.on_start_button_clicked(False)
@@ -893,15 +937,15 @@ class DiagnosticPage(Tk.Frame):
             self.laserBt.configure(text=_("LASER\nVIEW"))
             view_flag=0
         Pd.PLT.plot_all_chanel(self.waveformFrameCanvas.canvas1,
-                               self.parent.origin_config.sensor_config["store_sensor_data"][0],
-                               self.parent.origin_config.sensor_config["store_sensor_data"][1],
-                               self.parent.origin_config.sensor_config["store_sensor_data"][2],
-                               self.parent.origin_config.sensor_config["unit"][:3],
-                               self.parent.origin_config.sensor_config["sample_rate"])
+                               self.origin_config.sensor_config["store_sensor_data"][0],
+                               self.origin_config.sensor_config["store_sensor_data"][1],
+                               self.origin_config.sensor_config["store_sensor_data"][2],
+                               self.origin_config.sensor_config["unit"][:3],
+                               self.origin_config.sensor_config["sample_rate"])
 
     def on_apply_button_clicked(self, from_config: bool):
         if from_config:
-            self.config.update_diagnostic_struct(self.parent.origin_config)
+            self.config1.update_diagnostic_struct()
             self.applyBt.configure(state="disable")
             # self.configFrame.pack_forget()
             # self.on_waveform_button_clicked()
@@ -909,43 +953,43 @@ class DiagnosticPage(Tk.Frame):
     def on_start_button_clicked(self, from_config: bool):
         """This button callback is responsed get the data from sensor and execute the waveform callback function"""
         if from_config:
-            self.config.update_diagnostic_struct(self.parent.origin_config)
+            self.config1.update_diagnostic_struct()
             # self.configFrame.pack_forget()
         self.read_sensor()
         self.on_waveform_button_clicked()
      
         Pd.PLT.plot_all_chanel(self.waveformFrameCanvas.canvas1,
-                               self.parent.origin_config.sensor_config["store_sensor_data"][0],
-                               self.parent.origin_config.sensor_config["store_sensor_data"][1],
-                               self.parent.origin_config.sensor_config["store_sensor_data"][2],
-                               self.parent.origin_config.sensor_config["unit"][:3],
-                               self.parent.origin_config.sensor_config["sample_rate"])
-        Pd.PLT.plot_fft(self.frequencyFrameCanvas.canvas2, self.parent.origin_config.sensor_config["store_sensor_data"][0],
-                        self.parent.origin_config.sensor_config["store_sensor_data"][1],
-                        self.parent.origin_config.sensor_config["store_sensor_data"][2],
-                        self.parent.origin_config.sensor_config["sample_rate"],
-                        self.parent.origin_config.sensor_config["unit"][:3],
+                               self.origin_config.sensor_config["store_sensor_data"][0],
+                               self.origin_config.sensor_config["store_sensor_data"][1],
+                               self.origin_config.sensor_config["store_sensor_data"][2],
+                               self.origin_config.sensor_config["unit"][:3],
+                               self.origin_config.sensor_config["sample_rate"])
+        Pd.PLT.plot_fft(self.frequencyFrameCanvas.canvas2, self.origin_config.sensor_config["store_sensor_data"][0],
+                        self.origin_config.sensor_config["store_sensor_data"][1],
+                        self.origin_config.sensor_config["store_sensor_data"][2],
+                        self.origin_config.sensor_config["sample_rate"],
+                        self.origin_config.sensor_config["unit"][:3],
                         [1, 2, 3], win_var="Hanning")
 
 
     def general_indicator_plot(self):
         try:
             vel_arr_data = []
-            if len(self.parent.origin_config.sensor_config["vel"]) > 0:
+            if len(self.origin_config.sensor_config["vel"]) > 0:
 
-                for arr in self.parent.origin_config.sensor_config["vel_data"]:
+                for arr in self.origin_config.sensor_config["vel_data"]:
                     vel_arr_data.append(filter_data(arr, "BANDPASS", dfc._RMS_HIGHPASS_FROM, dfc._RMS_LOWPASS_TO,
-                                                    self.parent.origin_config.sensor_config["sample_rate"],
+                                                    self.origin_config.sensor_config["sample_rate"],
                                                     window="Hanning"))
                     # vel_arr_data.append(arr)
                 """get the machine type, power, speed, foundation to specify the standard """
-                machineType = self.parent.origin_config.waveform_config_struct["MachineType"]
-                congsuat = self.parent.origin_config.waveform_config_struct["Power"]
-                tocdo = self.parent.origin_config.waveform_config_struct["Speed"]
-                foundation = self.parent.origin_config.waveform_config_struct["Foundation"]
+                machineType = self.origin_config.waveform_config_struct["MachineType"]
+                congsuat = self.origin_config.waveform_config_struct["Power"]
+                tocdo = self.origin_config.waveform_config_struct["Speed"]
+                foundation = self.origin_config.waveform_config_struct["Foundation"]
                 appliedStandard = iso10816_judge(machineType, tocdo, congsuat, foundation)
                 Pd.PLT.plot_rms(self.generalFrameCanvas.canvas3, vel_arr_data, appliedStandard,
-                                self.parent.origin_config.sensor_config["vel"])
+                                self.origin_config.sensor_config["vel"])
 
             else:
                 Pd.PLT.clear_axes(self.generalFrameCanvas.canvas3, 2)
@@ -954,39 +998,39 @@ class DiagnosticPage(Tk.Frame):
 
 
         try:
-            _sample_rate = self.parent.origin_config.sensor_config["sample_rate"]
-            if len(self.parent.origin_config.sensor_config["accel"]) < 1:
+            _sample_rate = self.origin_config.sensor_config["sample_rate"]
+            if len(self.origin_config.sensor_config["accel"]) < 1:
                 Pd.PLT.clear_axes(self.generalFrameCanvas.canvas3, 0)
                 Pd.PLT.clear_axes(self.generalFrameCanvas.canvas3, 1)
 
             else:
-                rpmVal = self.parent.origin_config.waveform_config_struct["Speed"]
-                bearing_dia = self.parent.origin_config.waveform_config_struct["BearingBore"]
+                rpmVal = self.origin_config.waveform_config_struct["Speed"]
+                bearing_dia = self.origin_config.waveform_config_struct["BearingBore"]
                 filter_from = dfc._GE_HIGHPASS_FROM
                 filter_to = dfc._GE_LOWPASS_TO
                 hfcf_filter_from = dfc._HFCF_BANDPASS_FROM
                 hfcf_filter_to = dfc._HFCF_BANDPASS_TO
-                hfcf_arr = high_frequency_crest_factor(self.parent.origin_config.sensor_config["accel_data"],
+                hfcf_arr = high_frequency_crest_factor(self.origin_config.sensor_config["accel_data"],
                                                        hfcf_filter_from, hfcf_filter_to,
                                                        [_sample_rate for _i in range(
-                                                           len(self.parent.origin_config.sensor_config["accel_data"]))],
+                                                           len(self.origin_config.sensor_config["accel_data"]))],
                                                        window="Hanning")
-                gE_data_arr = gE(self.parent.origin_config.sensor_config["accel_data"], filter_from, filter_to,
+                gE_data_arr = gE(self.origin_config.sensor_config["accel_data"], filter_from, filter_to,
                                  [_sample_rate for _i in
-                                  range(len(self.parent.origin_config.sensor_config["accel_data"]))], window="Hanning")
+                                  range(len(self.origin_config.sensor_config["accel_data"]))], window="Hanning")
                 Pd.PLT.plot_gE_severity(self.generalFrameCanvas.canvas3, gE_data_arr, hfcf_arr,
-                                        self.parent.origin_config.sensor_config["accel"], dfc._GE_FMAX,
+                                        self.origin_config.sensor_config["accel"], dfc._GE_FMAX,
                                         rpmVal, bearing_dia)
                 self.side_band_energy_indicator()
         except Exception as ex:
             print(ex)
         try:
-            if len(self.parent.origin_config.sensor_config["dis"]) < 1:
+            if len(self.origin_config.sensor_config["dis"]) < 1:
                 Pd.PLT.clear_axes(self.generalFrameCanvas.canvas3, 3)
             else:
                 Pd.PLT.plot_displacement(self.generalFrameCanvas.canvas3,
-                                         self.parent.origin_config.sensor_config["displacement_data"],
-                                         self.parent.origin_config.sensor_config["dis"])
+                                         self.origin_config.sensor_config["displacement_data"],
+                                         self.origin_config.sensor_config["dis"])
         except Exception as ex:
             print(ex)
     def on_config_button_clicked(self):
@@ -1076,7 +1120,7 @@ class DiagnosticPage(Tk.Frame):
             self.configBt.configure(style="normal.TButton")
             try:
                 # self.summaryFrameCanvas = SummaryFrameCanvas(self.summaryPlotFrame)
-                self.summaryFrameCanvas.plot_summary(self.parent.origin_config)
+                self.summaryFrameCanvas.plot_summary(self.origin_config)
             except:
                 pass
         else:
@@ -1089,59 +1133,58 @@ class DiagnosticPage(Tk.Frame):
         try:
             startFreq = []
             stopFreq = []
-            rpm = self.parent.origin_config.waveform_config_struct["Speed"] / 60
-            SecondGMF = 2 * self.parent.origin_config.waveform_config_struct["GearTeeth"] * rpm
-            if len(self.parent.origin_config.sensor_config["accel"]) > 0 and (SecondGMF - 3 * rpm - 5) > 0 and (
+            rpm = self.origin_config.waveform_config_struct["Speed"] / 60
+            SecondGMF = 2 * self.origin_config.waveform_config_struct["GearTeeth"] * rpm
+            if len(self.origin_config.sensor_config["accel"]) > 0 and (SecondGMF - 3 * rpm - 5) > 0 and (
                     SecondGMF + 3 * rpm + 5) < (
-                    self.parent.origin_config.sensor_config["sample_rate"] / 2.56):
+                    self.origin_config.sensor_config["sample_rate"] / 2.56):
                 for i in range(7):
                     startFreq.append(SecondGMF - (3 - i) * rpm - 5)
                     stopFreq.append(SecondGMF - (3 - i) * rpm + 5)
                 CMFAmplitude = []
-                for j in range(len(self.parent.origin_config.sensor_config["accel"])):
-                    [max1, freq] = tab4_tracking_signal(self.parent.origin_config.sensor_config["accel_data"][j],
-                                                        self.parent.origin_config.sensor_config["sample_rate"],
+                for j in range(len(self.origin_config.sensor_config["accel"])):
+                    [max1, freq] = tab4_tracking_signal_old(self.origin_config.sensor_config["accel_data"][j],
+                                                        self.origin_config.sensor_config["sample_rate"],
                                                         [startFreq[3], stopFreq[3]])
                     CMFAmplitude.append(max1)
-                sumOfSideBand = np.zeros(len(self.parent.origin_config.sensor_config["accel"]))
-                for k in range(len(self.parent.origin_config.sensor_config["accel"])):
+                sumOfSideBand = np.zeros(len(self.origin_config.sensor_config["accel"]))
+                for k in range(len(self.origin_config.sensor_config["accel"])):
                     for h in range(7):
                         if h != 3:
-                            [max1, freq] = tab4_tracking_signal(
-                                self.parent.origin_config.sensor_config["accel_data"][k],
-                                self.parent.origin_config.sensor_config["sample_rate"],
+                            [max1, freq] = tab4_tracking_signal_old(
+                                self.origin_config.sensor_config["accel_data"][k],
+                                self.origin_config.sensor_config["sample_rate"],
                                 [startFreq[h], stopFreq[h]])
                             sumOfSideBand[k] += max1
-                for k in range(len(self.parent.origin_config.sensor_config["accel"])):
+                for k in range(len(self.origin_config.sensor_config["accel"])):
                     sumOfSideBand[k] /= CMFAmplitude[k]
 
                 # Calculate the Acc Peak
                 AccPeak = []
-                for i in range(len(self.parent.origin_config.sensor_config["accel"])):
+                for i in range(len(self.origin_config.sensor_config["accel"])):
                     arr = filter_data(
-                        self.parent.origin_config.sensor_config["accel_data"][i],
+                        self.origin_config.sensor_config["accel_data"][i],
                         "HIGHPASS",
                         1000,
                         20000,
-                        self.parent.origin_config.sensor_config["sample_rate"],
+                        self.origin_config.sensor_config["sample_rate"],
                         window="Hanning"
                     )
                     AccRms = rmsValue(arr)
                     AccPeak.append(AccRms * 1.414)
                 Pd.PLT.plot_SBR_severity(self.generalFrameCanvas.canvas3, sumOfSideBand, AccPeak,
-                                         self.parent.origin_config.sensor_config["accel"])
+                                         self.origin_config.sensor_config["accel"])
 
             else:
                 pass
         except Exception as ex:
             print("Error", ex)
 
-
     def on_grid_button(self):
         global grid_flag
         try:
             if grid_flag == True:
-                rpmVal = self.parent.origin_config.frequency_config_struct["mesh"]
+                rpmVal = self.origin_config.frequency_config_struct["mesh"]
                 Pd.PLT.plot_grid(self.frequencyFrameCanvas.canvas2, grid_flag, rpmVal)
                 self.freqGridtBt.configure(text=_("GRID OFF"))
                 grid_flag = False
@@ -1154,7 +1197,7 @@ class DiagnosticPage(Tk.Frame):
 
     def Tracking(self, dir: bool):
         global track_flag, plot_flag
-        tracking_freq = self.parent.origin_config.frequency_config_struct["TrackRange"]
+        tracking_freq = self.origin_config.frequency_config_struct["TrackRange"]
         axes_arr = self.frequencyFrameCanvas.canvas2.figure.get_axes()
         x_data=None
         y_data=None
@@ -1186,7 +1229,7 @@ class DiagnosticPage(Tk.Frame):
             try:
                 if plot_flag==0:
                     [max1, max2, max3, phase_shift1, phase_shift2, phase_shift3, freq] = tracking_signal(
-                        self.parent.origin_config.sensor_config,
+                        self.origin_config.sensor_config,
                         [start_freq,
                         stop_freq])
 
@@ -1211,9 +1254,10 @@ class DiagnosticPage(Tk.Frame):
 
 
 class ConfigFrame(Tk.Frame):
-    def __init__(self, parent: "self.configFrame", origin_config):
-        super().__init__(parent)
+    def __init__(self, parent: "self.configFrame"):
+        super().__init__(parent.configFrame, name="cai dat")
         self.parent = parent
+        self.origin_config=parent.origin_config
         self.style = ttk.Style()
         self.style.configure('config.TLabel', font=('Chakra Petch', '13'))
         self.style.configure('config.TLabelframe', font=('Chakra Petch', '14'), bg='white', borderwidth=1)
@@ -1221,9 +1265,9 @@ class ConfigFrame(Tk.Frame):
         self.style.configure('config.TCombobox', font=('Chakra Petch', '15'))
         self.style.configure('config.Switch.TCheckbutton', font=('Chakra Petch', '13'))
         
-        self.creat_config_frame(origin_config)
+        self.creat_config_frame()
 
-    def creat_config_frame(self, origin_config):
+    def creat_config_frame(self):
         self.wfParam1 = Tk.StringVar()
         self.wfParam2 = Tk.StringVar()
         self.wfParam3 = Tk.StringVar()
@@ -1253,87 +1297,97 @@ class ConfigFrame(Tk.Frame):
         self.frqParam7 = Tk.StringVar()
         ##config default value
 
-        self.wfParam1.set(origin_config.waveform_config_struct["Sensor1"])
-        self.wfParam2.set(origin_config.waveform_config_struct["Sensor2"])
-        self.wfParam3.set(origin_config.waveform_config_struct["Sensor3"])
-        self.wfParam4.set(origin_config.waveform_config_struct["Sensor4"])
-        self.wfParam5.set(origin_config.waveform_config_struct["KeyPhase"])
-        self.tsa_check.set(origin_config.waveform_config_struct["UseTSA"])
-        self.wfParam6.set(origin_config.waveform_config_struct["TSATimes"])
-        self.wfParam7.set(origin_config.waveform_config_struct["Fmax"])
-        self.wfParam8.set(origin_config.waveform_config_struct["num_fft_line"])
-        self.wfParam9.set(origin_config.waveform_config_struct["MachineType"])
-        self.wfParam10.set(origin_config.waveform_config_struct["Speed"])
-        self.wfParam11.set(origin_config.waveform_config_struct["Power"])
-        self.wfParam12.set(origin_config.waveform_config_struct["GearTeeth"])
-        self.wfParam13.set(origin_config.waveform_config_struct["BearingBore"])
-        self.wfParam14.set(origin_config.waveform_config_struct["MachineName"])
-        self.wfParam15.set(origin_config.waveform_config_struct["Foundation"])
-        self.wfParam16.set(origin_config.waveform_config_struct["Port1Pos"])
-        self.wfParam17.set(origin_config.waveform_config_struct["Port2Pos"])
-        self.wfParam18.set(origin_config.waveform_config_struct["Port3Pos"])
+        self.wfParam1.set(self.origin_config.waveform_config_struct["Sensor1"])
+        self.wfParam2.set(self.origin_config.waveform_config_struct["Sensor2"])
+        self.wfParam3.set(self.origin_config.waveform_config_struct["Sensor3"])
+        self.wfParam4.set(self.origin_config.waveform_config_struct["Sensor4"])
+        self.wfParam5.set(self.origin_config.waveform_config_struct["KeyPhase"])
+        self.tsa_check.set(self.origin_config.waveform_config_struct["UseTSA"])
+        self.wfParam6.set(self.origin_config.waveform_config_struct["TSATimes"])
+        self.wfParam7.set(self.origin_config.waveform_config_struct["Fmax"])
+        self.wfParam8.set(self.origin_config.waveform_config_struct["num_fft_line"])
+        self.wfParam9.set(self.origin_config.waveform_config_struct["MachineType"])
+        self.wfParam10.set(self.origin_config.waveform_config_struct["Speed"])
+        self.wfParam11.set(self.origin_config.waveform_config_struct["Power"])
+        self.wfParam12.set(self.origin_config.waveform_config_struct["GearTeeth"])
+        self.wfParam13.set(self.origin_config.waveform_config_struct["BearingBore"])
+        self.wfParam14.set(self.origin_config.waveform_config_struct["MachineName"])
+        self.wfParam15.set(self.origin_config.waveform_config_struct["Foundation"])
+        self.wfParam16.set(self.origin_config.waveform_config_struct["Port1Pos"])
+        self.wfParam17.set(self.origin_config.waveform_config_struct["Port2Pos"])
+        self.wfParam18.set(self.origin_config.waveform_config_struct["Port3Pos"])
 
-        self.frqParam1.set(origin_config.frequency_config_struct["FilterType"])
-        self.frqParam2.set(origin_config.frequency_config_struct["Window"])
-        self.frqParam3.set(origin_config.frequency_config_struct["FilterFrom"])
-        self.frqParam4.set(origin_config.frequency_config_struct["FilterTo"])
-        self.frqParam5.set(origin_config.frequency_config_struct["TrackRange"])
-        self.frqParam6.set(origin_config.frequency_config_struct["mesh"])
-        self.frqParam7.set(origin_config.frequency_config_struct["unit"])
+        self.frqParam1.set(self.origin_config.frequency_config_struct["FilterType"])
+        self.frqParam2.set(self.origin_config.frequency_config_struct["Window"])
+        self.frqParam3.set(self.origin_config.frequency_config_struct["FilterFrom"])
+        self.frqParam4.set(self.origin_config.frequency_config_struct["FilterTo"])
+        self.frqParam5.set(self.origin_config.frequency_config_struct["TrackRange"])
+        self.frqParam6.set(self.origin_config.frequency_config_struct["mesh"])
+        self.frqParam7.set(self.origin_config.frequency_config_struct["unit"])
 
 
-        self.wfConfigFrame = Tk.LabelFrame(self.parent, text='', font=('Chakra Petch', 13), border=0, \
+        self.wfConfigFrame = Tk.LabelFrame(self, text='', font=('Chakra Petch', 13), border=0, \
                                            bg='white')
         self.wfConfigFrame.pack(side=Tk.TOP, fill=Tk.BOTH)
 
         sensorFrame = ttk.LabelFrame(self.wfConfigFrame, text=_('Sensor config'), style='config.TLabelframe')
-        sensorFrame.grid(column=0, row=0, padx=5, pady=0, ipadx=5, rowspan=9, columnspan=2, sticky='wn')
+        sensorFrame.grid(column=0, row=0, padx=5, pady=0, ipadx=5, rowspan=10, columnspan=2, sticky='wn')
 
-        directionLabel = ttk.Label(sensorFrame, text=_('Direction'), style='config.TLabel')
-        directionLabel.grid(column=1, row=0, padx=5, pady=5, sticky='w')
+        # directionLabel = ttk.Label(sensorFrame, text=_('Type'), style='config.TLabel')
+        # directionLabel.grid(column=1, row=0, padx=5, pady=5, sticky='w')
 
-        positionLabel = ttk.Label(sensorFrame, text=_('Position'), style='config.TLabel')
-        positionLabel.grid(column=2, row=0, padx=5, pady=5, sticky='e')
-
+        # positionLabel = ttk.Label(sensorFrame, text=_('Position'), style='config.TLabel')
+        # positionLabel.grid(column=2, row=0, padx=5, pady=5, sticky='e')
+        machineType = ttk.Label(sensorFrame, text=_("Machine"), style='config.TLabel')
+        machineType.grid(column=0, row=0, padx=5, pady=5, sticky='w')
+        machineCombo = ttk.Combobox(sensorFrame, width=8, textvariable=self.wfParam9, state="readonly",
+                                    font=('Chakra Petch', 13))
+        machineCombo['value'] = ('GENERAL', "PUMP", "GEARBOX", "FAN", "CRITICAL MACHINE", 'STEAM TURBINE', "GAS TURBINE", "HYDRO TURBINE", "COMPRESSOR",
+            "WIND TURBINE")
+        machineCombo.grid(column=1, row=0, padx=0, pady=5, sticky="e")
+#ss1
         sensor1Label = ttk.Label(sensorFrame, text=_('Port1'), style='config.TLabel')
         sensor1Label.grid(column=0, row=1, padx=5, pady=5, sticky='w')
 
         sensor1Combo = ttk.Combobox(sensorFrame, width=8, textvariable=self.wfParam1, state="readonly",
                                     font=('Chakra Petch', 13))
-        sensor1Combo['value'] = ('NONE', 'HA', 'VA', 'AA', 'HV', 'VV', 'AV')
+        sensor1Combo['value'] = ('NONE', "Acceleration", "Velocity")
         sensor1Combo.grid(column=1, row=1, padx=0, pady=5, sticky='e')
 
-        port1PosCombo = ttk.Combobox(sensorFrame, width=2, textvariable=self.wfParam16, state="readonly",
+        port1PosCombo = ttk.Combobox(sensorFrame, width=4, textvariable=self.wfParam16, state="readonly",
                                     font=('Chakra Petch', 13))
-        port1PosCombo['value'] = ('A', 'B', 'C', 'D', 'E')
+        port1PosCombo['value']=('NONE')
         port1PosCombo.grid(column=2, row=1, padx=0, pady=5, sticky='e')
 
+        port1Button=ttk.Button(sensorFrame, text='...', style="normal.TButton", \
+                               command=lambda: self.creat_sensor_position_page(self.origin_config.waveform_config_struct))
+        port1Button.grid(column=3, row=1, padx=0, pady=5, sticky='e')
+#ss2
         sensor2Label = ttk.Label(sensorFrame, text=_('Port2'), style='config.TLabel')
         sensor2Label.grid(column=0, row=2, padx=5, pady=5, sticky='w')
 
         sensor2Combo = ttk.Combobox(sensorFrame, width=8, textvariable=self.wfParam2, state="readonly",
                                     font=('Chakra Petch', 13))
-        sensor2Combo['value'] = ('NONE', 'HA', 'VA', 'AA', 'HV', 'VV', 'AV')
+        sensor2Combo['value'] = ('NONE', "Acceleration", "Velocity")
         sensor2Combo.grid(column=1, row=2, padx=0, pady=5, sticky='e')
 
-        port2PosCombo = ttk.Combobox(sensorFrame, width=2, textvariable=self.wfParam17, state="readonly",
+        port2PosCombo = ttk.Combobox(sensorFrame, width=4, textvariable=self.wfParam17, state="readonly",
                                     font=('Chakra Petch', 13))
-        port2PosCombo['value'] = ('A', 'B', 'C', 'D', 'E')
-
+        port2PosCombo['value']=('NONE')
         port2PosCombo.grid(column=2, row=2, padx=0, pady=5, sticky='e')
 
+#ss3
         sensor3Label = ttk.Label(sensorFrame, text=_('Port3'), style='config.TLabel')
         sensor3Label.grid(column=0, row=3, padx=5, pady=5, sticky='w')
 
         sensor3Combo = ttk.Combobox(sensorFrame, width=8, textvariable=self.wfParam3, state="readonly",
                                     font=('Chakra Petch', 13))
-        sensor3Combo['value'] = ('NONE', 'HA', 'VA', 'AA', 'HV', 'VV', 'AV')
+        sensor3Combo['value'] = ('NONE', "Acceleration", "Velocity")
         sensor3Combo.grid(column=1, row=3, padx=0, pady=5, sticky='e')
 
-        port3PosCombo = ttk.Combobox(sensorFrame, width=2, textvariable=self.wfParam18, state="readonly",
+        port3PosCombo = ttk.Combobox(sensorFrame, width=4, textvariable=self.wfParam18, state="readonly",
                                     font=('Chakra Petch', 13))
-        port3PosCombo['value'] = ('A', 'B', 'C', 'D', 'E')
-
+        port3PosCombo['value']=('NONE')
         port3PosCombo.grid(column=2, row=3, padx=0, pady=5, sticky='e')
 
         sensor4Label = ttk.Label(sensorFrame, text=_('Port4'), style='config.TLabel')
@@ -1378,7 +1432,7 @@ class ConfigFrame(Tk.Frame):
         sampleRateEntry.grid(column=1, row=9, padx=0, pady=5, ipadx=3, sticky='e')
         ###
         frqConfigFrame = ttk.LabelFrame(self.wfConfigFrame, text=_('Filter configuration'), style='config.TLabelframe')
-        frqConfigFrame.grid(column=2, row=0, padx=12, ipadx=5, pady=0, sticky='w')
+        frqConfigFrame.grid(column=2, row=0, padx=5, ipadx=5, pady=0, sticky='nw')
 
         filterLabel = ttk.Label(frqConfigFrame, text=_('Filter type'), style='config.TLabel')
         filterLabel.grid(column=0, row=0, padx=5, pady=5, sticky="w")
@@ -1434,7 +1488,7 @@ class ConfigFrame(Tk.Frame):
         ###
 
         machineFrame = ttk.LabelFrame(self.wfConfigFrame, text=_('Machine configuration'), style="config.TLabelframe")
-        machineFrame.grid(column=4, row=0, padx=6, pady=0, ipadx=5, sticky='e')
+        machineFrame.grid(column=4, row=0, padx=5, pady=0, ipadx=5, sticky='ne')
 
         machineNameLabel = ttk.Label(machineFrame, text=_("Machine name"), style='config.TLabel')
         machineNameLabel.grid(column=0, row=0, padx=5, pady=5, sticky='w')
@@ -1442,49 +1496,40 @@ class ConfigFrame(Tk.Frame):
                             font=('Chakra Petch', 13))
         machineNameEntry.grid(column=1, row=0, padx=0, pady=5, ipadx=3, sticky='e')
 
-        machineType = ttk.Label(machineFrame, text=_("Machine type"), style='config.TLabel')
-        machineType.grid(column=0, row=1, padx=5, pady=5, sticky='w')
-        machineCombo = ttk.Combobox(machineFrame, width=8, textvariable=self.wfParam9, state="readonly",
-                                    font=('Chakra Petch', 13))
-        machineCombo['value'] = (
-            'GENERAL', 'STEAM TURBINE', "CRITICAL MACHINE", "GAS TURBINE", "HYDRO TURBINE", "PUMP", "COMPRESSOR",
-            "WIND TURBINE")
-        machineCombo.grid(column=1, row=1, padx=0, pady=5, sticky="e")
-
         speedLabel = ttk.Label(machineFrame, text=_("Speed (RPM)"), style='config.TLabel')
-        speedLabel.grid(column=0, row=2, padx=5, pady=5, sticky='w')
+        speedLabel.grid(column=0, row=1, padx=5, pady=5, sticky='w')
         speedEntry = ttk.Entry(machineFrame, width=10, textvariable=self.wfParam10, validate="key",
                             font=('Chakra Petch', 13))
         speedEntry['validatecommand'] = (speedEntry.register(testVal), '%P', '%d')
-        speedEntry.grid(column=1, row=2, padx=0, pady=5, ipadx=3, sticky='e')
+        speedEntry.grid(column=1, row=1, padx=0, pady=5, ipadx=3, sticky='e')
 
         powerLabel = ttk.Label(machineFrame, text=_("Power (kW)"), style='config.TLabel')
-        powerLabel.grid(column=0, row=3, padx=5, pady=5, sticky='w')
+        powerLabel.grid(column=0, row=2, padx=5, pady=5, sticky='w')
         powerEntry = ttk.Entry(machineFrame, width=10, textvariable=self.wfParam11, validate="key",
                             font=('Chakra Petch', 13))
         powerEntry['validatecommand'] = (powerEntry.register(testVal), '%P', '%d')
-        powerEntry.grid(column=1, row=3, padx=0, pady=5, ipadx=3, sticky='e')
+        powerEntry.grid(column=1, row=2, padx=0, pady=5, ipadx=3, sticky='e')
 
         TeethLabel = ttk.Label(machineFrame, text=_("Gear teeth"), style='config.TLabel')
-        TeethLabel.grid(column=0, row=4, padx=5, pady=5, sticky='w')
+        TeethLabel.grid(column=0, row=3, padx=5, pady=5, sticky='w')
         TeethEntry = ttk.Entry(machineFrame, width=10, textvariable=self.wfParam12, validate="key",
                             font=('Chakra Petch', 13))
         TeethEntry['validatecommand'] = (TeethEntry.register(testVal), '%P', '%d')
-        TeethEntry.grid(column=1, row=4, padx=0, pady=5, ipadx=3, sticky='e')
+        TeethEntry.grid(column=1, row=3, padx=0, pady=5, ipadx=3, sticky='e')
 
         bearingBoreLabel = ttk.Label(machineFrame, text=_("Bearing bore (mm)"), style='config.TLabel')
-        bearingBoreLabel.grid(column=0, row=5, padx=5, pady=5, sticky='w')
+        bearingBoreLabel.grid(column=0, row=4, padx=5, pady=5, sticky='w')
         bearingBoreEntry = ttk.Entry(machineFrame, width=10, textvariable=self.wfParam13, validate="key",
                             font=('Chakra Petch', 13))
         bearingBoreEntry['validatecommand'] = (bearingBoreEntry.register(testVal), '%P', '%d')
-        bearingBoreEntry.grid(column=1, row=5, padx=0, pady=5, ipadx=3, sticky='e')
+        bearingBoreEntry.grid(column=1, row=4, padx=0, pady=5, ipadx=3, sticky='e')
 
         foundationType = ttk.Label(machineFrame, text=_("Foundation"), style='config.TLabel')
-        foundationType.grid(column=0, row=6, padx=5, pady=5, sticky='w')
+        foundationType.grid(column=0, row=5, padx=5, pady=5, sticky='w')
         foundationCombo = ttk.Combobox(machineFrame, width=8, textvariable=self.wfParam15, state="readonly",
                                        font=('Chakra Petch', 13))
         foundationCombo['value'] = ('Rigid', "Flexible")
-        foundationCombo.grid(column=1, row=6, padx=0, pady=5, sticky="e")
+        foundationCombo.grid(column=1, row=5, padx=0, pady=5, sticky="e")
 
         # self.nextBt = ttk.Button(self.parent, text="START", style='Accent.TButton',
         #                          command=lambda: self.on_start_button_clicked(True, origin_config))
@@ -1493,37 +1538,37 @@ class ConfigFrame(Tk.Frame):
     def update_text_tsa(self):
         txt = self.tsa_check.get()
         if txt == 1:
-            self.tsaEntry.config(state='normal')
+            self.tsaEntry.configure(state='normal')
         else:
-            self.tsaEntry.config(state='disabled')
+            self.tsaEntry.configure(state='disabled')
 
-    def update_diagnostic_struct(self, origin_config):
+    def update_diagnostic_struct(self):
 
-        origin_config.waveform_config_struct["Sensor1"] = self.wfParam1.get()
-        origin_config.waveform_config_struct["Sensor2"] = self.wfParam2.get()
-        origin_config.waveform_config_struct["Sensor3"] = self.wfParam3.get()
-        origin_config.waveform_config_struct["Sensor4"] = self.wfParam4.get()
-        origin_config.waveform_config_struct["Port1Pos"] = self.wfParam16.get()
-        origin_config.waveform_config_struct["Port2Pos"] = self.wfParam17.get()
-        origin_config.waveform_config_struct["Port3Pos"] = self.wfParam18.get()
-        origin_config.waveform_config_struct["KeyPhase"] = self.wfParam5.get()
-        origin_config.waveform_config_struct["UseTSA"] = self.tsa_check.get()
-        origin_config.waveform_config_struct["MachineType"] = self.wfParam9.get()
-        origin_config.waveform_config_struct["num_fft_line"] = int(self.wfParam8.get())
-        origin_config.waveform_config_struct["MachineName"] = self.wfParam14.get()
-        origin_config.waveform_config_struct["Foundation"] = self.wfParam15.get()
+        self.origin_config.waveform_config_struct["Sensor1"] = self.wfParam1.get()
+        self.origin_config.waveform_config_struct["Sensor2"] = self.wfParam2.get()
+        self.origin_config.waveform_config_struct["Sensor3"] = self.wfParam3.get()
+        self.origin_config.waveform_config_struct["Sensor4"] = self.wfParam4.get()
+        self.origin_config.waveform_config_struct["Port1Pos"] = self.wfParam16.get()
+        self.origin_config.waveform_config_struct["Port2Pos"] = self.wfParam17.get()
+        self.origin_config.waveform_config_struct["Port3Pos"] = self.wfParam18.get()
+        self.origin_config.waveform_config_struct["KeyPhase"] = self.wfParam5.get()
+        self.origin_config.waveform_config_struct["UseTSA"] = self.tsa_check.get()
+        self.origin_config.waveform_config_struct["MachineType"] = self.wfParam9.get()
+        self.origin_config.waveform_config_struct["num_fft_line"] = int(self.wfParam8.get())
+        self.origin_config.waveform_config_struct["MachineName"] = self.wfParam14.get()
+        self.origin_config.waveform_config_struct["Foundation"] = self.wfParam15.get()
 
-        origin_config.frequency_config_struct["FilterType"] = self.frqParam1.get()
-        origin_config.frequency_config_struct["Window"] = self.frqParam2.get()
+        self.origin_config.frequency_config_struct["FilterType"] = self.frqParam1.get()
+        self.origin_config.frequency_config_struct["Window"] = self.frqParam2.get()
         if self.frqParam3.get()!='':
-            origin_config.frequency_config_struct["FilterFrom"] = int(self.frqParam3.get())
+            self.origin_config.frequency_config_struct["FilterFrom"] = int(self.frqParam3.get())
         if self.frqParam4.get() != '':
-            origin_config.frequency_config_struct["FilterTo"] = int(self.frqParam4.get())
+            self.origin_config.frequency_config_struct["FilterTo"] = int(self.frqParam4.get())
         if self.frqParam5.get() != '':
-            origin_config.frequency_config_struct["TrackRange"] = int(self.frqParam5.get())
+            self.origin_config.frequency_config_struct["TrackRange"] = int(self.frqParam5.get())
         if self.frqParam6.get() != '':
-            origin_config.frequency_config_struct["mesh"] = int(self.frqParam6.get())
-        origin_config.frequency_config_struct["unit"] = self.frqParam7.get()
+            self.origin_config.frequency_config_struct["mesh"] = int(self.frqParam6.get())
+        self.origin_config.frequency_config_struct["unit"] = self.frqParam7.get()
 
         tempFmax = self.wfParam7.get()
         tempTsaTimes = self.wfParam6.get()
@@ -1533,31 +1578,179 @@ class ConfigFrame(Tk.Frame):
         tempBore = self.wfParam13.get()
 
 
-        if origin_config.waveform_config_struct["Sensor4"] == "NONE":
+        if self.origin_config.waveform_config_struct["Sensor4"] == "NONE":
             if int(tempFmax) <= 15000:
-                origin_config.waveform_config_struct["Fmax"] = int(tempFmax)
+                self.origin_config.waveform_config_struct["Fmax"] = int(tempFmax)
             else:
-                origin_config.waveform_config_struct["Fmax"] = 15000
+                self.origin_config.waveform_config_struct["Fmax"] = 15000
         else:
             if int(tempFmax) <= 11000:
-                origin_config.waveform_config_struct["Fmax"] = int(tempFmax)
+                self.origin_config.waveform_config_struct["Fmax"] = int(tempFmax)
             else:
-                origin_config.waveform_config_struct["Fmax"] = 11000
-        if origin_config.waveform_config_struct["Fmax"] < 1000:
-            origin_config.waveform_config_struct["Fmax"] = 1000
+                self.origin_config.waveform_config_struct["Fmax"] = 11000
+        if self.origin_config.waveform_config_struct["Fmax"] < 1000:
+            self.origin_config.waveform_config_struct["Fmax"] = 1000
         if int(tempTsaTimes) < 30:
-            origin_config.waveform_config_struct["TSATimes"] = int(tempTsaTimes)
+            self.origin_config.waveform_config_struct["TSATimes"] = int(tempTsaTimes)
         else:
-            origin_config.waveform_config_struct["TSATimes"] = 30
+            self.origin_config.waveform_config_struct["TSATimes"] = 30
 
         if tempSpeed!='':
-            origin_config.waveform_config_struct["Speed"] = int(tempSpeed)
+            self.origin_config.waveform_config_struct["Speed"] = int(tempSpeed)
         if tempPower != '':
-            origin_config.waveform_config_struct["Power"] = int(tempPower)
+            self.origin_config.waveform_config_struct["Power"] = int(tempPower)
         if tempTeeth != '':
-            origin_config.waveform_config_struct["GearTeeth"] = int(tempTeeth)
+            self.origin_config.waveform_config_struct["GearTeeth"] = int(tempTeeth)
         if tempBore != '':
-            origin_config.waveform_config_struct["BearingBore"] = int(tempBore)
+            self.origin_config.waveform_config_struct["BearingBore"] = int(tempBore)
+
+    def creat_sensor_position_page(self, waveform_config_struct):
+        machineType=self.wfParam9.get()
+        SensorPositionCanvas1=SensorPositionCanvas(self, waveform_config_struct, machineType)
+        SensorPositionCanvas1.place(x=0, y=0, width=1008, height=504)
+
+
+class SensorPositionCanvas(Tk.Canvas):
+    def __init__(self, parent, waveform_config_struct, machineType):
+        super().__init__(parent.parent.configFrame, width=1008, height=504, bg='white')
+        self.parent = parent
+        self.waveform_config_struct=waveform_config_struct
+        self.newstyle = ttk.Style()
+        self.newstyle.configure('pos0.TButton', font=('Chakra Petch', 7), borderwidth=1, justify=Tk.CENTER)
+        self.newstyle.configure('pos1.Accent.TButton', font=('Chakra Petch', 10), justify=Tk.CENTER)
+        self.newstyle.configure('pos2.Accent.TButton', font=('Chakra Petch', 7), justify=Tk.CENTER)
+        self.newstyle.configure('feature.Accent.TButton', font=('Chakra Petch', 15), borderwidth=1, justify=Tk.CENTER)
+        self.newstyle.configure('normal.TLabel', font=('Chakra Petch', 13), background='white')
+        self.newstyle.configure('red.TLabel', font=('Chakra Petch', 13), background='white', foreground='#C40069')
+        self.sensorPositionConfig(machineType)
+    
+    def sensorPositionConfig(self, machineType):
+        self.inputParam1 = Tk.StringVar()
+        self.inputParam2 = Tk.StringVar()
+        self.inputParam3 = Tk.StringVar()
+        self.inputParam4 = Tk.StringVar()
+
+        self.inputParam2.set(self.waveform_config_struct["Port1Pos"])
+        self.inputParam3.set(self.waveform_config_struct["Port2Pos"])
+        self.inputParam4.set(self.waveform_config_struct["Port3Pos"])
+        parentFrame = Tk.LabelFrame(self, text='', font=('Chakra Petch', 13), border=0, bg='white')
+        parentFrame.pack(side=Tk.TOP, fill=Tk.BOTH)
+        
+        imageFrame = ttk.LabelFrame(parentFrame, text=(''))
+        imageFrame.grid(column=0, row=0, padx=0, pady=0, sticky='wn')
+        inputFrame = ttk.LabelFrame(parentFrame, text=_('Input'))
+        inputFrame.grid(column=1, row=0, padx=0, pady=0, sticky='wn')
+        
+        imageAdress=ImageAdrr()
+        if machineType=="PUMP":
+            image = imageAdress.pumpPhoto
+            x=[56,   56, 183, 183, 222, 390, 384, 353, 588, 595, 223, 223 ]
+            y=[230, 328, 230, 328, 298, 293, 330, 355, 293, 327, 414, 458 ]
+            dir=["AV", "AH", "BV", "BH", "BA", "CV", "CH", "CA", "DV", "DH", "EV", "FV"]
+        elif machineType=="GENERAL" or machineType=="CRITICAL MACHINE" or machineType=="FAN":
+            image = imageAdress.fanPhoto
+            x=[66,   66, 204, 204, 253, 316, 316, 282, 587, 587, 528, 528]
+            y=[228, 337, 228, 336, 362, 284, 337, 362, 284, 337, 420, 461 ]
+            dir=["AV", "AH", "BV", "BH", "BA", "CV", "CH", "CA", "DV", "DH", "EV", "FV"]
+        elif machineType=="WIND TURBINE":
+            image = imageAdress.windPhoto
+            x=[195, 253, 318, 412, 434, 419, 500, 510, 478, 590, 591]
+            y=[240, 244, 169, 120, 173, 317, 122, 186, 173, 122, 184 ]
+            dir=["AV", "BV", "CV", "DV", "DA", "EV", "FV", "FH", "FA", "GV", "GH"]
+        elif machineType=="GEARBOX":
+            image = imageAdress.gearboxPhoto
+            x=[63 , 63 , 126, 129, 158, 428, 429, 407, 463, 513, 538, 219, 219]
+            y=[271, 332, 272, 332, 317, 280, 332, 317, 245, 245, 219, 394, 439 ]
+            dir=["AV", "AH", "BV", "BH", "BA", "CV", "CH", "CA", "DV", "DH", "DA", "EV", "FV"]
+        else:
+            image = imageAdress.pumpPhoto
+            x=[56,   56, 183, 183, 222, 390, 384, 353, 588, 595, 223, 223 ]
+            y=[230, 328, 230, 328, 298, 293, 330, 355, 293, 327, 414, 458 ]
+            dir=["AV", "AH", "BV", "BH", "BA", "CV", "CH", "CA", "DV", "DH", "EV", "FV"]
+        px = 1/plt.rcParams['figure.dpi']
+        self.fig5 = Figure(figsize=(666*px, 475*px))
+        self.ax_41 = self.fig5.add_subplot()
+        self.ax_41.set_position([0.01, 0.01, 1, 1])
+        self.ax_41.set_xticks([])
+        self.ax_41.set_yticks([])
+        self.ax_41.imshow(image)
+        self.ax_41.axis('off')
+        self.canvas4 = FigureCanvasTkAgg(self.fig5, master=imageFrame)
+        self.canvas4.get_tk_widget().pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
+        
+        self.listBt=[]
+        for i in range(15):
+            self.listBt.append(Tk.Button())
+
+        for i in range(len(x)):
+            self.listBt[i]=Tk.Button(self, text='O', bg="green2", command=lambda text=dir[i], index=i: self.update_text(text, index))
+            self.listBt[i].place(x=x[i], y=y[i], width=25, height=25)
+        
+        sensorLabel=ttk.Label(inputFrame, text="Select sensor", style="pos0.TLabel")
+        sensorLabel.grid(column=0, row=0, padx=5, pady=0, sticky="w")
+        sensorCombo=ttk.Combobox(inputFrame, width=8, textvariable=self.inputParam1, validate="key", font=('Chakra Petch', 13),\
+                                 state="readonly" )
+        sensorCombo['value'] = ('Port1', 'Port2', 'Port3')
+        sensorCombo.current(0)
+        sensorCombo.bind("<<ComboboxSelected>>", self.sensor_combo_callback)  
+        sensorCombo.grid(column=1, row=0, padx=5, pady=5, sticky='e')
+
+        pos1Label= ttk.Label(inputFrame, text="Port 1", style="pos0.TLabel")
+        pos1Label.grid(column=0, row=1, padx=5, pady=0, sticky="w")
+        self.port1Entry=ttk.Entry(inputFrame, width=10, textvariable=self.inputParam2, validate="key", font=('Chakra Petch', 13))
+        self.port1Entry.grid(column=1, row=1, padx=5, pady=5, sticky='e')
+
+        pos2Label= ttk.Label(inputFrame, text="Port 2", style="pos0.TLabel")
+        pos2Label.grid(column=0, row=2, padx=5, pady=0, sticky="w")
+        self.port2Entry=ttk.Entry(inputFrame, width=10, textvariable=self.inputParam3, validate="key", font=('Chakra Petch', 13))
+        self.port2Entry.grid(column=1, row=2, padx=5, pady=5, sticky='e')
+
+        pos3Label= ttk.Label(inputFrame, text="Port 3", style="pos0.TLabel")
+        pos3Label.grid(column=0, row=3, padx=5, pady=0, sticky="w")
+        self.port3Entry=ttk.Entry(inputFrame, width=10, textvariable=self.inputParam4, validate="key", font=('Chakra Petch', 13))
+        self.port3Entry.grid(column=1, row=3, padx=5, pady=5, sticky='e')
+
+        applyButton=ttk.Button(self, text='APPLY', style="Accent.TButton", command=self.on_apply_button_click)
+        applyButton.place(x=860, y=456, width=130, height=40)
+
+    def update_text(self, text, index):
+        selectedSensor=self.inputParam1.get()
+        self.listBt[index].configure(text="S", bg="#C40069")
+        for i in range(len(self.listBt)):
+            if i!=index:
+                self.listBt[i].configure(text="O", bg="green2")
+        if selectedSensor=="Port1":
+            self.inputParam2.set(text)
+        elif selectedSensor=="Port2":
+            self.inputParam3.set(text)
+        else:
+            self.inputParam4.set(text)
+    def sensor_combo_callback(self, event):
+        text=self.inputParam1.get()
+        if text=="Port1":
+            self.port1Entry.configure(state="normal")
+            self.port2Entry.configure(state="disable")
+            self.port3Entry.configure(state="disable")
+        elif text=="Port2":
+            self.port1Entry.configure(state="disable")
+            self.port2Entry.configure(state="normal")
+            self.port3Entry.configure(state="disable")
+        elif text=="Port3":
+            self.port2Entry.configure(state="disable")
+            self.port1Entry.configure(state="disable")
+            self.port3Entry.configure(state="normal")
+
+    def on_apply_button_click(self):
+        port1Pos=self.inputParam2.get()
+        port2Pos=self.inputParam3.get()
+        port3Pos=self.inputParam4.get()
+        self.waveform_config_struct["Port1Pos"]=port1Pos
+        self.waveform_config_struct["Port2Pos"]=port2Pos
+        self.waveform_config_struct["Port3Pos"]=port3Pos
+        self.parent.wfParam16.set(port1Pos)
+        self.parent.wfParam17.set(port2Pos)
+        self.parent.wfParam18.set(port3Pos)
+        self.destroy()
 
 
 class WaveformFrameCanvas():
