@@ -692,6 +692,8 @@ class PLT(FigureCanvasTkAgg):
             ax_41.plot(tick_arr1, velocity_danger, linewidth=0.3, color="red")
             ax_41.text(tick_arr1[-1] - 0.1, velocity_alert[-1] + 0.1, str(velocity_alert[-1])[0:3])
             ax_41.text(tick_arr1[-1] - 0.1, velocity_danger[-1] + 0.1, str(velocity_danger[-1])[0:3])
+            for index, value in enumerate(rms_arr):
+                    ax_41.text(index, value+0.2, str(value)[0:4])
             ymin, ymax = ax_41.get_ylim()
             ax_41.set_ylim(0, ymax * 1.5)
             ax_41.legend(bbox_to_anchor=(1, 1), loc='upper right', borderaxespad=0.0)
@@ -704,6 +706,8 @@ class PLT(FigureCanvasTkAgg):
                 ax_42.plot(tick_arr1, acc_danger, linewidth=0.3, color="red")
                 ax_42.text(tick_arr1[-1] - 0.1, acc_alert[-1] + 0.1, str(acc_alert[-1])[0:3])
                 ax_42.text(tick_arr1[-1] - 0.1, acc_danger[-1] + 0.1, str(acc_danger[-1])[0:3])
+                for index, value in enumerate(Acc_Pk_arr):
+                    ax_42.text(index, value+0.2, str(value)[0:4])
             if view_arr[2] == 1:
                 ax_43.plot(tick_arr, gE_arr, color="blue", linestyle='solid', marker='o', \
                            markerfacecolor='red', markersize=5, label="BRGs-gE")
@@ -711,8 +715,8 @@ class PLT(FigureCanvasTkAgg):
                 ax_43.plot(tick_arr1, gE_danger_arr, linewidth=0.3, color="red")
                 ax_43.text(tick_arr1[-1] - 0.1, gE_alert_arr[-1] + 0.1, str(gE_alert_arr[-1])[0:3])
                 ax_43.text(tick_arr1[-1] - 0.1, gE_danger_arr[-1] + 0.1, str(gE_danger_arr[-1])[0:3])
-                # for index, value in enumerate(gE_arr):
-                #     ax_43.text(index,value, str(value)[0:4])
+                for index, value in enumerate(gE_arr):
+                    ax_43.text(index, value+0.2, str(value)[0:4])
             if view_arr[3] == 1:
                 ax_44.plot(tick_arr, hfcf_arr, color="blue", linestyle='solid', marker='o', \
                            markerfacecolor='red', markersize=5, label="BRGs-HFCF")
@@ -720,8 +724,8 @@ class PLT(FigureCanvasTkAgg):
                 ax_44.plot(tick_arr1, hfcf_danger_arr, linewidth=0.3, color="red")
                 ax_44.text(tick_arr1[-1] - 0.1, hfcf_alert_arr[-1] + 0.1, str(hfcf_alert_arr[-1])[0:3])
                 ax_44.text(tick_arr1[-1] - 0.1, hfcf_danger_arr[-1] + 0.1, str(hfcf_danger_arr[-1])[0:3])
-                # for index, value in enumerate(hfcf_arr):
-                #     ax_44.text(index,value, str(value)[0:4])
+                for index, value in enumerate(hfcf_arr):
+                    ax_44.text(index, value+0.2, str(value)[0:4])
 
             ymin, ymax = ax_42.get_ylim()
             ax_42.set_ylim(0, ymax * 1.5)

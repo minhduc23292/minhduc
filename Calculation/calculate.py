@@ -201,7 +201,9 @@ def vtrial(a0, phi0, a1, phi1):
     return np.pi - phase + phi0
     # azt = np.sqrt(a0**2+a1**2-2*a0*a1*np.cos(phi0-phi1))\
 
-
+""" convert the signal using the TSA
+    arr: input array from 4 ports and laser
+    return the signal after tsa and cut laser pulse"""
 def tsa_convert(arr, pulse_position, tsa_value):
     temp_arr = []
     for i in range(5):
@@ -251,7 +253,7 @@ def acc2vel(accel_arr, sample_rate): #g->mm/s
     v=filter_data(
                             v,
                             "BANDPASS",
-                            5,
+                            10,
                             1000,
                             sample_rate,
                             window="Hanning"

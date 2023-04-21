@@ -427,7 +427,7 @@ class DiagnosticPage(Tk.Frame):
                                         self.origin_config.sensor_config["sample_rate"],
                                         window="Hanning")
                 self.origin_config.sensor_config["accel_data"].append(
-                    self.origin_config.sensor_config["sensor_data"][i])     
+                    self.origin_config.sensor_config["store_sensor_data"][i])     
 
             elif self.origin_config.sensor_config["sensor_input"][i] == 'Velocity':
                 self.origin_config.sensor_config["sensor_data"][i] *= velConvertFactor  # mm/s
@@ -444,7 +444,7 @@ class DiagnosticPage(Tk.Frame):
                 self.origin_config.sensor_config["vel"].append(i)
                 self.origin_config.sensor_config["dis"].append(i)
                 self.origin_config.sensor_config["vel_data"].append(
-                    self.origin_config.sensor_config["sensor_data"][i])
+                    self.origin_config.sensor_config["store_sensor_data"][i])
                 self.origin_config.sensor_config["displacement_data"].append(
                     vel2disp(self.origin_config.sensor_config["sensor_data"][i],
                              self.origin_config.sensor_config["sample_rate"]))
@@ -560,15 +560,15 @@ class DiagnosticPage(Tk.Frame):
                             cur.execute(f"INSERT INTO Company_ID (COM_ID, NAME, ADR) VALUES (:id, :name, :address)", companyData)
                             cur.execute(f"""INSERT INTO Project_ID (COM_ID, CODE, POWER, RPM, DRIVEN, NOTE, FOUNDATION, GEARTOOTH, BEARINGBORE) VALUES 
                                         (:id, :code, :power, :rpm, :driven, :note, :foundation, :gearTooth, :bearingBore)""", projectData)
-                            if ss1 != 'N':
+                            if ss1 != 'N' and p1 != "NONE":
                                 cur.execute(f""" INSERT INTO DATA (CODE, DATE, POS, DATA, Sample_rate) VALUES (:prjCode, :date, :position, :chanelData, :sampleRate)""", channel1Data)
                             else:
                                 pass
-                            if ss2 != 'N':
+                            if ss2 != 'N' and p2 != "NONE":
                                 cur.execute(f""" INSERT INTO DATA (CODE, DATE, POS, DATA, Sample_rate) VALUES (:prjCode, :date, :position, :chanelData, :sampleRate)""", channel2Data)
                             else:
                                 pass
-                            if ss3 != 'N':
+                            if ss3 != 'N' and p3 != "NONE":
                                 cur.execute(f""" INSERT INTO DATA (CODE, DATE, POS, DATA, Sample_rate) VALUES (:prjCode, :date, :position, :chanelData, :sampleRate)""", channel3Data)
                             else:
                                 pass
@@ -595,15 +595,15 @@ class DiagnosticPage(Tk.Frame):
                             }
                             cur.execute(f"""INSERT INTO Project_ID (COM_ID, CODE, POWER, RPM, DRIVEN, NOTE, FOUNDATION, GEARTOOTH, BEARINGBORE) 
                             VALUES (:id, :code, :power, :rpm, :driven, :note, :foundation, :gearTooth, :bearingBore)""", projectData1)
-                            if ss1 != 'N':
+                            if ss1 != 'N' and p1 != "NONE":
                                 cur.execute(f""" INSERT INTO DATA (CODE, DATE, POS, DATA, Sample_rate) VALUES (:prjCode, :date, :position, :chanelData, :sampleRate)""", channel1Data)
                             else:
                                 pass
-                            if ss2 != 'N':
+                            if ss2 != 'N' and p2 != "NONE":
                                 cur.execute(f""" INSERT INTO DATA (CODE, DATE, POS, DATA, Sample_rate) VALUES (:prjCode, :date, :position, :chanelData, :sampleRate)""", channel2Data)
                             else:
                                 pass
-                            if ss3 != 'N':
+                            if ss3 != 'N' and p3 != "NONE":
                                 cur.execute(f""" INSERT INTO DATA (CODE, DATE, POS, DATA, Sample_rate) VALUES (:prjCode, :date, :position, :chanelData, :sampleRate)""", channel3Data)
                             else:
                                 pass
@@ -613,17 +613,17 @@ class DiagnosticPage(Tk.Frame):
                     elif len(arr) == 1 and len(arr1) == 1:
                         if arr[0][0]==arr1[0][1] :
                             if pms.company_project_existed_warning()==True:
-                                if ss1 != 'N':
+                                if ss1 != 'N' and p1 != "NONE":
                                     cur.execute(
                                         f""" INSERT INTO DATA (CODE, DATE, POS, DATA, Sample_rate) VALUES (:prjCode, :date, :position, :chanelData, :sampleRate)""", channel1Data)
                                 else:
                                     pass
-                                if ss2 != 'N':
+                                if ss2 != 'N' and p2 != "NONE":
                                     cur.execute(
                                         f""" INSERT INTO DATA (CODE, DATE, POS, DATA, Sample_rate) VALUES (:prjCode, :date, :position, :chanelData, :sampleRate)""", channel2Data)
                                 else:
                                     pass
-                                if ss3 != 'N':
+                                if ss3 != 'N' and p3 != "NONE":
                                     cur.execute(
                                         f""" INSERT INTO DATA (CODE, DATE, POS, DATA, Sample_rate) VALUES (:prjCode, :date, :position, :chanelData, :sampleRate)""", channel3Data)
                                 else:
@@ -1135,20 +1135,21 @@ class DiagnosticPage(Tk.Frame):
             stopFreq = []
             rpm = self.origin_config.waveform_config_struct["Speed"] / 60
             SecondGMF = 2 * self.origin_config.waveform_config_struct["GearTeeth"] * rpm
-            if len(self.origin_config.sensor_config["accel"]) > 0 and (SecondGMF - 3 * rpm - 5) > 0 and (
+            N=len(self.origin_config.sensor_config["accel"])
+            if N > 0 and (SecondGMF - 3 * rpm - 5) > 0 and (
                     SecondGMF + 3 * rpm + 5) < (
                     self.origin_config.sensor_config["sample_rate"] / 2.56):
                 for i in range(7):
                     startFreq.append(SecondGMF - (3 - i) * rpm - 5)
                     stopFreq.append(SecondGMF - (3 - i) * rpm + 5)
                 CMFAmplitude = []
-                for j in range(len(self.origin_config.sensor_config["accel"])):
+                for j in range(N):
                     [max1, freq] = tab4_tracking_signal_old(self.origin_config.sensor_config["accel_data"][j],
                                                         self.origin_config.sensor_config["sample_rate"],
                                                         [startFreq[3], stopFreq[3]])
                     CMFAmplitude.append(max1)
-                sumOfSideBand = np.zeros(len(self.origin_config.sensor_config["accel"]))
-                for k in range(len(self.origin_config.sensor_config["accel"])):
+                sumOfSideBand = np.zeros(N)
+                for k in range(N):
                     for h in range(7):
                         if h != 3:
                             [max1, freq] = tab4_tracking_signal_old(
@@ -1156,12 +1157,12 @@ class DiagnosticPage(Tk.Frame):
                                 self.origin_config.sensor_config["sample_rate"],
                                 [startFreq[h], stopFreq[h]])
                             sumOfSideBand[k] += max1
-                for k in range(len(self.origin_config.sensor_config["accel"])):
+                for k in range(N):
                     sumOfSideBand[k] /= CMFAmplitude[k]
 
                 # Calculate the Acc Peak
                 AccPeak = []
-                for i in range(len(self.origin_config.sensor_config["accel"])):
+                for i in range(N):
                     arr = filter_data(
                         self.origin_config.sensor_config["accel_data"][i],
                         "HIGHPASS",
@@ -1874,9 +1875,11 @@ class SummaryFrameCanvas():
         for i in range(3):
             try:
                 a_index = origin_config.sensor_config["accel"].index(i)
-                Apeak = max(np.abs(origin_config.sensor_config["accel_data"][a_index]))
-                APp = np.ptp(origin_config.sensor_config["accel_data"][a_index])
+                # Apeak = max(np.abs(origin_config.sensor_config["accel_data"][a_index]))
+                # APp = np.ptp(origin_config.sensor_config["accel_data"][a_index])
                 Arms = rmsValue(origin_config.sensor_config["accel_data"][a_index])
+                Apeak=np.sqrt(2)*Arms
+                APp=2*Apeak
                 Acrest = Apeak / Arms
                 Akutor = kurtosis(origin_config.sensor_config["accel_data"][a_index])
             except:
@@ -1892,9 +1895,11 @@ class SummaryFrameCanvas():
                                             dfc._RMS_HIGHPASS_FROM,
                                             dfc._RMS_LOWPASS_TO, origin_config.sensor_config["sample_rate"],
                                             window="Hanning")
-                Vpeak = max(np.abs(filtered_data))
-                VPp = np.ptp(filtered_data)
+                # Vpeak = max(np.abs(filtered_data))
+                # VPp = np.ptp(filtered_data)
                 Vrms = rmsValue(filtered_data)
+                Vpeak=np.sqrt(2)*Vrms
+                VPp=2*Vpeak
                 # Vcrest = Vpeak / Vrms
                 # Vkutor = kurtosis(filtered_data)
             except:
@@ -1906,9 +1911,11 @@ class SummaryFrameCanvas():
                 # Vkutor = "None "
             try:
                 d_index = origin_config.sensor_config["dis"].index(i)
-                Dpeak = max(np.abs(origin_config.sensor_config["displacement_data"][d_index]))
-                DPp = np.ptp(origin_config.sensor_config["displacement_data"][d_index])
+                # Dpeak = max(np.abs(origin_config.sensor_config["displacement_data"][d_index]))
+                # DPp = np.ptp(origin_config.sensor_config["displacement_data"][d_index])
                 Drms = rmsValue(origin_config.sensor_config["displacement_data"][d_index])
+                Dpeak=np.sqrt(2)*Drms
+                DPp=2*Dpeak
                 # Dcrest = Dpeak / Drms
                 # Dkutor = kurtosis(origin_config.sensor_config["displacement_data"][d_index])
             except:
