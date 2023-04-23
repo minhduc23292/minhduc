@@ -172,6 +172,7 @@ class historyConfig(Tk.Frame):
         super().__init__(parent, width=1024, height=520, background='white')
         self.parent=parent
         self.infoLabel=infoLabel
+        self.prjDate=Tk.StringVar()
         self.con=db_connect
         self.style = ttk.Style()
         self.style.configure('history.TLabel', font=('Chakra Petch', 13), bg='white')
@@ -179,6 +180,7 @@ class historyConfig(Tk.Frame):
         self.style.configure('history.TButton', font=('Chakra Petch', 15))
         self.style.configure('history.TEntry', font=('Chakra Petch', 15))
         self.style.configure('history.Switch.TCheckbutton', font=('Chakra Petch', 13))
+        self.style.configure("Custom.Treeview", rowheight=30, font=('Chakra Petch', 12))
         self.creatConfig(history_config_struct)
 
     def creatConfig(self, history_config_struct):
@@ -267,15 +269,16 @@ class historyConfig(Tk.Frame):
         self.scrollbar = ttk.Scrollbar(self)
         self.scrollbar.pack(side="right", fill="y")
 
-        self.PrjTable = ttk.Treeview(self, yscrollcommand=self.scrollbar.set,)
+        self.PrjTable = ttk.Treeview(self, yscrollcommand=self.scrollbar.set, show=("tree",), style="Custom.Treeview")
         self.PrjTable.bind('<<TreeviewSelect>>', self.get_selected_cell)
+
         self.PrjTable.pack(side="left", expand=True, fill="both")
         self.PrjTable['columns'] = ('PrjID', 'Date', 'Pos', 'SampleRate')
-        self.PrjTable.column("#0", width=0,  stretch=Tk.NO)
-        self.PrjTable.column("PrjID",anchor='w', width=100)
-        self.PrjTable.column("Date",anchor=Tk.CENTER,width=100)
-        self.PrjTable.column("Pos",anchor=Tk.CENTER,width=100)
-        self.PrjTable.column("SampleRate",anchor=Tk.CENTER,width=100)
+        self.PrjTable.column("#0", anchor='w', width=120)
+        self.PrjTable.column("PrjID",anchor='w', width=120)
+        self.PrjTable.column("Date",anchor=Tk.CENTER,width=120)
+        self.PrjTable.column("Pos",anchor=Tk.CENTER,width=60)
+        self.PrjTable.column("SampleRate",anchor=Tk.CENTER,width=80)
 
         self.PrjTable.heading("#0",text="",anchor=Tk.CENTER)
         self.PrjTable.heading("PrjID",text="ID",anchor=Tk.CENTER)
@@ -283,10 +286,23 @@ class historyConfig(Tk.Frame):
         self.PrjTable.heading("Pos",text=_("Position"),anchor=Tk.CENTER)
         self.PrjTable.heading("SampleRate",text=_("Sample rate"),anchor=Tk.CENTER)
         self.scrollbar.config(command=self.PrjTable.yview)
-        load_data_arr=self.load_project()
-        for i in range(len(load_data_arr)):
-                        self.PrjTable.insert(parent='',index='end',iid=i,text='', values=(str(load_data_arr[i][0]),str(load_data_arr[i][1]), \
-                                            str(load_data_arr[i][2]), str(load_data_arr[i][3])))
+        prjCodeArr=self.load_all_project_code()
+        for i in range(len(prjCodeArr)):
+            data_arr=self.load_data_base_on_code(prjCodeArr[i])
+            companyName=self.find_company_name_base_on_code(prjCodeArr[i])
+            date_arr=[arr[0] for arr in data_arr]
+            pos_arr=[arr[1] for arr in data_arr]
+            sample_rate_arr=[arr[2] for arr in data_arr]
+            self.PrjTable.insert(parent='', index='end', iid=i, text=prjCodeArr[i], values=(str(companyName), '', '', ''))
+            for k in range(len(pos_arr)):
+                self.PrjTable.insert(parent=i,index='end',text='', values=(str(prjCodeArr[i]),str(date_arr[k]), \
+                            str(pos_arr[k]), str(sample_rate_arr[k])))
+        # self.PrjTable.item(open=True)
+        # print("load_prj_code:", load_data_arr)
+
+        # for i in range(len(load_data_arr)):
+        #                 self.PrjTable.insert(parent='',index='end',iid=i,text='', values=(str(load_data_arr[i][0]),str(load_data_arr[i][1]), \
+        #                                     str(load_data_arr[i][2]), str(load_data_arr[i][3])))
 
         
 
@@ -296,10 +312,17 @@ class historyConfig(Tk.Frame):
         self.applyBt.configure(state='normal')
         try:
             selected_item = self.PrjTable.focus() # get the selected item
-            prjID = self.PrjTable.item(selected_item)['values'][0] # get the value of the cell
-            position=self.PrjTable.item(selected_item)['values'][2]
-            self.historyParam1.set(prjID)
-            self.historyParam2.set(position)
+            if self.PrjTable.parent(selected_item) !='':
+                prjID = self.PrjTable.item(selected_item)['values'][0] # get the value of the cell
+                position=self.PrjTable.item(selected_item)['values'][2]
+                date=self.PrjTable.item(selected_item)['values'][1]
+                self.historyParam1.set(prjID)
+                self.historyParam2.set(position)
+                self.prjDate.set(date)
+            else:
+                prjID = self.PrjTable.item(selected_item)['text']
+                self.historyParam1.set(prjID)
+                self.historyParam2.set('')
         except:
             pass
 
@@ -344,8 +367,33 @@ class historyConfig(Tk.Frame):
             load_data = cur.fetchall()
             load_data_arr = [i for i in load_data]
             return load_data_arr
-        
 
+    def load_all_project_code(self):
+        with self.con:
+            cur=self.con.cursor()
+            cur.execute(f"SELECT DISTINCT CODE FROM DATA ORDER BY DATE ASC;")
+            load_data = cur.fetchall()
+            load_data_arr = [i for i in load_data]
+            return [arr[0] for arr in load_data_arr]
+
+    def load_data_base_on_code(self, prjCode):
+        with self.con:
+            cur=self.con.cursor()
+            cur.execute(f"SELECT DATE, POS, Sample_rate FROM DATA WHERE CODE=? ORDER BY DATE ASC", (prjCode,))
+            load_data = cur.fetchall()
+            load_data_arr = [i for i in load_data]
+            return load_data_arr
+    
+    def find_company_name_base_on_code(self, prjCode):
+        with self.con:
+            cur=self.con.cursor()
+            cur.execute(f"SELECT COM_ID FROM Project_ID WHERE CODE=?", (prjCode,))
+            load_data=cur.fetchall()
+            com_id=load_data[0][0]
+            cur.execute(f"SELECT NAME FROM Company_ID WHERE COM_ID =?", (com_id,))
+            name=cur.fetchall()
+            return name[0][0]
+        
     def find_position_list(self, event):
         prjCode=self.historyParam1.get()
         self.historyParam2.set("")
@@ -364,20 +412,31 @@ class historyConfig(Tk.Frame):
     def delete_project(self):
         try:
             prjCode = self.historyParam1.get()
+            position =  self.historyParam2.get().replace(' ', '')
+            date = self.prjDate.get()
             if prjCode!='':
                 with self.con:
                     cur=self.con.cursor()
                     if pms.general_warning(_("Do you want to delete this project?"))==True:
-                        
-                        cur.execute(f"""DELETE FROM DATA WHERE CODE = ? """, (prjCode,))
-                        cur.execute(f"""DELETE FROM Project_ID WHERE CODE = ? """, (prjCode,))
+                        if position=='':
+                            cur.execute(f"""DELETE FROM DATA WHERE CODE = ? """, (prjCode,))
+                            cur.execute(f"""DELETE FROM Project_ID WHERE CODE = ? """, (prjCode,))
+                        else:
+                            cur.execute(f"""DELETE FROM DATA WHERE CODE = ? AND DATE = ? AND POS = ?    """, (prjCode, date, position,))
                         self.infoLabel.configure(text=_("Selected project is deleted."))
                         for row in self.PrjTable.get_children():
                             self.PrjTable.delete(row)
-                        load_data_arr=self.load_project()
-                        for i in range(len(load_data_arr)):
-                            self.PrjTable.insert(parent='',index='end',iid=i,text='', values=(str(load_data_arr[i][0]),str(load_data_arr[i][1]), \
-                                            str(load_data_arr[i][2]), str(load_data_arr[i][3])))
+                        prjCodeArr=self.load_all_project_code()
+                        for i in range(len(prjCodeArr)):
+                            data_arr=self.load_data_base_on_code(prjCodeArr[i])
+                            companyName=self.find_company_name_base_on_code(prjCodeArr[i])
+                            date_arr=[arr[0] for arr in data_arr]
+                            pos_arr=[arr[1] for arr in data_arr]
+                            sample_rate_arr=[arr[2] for arr in data_arr]
+                            self.PrjTable.insert(parent='', index='end', iid=i, text=prjCodeArr[i], values=(str(companyName), '', '', ''))
+                            for k in range(len(pos_arr)):
+                                self.PrjTable.insert(parent=i,index='end',text='', values=(str(prjCodeArr[i]),str(date_arr[k]), \
+                                            str(pos_arr[k]), str(sample_rate_arr[k])))
                     else:
                         pass
             else:

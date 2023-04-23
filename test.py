@@ -151,7 +151,8 @@ class PanedDemo(ttk.PanedWindow):
             print("iid=", iid)
             print("text=", text)
             print("value=", values)
-            self.tree.insert(parent=parent, index="end", iid=iid, text=text, values=values)
+            self.tree.insert(parent=parent, index="end", iid=iid, text=text, values=values) 
+            # chèn vào dòng iid, tiêu đề dòng là text, giá trị các cột là value
 
             if not parent or iid in {8, 21}:
                 self.tree.item(iid, open=True)
