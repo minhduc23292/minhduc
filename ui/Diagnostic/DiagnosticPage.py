@@ -402,7 +402,7 @@ class DiagnosticPage(Tk.Frame):
         accConvertFactor=1000/self.origin_config.sensor_sensitivity["acc_sensitivity"]
         velConvertFactor=1000/self.origin_config.sensor_sensitivity["vel_sensitivity"]
         for i in range(3):
-            if self.origin_config.sensor_config["sensor_input"][i] == 'Acceleration':
+            if self.origin_config.sensor_config["sensor_input"][i] == 'Accelerometer':
                 self.origin_config.sensor_config["sensor_data"][i] *= accConvertFactor  # g
                 self.origin_config.sensor_config["sensor_data"][i] -= np.mean(
                     self.origin_config.sensor_config["sensor_data"][i])
@@ -429,7 +429,7 @@ class DiagnosticPage(Tk.Frame):
                 self.origin_config.sensor_config["accel_data"].append(
                     self.origin_config.sensor_config["store_sensor_data"][i])     
 
-            elif self.origin_config.sensor_config["sensor_input"][i] == 'Velocity':
+            elif self.origin_config.sensor_config["sensor_input"][i] == 'Velocity Sensor':
                 self.origin_config.sensor_config["sensor_data"][i] *= velConvertFactor  # mm/s
                 self.origin_config.sensor_config["sensor_data"][i] -= np.mean(
                     self.origin_config.sensor_config["sensor_data"][i])
@@ -1352,7 +1352,7 @@ class ConfigFrame(Tk.Frame):
 
         sensor1Combo = ttk.Combobox(sensorFrame, width=8, textvariable=self.wfParam1, state="readonly",
                                     font=('Chakra Petch', 13))
-        sensor1Combo['value'] = ('NONE', "Acceleration", "Velocity")
+        sensor1Combo['value'] = ('NONE', "Accelerometer", "Velocity Sensor")
         sensor1Combo.grid(column=1, row=1, padx=0, pady=5, sticky='e')
 
         port1PosCombo = ttk.Combobox(sensorFrame, width=4, textvariable=self.wfParam16, state="readonly",
@@ -1369,7 +1369,7 @@ class ConfigFrame(Tk.Frame):
 
         sensor2Combo = ttk.Combobox(sensorFrame, width=8, textvariable=self.wfParam2, state="readonly",
                                     font=('Chakra Petch', 13))
-        sensor2Combo['value'] = ('NONE', "Acceleration", "Velocity")
+        sensor2Combo['value'] = ('NONE', "Accelerometer", "Velocity Sensor")
         sensor2Combo.grid(column=1, row=2, padx=0, pady=5, sticky='e')
 
         port2PosCombo = ttk.Combobox(sensorFrame, width=4, textvariable=self.wfParam17, state="readonly",
@@ -1383,7 +1383,7 @@ class ConfigFrame(Tk.Frame):
 
         sensor3Combo = ttk.Combobox(sensorFrame, width=8, textvariable=self.wfParam3, state="readonly",
                                     font=('Chakra Petch', 13))
-        sensor3Combo['value'] = ('NONE', "Acceleration", "Velocity")
+        sensor3Combo['value'] = ('NONE', "Accelerometer", "Velocity Sensor")
         sensor3Combo.grid(column=1, row=3, padx=0, pady=5, sticky='e')
 
         port3PosCombo = ttk.Combobox(sensorFrame, width=4, textvariable=self.wfParam18, state="readonly",
