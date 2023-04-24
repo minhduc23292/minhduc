@@ -193,6 +193,10 @@ class historyConfig(Tk.Frame):
         self.historyParam7=Tk.StringVar()
         self.historyParam8=Tk.StringVar()
         self.tsa_var = Tk.IntVar()
+        self.var_1 = Tk.BooleanVar(self, True)
+        self.var_2 = Tk.BooleanVar(self, True)
+        self.var_3 = Tk.BooleanVar(self, True)
+        self.var_4 = Tk.BooleanVar(self, True)
 
         self.historyParam1.set(history_config_struct["ProjectID"])
         self.historyParam2.set(history_config_struct["SensorPosition"])
@@ -209,56 +213,68 @@ class historyConfig(Tk.Frame):
         historyFrame.pack(side="left", fill='y')
 
         projectIDLabel = ttk.Label(historyFrame, text=_('Project Code'), style="history.TLabel")
-        projectIDLabel.grid(column=0, row=0, padx=5, pady=5, sticky="w")
+        projectIDLabel.grid(column=0, row=0, padx=5, pady=4, sticky="w")
         projectIDEntry=ttk.Entry(historyFrame, width=14, textvariable=self.historyParam1, font=('Chakra Petch', 13),
                                 validate="key")
-        projectIDEntry.grid(column=1, row=0, padx=(0,10), pady=5, sticky="e")
+        projectIDEntry.grid(column=1, row=0, padx=(0,10), pady=4, sticky="e")
 
         positionLabel = ttk.Label(historyFrame, text=_('Sensor Position'), style="history.TLabel")
-        positionLabel.grid(column=0, row=1, padx=5, pady=5, sticky="w")
+        positionLabel.grid(column=0, row=1, padx=5, pady=4, sticky="w")
         self.positionCombo=ttk.Combobox(historyFrame, width=10, textvariable=self.historyParam2, state="readonly",
                                     font=('Chakra Petch', 13))
         self.positionCombo.bind("<Button-1>", self.find_position_list)
-        self.positionCombo.grid(column=1, row=1, padx=(0, 10), pady=5, ipadx=7, sticky="e")
+        self.positionCombo.grid(column=1, row=1, padx=(0, 10), pady=4, ipadx=7, sticky="e")
 
         filterFromLabel = ttk.Label(historyFrame, text=_("Bandpass Filter From"), style="history.TLabel")
-        filterFromLabel.grid(column=0, row=3, padx=5, pady=5, sticky='w')
+        filterFromLabel.grid(column=0, row=3, padx=5, pady=4, sticky='w')
         filterFromEntry=ttk.Entry(historyFrame, width=14, textvariable=self.historyParam4, font=('Chakra Petch', 13),
                                 validate="key")
-        filterFromEntry.grid(column=1, row=3, padx=(0,10), pady=5, sticky='e')
+        filterFromEntry.grid(column=1, row=3, padx=(0,10), pady=4, sticky='e')
 
         filterToLabel = ttk.Label(historyFrame, text=_("Bandpass Filter To"), style="history.TLabel")
-        filterToLabel.grid(column=0, row=4, padx=5, pady=5, sticky='w')
+        filterToLabel.grid(column=0, row=4, padx=5, pady=4, sticky='w')
         filterToEntry=ttk.Entry(historyFrame, width=14, textvariable=self.historyParam5, font=('Chakra Petch', 13),
                                 validate="key")
-        filterToEntry.grid(column=1, row=4, padx=(0, 10), pady=5, sticky='e')
+        filterToEntry.grid(column=1, row=4, padx=(0, 10), pady=4, sticky='e')
 
         viewLabel = ttk.Label(historyFrame, text=_("View Limit"), style="history.TLabel")
-        viewLabel.grid(column=0, row=5, padx=5, pady=5, sticky='w')
+        viewLabel.grid(column=0, row=5, padx=5, pady=4, sticky='w')
         viewEntry=ttk.Entry(historyFrame, width=14, textvariable=self.historyParam6, font=('Chakra Petch', 13),
                                 validate="key")
-        viewEntry.grid(column=1, row=5, padx=(0, 10), pady=5, sticky='e')
+        viewEntry.grid(column=1, row=5, padx=(0, 10), pady=4, sticky='e')
 
         meshLabel = ttk.Label(historyFrame, text=_("Tracking speed"), style="history.TLabel")
-        meshLabel.grid(column=0, row=6, padx=5, pady=5, sticky='w')
+        meshLabel.grid(column=0, row=6, padx=5, pady=4, sticky='w')
         meshEntry=ttk.Entry(historyFrame, width=14, textvariable=self.historyParam7, font=('Chakra Petch', 13),
                                 validate="key")
-        meshEntry.grid(column=1, row=6, padx=(0, 10), pady=5, sticky='e')
+        meshEntry.grid(column=1, row=6, padx=(0, 10), pady=4, sticky='e')
         
         tsaCheckButton=ttk.Checkbutton(historyFrame, text=_("Use Average"), offvalue=0, onvalue=1, 
                             variable=self.tsa_var, command=self.update_text_tsa, style="history.Switch.TCheckbutton")
-        tsaCheckButton.grid(column=1,row=7, padx=(0,5), pady=5, sticky='e')
+        tsaCheckButton.grid(column=1,row=7, padx=(0,5), pady=2, sticky='e')
 
         tsaLabel = ttk.Label(historyFrame, text=_("Average Bin"), style="history.TLabel")
-        tsaLabel.grid(column=0, row=8, padx=5, pady=5, sticky='w')
+        tsaLabel.grid(column=0, row=8, padx=5, pady=4, sticky='w')
         self.tsaBin=ttk.Combobox(historyFrame, width=10, textvariable=self.historyParam8, state="readonly",
                                     font=('Chakra Petch', 13))
         self.tsaBin['value'] = ('2048','4096','8192','16384','32768')
-        self.tsaBin.grid(column=1, row=8, padx=(0, 10), pady=5, ipadx=7, sticky='e')
+        self.tsaBin.grid(column=1, row=8, padx=(0, 10), pady=4, ipadx=7, sticky='e')
+
+        checkbox_1 = ttk.Checkbutton(historyFrame, text="Show Vel RMS", variable=self.var_1, command=self.checkbox_clicked)
+        checkbox_1.grid(row=9, column=0, padx=5, pady=4, sticky="w")
+
+        checkbox_2 = ttk.Checkbutton(historyFrame, text="Show Bearing gE", variable=self.var_2, command=self.checkbox_clicked)
+        checkbox_2.grid(row=9, column=1, padx=5, pady=4, sticky="w")
+
+        checkbox_3 = ttk.Checkbutton(historyFrame, text="Show Gear Acc", variable=self.var_3, command=self.checkbox_clicked)
+        checkbox_3.grid(row=10, column=0, padx=5, pady=4, sticky="w")
+
+        checkbox_4 = ttk.Checkbutton(historyFrame, text="Show Bearing HFCF", variable=self.var_4, command=self.checkbox_clicked)
+        checkbox_4.grid(row=10, column=1, padx=5, pady=4, sticky="w")
 
         self.applyBt = ttk.Button(historyFrame, style='Accent.TButton', text=_("APPLY"),
                                    command=lambda: self.update_config_struct(history_config_struct))
-        self.applyBt.grid(column=1, row=9, padx=(0, 10), pady=(30,5), ipadx=32, ipady=5, sticky='w')
+        self.applyBt.grid(column=1, row=11, padx=(0, 10), pady=4, ipadx=32, ipady=4, sticky='w')
 
         databaseConfigFrame = ttk.LabelFrame(self, text=(''), style="history.TLabelframe")
         databaseConfigFrame.pack(side="left", fill='y')
@@ -305,7 +321,9 @@ class historyConfig(Tk.Frame):
         #                                     str(load_data_arr[i][2]), str(load_data_arr[i][3])))
 
         
-
+    def checkbox_clicked(self):
+        self.applyBt.configure(state='normal')
+        
     def get_selected_cell(self, event):
         global confirm_flag
         confirm_flag=0
@@ -349,7 +367,10 @@ class historyConfig(Tk.Frame):
         history_config_struct["PlotType"]=self.historyParam3.get()
         history_config_struct["TsaBin"]=int(self.historyParam8.get())
         history_config_struct["TSA"]=self.tsa_var.get()
-
+        history_config_struct["Rms"]=self.var_1.get()
+        history_config_struct["A_Pk"]=self.var_3.get()
+        history_config_struct["gE"]=self.var_2.get()
+        history_config_struct["HFCF"]=self.var_4.get()
         tempViewValue=  self.historyParam6.get()
         tempMeshValue=  self.historyParam7.get()
         tempFilterFrom= self.historyParam4.get()

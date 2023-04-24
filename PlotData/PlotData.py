@@ -686,18 +686,18 @@ class PLT(FigureCanvasTkAgg):
         ax_44.yaxis.set_major_formatter(FormatStrFormatter('%0.1f'))
 
         if view_arr[0] == 1:
-            ax_41.plot(tick_arr, rms_arr, color='blue', linestyle='solid', marker='o', \
+            ax_44.plot(tick_arr, rms_arr, color='blue', linestyle='solid', marker='o', \
                        markerfacecolor='red', markersize=5, label=_("Velocity RMS (mm/s)"))
-            ax_41.plot(tick_arr1, velocity_alert, linewidth=0.3, color="orange")
-            ax_41.plot(tick_arr1, velocity_danger, linewidth=0.3, color="red")
-            ax_41.text(tick_arr1[-1] - 0.1, velocity_alert[-1] + 0.1, str(velocity_alert[-1])[0:3])
-            ax_41.text(tick_arr1[-1] - 0.1, velocity_danger[-1] + 0.1, str(velocity_danger[-1])[0:3])
+            ax_44.plot(tick_arr1, velocity_alert, linewidth=0.3, color="orange")
+            ax_44.plot(tick_arr1, velocity_danger, linewidth=0.3, color="red")
+            ax_44.text(tick_arr1[-1] - 0.1, velocity_alert[-1] + 0.1, str(velocity_alert[-1])[0:3])
+            ax_44.text(tick_arr1[-1] - 0.1, velocity_danger[-1] + 0.1, str(velocity_danger[-1])[0:3])
             for index, value in enumerate(rms_arr):
-                    ax_41.text(index, value+0.2, str(value)[0:4])
-            ymin, ymax = ax_41.get_ylim()
-            ax_41.set_ylim(0, ymax * 1.5)
-            ax_41.legend(bbox_to_anchor=(1, 1), loc='upper right', borderaxespad=0.0)
-            ax_41.xaxis.grid(True)
+                    ax_44.text(index, value+0.2, str(value)[0:4])
+            ymin, ymax = ax_44.get_ylim()
+            ax_44.set_ylim(0, ymax * 1.5)
+            ax_44.legend(bbox_to_anchor=(1, 1), loc='upper right', borderaxespad=0.0)
+            ax_44.xaxis.grid(True)
         if sensorPosition[-1] == "A":
             if view_arr[1] == 1:
                 ax_42.plot(tick_arr, Acc_Pk_arr, color="blue", linestyle='solid', marker='o', \
@@ -718,14 +718,14 @@ class PLT(FigureCanvasTkAgg):
                 for index, value in enumerate(gE_arr):
                     ax_43.text(index, value+0.2, str(value)[0:4])
             if view_arr[3] == 1:
-                ax_44.plot(tick_arr, hfcf_arr, color="blue", linestyle='solid', marker='o', \
+                ax_41.plot(tick_arr, hfcf_arr, color="blue", linestyle='solid', marker='o', \
                            markerfacecolor='red', markersize=5, label="BRGs-HFCF")
-                ax_44.plot(tick_arr1, hfcf_alert_arr, linewidth=0.3, color="orange")
-                ax_44.plot(tick_arr1, hfcf_danger_arr, linewidth=0.3, color="red")
-                ax_44.text(tick_arr1[-1] - 0.1, hfcf_alert_arr[-1] + 0.1, str(hfcf_alert_arr[-1])[0:3])
-                ax_44.text(tick_arr1[-1] - 0.1, hfcf_danger_arr[-1] + 0.1, str(hfcf_danger_arr[-1])[0:3])
+                ax_41.plot(tick_arr1, hfcf_alert_arr, linewidth=0.3, color="orange")
+                ax_41.plot(tick_arr1, hfcf_danger_arr, linewidth=0.3, color="red")
+                ax_41.text(tick_arr1[-1] - 0.1, hfcf_alert_arr[-1] + 0.1, str(hfcf_alert_arr[-1])[0:3])
+                ax_41.text(tick_arr1[-1] - 0.1, hfcf_danger_arr[-1] + 0.1, str(hfcf_danger_arr[-1])[0:3])
                 for index, value in enumerate(hfcf_arr):
-                    ax_44.text(index, value+0.2, str(value)[0:4])
+                    ax_41.text(index, value+0.2, str(value)[0:4])
 
             ymin, ymax = ax_42.get_ylim()
             ax_42.set_ylim(0, ymax * 1.5)
@@ -737,10 +737,10 @@ class PLT(FigureCanvasTkAgg):
             ax_43.legend(bbox_to_anchor=(1, 1), loc='upper right', borderaxespad=0.0)
             ax_43.xaxis.grid(True)
 
-            ymin, ymax = ax_44.get_ylim()
-            ax_44.set_ylim(0, ymax * 1.5)
-            ax_44.legend(bbox_to_anchor=(1, 1), loc='upper right', borderaxespad=0.0)
-            ax_44.xaxis.grid(True)
+            ymin, ymax = ax_41.get_ylim()
+            ax_41.set_ylim(0, ymax * 1.5)
+            ax_41.legend(bbox_to_anchor=(1, 1), loc='upper right', borderaxespad=0.0)
+            ax_41.xaxis.grid(True)
             # ax_41.xaxis.set_major_locator(dates.AutoDateLocator())
             # ax_41.xaxis.set_major_formatter(hfmt)
         if export_png == True:
