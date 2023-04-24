@@ -1425,7 +1425,7 @@ class ConfigFrame(Tk.Frame):
         fftLineCombo['value'] = ('1600','3200','6400','12800', '25600', '51200')
         fftLineCombo.grid(column=1, row=8, padx=0, pady=5, sticky="e")
 
-        sampleRateLabel = ttk.Label(sensorFrame, text=_("Fmax "), style='config.TLabel')
+        sampleRateLabel = ttk.Label(sensorFrame, text=_("Fmax (Hz)"), style='config.TLabel')
         sampleRateLabel.grid(column=0, row=9, padx=5, pady=5, sticky='w')
         sampleRateEntry = ttk.Entry(sensorFrame, width=10, textvariable=self.wfParam7, validate="key",
                                     font=('Chakra Petch', 13))
@@ -1466,7 +1466,7 @@ class ConfigFrame(Tk.Frame):
         lowpassEntry['validatecommand'] = (lowpassEntry.register(testVal), '%P', '%d')
         lowpassEntry.grid(column=1, row=3, padx=0, ipadx=3, pady=5, sticky='e')
 
-        trackLabel = ttk.Label(frqConfigFrame, text=_("Tracking step"), style='config.TLabel')
+        trackLabel = ttk.Label(frqConfigFrame, text=_("Tracking speed"), style='config.TLabel')
         trackLabel.grid(column=0, row=4, padx=5, pady=5, sticky='w')
         trackEntry = ttk.Entry(frqConfigFrame, width=10, textvariable=self.frqParam5, validate="key",
                                 font=('Chakra Petch', 13))

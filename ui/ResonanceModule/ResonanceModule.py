@@ -275,14 +275,14 @@ class ResonanceConfig(Tk.Frame):
         samplingTimeEntry['value'] = ('4', '8', '16')
         samplingTimeEntry.grid(column=3, row=3, padx=0, pady=5, sticky="e")
 
-        trackingLabel = ttk.Label(resonanceConfigFrame, text=_("Tracking resolution"), style="resonance.TLabel")
+        trackingLabel = ttk.Label(resonanceConfigFrame, text=_("Tracking speed"), style="resonance.TLabel")
         trackingLabel.grid(column=2, row=4, padx=20, pady=5, sticky='w')
         trackingEntry = ttk.Entry(resonanceConfigFrame, width=12, textvariable=self.resonanceParam9, validate="key",
                                     font=('Chakra Petch', 13))
         trackingEntry['validatecommand'] = (trackingEntry.register(testVal), '%P', '%d')
         trackingEntry.grid(column=3, row=4, padx=0, pady=5, sticky='e')
 
-        numOfAverageLabel = ttk.Label(resonanceConfigFrame, text=_("Num of Average"), style="resonance.TLabel")
+        numOfAverageLabel = ttk.Label(resonanceConfigFrame, text=_("Num of Averages"), style="resonance.TLabel")
         numOfAverageLabel.grid(column=2, row=5, padx=20, pady=5, sticky='w')
         numOfAverageEntry = ttk.Entry(resonanceConfigFrame, width=12, textvariable=self.resonanceParam11, validate="key",
                                     font=('Chakra Petch', 13))

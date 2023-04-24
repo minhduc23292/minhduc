@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-19 23:47+0700\n"
+"POT-Creation-Date: 2023-04-24 10:30+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -45,8 +45,8 @@ msgstr ""
 msgid "Please entry the "
 msgstr ""
 
-#: keyboard/keyboard.py:26 ui/history/historyModule.py:422
-#: ui/Diagnostic/DiagnosticPage.py:1641
+#: keyboard/keyboard.py:26 ui/history/historyModule.py:486
+#: ui/Diagnostic/DiagnosticPage.py:1642
 msgid "Input"
 msgstr ""
 
@@ -81,7 +81,7 @@ msgstr ""
 msgid "Click APPLY button before using this funtion."
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:206 ui/history/historyModule.py:206
+#: ui/balancingModule/balancingModule.py:206 ui/history/historyModule.py:208
 #: ui/ResonanceModule/ResonanceModule.py:205
 msgid "Configuration"
 msgstr ""
@@ -127,11 +127,11 @@ msgid "Rotating dir"
 msgstr ""
 
 #: ui/balancingModule/balancingModule.py:280
-#: ui/Diagnostic/DiagnosticPage.py:1420
+#: ui/Diagnostic/DiagnosticPage.py:1421
 msgid "FFT lines"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:287 ui/history/historyModule.py:284
+#: ui/balancingModule/balancingModule.py:287 ui/history/historyModule.py:287
 #: ui/ResonanceModule/ResonanceModule.py:264
 msgid "Sample rate"
 msgstr ""
@@ -144,7 +144,7 @@ msgstr ""
 msgid "Balancing speed(RPM)"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:308 ui/history/historyModule.py:257
+#: ui/balancingModule/balancingModule.py:308 ui/history/historyModule.py:259
 #: ui/ResonanceModule/ResonanceModule.py:292
 #: ui/Diagnostic/DiagnosticPage.py:225 ui/Settingpage/SettingPage.py:183
 #: ui/Settingpage/SettingPage.py:254
@@ -152,12 +152,12 @@ msgid "APPLY"
 msgstr ""
 
 #: ui/balancingModule/balancingModule.py:335
-#: ui/balancingModule/balancingModule.py:348 ui/history/historyModule.py:331
+#: ui/balancingModule/balancingModule.py:348 ui/history/historyModule.py:359
 msgid "Parameter errors. Check the input type."
 msgstr ""
 
 #: ui/balancingModule/balancingModule.py:344
-#: ui/balancingModule/balancingModule.py:357 ui/history/historyModule.py:338
+#: ui/balancingModule/balancingModule.py:357 ui/history/historyModule.py:366
 msgid "OK"
 msgstr ""
 
@@ -395,8 +395,8 @@ msgid "Next step: Initial Run, Mount the sensor on two planes and execute"
 msgstr ""
 
 #: ui/balancingModule/balancingModule.py:980
-#: ui/balancingModule/balancingModule.py:1092 ui/history/historyModule.py:796
-#: ui/history/historyModule.py:839 ui/history/historyModule.py:1026
+#: ui/balancingModule/balancingModule.py:1092 ui/history/historyModule.py:860
+#: ui/history/historyModule.py:903 ui/history/historyModule.py:1090
 #: ui/ResonanceModule/ResonanceModule.py:565
 msgid "Data errors."
 msgstr ""
@@ -413,261 +413,262 @@ msgid ""
 "Frequency"
 msgstr ""
 
-#: ui/history/historyModule.py:209 ui/history/historyModule.py:384
+#: ui/history/historyModule.py:211 ui/history/historyModule.py:448
 msgid "Project Code"
 msgstr ""
 
-#: ui/history/historyModule.py:215
+#: ui/history/historyModule.py:217
 msgid "Sensor Position"
 msgstr ""
 
-#: ui/history/historyModule.py:222 ui/ResonanceModule/ResonanceModule.py:250
+#: ui/history/historyModule.py:224 ui/ResonanceModule/ResonanceModule.py:250
 msgid "Bandpass Filter From"
 msgstr ""
 
-#: ui/history/historyModule.py:228 ui/ResonanceModule/ResonanceModule.py:257
+#: ui/history/historyModule.py:230 ui/ResonanceModule/ResonanceModule.py:257
 msgid "Bandpass Filter To"
 msgstr ""
 
-#: ui/history/historyModule.py:234
+#: ui/history/historyModule.py:236
 msgid "View Limit"
 msgstr ""
 
-#: ui/history/historyModule.py:240 ui/ResonanceModule/ResonanceModule.py:278
-msgid "Tracking resolution"
+#: ui/history/historyModule.py:242 ui/ResonanceModule/ResonanceModule.py:278
+#: ui/Diagnostic/DiagnosticPage.py:1469
+msgid "Tracking speed"
 msgstr ""
 
-#: ui/history/historyModule.py:246
+#: ui/history/historyModule.py:248
 msgid "Use Average"
 msgstr ""
 
-#: ui/history/historyModule.py:250
+#: ui/history/historyModule.py:252
 msgid "Average Bin"
 msgstr ""
 
-#: ui/history/historyModule.py:263
+#: ui/history/historyModule.py:265
 msgid "Delete Project"
 msgstr ""
 
-#: ui/history/historyModule.py:282 ui/Settingpage/SettingPage.py:172
+#: ui/history/historyModule.py:285 ui/Settingpage/SettingPage.py:172
 msgid "Date"
 msgstr ""
 
-#: ui/history/historyModule.py:283
+#: ui/history/historyModule.py:286
 msgid "Position"
 msgstr ""
 
-#: ui/history/historyModule.py:370
+#: ui/history/historyModule.py:425
 msgid "Do you want to delete this project?"
 msgstr ""
 
-#: ui/history/historyModule.py:374
+#: ui/history/historyModule.py:431
 msgid "Selected project is deleted."
 msgstr ""
 
-#: ui/history/historyModule.py:386
+#: ui/history/historyModule.py:450
 msgid "Delete project errors"
 msgstr ""
 
-#: ui/history/historyModule.py:426
+#: ui/history/historyModule.py:490
 msgid "Bearing frequency table"
 msgstr ""
 
-#: ui/history/historyModule.py:443
+#: ui/history/historyModule.py:507
 msgid "Bearing Name"
 msgstr ""
 
-#: ui/history/historyModule.py:450
+#: ui/history/historyModule.py:514
 msgid "Speed(RPM)"
 msgstr ""
 
-#: ui/history/historyModule.py:456
+#: ui/history/historyModule.py:520
 msgid "SEARCH"
 msgstr ""
 
-#: ui/history/historyModule.py:529
+#: ui/history/historyModule.py:593
 msgid ""
 "EXPORT\n"
 "REPORT"
 msgstr ""
 
-#: ui/history/historyModule.py:532
+#: ui/history/historyModule.py:596
 msgid ""
 "EXPORT\n"
 ".CSV"
 msgstr ""
 
-#: ui/history/historyModule.py:535 ui/ResonanceModule/ResonanceModule.py:373
+#: ui/history/historyModule.py:599 ui/ResonanceModule/ResonanceModule.py:373
 #: ui/Diagnostic/DiagnosticPage.py:241 ui/Diagnostic/DiagnosticPage.py:259
 msgid "ZOOM"
 msgstr ""
 
-#: ui/history/historyModule.py:542 ui/ResonanceModule/ResonanceModule.py:378
+#: ui/history/historyModule.py:606 ui/ResonanceModule/ResonanceModule.py:378
 #: ui/Diagnostic/DiagnosticPage.py:265
 msgid ""
 "CURSOR\n"
 "LEFT"
 msgstr ""
 
-#: ui/history/historyModule.py:546 ui/ResonanceModule/ResonanceModule.py:382
+#: ui/history/historyModule.py:610 ui/ResonanceModule/ResonanceModule.py:382
 #: ui/Diagnostic/DiagnosticPage.py:269
 msgid ""
 "CURSOR\n"
 "RIGHT"
 msgstr ""
 
-#: ui/history/historyModule.py:553
+#: ui/history/historyModule.py:617
 msgid ""
 "PLOT\n"
 "NONE"
 msgstr ""
 
-#: ui/history/historyModule.py:576 ui/ResonanceModule/ResonanceModule.py:437
+#: ui/history/historyModule.py:640 ui/ResonanceModule/ResonanceModule.py:437
 #: ui/Diagnostic/DiagnosticPage.py:683
 msgid "ZOOM IN"
 msgstr ""
 
-#: ui/history/historyModule.py:582 ui/ResonanceModule/ResonanceModule.py:443
+#: ui/history/historyModule.py:646 ui/ResonanceModule/ResonanceModule.py:443
 #: ui/Diagnostic/DiagnosticPage.py:689
 msgid "ZOOM OUT"
 msgstr ""
 
-#: ui/history/historyModule.py:587 ui/ResonanceModule/ResonanceModule.py:448
+#: ui/history/historyModule.py:651 ui/ResonanceModule/ResonanceModule.py:448
 #: ui/Diagnostic/DiagnosticPage.py:694
 msgid "PAN LEFT"
 msgstr ""
 
-#: ui/history/historyModule.py:593 ui/ResonanceModule/ResonanceModule.py:454
+#: ui/history/historyModule.py:657 ui/ResonanceModule/ResonanceModule.py:454
 #: ui/Diagnostic/DiagnosticPage.py:700
 msgid "PAN RIGHT"
 msgstr ""
 
-#: ui/history/historyModule.py:599 ui/ResonanceModule/ResonanceModule.py:460
+#: ui/history/historyModule.py:663 ui/ResonanceModule/ResonanceModule.py:460
 #: ui/Diagnostic/DiagnosticPage.py:706
 msgid "RESET"
 msgstr ""
 
-#: ui/history/historyModule.py:656
+#: ui/history/historyModule.py:720
 msgid "WAVEFORM"
 msgstr ""
 
-#: ui/history/historyModule.py:660
+#: ui/history/historyModule.py:724
 msgid "FREQUENCY"
 msgstr ""
 
-#: ui/history/historyModule.py:664
+#: ui/history/historyModule.py:728
 msgid ""
 "VELOCITY\n"
 "FREQUENCY"
 msgstr ""
 
-#: ui/history/historyModule.py:668 ui/Diagnostic/DiagnosticPage.py:767
+#: ui/history/historyModule.py:732 ui/Diagnostic/DiagnosticPage.py:767
 msgid "ENVELOPED"
 msgstr ""
 
-#: ui/history/historyModule.py:672
+#: ui/history/historyModule.py:736
 msgid "WATERFALL"
 msgstr ""
 
-#: ui/history/historyModule.py:676
+#: ui/history/historyModule.py:740
 msgid "TREND"
 msgstr ""
 
-#: ui/history/historyModule.py:726
+#: ui/history/historyModule.py:790
 msgid ""
 "PLOT\n"
 "WAVEFORM"
 msgstr ""
 
-#: ui/history/historyModule.py:729
+#: ui/history/historyModule.py:793
 msgid ""
 "PLOT\n"
 "FREQUENCY\n"
 "SPECTRUM"
 msgstr ""
 
-#: ui/history/historyModule.py:733
+#: ui/history/historyModule.py:797
 msgid ""
 "PLOT\n"
 "VELOCITY\n"
 "SPECTRUM"
 msgstr ""
 
-#: ui/history/historyModule.py:738
+#: ui/history/historyModule.py:802
 msgid ""
 "PLOT\n"
 "WATERFALL"
 msgstr ""
 
-#: ui/history/historyModule.py:742
+#: ui/history/historyModule.py:806
 msgid ""
 "PLOT\n"
 "TREND"
 msgstr ""
 
-#: ui/history/historyModule.py:756
+#: ui/history/historyModule.py:820
 msgid ""
 "PLOT\n"
 "ENVELOPED"
 msgstr ""
 
-#: ui/history/historyModule.py:764
+#: ui/history/historyModule.py:828
 msgid "Fcut is wrong. Use the default value."
 msgstr ""
 
-#: ui/history/historyModule.py:791
+#: ui/history/historyModule.py:855
 msgid "Project: "
 msgstr ""
 
-#: ui/history/historyModule.py:793 ui/history/historyModule.py:1024
+#: ui/history/historyModule.py:857 ui/history/historyModule.py:1088
 msgid "There is no data, please check SETTING !"
 msgstr ""
 
-#: ui/history/historyModule.py:836
+#: ui/history/historyModule.py:900
 msgid "Frequency:"
 msgstr ""
 
-#: ui/history/historyModule.py:844
+#: ui/history/historyModule.py:908
 msgid "Do you want to export data to .CSV file"
 msgstr ""
 
-#: ui/history/historyModule.py:886
+#: ui/history/historyModule.py:950
 msgid "Export CSV is completed"
 msgstr ""
 
-#: ui/history/historyModule.py:888
+#: ui/history/historyModule.py:952
 msgid "There is no data, please check input value !"
 msgstr ""
 
-#: ui/history/historyModule.py:900
+#: ui/history/historyModule.py:964
 msgid "Do you want to export the report"
 msgstr ""
 
-#: ui/history/historyModule.py:965
+#: ui/history/historyModule.py:1029
 msgid "Filter bandpass frequency is wrong. Use the default value."
 msgstr ""
 
-#: ui/history/historyModule.py:994
+#: ui/history/historyModule.py:1058
 msgid "Figure1: Vibration trend"
 msgstr ""
 
-#: ui/history/historyModule.py:998
+#: ui/history/historyModule.py:1062
 msgid "Figure2: Waveform"
 msgstr ""
 
-#: ui/history/historyModule.py:1002
+#: ui/history/historyModule.py:1066
 msgid "Figure3: Frequency spectrum"
 msgstr ""
 
-#: ui/history/historyModule.py:1006
+#: ui/history/historyModule.py:1070
 msgid "Figure4: Velocity spectrum"
 msgstr ""
 
-#: ui/history/historyModule.py:1010
+#: ui/history/historyModule.py:1074
 msgid "Figure5: Envelope spectrum"
 msgstr ""
 
-#: ui/history/historyModule.py:1022
+#: ui/history/historyModule.py:1086
 msgid "Report is exported. Use QR code scanner to see the report."
 msgstr ""
 
@@ -710,7 +711,7 @@ msgid "Sampling time"
 msgstr ""
 
 #: ui/ResonanceModule/ResonanceModule.py:285
-msgid "Num of Average"
+msgid "Num of Averages"
 msgstr ""
 
 #: ui/ResonanceModule/ResonanceModule.py:369
@@ -805,7 +806,7 @@ msgstr ""
 #: ui/Diagnostic/DiagnosticPage.py:273 ui/Diagnostic/DiagnosticPage.py:787
 #: ui/Diagnostic/DiagnosticPage.py:808 ui/Diagnostic/DiagnosticPage.py:821
 #: ui/Diagnostic/DiagnosticPage.py:843 ui/Diagnostic/DiagnosticPage.py:863
-#: ui/Diagnostic/DiagnosticPage.py:1193
+#: ui/Diagnostic/DiagnosticPage.py:1194
 msgid "GRID ON"
 msgstr ""
 
@@ -897,107 +898,103 @@ msgid ""
 "SPECTRUM"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1189
+#: ui/Diagnostic/DiagnosticPage.py:1190
 msgid "GRID OFF"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1333 ui/Settingpage/SettingPage.py:226
+#: ui/Diagnostic/DiagnosticPage.py:1334 ui/Settingpage/SettingPage.py:226
 msgid "Sensor config"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1341
+#: ui/Diagnostic/DiagnosticPage.py:1342
 msgid "Machine"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1349
+#: ui/Diagnostic/DiagnosticPage.py:1350
 msgid "Port1"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1366
+#: ui/Diagnostic/DiagnosticPage.py:1367
 msgid "Port2"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1380
+#: ui/Diagnostic/DiagnosticPage.py:1381
 msgid "Port3"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1393
+#: ui/Diagnostic/DiagnosticPage.py:1394
 msgid "Port4"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1401
+#: ui/Diagnostic/DiagnosticPage.py:1402
 msgid "Key sensor"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1409
+#: ui/Diagnostic/DiagnosticPage.py:1410
 msgid "  Use TSA"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1414
+#: ui/Diagnostic/DiagnosticPage.py:1415
 msgid "TSA times"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1427
-msgid "Fmax "
+#: ui/Diagnostic/DiagnosticPage.py:1428
+msgid "Fmax (Hz)"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1434
+#: ui/Diagnostic/DiagnosticPage.py:1435
 msgid "Filter configuration"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1437
+#: ui/Diagnostic/DiagnosticPage.py:1438
 msgid "Filter type"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1445
+#: ui/Diagnostic/DiagnosticPage.py:1446
 msgid "Window type"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1454
+#: ui/Diagnostic/DiagnosticPage.py:1455
 msgid "Filter From (Hz)"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1461
+#: ui/Diagnostic/DiagnosticPage.py:1462
 msgid "Filter To (Hz)"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1468
-msgid "Tracking step"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:1475
+#: ui/Diagnostic/DiagnosticPage.py:1476
 msgid "Mesh grid"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1482
+#: ui/Diagnostic/DiagnosticPage.py:1483
 msgid "Unit show"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1490
+#: ui/Diagnostic/DiagnosticPage.py:1491
 msgid "Machine configuration"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1493
+#: ui/Diagnostic/DiagnosticPage.py:1494
 msgid "Machine name"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1499
+#: ui/Diagnostic/DiagnosticPage.py:1500
 msgid "Speed (RPM)"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1506
+#: ui/Diagnostic/DiagnosticPage.py:1507
 msgid "Power (kW)"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1513
+#: ui/Diagnostic/DiagnosticPage.py:1514
 msgid "Gear teeth"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1520
+#: ui/Diagnostic/DiagnosticPage.py:1521
 msgid "Bearing bore (mm)"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1527
+#: ui/Diagnostic/DiagnosticPage.py:1528
 msgid "Foundation"
 msgstr ""
 
@@ -1189,11 +1186,11 @@ msgid "Frequency(Hz)"
 msgstr ""
 
 #: PlotData/PlotData.py:423 PlotData/PlotData.py:467 PlotData/PlotData.py:523
-#: PlotData/PlotData.py:588 PlotData/PlotData.py:1256
+#: PlotData/PlotData.py:588 PlotData/PlotData.py:1260
 msgid "Frequency [Hz]"
 msgstr ""
 
-#: PlotData/PlotData.py:442 PlotData/PlotData.py:1257
+#: PlotData/PlotData.py:442 PlotData/PlotData.py:1261
 msgid "Time [ms]"
 msgstr ""
 
@@ -1201,60 +1198,60 @@ msgstr ""
 msgid "Velocity RMS (mm/s)"
 msgstr ""
 
-#: PlotData/PlotData.py:702
+#: PlotData/PlotData.py:704
 msgid "Accelleration Pk (g)"
 msgstr ""
 
-#: PlotData/PlotData.py:763
+#: PlotData/PlotData.py:767
 msgid "ISO-10816 Displacement (um)"
 msgstr ""
 
-#: PlotData/PlotData.py:807
+#: PlotData/PlotData.py:811
 msgid "ISO-10816 Velocity (mm/s)"
 msgstr ""
 
-#: PlotData/PlotData.py:850
+#: PlotData/PlotData.py:854
 msgid "gE/HFCF for bearing"
 msgstr ""
 
-#: PlotData/PlotData.py:895
+#: PlotData/PlotData.py:899
 msgid "Sideband ratio/ Acc-Peak Gearbox"
 msgstr ""
 
-#: PlotData/PlotData.py:946
+#: PlotData/PlotData.py:950
 msgid "Dynamic balancing"
 msgstr ""
 
-#: PlotData/PlotData.py:946
+#: PlotData/PlotData.py:950
 msgid "Compensation mass = "
 msgstr ""
 
-#: PlotData/PlotData.py:947
+#: PlotData/PlotData.py:951
 msgid "at angle ="
 msgstr ""
 
-#: PlotData/PlotData.py:977 PlotData/PlotData.py:1046 PlotData/PlotData.py:1121
-#: PlotData/PlotData.py:1231
+#: PlotData/PlotData.py:981 PlotData/PlotData.py:1050 PlotData/PlotData.py:1125
+#: PlotData/PlotData.py:1235
 msgid "1st plane"
 msgstr ""
 
-#: PlotData/PlotData.py:978 PlotData/PlotData.py:1047 PlotData/PlotData.py:1232
+#: PlotData/PlotData.py:982 PlotData/PlotData.py:1051 PlotData/PlotData.py:1236
 msgid "2nd plane"
 msgstr ""
 
-#: PlotData/PlotData.py:1238
+#: PlotData/PlotData.py:1242
 msgid "Dynamic balancing 2nd plane"
 msgstr ""
 
-#: PlotData/PlotData.py:1255
+#: PlotData/PlotData.py:1259
 msgid "STFT Magnitude-"
 msgstr ""
 
-#: PlotData/PlotData.py:1351 PlotData/PlotData.py:1406
+#: PlotData/PlotData.py:1355 PlotData/PlotData.py:1410
 msgid "Amplitude-g"
 msgstr ""
 
-#: PlotData/PlotData.py:1361 PlotData/PlotData.py:1416
-#: PlotData/PlotData.py:1436
+#: PlotData/PlotData.py:1365 PlotData/PlotData.py:1420
+#: PlotData/PlotData.py:1440
 msgid "Phase-degree"
 msgstr ""

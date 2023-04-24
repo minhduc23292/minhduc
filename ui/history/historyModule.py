@@ -239,7 +239,7 @@ class historyConfig(Tk.Frame):
                                 validate="key")
         viewEntry.grid(column=1, row=5, padx=(0, 10), pady=5, sticky='e')
 
-        meshLabel = ttk.Label(historyFrame, text=_("Tracking resolution"), style="history.TLabel")
+        meshLabel = ttk.Label(historyFrame, text=_("Tracking speed"), style="history.TLabel")
         meshLabel.grid(column=0, row=6, padx=5, pady=5, sticky='w')
         meshEntry=ttk.Entry(historyFrame, width=14, textvariable=self.historyParam7, font=('Chakra Petch', 13),
                                 validate="key")
@@ -310,8 +310,10 @@ class historyConfig(Tk.Frame):
         global confirm_flag
         confirm_flag=0
         self.applyBt.configure(state='normal')
+        
         try:
             selected_item = self.PrjTable.focus() # get the selected item
+            self.PrjTable.item(selected_item, open=True)
             if self.PrjTable.parent(selected_item) !='':
                 prjID = self.PrjTable.item(selected_item)['values'][0] # get the value of the cell
                 position=self.PrjTable.item(selected_item)['values'][2]
@@ -323,6 +325,9 @@ class historyConfig(Tk.Frame):
                 prjID = self.PrjTable.item(selected_item)['text']
                 self.historyParam1.set(prjID)
                 self.historyParam2.set('')
+                for item in self.PrjTable.get_children():
+                    if item != selected_item:
+                        self.PrjTable.item(item, open=False)
         except:
             pass
 
