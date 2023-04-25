@@ -889,8 +889,8 @@ class SideButtonFrame(Tk.Frame):
             if axes_arr[0].name=='3d':
                 return
             else:
-                x_data=axes_arr[0].lines[0].get_xdata()
-                y_data=axes_arr[0].lines[0].get_ydata()
+                x_data=axes_arr[0].get_lines()[-1].get_xdata()
+                y_data=axes_arr[0].get_lines()[-1].get_ydata()
 
             [xleft, xright] = axes_arr[0].get_xlim()
             
@@ -965,10 +965,37 @@ class SideButtonFrame(Tk.Frame):
 
                     for i in range(len(pos_arr)):
                         new_file_name= f'_{str(i+1)}_' + file_name + date_arr[i] + pos_arr[i] + '.csv'
-                        completeName = os.path.join(save_path, new_file_name)  
+                        completeName = os.path.join(save_path, new_file_name)
                         file_operation.store_data(result_arr2[i], completeName)
+                        
                     
-                    self.infoLabel.configure(text=_("Export CSV is completed"))
+                    try:
+                        os.system("sudo umount /media/pi/usb")
+                    except:
+                        pass
+                    try:
+                        os.system("sudo rmdir /media/pi/usb")
+                    except:
+                        pass
+                    try:
+                        os.system("sudo mkdir /media/pi/usb")
+                    except:
+                        pass
+                    try:
+                        os.system("sudo mount /dev/sda1 /media/pi/usb")
+                    except:
+                        pass
+                    try:
+                        os.system(f"sudo cp -ru -f {save_path}/* /media/pi/usb" )
+                        os.system("sudo umount /media/pi/usb")
+                        os.system("sudo rmdir /media/pi/usb")
+                        self.infoLabel.configure(text=_("Export CSV is completed"))
+                    except Exception as ex:
+                        print(ex)
+                    try:
+                        os.system(f"sudo rm -r {save_path}/*")
+                    except Exception as ex:
+                        print(ex)
                 else:
                     self.infoLabel.configure(text=_("There is no data, please check input value !"))
             else:
@@ -1095,15 +1122,43 @@ class SideButtonFrame(Tk.Frame):
                     document._add_run(_('Figure5: Envelope spectrum'), style='italic')
                     document.add_blank_comment()
                     document._add_page_break()
-                    new_file_name='demo.docx'
+                    new_file_name=str(prjCode)+'_report.docx'
                     document._save(new_file_name)
-                    
-                    qr = qrcode.QRCode(version = 1, box_size = 10, border = 5)
-                    qr.add_data(self.link)
-                    qr.make(fit = True)
-                    img = qr.make_image(fill_color = 'black', back_color = 'white')
-                    img.save(save_path + 'MyQRCode2.png')
-                    Pd.PLT.plot_image(self.canvas, 'MyQRCode2.png', self.link)
+
+                    try:
+                        os.system("sudo umount /media/pi/usb")
+                    except:
+                        pass
+                    try:
+                        os.system("sudo rmdir /media/pi/usb")
+                    except:
+                        pass
+                    try:
+                        os.system("sudo mkdir /media/pi/usb")
+                    except:
+                        pass
+                    try:
+                        os.system("sudo mount /dev/sda1 /media/pi/usb")
+                    except:
+                        pass
+                    try:
+                        os.system(f"sudo cp -ru -f {save_path}/{new_file_name} /media/pi/usb" )
+                        os.system("sudo umount /media/pi/usb")
+                        os.system("sudo rmdir /media/pi/usb")
+                        self.infoLabel.configure(text=_("Export CSV is completed"))
+                    except Exception as ex:
+                        print(ex)
+                    try:
+                        os.system(f"sudo rm -r {save_path}/*")
+                    except Exception as ex:
+                        print(ex)
+                    # qr = qrcode.QRCode(version = 1, box_size = 10, border = 5)
+                    # qr.add_data(self.link)
+                    # qr.make(fit = True)
+                    # img = qr.make_image(fill_color = 'black', back_color = 'white')
+                    # img.save(save_path + 'MyQRCode2.png')
+                    # Pd.PLT.plot_image(self.canvas, 'MyQRCode2.png', self.link)
+
                     self.infoLabel.configure(text=_("Report is exported. Use QR code scanner to see the report."))
                 else:
                     self.infoLabel.configure(text=_("There is no data, please check SETTING !"))

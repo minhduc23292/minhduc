@@ -528,8 +528,8 @@ class SideButtonFrame(Tk.Frame):
             if axes_arr[0].name=='3d':
                 return
             else:
-                x_data=axes_arr[0].lines[0].get_xdata()
-                y_data=axes_arr[0].lines[0].get_ydata()
+                x_data=axes_arr[0].get_lines()[-1].get_xdata()
+                y_data=axes_arr[0].get_lines()[-1].get_ydata()
             [xleft, xright] = axes_arr[1].get_xlim()
             
             if dir==True:

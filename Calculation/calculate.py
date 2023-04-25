@@ -100,9 +100,9 @@ def phase_shift_calculate(arr1, arr2, sample_rate, speed):
 
 
 def tracking_signal(sensor_dict, range_freq):
-    arr1 = sensor_dict["sensor_data"][0]
-    arr2 = sensor_dict["sensor_data"][1]
-    arr3 = sensor_dict["sensor_data"][2]
+    arr1 = sensor_dict["store_sensor_data"][0]
+    arr2 = sensor_dict["store_sensor_data"][1]
+    arr3 = sensor_dict["store_sensor_data"][2]
     _sample_rate = sensor_dict["sample_rate"]
     N = len(arr1)
     w = signal.hann(N, sym=False)

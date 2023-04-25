@@ -929,6 +929,10 @@ class DiagnosticPage(Tk.Frame):
                             self.origin_config.sensor_config["unit"][:3], [1, 2, 3], window)
 
     def on_read_sensor_button_clicked(self):
+        global view_flag, plot_flag
+        view_flag=0
+        plot_flag=0
+        self.laserBt.configure(text=_("LASER\nVIEW"))
         self.on_start_button_clicked(False)
 
     def on_refresh_button_clicked(self):
@@ -952,6 +956,10 @@ class DiagnosticPage(Tk.Frame):
 
     def on_start_button_clicked(self, from_config: bool):
         """This button callback is responsed get the data from sensor and execute the waveform callback function"""
+        global plot_flag, view_flag
+        view_flag=0
+        plot_flag=0
+        self.laserBt.configure(text=_("LASER\nVIEW"))
         if from_config:
             self.config1.update_diagnostic_struct()
             # self.configFrame.pack_forget()
@@ -1200,13 +1208,11 @@ class DiagnosticPage(Tk.Frame):
         global track_flag, plot_flag
         tracking_freq = self.origin_config.frequency_config_struct["TrackRange"]
         axes_arr = self.frequencyFrameCanvas.canvas2.figure.get_axes()
-        x_data=None
-        y_data=None
         if len(axes_arr) > 0:
-            x1_data=axes_arr[0].lines[0].get_xdata()
-            y1_data=axes_arr[0].lines[0].get_ydata()
-            y2_data=axes_arr[1].lines[0].get_ydata()
-            y3_data=axes_arr[2].lines[0].get_ydata()
+            x1_data=axes_arr[0].get_lines()[-1].get_xdata()
+            y1_data=axes_arr[0].get_lines()[-1].get_ydata()
+            y2_data=axes_arr[1].get_lines()[-1].get_ydata()
+            y3_data=axes_arr[2].get_lines()[-1].get_ydata()
             [xleft, xright] = axes_arr[0].get_xlim()
             if dir == True:
                 if xleft >= track_flag:

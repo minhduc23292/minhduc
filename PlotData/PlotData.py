@@ -116,40 +116,6 @@ class PLT(FigureCanvasTkAgg):
         ax_13.grid(axis='y')  # Shows grid.
         self.draw()
 
-    def plot_zoom(self, canal_1, canal_2, canal_3, unit, sample_rate, scale):
-        num_datos = len(canal_1)
-        read_time = (num_datos / sample_rate) * 1000
-
-        # ----------------- Plotting ----------
-        X1 = np.linspace(0, int(read_time), num=num_datos)  # X axis, 5000 sps, 1/5 ms.
-        titX = "Ch1" + f'({unit[0]})'
-        titY = "Ch2" + f'({unit[1]})'
-        titZ = "Ch3" + f'({unit[2]})'
-        ax_11, ax_12, ax_13 = self.figure.get_axes()
-        self.figure.set_visible(True)
-        ax_11.clear()
-        ax_11.yaxis.set_major_formatter(FormatStrFormatter('%0.3f'))
-        ax_11.plot(X1, canal_1, color='blue', linewidth=0.4)
-        ax_11.set_ylabel(titX)
-        ax_11.set_xlim(xmax=scale, xmin=0)
-        ax_11.grid()  # Shows grid.
-
-        # Channel Y
-        ax_12.clear()
-        ax_12.yaxis.set_major_formatter(FormatStrFormatter('%0.3f'))
-        ax_12.plot(X1, canal_2, color='blue', linewidth=0.4)
-        ax_12.set_ylabel(titY)
-        ax_12.set_xlim(xmax=scale, xmin=0)
-        ax_12.grid()  # Shows grid.
-
-        # Channel Z
-        ax_13.clear()
-        ax_13.yaxis.set_major_formatter(FormatStrFormatter('%0.3f'))
-        ax_13.plot(X1, canal_3, color='blue', linewidth=0.4)
-        ax_13.set_ylabel(titZ)
-        ax_13.set_xlim(xmax=scale, xmin=0)
-        ax_13.grid()  # Shows grid.
-        self.draw()
 
     def plot_psd(self, canal_1, canal_2, canal_3, sample_rate, unit, ch, show_unit, win_var="Hanning"):
         """Calculate the PSD of signal and plot
