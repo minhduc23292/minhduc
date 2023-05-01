@@ -276,8 +276,6 @@ class historyConfig(Tk.Frame):
                                    command=lambda: self.update_config_struct(history_config_struct))
         self.applyBt.grid(column=0, row=11, padx=(5, 5), pady=4, ipadx=50, ipady=4, sticky='w')
 
-        databaseConfigFrame = ttk.LabelFrame(self, text=(''), style="history.TLabelframe")
-        databaseConfigFrame.pack(side="left", fill='y')
         deletePrjButton = ttk.Button(historyFrame, text=_("Delete Project"), style='Accent.TButton',
                             command=self.delete_project)
         deletePrjButton.grid(column=1, row=11, padx=(5, 5), pady=4, ipadx=20, ipady=4, sticky='w')

@@ -1525,7 +1525,7 @@ class ConfigFrame(Tk.Frame):
         TeethEntry['validatecommand'] = (TeethEntry.register(testVal), '%P', '%d')
         TeethEntry.grid(column=1, row=3, padx=0, pady=5, ipadx=3, sticky='e')
 
-        bearingBoreLabel = ttk.Label(machineFrame, text=_("Bearing bore (mm)"), style='config.TLabel')
+        bearingBoreLabel = ttk.Label(machineFrame, text=_("Brgs bore(mm)"), style='config.TLabel')
         bearingBoreLabel.grid(column=0, row=4, padx=5, pady=5, sticky='w')
         bearingBoreEntry = ttk.Entry(machineFrame, width=10, textvariable=self.wfParam13, validate="key",
                             font=('Chakra Petch', 13))

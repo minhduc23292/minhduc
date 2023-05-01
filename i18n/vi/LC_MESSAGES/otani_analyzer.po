@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-01 09:49+0700\n"
+"POT-Creation-Date: 2023-05-01 12:37+0700\n"
 "PO-Revision-Date: 2022-11-02 18:07+0900\n"
 "Last-Translator: Le Phuong <lephuong@phuonglh>\n"
 "Language-Team: Vietnamese\n"
@@ -769,7 +769,8 @@ msgid "Window Factor"
 msgstr "Hệ số cửa sổ"
 
 #: ui/ResonanceModule/ResonanceModule.py:243
-msgid "Filter Type"
+#: ui/Diagnostic/DiagnosticPage.py:1445
+msgid "Filter type"
 msgstr "Kiểu bộ lọc"
 
 #: ui/ResonanceModule/ResonanceModule.py:271
@@ -1043,21 +1044,17 @@ msgstr "Fmax (Hz)"
 msgid "Filter configuration"
 msgstr "Cài đặt bộ lọc"
 
-#: ui/Diagnostic/DiagnosticPage.py:1445
-msgid "Filter type"
-msgstr "Kiểu bộ lọc"
-
 #: ui/Diagnostic/DiagnosticPage.py:1453
 msgid "Window type"
 msgstr "Kiểu cửa sổ"
 
 #: ui/Diagnostic/DiagnosticPage.py:1462
 msgid "Filter From (Hz)"
-msgstr "Tần số cắt dưới"
+msgstr "Fcut dưới (Hz)"
 
 #: ui/Diagnostic/DiagnosticPage.py:1469
 msgid "Filter To (Hz)"
-msgstr "Tần số cắt trên"
+msgstr "Fcut trên (hz)"
 
 #: ui/Diagnostic/DiagnosticPage.py:1483
 msgid "Mesh grid"
@@ -1077,7 +1074,7 @@ msgstr "Tên máy"
 
 #: ui/Diagnostic/DiagnosticPage.py:1507
 msgid "Speed (RPM)"
-msgstr "Tốc độ"
+msgstr "Tốc độ (RPM)"
 
 #: ui/Diagnostic/DiagnosticPage.py:1514
 msgid "Power (kW)"
@@ -1088,8 +1085,8 @@ msgid "Gear teeth"
 msgstr "Số răng"
 
 #: ui/Diagnostic/DiagnosticPage.py:1528
-msgid "Bearing bore (mm)"
-msgstr "BRGs bore (mm)"
+msgid "Brgs bore(mm)"
+msgstr "BRGs bore(mm)"
 
 #: ui/Diagnostic/DiagnosticPage.py:1535
 msgid "Foundation"
@@ -1372,3 +1369,6 @@ msgstr "Biên độ(g)"
 #: PlotData/PlotData.py:1406
 msgid "Phase-degree"
 msgstr "Pha(độ)"
+
+#~ msgid "Filter Type"
+#~ msgstr "Kiểu bộ lọc"

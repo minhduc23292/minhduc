@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-01 09:49+0700\n"
+"POT-Creation-Date: 2023-05-01 12:37+0700\n"
 "PO-Revision-Date: 2022-11-02 18:09+0900\n"
 "Last-Translator: Le Phuong <lephuong@phuonglh>\n"
 "Language-Team: Japanese\n"
@@ -683,7 +683,8 @@ msgstr "レポートをエクスポートしますか"
 
 #: ui/history/historyModule.py:1077
 msgid "Filter bandpass frequency is wrong. Use the default value."
-msgstr "フィルタにエラーが発生しています。デファクトのフィルターを使用します。"
+msgstr ""
+"フィルターにエラーが発生しています。デファクトのフィルターを使用します。"
 
 #: ui/history/historyModule.py:1106
 msgid "Figure1: Vibration trend"
@@ -742,8 +743,9 @@ msgid "Window Factor"
 msgstr "ウィンドウ係数"
 
 #: ui/ResonanceModule/ResonanceModule.py:243
-msgid "Filter Type"
-msgstr "フィルタ タイプ"
+#: ui/Diagnostic/DiagnosticPage.py:1445
+msgid "Filter type"
+msgstr "フィルタータイプ"
 
 #: ui/ResonanceModule/ResonanceModule.py:271
 msgid "Sampling time"
@@ -1012,21 +1014,17 @@ msgstr "Fmax (Hz)"
 msgid "Filter configuration"
 msgstr "フィルター設定"
 
-#: ui/Diagnostic/DiagnosticPage.py:1445
-msgid "Filter type"
-msgstr "フィルタタイプ"
-
 #: ui/Diagnostic/DiagnosticPage.py:1453
 msgid "Window type"
 msgstr "ウィンドウタイプ"
 
 #: ui/Diagnostic/DiagnosticPage.py:1462
 msgid "Filter From (Hz)"
-msgstr "フィルターから (Hz)"
+msgstr "フィルターから(Hz)"
 
 #: ui/Diagnostic/DiagnosticPage.py:1469
 msgid "Filter To (Hz)"
-msgstr "フィルターへ (Hz)"
+msgstr "フィルターへ(Hz)"
 
 #: ui/Diagnostic/DiagnosticPage.py:1483
 msgid "Mesh grid"
@@ -1057,8 +1055,8 @@ msgid "Gear teeth"
 msgstr "歯車の歯"
 
 #: ui/Diagnostic/DiagnosticPage.py:1528
-msgid "Bearing bore (mm)"
-msgstr "ベアリング内径 (mm)"
+msgid "Brgs bore(mm)"
+msgstr "BRGs内径(mm)"
 
 #: ui/Diagnostic/DiagnosticPage.py:1535
 msgid "Foundation"
@@ -1337,3 +1335,6 @@ msgstr ""
 #: PlotData/PlotData.py:1406
 msgid "Phase-degree"
 msgstr ""
+
+#~ msgid "Filter Type"
+#~ msgstr "フィルター タイプ"

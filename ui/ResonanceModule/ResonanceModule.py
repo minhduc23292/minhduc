@@ -240,7 +240,7 @@ class ResonanceConfig(Tk.Frame):
         factorCombo['value'] = ('Length', "Damping ratio")
         factorCombo.grid(column=1, row=4, padx=0, pady=5, sticky="e")
 
-        filterLabel = ttk.Label(resonanceConfigFrame, text=_('Filter Type'), style="resonance.TLabel")
+        filterLabel = ttk.Label(resonanceConfigFrame, text=_('Filter type'), style="resonance.TLabel")
         filterLabel.grid(column=0, row=5, padx=10, pady=5, sticky="w")
         filterCombo = ttk.Combobox(resonanceConfigFrame, width=10, textvariable=self.resonanceParam3, 
                                     state="readonly", font=('Chakra Petch', 13))

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-01 09:57+0700\n"
+"POT-Creation-Date: 2023-05-01 12:42+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -703,7 +703,8 @@ msgid "Window Factor"
 msgstr ""
 
 #: ui/ResonanceModule/ResonanceModule.py:243
-msgid "Filter Type"
+#: ui/Diagnostic/DiagnosticPage.py:1445
+msgid "Filter type"
 msgstr ""
 
 #: ui/ResonanceModule/ResonanceModule.py:271
@@ -947,10 +948,6 @@ msgstr ""
 msgid "Filter configuration"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1445
-msgid "Filter type"
-msgstr ""
-
 #: ui/Diagnostic/DiagnosticPage.py:1453
 msgid "Window type"
 msgstr ""
@@ -992,7 +989,7 @@ msgid "Gear teeth"
 msgstr ""
 
 #: ui/Diagnostic/DiagnosticPage.py:1528
-msgid "Bearing bore (mm)"
+msgid "Brgs bore(mm)"
 msgstr ""
 
 #: ui/Diagnostic/DiagnosticPage.py:1535
