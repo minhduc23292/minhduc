@@ -274,13 +274,13 @@ class historyConfig(Tk.Frame):
 
         self.applyBt = ttk.Button(historyFrame, style='Accent.TButton', text=_("APPLY"),
                                    command=lambda: self.update_config_struct(history_config_struct))
-        self.applyBt.grid(column=1, row=11, padx=(0, 10), pady=4, ipadx=32, ipady=4, sticky='w')
+        self.applyBt.grid(column=0, row=11, padx=(5, 5), pady=4, ipadx=50, ipady=4, sticky='w')
 
         databaseConfigFrame = ttk.LabelFrame(self, text=(''), style="history.TLabelframe")
         databaseConfigFrame.pack(side="left", fill='y')
-        deletePrjButton = ttk.Button(databaseConfigFrame, text=_("Delete Project"), style='Accent.TButton',
+        deletePrjButton = ttk.Button(historyFrame, text=_("Delete Project"), style='Accent.TButton',
                             command=self.delete_project)
-        deletePrjButton.grid(column=0, row=1, padx=10, pady=(5, 5), ipadx=10, ipady=5, sticky='e')
+        deletePrjButton.grid(column=1, row=11, padx=(5, 5), pady=4, ipadx=20, ipady=4, sticky='w')
 
         self.scrollbar = ttk.Scrollbar(self)
         self.scrollbar.pack(side="right", fill="y")
@@ -1142,7 +1142,7 @@ class SideButtonFrame(Tk.Frame):
                     except:
                         pass
                     try:
-                        os.system(f"sudo cp -ru -f {save_path}/{new_file_name} /media/pi/usb" )
+                        os.system(f"sudo cp -ru -f {save_path}/{new_file_name} /media/pi/usb")
                         os.system("sudo umount /media/pi/usb")
                         os.system("sudo rmdir /media/pi/usb")
                         self.infoLabel.configure(text=_("Export CSV is completed"))

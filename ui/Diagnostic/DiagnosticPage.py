@@ -40,6 +40,7 @@ grid_flag = True
 summary_flag=0
 view_flag=0
 plot_flag=0
+SensorPosition='NONE'
 def testVal(inStr, acttyp):
     if acttyp == '1':  # insert
         if not inStr.isdigit():
@@ -1693,47 +1694,57 @@ class SensorPositionCanvas(Tk.Canvas):
             self.listBt[i]=Tk.Button(self, text='O', bg="green2", command=lambda text=dir[i], index=i: self.update_text(text, index))
             self.listBt[i].place(x=x[i], y=y[i], width=25, height=25)
         
-        sensorLabel=ttk.Label(inputFrame, text="Select sensor", style="pos0.TLabel")
+        sensorLabel=ttk.Label(inputFrame, text=_("Select port"), style="pos0.TLabel")
         sensorLabel.grid(column=0, row=0, padx=5, pady=0, sticky="w")
-        sensorCombo=ttk.Combobox(inputFrame, width=8, textvariable=self.inputParam1, validate="key", font=('Chakra Petch', 13),\
+        self.sensorCombo=ttk.Combobox(inputFrame, width=8, textvariable=self.inputParam1, validate="key", font=('Chakra Petch', 13),\
                                  state="readonly" )
-        sensorCombo['value'] = ('Port1', 'Port2', 'Port3')
-        sensorCombo.current(0)
-        sensorCombo.bind("<<ComboboxSelected>>", self.sensor_combo_callback)  
-        sensorCombo.grid(column=1, row=0, padx=5, pady=5, sticky='e')
+        self.sensorCombo['value'] = ('Port1', 'Port2', 'Port3')
+        self.sensorCombo.current(0)
+        self.sensorCombo.bind("<<ComboboxSelected>>", self.sensor_combo_callback)  
+        self.sensorCombo.grid(column=1, row=0, padx=5, pady=5, sticky='e')
 
-        pos1Label= ttk.Label(inputFrame, text="Port 1", style="pos0.TLabel")
+        pos1Label= ttk.Label(inputFrame, text=_("Port 1"), style="pos0.TLabel")
         pos1Label.grid(column=0, row=1, padx=5, pady=0, sticky="w")
         self.port1Entry=ttk.Entry(inputFrame, width=10, textvariable=self.inputParam2, validate="key", font=('Chakra Petch', 13))
         self.port1Entry.grid(column=1, row=1, padx=5, pady=5, sticky='e')
 
-        pos2Label= ttk.Label(inputFrame, text="Port 2", style="pos0.TLabel")
+        pos2Label= ttk.Label(inputFrame, text=_("Port 2"), style="pos0.TLabel")
         pos2Label.grid(column=0, row=2, padx=5, pady=0, sticky="w")
         self.port2Entry=ttk.Entry(inputFrame, width=10, textvariable=self.inputParam3, validate="key", font=('Chakra Petch', 13))
         self.port2Entry.grid(column=1, row=2, padx=5, pady=5, sticky='e')
 
-        pos3Label= ttk.Label(inputFrame, text="Port 3", style="pos0.TLabel")
+        pos3Label= ttk.Label(inputFrame, text=_("Port 3"), style="pos0.TLabel")
         pos3Label.grid(column=0, row=3, padx=5, pady=0, sticky="w")
         self.port3Entry=ttk.Entry(inputFrame, width=10, textvariable=self.inputParam4, validate="key", font=('Chakra Petch', 13))
         self.port3Entry.grid(column=1, row=3, padx=5, pady=5, sticky='e')
 
-        applyButton=ttk.Button(self, text='APPLY', style="Accent.TButton", command=self.on_apply_button_click)
+        applyButton=ttk.Button(self, text=_('APPLY'), style="Accent.TButton", command=self.on_apply_button_click)
         applyButton.place(x=860, y=456, width=130, height=40)
 
     def update_text(self, text, index):
-        selectedSensor=self.inputParam1.get()
+        global SensorPosition
+        SensorPosition=text
+        self.sensorCombo.event_generate('<Button-1>', x=1, y=1)
+        # selectedSensor=self.inputParam1.get()
         self.listBt[index].configure(text="S", bg="#C40069")
         for i in range(len(self.listBt)):
             if i!=index:
                 self.listBt[i].configure(text="O", bg="green2")
-        if selectedSensor=="Port1":
-            self.inputParam2.set(text)
-        elif selectedSensor=="Port2":
-            self.inputParam3.set(text)
-        else:
-            self.inputParam4.set(text)
+        # if selectedSensor=="Port1":
+        #     self.inputParam2.set(text)
+        # elif selectedSensor=="Port2":
+        #     self.inputParam3.set(text)
+        # else:
+        #     self.inputParam4.set(text)
     def sensor_combo_callback(self, event):
+        global SensorPosition
         text=self.inputParam1.get()
+        if text=="Port1":
+            self.inputParam2.set(SensorPosition)
+        elif text=="Port2":
+            self.inputParam3.set(SensorPosition)
+        else:
+            self.inputParam4.set(SensorPosition)
         if text=="Port1":
             self.port1Entry.configure(state="normal")
             self.port2Entry.configure(state="disable")
