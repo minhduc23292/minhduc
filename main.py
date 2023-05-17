@@ -79,6 +79,11 @@ class TotalConfig(object):
         }
         self.balancing_config_struct={
                     # "roto_type":'Overhang',
+                    "roto_mass":1000,
+                    "grade":6.3,
+                    "radius":1000,
+                    "trial_remove":True,
+                    "origin":"LASER POINT",
                     "num_planes":'One',
                     "num_sensors":'One',
                     "num_blades" :4,

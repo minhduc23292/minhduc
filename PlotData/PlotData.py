@@ -1103,28 +1103,29 @@ class PLT(FigureCanvasTkAgg):
             if len(struct_balancing["run"]) > 1:
                 [T_amp, T_phase, corr_weight, corr_angle, inf_coe_weight, inf_coe_angle] = calculate_corection(
                     struct_balancing["run"][0]["phase"], \
-                    struct_balancing["run"][0]["amplitude"], struct_balancing["run"][1]["phase"],
+                    struct_balancing["run"][0]["amplitude"],\
+                    struct_balancing["run"][1]["phase"],\
                     struct_balancing["run"][1]["amplitude"], \
-                    struct_balancing["angle1"] * np.pi / 180, struct_balancing["trial_mass1"])
+                    struct_balancing["angle1"] * np.pi / 180, \
+                    struct_balancing["trial_mass1"],
+                    trial_mass_remove=struct_balancing["trial_remove"])
                 # ax_51.plot([0, T_phase], [0, T_amp], color[4])
                 # ax_51.text(T_phase, T_amp, '(%s/ %0.2f; %0.2f)' % (header[2], T_phase * 180 / 3.14, T_amp), color=color[4])
                 # self.draw()
                 if len(struct_balancing["run"]) == 2:
-                    return [corr_weight, (corr_angle % 2 * np.pi) * 180 / np.pi, "Corr1"]
+                    return [corr_weight, (corr_angle % (2 * np.pi)) * 180 / np.pi, "Corr1"]
                 elif len(struct_balancing["run"]) == 3:
                     trim_corr_weight = struct_balancing["run"][2]["amplitude"] / inf_coe_weight
-                    trim_corr_angle = ((struct_balancing["run"][2]["phase"] + np.pi - inf_coe_angle) % (
-                                2 * np.pi)) * 180 / np.pi
+                    trim_corr_angle = ((struct_balancing["run"][2]["phase"] + np.pi - inf_coe_angle) % (2 * np.pi)) * 180 / np.pi
                     return [trim_corr_weight, trim_corr_angle, "Trim1"]
                 elif len(struct_balancing["run"]) == 4:
                     trim_corr_weight = struct_balancing["run"][3]["amplitude"] / inf_coe_weight
-                    trim_corr_angle = ((struct_balancing["run"][3]["phase"] + np.pi - inf_coe_angle) % (
-                                2 * np.pi)) * 180 / np.pi
+                    trim_corr_angle = ((struct_balancing["run"][3]["phase"] + np.pi - inf_coe_angle) % (2 * np.pi)) * 180 / np.pi
                     return [trim_corr_weight, trim_corr_angle, "Trim2"]
                 else:
                     return [-1, -1]
             else:
-                return [-1, -1, ]
+                return [-1, -1]
 
     def balancing_array_plotter(self, phase_left, phase_right, amplitude_left, amplitude_right, trial_mass1,
                                 trial_mass2):
@@ -1426,7 +1427,7 @@ class PLT(FigureCanvasTkAgg):
         ax_11.set_visible(True)
         self.draw()
 
-def calculate_corection(phi0, a0, phi1, a1, trial_mass_angle, trial_mass):
+def calculate_corection(phi0, a0, phi1, a1, trial_mass_angle, trial_mass, trial_mass_remove= True):
     z0 = a0 * np.cos(phi0) + (a0 * np.sin(phi0)) * 1j
     z1 = a1 * np.cos(phi1) + (a1 * np.sin(phi1)) * 1j
     tw = trial_mass * np.cos(trial_mass_angle) + (trial_mass * np.sin(trial_mass_angle)) * 1j
@@ -1434,12 +1435,14 @@ def calculate_corection(phi0, a0, phi1, a1, trial_mass_angle, trial_mass):
     Hh = Tr / tw
     amp_T = np.abs(Tr)
     phase_T = np.angle(Tr)
-    amp_H = np.abs(Hh)
-    phase_H = np.angle(Hh)
-    influent_coef_angle = phase_H
-    influent_coef_weight = amp_H
-    correction_weight = a0 / influent_coef_weight
-    correction_angle = np.pi + phi0 - influent_coef_angle
+    influent_coef_angle = np.angle(Hh)
+    influent_coef_weight = np.abs(Hh)
+    if trial_mass_remove==True:
+        correction_weight = a0 / influent_coef_weight
+        correction_angle = np.pi + phi0 - influent_coef_angle
+    else:
+        correction_weight = a1 / influent_coef_weight
+        correction_angle = np.pi + phi1 - influent_coef_angle
     return [
         amp_T,
         phase_T,
@@ -1467,8 +1470,8 @@ def two_planes_ICs(phase, amplitude, trial_mass1, trial_mass2):
     CW1 = (H12 * O2 - H22 * O1) / (H11 * H22 - H21 * H12)
     CW2 = (H21 * O1 - H11 * O2) / (H11 * H22 - H21 * H12)
     CW1_weight = np.abs(CW1)
-    CW1_angle = (np.angle(CW1) % (2 * np.pi))
+    CW1_angle = np.angle(CW1) % (2 * np.pi)
     CW2_weight = np.abs(CW2)
-    CW2_angle = (np.angle(CW2) % (2 * np.pi))
+    CW2_angle = np.angle(CW2) % (2 * np.pi)
     return [H11, H12, H21, H22, CW1_weight, CW1_angle, CW2_weight, CW2_angle]
 

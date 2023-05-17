@@ -1339,7 +1339,7 @@ class ConfigFrame(Tk.Frame):
         self.wfConfigFrame.pack(side=Tk.TOP, fill=Tk.BOTH)
 
         sensorFrame = ttk.LabelFrame(self.wfConfigFrame, text=_('Sensor config'), style='config.TLabelframe')
-        sensorFrame.grid(column=0, row=0, padx=5, pady=0, ipadx=5, rowspan=10, columnspan=2, sticky='wn')
+        sensorFrame.grid(column=0, row=0, padx=5, pady=0, ipadx=2, rowspan=10, columnspan=2, sticky='wn')
 
         # directionLabel = ttk.Label(sensorFrame, text=_('Type'), style='config.TLabel')
         # directionLabel.grid(column=1, row=0, padx=5, pady=5, sticky='w')
@@ -1440,7 +1440,7 @@ class ConfigFrame(Tk.Frame):
         sampleRateEntry.grid(column=1, row=9, padx=0, pady=5, ipadx=3, sticky='e')
         ###
         frqConfigFrame = ttk.LabelFrame(self.wfConfigFrame, text=_('Filter configuration'), style='config.TLabelframe')
-        frqConfigFrame.grid(column=2, row=0, padx=5, ipadx=5, pady=0, sticky='nw')
+        frqConfigFrame.grid(column=2, row=0, padx=5, ipadx=2, pady=0, sticky='nw')
 
         filterLabel = ttk.Label(frqConfigFrame, text=_('Filter type'), style='config.TLabel')
         filterLabel.grid(column=0, row=0, padx=5, pady=5, sticky="w")
@@ -1496,7 +1496,7 @@ class ConfigFrame(Tk.Frame):
         ###
 
         machineFrame = ttk.LabelFrame(self.wfConfigFrame, text=_('Machine configuration'), style="config.TLabelframe")
-        machineFrame.grid(column=4, row=0, padx=5, pady=0, ipadx=5, sticky='ne')
+        machineFrame.grid(column=4, row=0, padx=5, pady=0, ipadx=2, sticky='ne')
 
         machineNameLabel = ttk.Label(machineFrame, text=_("Machine name"), style='config.TLabel')
         machineNameLabel.grid(column=0, row=0, padx=5, pady=5, sticky='w')
