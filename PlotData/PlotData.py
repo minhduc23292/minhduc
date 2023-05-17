@@ -1004,9 +1004,9 @@ class PLT(FigureCanvasTkAgg):
                     CW2_angle = (np.angle(CW2) % (2 * np.pi)) * 180 / np.pi
                     return [CW1_weight, CW1_angle, CW2_weight, CW2_angle, "Trim2"]
                 else:
-                    return [-1, -1]
+                    return [-1, -1, -1, -1, "No"]
             else:
-                return [-1, -1]
+                return [-1, -1, -1, -1, "No"]
         if flag == 2:
             color = ['b', 'b', 'm', 'm', 'k', 'k', 'r', 'r', 'y', 'y']
             header = ['OL', 'OR', 'T1L', 'T1R', 'T2L', 'T2R', 'TR1L', 'TR1R', 'TR2L', 'TR2R']
@@ -1080,9 +1080,9 @@ class PLT(FigureCanvasTkAgg):
                     CW2_angle = (np.angle(CW2) % (2 * np.pi)) * 180 / np.pi
                     return [CW1_weight, CW1_angle, CW2_weight, CW2_angle, "Trim2"]
                 else:
-                    return [-1, -1]
+                    return [-1, -1, -1, -1, "No"]
             else:
-                return [-1, -1]
+                return [-1, -1, -1, -1, "No"]
         elif flag == 1:
             color = ['g', 'r', 'm', 'b', 'o']
             header = ['O', 'O+T', 'TR1', 'TR2']
@@ -1123,9 +1123,9 @@ class PLT(FigureCanvasTkAgg):
                     trim_corr_angle = ((struct_balancing["run"][3]["phase"] + np.pi - inf_coe_angle) % (2 * np.pi)) * 180 / np.pi
                     return [trim_corr_weight, trim_corr_angle, "Trim2"]
                 else:
-                    return [-1, -1]
+                    return [-1, -1, "No"]
             else:
-                return [-1, -1]
+                return [-1, -1, "No"]
 
     def balancing_array_plotter(self, phase_left, phase_right, amplitude_left, amplitude_right, trial_mass1,
                                 trial_mass2):

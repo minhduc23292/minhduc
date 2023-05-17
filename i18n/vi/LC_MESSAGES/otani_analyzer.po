@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-01 12:37+0700\n"
+"POT-Creation-Date: 2023-05-17 22:43+0700\n"
 "PO-Revision-Date: 2022-11-02 18:07+0900\n"
 "Last-Translator: Le Phuong <lephuong@phuonglh>\n"
 "Language-Team: Vietnamese\n"
@@ -45,7 +45,7 @@ msgstr "Dự án đã tồn tại. Bạn có muốn tiếp tục không"
 msgid "Please entry the "
 msgstr "Hãy nhập"
 
-#: keyboard/keyboard.py:26 ui/history/historyModule.py:507
+#: keyboard/keyboard.py:26 ui/history/historyModule.py:505
 #: ui/Diagnostic/DiagnosticPage.py:1649
 msgid "Input"
 msgstr "Input"
@@ -81,142 +81,181 @@ msgstr "Click vào RUN để bắt đầu"
 msgid "Click APPLY button before using this funtion."
 msgstr "Nhấn XÁC NHẬN để sử dụng tính năng này."
 
-#: ui/balancingModule/balancingModule.py:206 ui/history/historyModule.py:212
+#: ui/balancingModule/balancingModule.py:220 ui/history/historyModule.py:212
 #: ui/ResonanceModule/ResonanceModule.py:205
 msgid "Configuration"
 msgstr "Cài đặt"
 
-#: ui/balancingModule/balancingModule.py:209
+#: ui/balancingModule/balancingModule.py:223
 msgid "Num of planes"
 msgstr "Số mặt phẳng"
 
-#: ui/balancingModule/balancingModule.py:216
+#: ui/balancingModule/balancingModule.py:231
 msgid "Num of sensors"
 msgstr "Số cảm biến"
 
-#: ui/balancingModule/balancingModule.py:223
+#: ui/balancingModule/balancingModule.py:238
 msgid "Sensor type"
 msgstr "Loại cảm biến"
 
-#: ui/balancingModule/balancingModule.py:230
-msgid "Sensor1"
-msgstr "Cảm biến 1"
+#: ui/balancingModule/balancingModule.py:245
+msgid "Plane 1"
+msgstr "Mặt phẳng 1"
 
-#: ui/balancingModule/balancingModule.py:237
-msgid "Sensor2"
-msgstr "Cảm biến 2"
+#: ui/balancingModule/balancingModule.py:252
+msgid "Plane 2"
+msgstr "Mặt phẳng 2"
 
-#: ui/balancingModule/balancingModule.py:244
+#: ui/balancingModule/balancingModule.py:259
+msgid "Coordinate Origin"
+msgstr "Gốc tọa độ"
+
+#: ui/balancingModule/balancingModule.py:266
 msgid "Trial mass 1 (g)"
 msgstr "Lượng thử 1 (g)"
 
-#: ui/balancingModule/balancingModule.py:251
+#: ui/balancingModule/balancingModule.py:273
 msgid "Trial mass 2 (g)"
 msgstr "Lượng thử 2 (g)"
 
-#: ui/balancingModule/balancingModule.py:258
-msgid "Angle 1 (deg)"
-msgstr "Góc 1 (độ)"
+#: ui/balancingModule/balancingModule.py:280
+msgid "Trial angle 1(deg)"
+msgstr "Góc thử 1 (độ)"
 
-#: ui/balancingModule/balancingModule.py:265
-msgid "Angle 2 (deg)"
-msgstr "Góc 2 (độ)"
+#: ui/balancingModule/balancingModule.py:287
+msgid "Trial angle 2(deg)"
+msgstr "Góc thử 2 (độ)"
 
-#: ui/balancingModule/balancingModule.py:273
-msgid "Rotating dir"
+#: ui/balancingModule/balancingModule.py:295
+msgid "Rotating direction"
 msgstr "Chiều quay"
 
-#: ui/balancingModule/balancingModule.py:280
+#: ui/balancingModule/balancingModule.py:302
 #: ui/Diagnostic/DiagnosticPage.py:1428
 msgid "FFT lines"
 msgstr "Số dòng FFT"
 
-#: ui/balancingModule/balancingModule.py:287 ui/history/historyModule.py:303
+#: ui/balancingModule/balancingModule.py:309 ui/history/historyModule.py:301
 #: ui/ResonanceModule/ResonanceModule.py:264
 msgid "Sample rate"
 msgstr "Tốc độ lấy mẫu"
 
-#: ui/balancingModule/balancingModule.py:294
+#: ui/balancingModule/balancingModule.py:316
 msgid "Num of blades"
 msgstr "Số cánh"
 
-#: ui/balancingModule/balancingModule.py:301
+#: ui/balancingModule/balancingModule.py:323
 msgid "Balancing speed(RPM)"
-msgstr "Tốc độ roto (RPM)"
+msgstr "Tốc độ cân bằng(RPM)"
 
-#: ui/balancingModule/balancingModule.py:308 ui/history/historyModule.py:275
+#: ui/balancingModule/balancingModule.py:330
+msgid "Trial mass remove"
+msgstr "Bỏ vật thử"
+
+#: ui/balancingModule/balancingModule.py:337
+msgid "Trial weight calculation"
+msgstr "Tính toán khối lượng thử"
+
+#: ui/balancingModule/balancingModule.py:340
+msgid "Roto mass(kg)"
+msgstr "Khối lượng roto(kg)"
+
+#: ui/balancingModule/balancingModule.py:348
+msgid "Grade(ISO-1940)"
+msgstr ""
+
+#: ui/balancingModule/balancingModule.py:355
+msgid "Operation speed(RPM)"
+msgstr "Tốc độ vận hành(RPM)"
+
+#: ui/balancingModule/balancingModule.py:363
+msgid "Correction radius(mm)"
+msgstr "Bán kính cân bằng(mm)"
+
+#: ui/balancingModule/balancingModule.py:370
+msgid "CALCULATE"
+msgstr "TÍNH TOÁN"
+
+#: ui/balancingModule/balancingModule.py:374 ui/history/historyModule.py:275
 #: ui/ResonanceModule/ResonanceModule.py:292
 #: ui/Diagnostic/DiagnosticPage.py:226 ui/Diagnostic/DiagnosticPage.py:1721
 #: ui/Settingpage/SettingPage.py:183 ui/Settingpage/SettingPage.py:254
 msgid "APPLY"
 msgstr "XÁC NHẬN"
 
-#: ui/balancingModule/balancingModule.py:335
-#: ui/balancingModule/balancingModule.py:348 ui/history/historyModule.py:380
+#: ui/balancingModule/balancingModule.py:450
+#: ui/balancingModule/balancingModule.py:463 ui/history/historyModule.py:378
 msgid "Parameter errors. Check the input type."
 msgstr "Tham số nhập vào lỗi. Kiểm tra lại các mục nhập vào."
 
-#: ui/balancingModule/balancingModule.py:344
-#: ui/balancingModule/balancingModule.py:357 ui/history/historyModule.py:387
+#: ui/balancingModule/balancingModule.py:458
+#: ui/balancingModule/balancingModule.py:472
+#: ui/balancingModule/balancingModule.py:492 ui/history/historyModule.py:385
 msgid "OK"
 msgstr ""
 
-#: ui/balancingModule/balancingModule.py:440
+#: ui/balancingModule/balancingModule.py:486
+#: ui/balancingModule/balancingModule.py:494
+#: ui/Diagnostic/DiagnosticPage.py:475
+msgid "Data errors"
+msgstr "Lỗi dữ liệu"
+
+#: ui/balancingModule/balancingModule.py:577
 msgid "CW split"
 msgstr "Tách vật"
 
-#: ui/balancingModule/balancingModule.py:533
+#: ui/balancingModule/balancingModule.py:670
 msgid ""
 "START\n"
 "INITIAL\n"
 "RUN"
 msgstr "CHẠY THÔ"
 
-#: ui/balancingModule/balancingModule.py:543
-#: ui/balancingModule/balancingModule.py:559
-#: ui/balancingModule/balancingModule.py:575
-#: ui/balancingModule/balancingModule.py:591
-#: ui/balancingModule/balancingModule.py:620
-#: ui/balancingModule/balancingModule.py:636
-#: ui/balancingModule/balancingModule.py:653
-#: ui/balancingModule/balancingModule.py:670
-#: ui/balancingModule/balancingModule.py:687
-#: ui/balancingModule/balancingModule.py:704
-#: ui/balancingModule/balancingModule.py:721
-#: ui/balancingModule/balancingModule.py:738
-#: ui/balancingModule/balancingModule.py:755
-#: ui/balancingModule/balancingModule.py:772
-#: ui/balancingModule/balancingModule.py:800
-#: ui/balancingModule/balancingModule.py:817
-#: ui/balancingModule/balancingModule.py:834
-#: ui/balancingModule/balancingModule.py:851
-#: ui/balancingModule/balancingModule.py:868
+#: ui/balancingModule/balancingModule.py:680
+#: ui/balancingModule/balancingModule.py:696
+#: ui/balancingModule/balancingModule.py:712
+#: ui/balancingModule/balancingModule.py:728
+#: ui/balancingModule/balancingModule.py:757
+#: ui/balancingModule/balancingModule.py:773
+#: ui/balancingModule/balancingModule.py:790
+#: ui/balancingModule/balancingModule.py:807
+#: ui/balancingModule/balancingModule.py:824
+#: ui/balancingModule/balancingModule.py:841
+#: ui/balancingModule/balancingModule.py:858
+#: ui/balancingModule/balancingModule.py:875
+#: ui/balancingModule/balancingModule.py:892
+#: ui/balancingModule/balancingModule.py:909
+#: ui/balancingModule/balancingModule.py:937
+#: ui/balancingModule/balancingModule.py:954
+#: ui/balancingModule/balancingModule.py:971
+#: ui/balancingModule/balancingModule.py:988
+#: ui/balancingModule/balancingModule.py:1005
 msgid "STOP"
 msgstr "DỪNG"
 
-#: ui/balancingModule/balancingModule.py:547
-#: ui/balancingModule/balancingModule.py:563
-#: ui/balancingModule/balancingModule.py:579
-#: ui/balancingModule/balancingModule.py:595
-#: ui/balancingModule/balancingModule.py:624
-#: ui/balancingModule/balancingModule.py:640
-#: ui/balancingModule/balancingModule.py:657
-#: ui/balancingModule/balancingModule.py:674
-#: ui/balancingModule/balancingModule.py:691
-#: ui/balancingModule/balancingModule.py:708
-#: ui/balancingModule/balancingModule.py:725
-#: ui/balancingModule/balancingModule.py:742
-#: ui/balancingModule/balancingModule.py:759
-#: ui/balancingModule/balancingModule.py:776
-#: ui/balancingModule/balancingModule.py:804
-#: ui/balancingModule/balancingModule.py:821
-#: ui/balancingModule/balancingModule.py:838
-#: ui/balancingModule/balancingModule.py:855
-#: ui/balancingModule/balancingModule.py:872
+#: ui/balancingModule/balancingModule.py:684
+#: ui/balancingModule/balancingModule.py:700
+#: ui/balancingModule/balancingModule.py:716
+#: ui/balancingModule/balancingModule.py:732
+#: ui/balancingModule/balancingModule.py:761
+#: ui/balancingModule/balancingModule.py:777
+#: ui/balancingModule/balancingModule.py:794
+#: ui/balancingModule/balancingModule.py:811
+#: ui/balancingModule/balancingModule.py:828
+#: ui/balancingModule/balancingModule.py:845
+#: ui/balancingModule/balancingModule.py:862
+#: ui/balancingModule/balancingModule.py:879
+#: ui/balancingModule/balancingModule.py:896
+#: ui/balancingModule/balancingModule.py:913
+#: ui/balancingModule/balancingModule.py:941
+#: ui/balancingModule/balancingModule.py:958
+#: ui/balancingModule/balancingModule.py:975
+#: ui/balancingModule/balancingModule.py:992
+#: ui/balancingModule/balancingModule.py:1009
 msgid "Wait until phase and amplitude is stable and click STOP"
 msgstr "Chờ đến khi pha và biên độ ổn định, kích nút DỪNG"
 
-#: ui/balancingModule/balancingModule.py:551
+#: ui/balancingModule/balancingModule.py:688
 msgid ""
 "TRIAL\n"
 "RUN"
@@ -224,12 +263,12 @@ msgstr ""
 "CHẠY VỚI\n"
 " VẬT THỬ"
 
-#: ui/balancingModule/balancingModule.py:555
+#: ui/balancingModule/balancingModule.py:692
 msgid "Next step: Execute the trial run"
 msgstr "Bước tiếp theo: Thực hiện chạy với vật thử."
 
-#: ui/balancingModule/balancingModule.py:567
-#: ui/balancingModule/balancingModule.py:843
+#: ui/balancingModule/balancingModule.py:704
+#: ui/balancingModule/balancingModule.py:980
 msgid ""
 "TRIM 1\n"
 "RUN"
@@ -237,12 +276,12 @@ msgstr ""
 "CHẠY TINH\n"
 " LẦN 1"
 
-#: ui/balancingModule/balancingModule.py:571
+#: ui/balancingModule/balancingModule.py:708
 msgid "Next step: Execute the first trim run"
 msgstr "Bước tiếp theo: Chạy tinh lần 1."
 
-#: ui/balancingModule/balancingModule.py:583
-#: ui/balancingModule/balancingModule.py:860
+#: ui/balancingModule/balancingModule.py:720
+#: ui/balancingModule/balancingModule.py:997
 msgid ""
 "TRIM 2\n"
 "RUN"
@@ -250,28 +289,28 @@ msgstr ""
 "CHẠY TINH\n"
 " LẦN 2"
 
-#: ui/balancingModule/balancingModule.py:587
+#: ui/balancingModule/balancingModule.py:724
 msgid "Next step: Execute the second trim run"
 msgstr "Bước tiếp theo: Chạy tinh lần 2."
 
-#: ui/balancingModule/balancingModule.py:599
+#: ui/balancingModule/balancingModule.py:736
 msgid ""
 "END\n"
 "PROCESS"
 msgstr "KẾT THÚC"
 
-#: ui/balancingModule/balancingModule.py:603
+#: ui/balancingModule/balancingModule.py:740
 msgid "Next step: Finish!"
 msgstr "Bước tiếp theo: Kết thúc"
 
-#: ui/balancingModule/balancingModule.py:613
-#: ui/balancingModule/balancingModule.py:877
+#: ui/balancingModule/balancingModule.py:750
+#: ui/balancingModule/balancingModule.py:1014
 msgid ""
 "INITIAL\n"
 "RUN"
 msgstr "CHẠY THÔ"
 
-#: ui/balancingModule/balancingModule.py:628
+#: ui/balancingModule/balancingModule.py:765
 msgid ""
 "INITIAL\n"
 "PL2"
@@ -279,11 +318,11 @@ msgstr ""
 "CHẠY THÔ\n"
 "MẶT 2"
 
-#: ui/balancingModule/balancingModule.py:632
+#: ui/balancingModule/balancingModule.py:769
 msgid "Next step: Initial Run, Collect data on the plane 2"
 msgstr "Bước tiếp theo: Lấy dữ liệu trên mặt phẳng số 2"
 
-#: ui/balancingModule/balancingModule.py:645
+#: ui/balancingModule/balancingModule.py:782
 msgid ""
 "TRIAL 1\n"
 "PL1"
@@ -292,11 +331,11 @@ msgstr ""
 "LẦN 1\n"
 " MẶT 1"
 
-#: ui/balancingModule/balancingModule.py:649
+#: ui/balancingModule/balancingModule.py:786
 msgid "Next step: First Trial Run, Collect data on the plane 1"
 msgstr "Bước tiếp theo: Chạy với vật thử, lấy data ở mặt phẳng 1"
 
-#: ui/balancingModule/balancingModule.py:662
+#: ui/balancingModule/balancingModule.py:799
 msgid ""
 "TRIAL 1\n"
 "PL2"
@@ -305,11 +344,11 @@ msgstr ""
 "LẦN 1\n"
 " MẶT 2"
 
-#: ui/balancingModule/balancingModule.py:666
+#: ui/balancingModule/balancingModule.py:803
 msgid "Next step: First Trial Run, Collect data on the plane 2"
 msgstr "Bước tiếp theo: Chạy với vật thử, lấy data ở mặt phẳng 2"
 
-#: ui/balancingModule/balancingModule.py:679
+#: ui/balancingModule/balancingModule.py:816
 msgid ""
 "TRIAL 2\n"
 "PL1"
@@ -318,11 +357,11 @@ msgstr ""
 "LẦN 2\n"
 "MẶT 1"
 
-#: ui/balancingModule/balancingModule.py:683
+#: ui/balancingModule/balancingModule.py:820
 msgid "Next step: Second Trial Run, Collect data on the plane 1"
 msgstr "Bước tiếp theo: Chạy với vật thử, lấy data ở mặt phẳng 1"
 
-#: ui/balancingModule/balancingModule.py:696
+#: ui/balancingModule/balancingModule.py:833
 msgid ""
 "TRIAL 2\n"
 "PL2"
@@ -331,11 +370,11 @@ msgstr ""
 "LẦN 2\n"
 "MẶT 2"
 
-#: ui/balancingModule/balancingModule.py:700
+#: ui/balancingModule/balancingModule.py:837
 msgid "Next step: Second Trial Run, Collect data on the plane 2"
 msgstr "Bước tiếp theo: Chạy với vật thử, lấy data ở mặt phẳng 2"
 
-#: ui/balancingModule/balancingModule.py:713
+#: ui/balancingModule/balancingModule.py:850
 msgid ""
 "TRIM 1\n"
 "PL1"
@@ -344,11 +383,11 @@ msgstr ""
 "LẦN 1\n"
 "MẶT 1"
 
-#: ui/balancingModule/balancingModule.py:717
+#: ui/balancingModule/balancingModule.py:854
 msgid "Next step: First Trim Run, Collect data on the plane 1"
 msgstr "Bước tiếp theo: Chạy tinh lần 1, lấy data ở mặt phẳng 1"
 
-#: ui/balancingModule/balancingModule.py:730
+#: ui/balancingModule/balancingModule.py:867
 msgid ""
 "TRIM 1\n"
 "PL2"
@@ -357,11 +396,11 @@ msgstr ""
 "LẦN 1\n"
 "MẶT 2"
 
-#: ui/balancingModule/balancingModule.py:734
+#: ui/balancingModule/balancingModule.py:871
 msgid "Next step: First Trim Run, Collect data on the plane 2"
 msgstr "Bước tiếp theo: Chạy tinh lần 1, lấy data ở mặt phẳng 2"
 
-#: ui/balancingModule/balancingModule.py:747
+#: ui/balancingModule/balancingModule.py:884
 msgid ""
 "TRIM 2\n"
 "PL1"
@@ -370,11 +409,11 @@ msgstr ""
 "LẦN 2\n"
 "MẶT 1"
 
-#: ui/balancingModule/balancingModule.py:751
+#: ui/balancingModule/balancingModule.py:888
 msgid "Next step: Second Trim Run, Collect data on the plane 1"
 msgstr "Bước tiếp theo: Chạy tinh lần 2, lấy data ở mặt phẳng 1"
 
-#: ui/balancingModule/balancingModule.py:764
+#: ui/balancingModule/balancingModule.py:901
 msgid ""
 "TRIM 2\n"
 "PL2"
@@ -383,12 +422,12 @@ msgstr ""
 "LẦN 2\n"
 "MẶT 2"
 
-#: ui/balancingModule/balancingModule.py:768
-#: ui/balancingModule/balancingModule.py:785
+#: ui/balancingModule/balancingModule.py:905
+#: ui/balancingModule/balancingModule.py:922
 msgid "Next step: Second Trim Run, Collect data on the plane 2"
 msgstr "Bước tiếp theo: Chạy tinh lần 2, lấy data ở mặt phẳng 2"
 
-#: ui/balancingModule/balancingModule.py:781
+#: ui/balancingModule/balancingModule.py:918
 msgid ""
 "INITIAL 1\n"
 "PL1"
@@ -397,7 +436,7 @@ msgstr ""
 "LẦN 1\n"
 "MẶT 1"
 
-#: ui/balancingModule/balancingModule.py:809
+#: ui/balancingModule/balancingModule.py:946
 msgid ""
 "TRIAL 1\n"
 "RUN"
@@ -405,12 +444,12 @@ msgstr ""
 "CHẠY THỬ\n"
 "LẦN 1"
 
-#: ui/balancingModule/balancingModule.py:813
+#: ui/balancingModule/balancingModule.py:950
 msgid "Next step: First Trial Run, Mount the sensor on two planes and execute"
 msgstr ""
 "Bước tiếp theo: Chạy với vật thử lần 1, gắn cảm biến ở cả hai mặt phẳng."
 
-#: ui/balancingModule/balancingModule.py:826
+#: ui/balancingModule/balancingModule.py:963
 msgid ""
 "TRIAL 2\n"
 "RUN"
@@ -418,26 +457,26 @@ msgstr ""
 "CHẠY THỬ\n"
 "LẦN 2"
 
-#: ui/balancingModule/balancingModule.py:830
+#: ui/balancingModule/balancingModule.py:967
 msgid "Next step: Second Trial Run, Mount the sensor on two planes and execute"
 msgstr ""
 "Bước tiếp theo: Chạy với vật thử lần 2, gắn cảm biến ở cả hai mặt phẳng."
 
-#: ui/balancingModule/balancingModule.py:847
+#: ui/balancingModule/balancingModule.py:984
 msgid "Next step: First Trim Run, Mount the sensor on two planes and execute"
 msgstr "Bước tiếp theo: Chạy tinh lần 1, gắn cảm biến ở cả hai mặt phẳng."
 
-#: ui/balancingModule/balancingModule.py:864
+#: ui/balancingModule/balancingModule.py:1001
 msgid "Next step: Second Trim Run, Mount the sensor on two planes and execute"
 msgstr "Bước tiếp theo: Chạy tinh lần 2, gắn cảm biến ở cả hai mặt phẳng."
 
-#: ui/balancingModule/balancingModule.py:881
+#: ui/balancingModule/balancingModule.py:1018
 msgid "Next step: Initial Run, Mount the sensor on two planes and execute"
 msgstr "Bước tiếp theo: Chạy thô, gắn cảm biến ở cả hai mặt phẳng."
 
-#: ui/balancingModule/balancingModule.py:980
-#: ui/balancingModule/balancingModule.py:1092 ui/history/historyModule.py:881
-#: ui/history/historyModule.py:924 ui/history/historyModule.py:1166
+#: ui/balancingModule/balancingModule.py:1116
+#: ui/balancingModule/balancingModule.py:1233 ui/history/historyModule.py:879
+#: ui/history/historyModule.py:922 ui/history/historyModule.py:1164
 #: ui/ResonanceModule/ResonanceModule.py:565
 msgid "Data errors."
 msgstr "Lỗi dữ liệu"
@@ -458,7 +497,7 @@ msgstr ""
 "Tần số\n"
 "Vòng bi"
 
-#: ui/history/historyModule.py:215 ui/history/historyModule.py:469
+#: ui/history/historyModule.py:215 ui/history/historyModule.py:467
 msgid "Project Code"
 msgstr "Mã dự án"
 
@@ -491,47 +530,47 @@ msgstr "Trung bình phổ"
 msgid "Average Bin"
 msgstr "Độ dài trung bình"
 
-#: ui/history/historyModule.py:281
+#: ui/history/historyModule.py:279
 msgid "Delete Project"
 msgstr "Xóa dự án"
 
-#: ui/history/historyModule.py:301 ui/Settingpage/SettingPage.py:172
+#: ui/history/historyModule.py:299 ui/Settingpage/SettingPage.py:172
 msgid "Date"
 msgstr "Ngày tháng năm"
 
-#: ui/history/historyModule.py:302
+#: ui/history/historyModule.py:300
 msgid "Position"
 msgstr "Vị trí"
 
-#: ui/history/historyModule.py:446
+#: ui/history/historyModule.py:444
 msgid "Do you want to delete this project?"
 msgstr "Bạn có muốn xóa dự án này không"
 
-#: ui/history/historyModule.py:452
+#: ui/history/historyModule.py:450
 msgid "Selected project is deleted."
 msgstr "Dự án đã được xóa."
 
-#: ui/history/historyModule.py:471
+#: ui/history/historyModule.py:469
 msgid "Delete project errors"
 msgstr "Lỗi trong khi xóa dự án."
 
-#: ui/history/historyModule.py:511
+#: ui/history/historyModule.py:509
 msgid "Bearing frequency table"
 msgstr "Bảng tần số đặc trưng vòng bi"
 
-#: ui/history/historyModule.py:528
+#: ui/history/historyModule.py:526
 msgid "Bearing Name"
 msgstr "Mã vòng bi: "
 
-#: ui/history/historyModule.py:535
+#: ui/history/historyModule.py:533
 msgid "Speed(RPM)"
 msgstr "Tốc độ(RPM)"
 
-#: ui/history/historyModule.py:541
+#: ui/history/historyModule.py:539
 msgid "SEARCH"
 msgstr "TÌM KIẾM"
 
-#: ui/history/historyModule.py:614
+#: ui/history/historyModule.py:612
 msgid ""
 "EXPORT\n"
 "REPORT"
@@ -539,32 +578,32 @@ msgstr ""
 "XUẤT\n"
 "BÁO CÁO"
 
-#: ui/history/historyModule.py:617
+#: ui/history/historyModule.py:615
 msgid ""
 "EXPORT\n"
 ".CSV"
 msgstr ""
 
-#: ui/history/historyModule.py:620 ui/ResonanceModule/ResonanceModule.py:373
+#: ui/history/historyModule.py:618 ui/ResonanceModule/ResonanceModule.py:373
 #: ui/Diagnostic/DiagnosticPage.py:242 ui/Diagnostic/DiagnosticPage.py:260
 msgid "ZOOM"
 msgstr "ZOOM"
 
-#: ui/history/historyModule.py:627 ui/ResonanceModule/ResonanceModule.py:378
+#: ui/history/historyModule.py:625 ui/ResonanceModule/ResonanceModule.py:378
 #: ui/Diagnostic/DiagnosticPage.py:266
 msgid ""
 "CURSOR\n"
 "LEFT"
 msgstr ""
 
-#: ui/history/historyModule.py:631 ui/ResonanceModule/ResonanceModule.py:382
+#: ui/history/historyModule.py:629 ui/ResonanceModule/ResonanceModule.py:382
 #: ui/Diagnostic/DiagnosticPage.py:270
 msgid ""
 "CURSOR\n"
 "RIGHT"
 msgstr ""
 
-#: ui/history/historyModule.py:638
+#: ui/history/historyModule.py:636
 msgid ""
 "PLOT\n"
 "NONE"
@@ -572,40 +611,40 @@ msgstr ""
 "PLOT\n"
 "NONE"
 
-#: ui/history/historyModule.py:661 ui/ResonanceModule/ResonanceModule.py:437
+#: ui/history/historyModule.py:659 ui/ResonanceModule/ResonanceModule.py:437
 #: ui/Diagnostic/DiagnosticPage.py:684
 msgid "ZOOM IN"
 msgstr "PHÓNG TO"
 
-#: ui/history/historyModule.py:667 ui/ResonanceModule/ResonanceModule.py:443
+#: ui/history/historyModule.py:665 ui/ResonanceModule/ResonanceModule.py:443
 #: ui/Diagnostic/DiagnosticPage.py:690
 msgid "ZOOM OUT"
 msgstr "THU NHỎ"
 
-#: ui/history/historyModule.py:672 ui/ResonanceModule/ResonanceModule.py:448
+#: ui/history/historyModule.py:670 ui/ResonanceModule/ResonanceModule.py:448
 #: ui/Diagnostic/DiagnosticPage.py:695
 msgid "PAN LEFT"
 msgstr "DỊCH TRÁI"
 
-#: ui/history/historyModule.py:678 ui/ResonanceModule/ResonanceModule.py:454
+#: ui/history/historyModule.py:676 ui/ResonanceModule/ResonanceModule.py:454
 #: ui/Diagnostic/DiagnosticPage.py:701
 msgid "PAN RIGHT"
 msgstr "DỊCH PHẢI"
 
-#: ui/history/historyModule.py:684 ui/ResonanceModule/ResonanceModule.py:460
+#: ui/history/historyModule.py:682 ui/ResonanceModule/ResonanceModule.py:460
 #: ui/Diagnostic/DiagnosticPage.py:707
 msgid "RESET"
 msgstr "RESET"
 
-#: ui/history/historyModule.py:741
+#: ui/history/historyModule.py:739
 msgid "WAVEFORM"
 msgstr "SÓNG RUNG"
 
-#: ui/history/historyModule.py:745
+#: ui/history/historyModule.py:743
 msgid "FREQUENCY"
 msgstr "TẦN SỐ"
 
-#: ui/history/historyModule.py:749
+#: ui/history/historyModule.py:747
 msgid ""
 "VELOCITY\n"
 "FREQUENCY"
@@ -613,19 +652,19 @@ msgstr ""
 "TẦN SỐ\n"
 "VẬN TỐC"
 
-#: ui/history/historyModule.py:753 ui/Diagnostic/DiagnosticPage.py:768
+#: ui/history/historyModule.py:751 ui/Diagnostic/DiagnosticPage.py:768
 msgid "ENVELOPED"
 msgstr "ENVELOPED"
 
-#: ui/history/historyModule.py:757
+#: ui/history/historyModule.py:755
 msgid "WATERFALL"
 msgstr "THÁC NƯỚC"
 
-#: ui/history/historyModule.py:761
+#: ui/history/historyModule.py:759
 msgid "TREND"
 msgstr "XU HƯỚNG"
 
-#: ui/history/historyModule.py:811
+#: ui/history/historyModule.py:809
 msgid ""
 "PLOT\n"
 "WAVEFORM"
@@ -633,7 +672,7 @@ msgstr ""
 "PLOT\n"
 "SÓNG RUNG"
 
-#: ui/history/historyModule.py:814
+#: ui/history/historyModule.py:812
 msgid ""
 "PLOT\n"
 "FREQUENCY\n"
@@ -642,7 +681,7 @@ msgstr ""
 "PLOT\n"
 "TẦN SỐ"
 
-#: ui/history/historyModule.py:818
+#: ui/history/historyModule.py:816
 msgid ""
 "PLOT\n"
 "VELOCITY\n"
@@ -652,7 +691,7 @@ msgstr ""
 "PHỔ\n"
 "VẬN TỐC"
 
-#: ui/history/historyModule.py:823
+#: ui/history/historyModule.py:821
 msgid ""
 "PLOT\n"
 "WATERFALL"
@@ -660,7 +699,7 @@ msgstr ""
 "PLOT\n"
 "THÁC NƯỚC"
 
-#: ui/history/historyModule.py:827
+#: ui/history/historyModule.py:825
 msgid ""
 "PLOT\n"
 "TREND"
@@ -668,7 +707,7 @@ msgstr ""
 "PLOT\n"
 "XU HƯỚNG"
 
-#: ui/history/historyModule.py:841
+#: ui/history/historyModule.py:839
 msgid ""
 "PLOT\n"
 "ENVELOPED"
@@ -676,63 +715,63 @@ msgstr ""
 "PLOT\n"
 "ENVELOPED"
 
-#: ui/history/historyModule.py:849
+#: ui/history/historyModule.py:847
 msgid "Fcut is wrong. Use the default value."
 msgstr "Lỗi Fcut. Sử dụng bộ lọc mặc định."
 
-#: ui/history/historyModule.py:876
+#: ui/history/historyModule.py:874
 msgid "Project: "
 msgstr "Dự án: "
 
-#: ui/history/historyModule.py:878 ui/history/historyModule.py:1164
+#: ui/history/historyModule.py:876 ui/history/historyModule.py:1162
 msgid "There is no data, please check SETTING !"
 msgstr "Không có dữ liệu, kiểm tra cài đặt"
 
-#: ui/history/historyModule.py:921
+#: ui/history/historyModule.py:919
 msgid "Frequency:"
 msgstr "Tần số"
 
-#: ui/history/historyModule.py:929
+#: ui/history/historyModule.py:927
 msgid "Do you want to export data to .CSV file"
 msgstr "Bạn có muốn xuất dữ liệu thô ra file CSV"
 
-#: ui/history/historyModule.py:992 ui/history/historyModule.py:1148
+#: ui/history/historyModule.py:990 ui/history/historyModule.py:1146
 msgid "Export CSV is completed"
 msgstr "Hoàn thành xuất file .CSV"
 
-#: ui/history/historyModule.py:1000
+#: ui/history/historyModule.py:998
 msgid "There is no data, please check input value !"
 msgstr "Không có dữ liệu, kiểm tra cài đặt"
 
-#: ui/history/historyModule.py:1012
+#: ui/history/historyModule.py:1010
 msgid "Do you want to export the report"
 msgstr "Bạn có muốn xuất báo cáo"
 
-#: ui/history/historyModule.py:1077
+#: ui/history/historyModule.py:1075
 msgid "Filter bandpass frequency is wrong. Use the default value."
 msgstr "Lỗi bộ lọc thông dải. Sử dụng bộ lọc mặc định."
 
-#: ui/history/historyModule.py:1106
+#: ui/history/historyModule.py:1104
 msgid "Figure1: Vibration trend"
 msgstr "Hình 1: Xu hướng dao động."
 
-#: ui/history/historyModule.py:1110
+#: ui/history/historyModule.py:1108
 msgid "Figure2: Waveform"
 msgstr "Hình 2: Độ rung trong miền thời gian."
 
-#: ui/history/historyModule.py:1114
+#: ui/history/historyModule.py:1112
 msgid "Figure3: Frequency spectrum"
 msgstr "Hình 3: Phổ tần số"
 
-#: ui/history/historyModule.py:1118
+#: ui/history/historyModule.py:1116
 msgid "Figure4: Velocity spectrum"
 msgstr "Phổ tần số vận tốc"
 
-#: ui/history/historyModule.py:1122
+#: ui/history/historyModule.py:1120
 msgid "Figure5: Envelope spectrum"
 msgstr "Hình 5: Phổ đường bao"
 
-#: ui/history/historyModule.py:1162
+#: ui/history/historyModule.py:1160
 msgid "Report is exported. Use QR code scanner to see the report."
 msgstr "Báo cáo đã được xuất bản. Hãy quét mã vạch để xem cáo cáo."
 
@@ -923,10 +962,6 @@ msgid ""
 "NORMAL\n"
 "VIEW"
 msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:475
-msgid "Data errors"
-msgstr "Lỗi dữ liệu"
 
 #: ui/Diagnostic/DiagnosticPage.py:503 ui/Diagnostic/DiagnosticPage.py:640
 msgid "There is no data !"
@@ -1300,11 +1335,11 @@ msgid "Frequency(Hz)"
 msgstr "Tần số (Hz)"
 
 #: PlotData/PlotData.py:389 PlotData/PlotData.py:433 PlotData/PlotData.py:489
-#: PlotData/PlotData.py:554 PlotData/PlotData.py:1226
+#: PlotData/PlotData.py:554 PlotData/PlotData.py:1227
 msgid "Frequency [Hz]"
 msgstr "Tần số [Hz]"
 
-#: PlotData/PlotData.py:408 PlotData/PlotData.py:1227
+#: PlotData/PlotData.py:408 PlotData/PlotData.py:1228
 msgid "Time [ms]"
 msgstr "Thời gian [ms]"
 
@@ -1345,30 +1380,27 @@ msgid "at angle ="
 msgstr "tại góc"
 
 #: PlotData/PlotData.py:947 PlotData/PlotData.py:1016 PlotData/PlotData.py:1091
-#: PlotData/PlotData.py:1201
+#: PlotData/PlotData.py:1202
 msgid "1st plane"
 msgstr "Mặt phẳng thứ nhất"
 
-#: PlotData/PlotData.py:948 PlotData/PlotData.py:1017 PlotData/PlotData.py:1202
+#: PlotData/PlotData.py:948 PlotData/PlotData.py:1017 PlotData/PlotData.py:1203
 msgid "2nd plane"
 msgstr "Mặt phẳng thứ 2"
 
-#: PlotData/PlotData.py:1208
+#: PlotData/PlotData.py:1209
 msgid "Dynamic balancing 2nd plane"
 msgstr "Cân bằng động 2 mặt phẳng"
 
-#: PlotData/PlotData.py:1225
+#: PlotData/PlotData.py:1226
 msgid "STFT Magnitude-"
 msgstr "STFT Cường độ -"
 
-#: PlotData/PlotData.py:1321 PlotData/PlotData.py:1376
+#: PlotData/PlotData.py:1322 PlotData/PlotData.py:1377
 msgid "Amplitude-g"
 msgstr "Biên độ(g)"
 
-#: PlotData/PlotData.py:1331 PlotData/PlotData.py:1386
-#: PlotData/PlotData.py:1406
+#: PlotData/PlotData.py:1332 PlotData/PlotData.py:1387
+#: PlotData/PlotData.py:1407
 msgid "Phase-degree"
 msgstr "Pha(độ)"
-
-#~ msgid "Filter Type"
-#~ msgstr "Kiểu bộ lọc"
