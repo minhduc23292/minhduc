@@ -1266,6 +1266,8 @@ class ConfigFrame(Tk.Frame):
         super().__init__(parent.configFrame, name="cai dat")
         self.parent = parent
         self.origin_config=parent.origin_config
+        imageAddress = ImageAdrr()
+        self.smallSePhoto = imageAddress.smallSettingPhoto
         self.style = ttk.Style()
         self.style.configure('config.TLabel', font=('Chakra Petch', '13'))
         self.style.configure('config.TLabelframe', font=('Chakra Petch', '14'), bg='white', borderwidth=1)
@@ -1367,7 +1369,7 @@ class ConfigFrame(Tk.Frame):
         port1PosCombo['value']=('NONE')
         port1PosCombo.grid(column=2, row=1, padx=0, pady=5, sticky='e')
 
-        port1Button=ttk.Button(sensorFrame, text='...', style="normal.TButton", \
+        port1Button=ttk.Button(sensorFrame, style="normal.TButton", image=self.smallSePhoto,\
                                command=lambda: self.creat_sensor_position_page(self.origin_config.waveform_config_struct))
         port1Button.grid(column=3, row=1, padx=0, pady=5, sticky='e')
 #ss2

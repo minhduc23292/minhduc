@@ -1,219 +1,279 @@
-"""A demo script to showcase the Sun Valley ttk theme."""
+# from distutils.core import setup
+# from distutils.extension import Extension
 
-import tkinter
-from tkinter import ttk
-
-import sv_ttk
-
-
-class CheckBoxDemo(ttk.LabelFrame):
-    def __init__(self, parent):
-        super().__init__(parent, text="Checkbuttons", padding=15)
-
-        self.var_1 = tkinter.BooleanVar(self, False)
-        self.var_2 = tkinter.BooleanVar(self, True)
-
-        self.add_widgets()
-
-    def add_widgets(self):
-        self.checkbox_1 = ttk.Checkbutton(self, text="Europe")
-        self.checkbox_1.grid(row=0, column=0, pady=(0, 10), sticky="w")
-
-        self.checkbox_2 = ttk.Checkbutton(self, text="France", variable=self.var_1)
-        self.checkbox_2.grid(row=1, column=0, padx=(30, 0), pady=(5, 10), sticky="w")
-
-        self.checkbox_3 = ttk.Checkbutton(self, text="Germany", variable=self.var_2)
-        self.checkbox_3.grid(row=2, column=0, padx=(30, 0), pady=10, sticky="w")
-
-        self.checkbox_4 = ttk.Checkbutton(self, text="Fooland")
-        self.checkbox_4.state({"disabled", "!alternate"})
-        self.checkbox_4.grid(row=3, column=0, padx=(30, 0), pady=(10, 0), sticky="w")
+# setup(
+#   name='otani_analyzer',
+#   ext_modules=[Extension("ad7609BTZ", ["ad7609BTZ.c"], libraries=['wiringPi'])],
+# )
 
 
-class RadioButtonDemo(ttk.LabelFrame):
-    def __init__(self, parent):
-        super().__init__(parent, text="Radiobuttons", padding=15)
+# import ctypes
+# from numpy.ctypeslib import ndpointer
+# ad7609 = ctypes.CDLL('/home/pi/otani_analyzer/ad7609BTZ.so')
+# if __name__=="__main__":
+#     ad7609.init()
+#     n=6
+#     data_length = 1000
+#     total_length=data_length * n + 1
+#     sample_rate=20000 #max=35000
+#     ad7609.ADCread.restype = ctypes.POINTER(ctypes.c_float * total_length)
+#     ad7609.ADCread.argtypes = [ctypes.c_int, ctypes.c_int, ctypes.c_int]
+#     ad7609.freeme.argtypes = ctypes.c_void_p,
+#     ad7609.freeme.restype = None
+#     kq=ad7609.ADCread(data_length, sample_rate, n )
+#     ttl=[i for i in kq.contents] # ket qua tra ve
+#     print("len ttl",len(ttl))
+#     ad7609.freeme(kq) # Xoa con trỏ
+#     actual_sample_rate= ttl[-1] # phần tử cuối cùng là tốc độ lấy mẫu thực
+#     print("sample rate:", actual_sample_rate)
+#     chanelm=[[],[],[],[],[],[]]
 
-        self.var = tkinter.IntVar()
+#     if n==6:
+#         for j in range(len(ttl)-1):
+#             if   j%6==0:
+#                 chanelm[0].append(ttl[j])
+#             elif j%6==1:
+#                 chanelm[1].append(ttl[j])
+#             elif j%6==2:
+#                 chanelm[2].append(ttl[j])
+#             elif j%6==3:
+#                 chanelm[3].append(ttl[j])
+#             elif j%6==4:
+#                 chanelm[4].append(ttl[j])
+#             elif j%6==5:
+#                 chanelm[5].append(ttl[j])
+#             else:
+#                 pass
 
-        self.add_widgets()
+#         print(chanelm[0][0:7])
+#         print(chanelm[1][0:7])
+#         print(chanelm[2][0:7])
+#         print(chanelm[3][0:7])
+#         print(chanelm[4][0:7])
+#         print(chanelm[5][0:7])
+#     if n==4:
+#         for j in range(len(ttl)-1):
+#             if   j%4==0:
+#                 chanelm[0].append(ttl[j])
+#             elif j%4==1:
+#                 chanelm[1].append(ttl[j])
+#             elif j%4==2:
+#                 chanelm[2].append(ttl[j])
+#             elif j%4==3:
+#                 chanelm[3].append(ttl[j])
+#             else:
+#                 pass
 
-    def add_widgets(self):
-        self.radio_1 = ttk.Radiobutton(self, text="Dog", variable=self.var, value=0)
-        self.radio_1.grid(row=0, column=0, pady=(0, 10), sticky="w")
+#         print(chanelm[0][0:7])
+#         print(chanelm[1][0:7])
+#         print(chanelm[2][0:7])
+#         print(chanelm[3][0:7])
 
-        self.radio_1 = ttk.Radiobutton(self, text="Cat", variable=self.var, value=1)
-        self.radio_1.grid(row=1, column=0, pady=10, sticky="w")
+# ad7609.turn_on_24v.restype=None
+# ad7609.turn_on_24v.argtypes=None
 
-        self.radio_1 = ttk.Radiobutton(self, text="Neither", state="disabled")
-        self.radio_1.grid(row=2, column=0, pady=(10, 0), sticky="w")
+##### Code mau so 2, su dung code tren mang#########
+# import ad7768
 
+# adc_pins = {'standby':6, 'convsta':9, 'reset':10, 'busy':24, '1stData':25, "cs": 23, "clock":11, "DoutA":8, "DoutB":7, "range":5, "os0":13, "os1":19, "os2":26, "sen1_en":21 }
+# adc=ad7768.AD7606_AB(10, adc_pins,returnRaw=False)
+# adc.ADCreset()
+# kq=adc.ADCread()
+# print(kq)
 
-class InputsAndButtonsDemo(ttk.Frame):
-    def __init__(self, parent):
-        super().__init__(parent, style="Card.TFrame", padding=15)
+# import RPi.GPIO as GPIO
+# from time import sleep
+# GPIO.setmode(GPIO.BCM)
+# GPIO.setwarnings(False)
+# GPIO.setup(7,GPIO.OUT)
+# GPIO.setup(8,GPIO.OUT)
+# GPIO.setup(11,GPIO.OUT)
+# for i in range(100):
+#     GPIO.output(7, 1)
+#     GPIO.output(11, 1)
+#     sleep(0.1)
+#     GPIO.output(7, 0)
+#     GPIO.output(11, 0)
+#     sleep(0.1)
 
-        self.columnconfigure(0, weight=1)
-
-        self.add_widgets()
-
-    def add_widgets(self):
-        self.entry = ttk.Entry(self)
-        self.entry.insert(0, "Type here")
-        self.entry.grid(row=0, column=0, padx=5, pady=(0, 10), sticky="ew")
-
-        self.spinbox = ttk.Spinbox(self, from_=0, to=100, increment=0.01)
-        self.spinbox.insert(0, "3.14")
-        self.spinbox.grid(row=1, column=0, padx=5, pady=10, sticky="ew")
-
-        combo_list = ["Lorem", "Ipsum", "Dolor"]
-
-        self.combobox = ttk.Combobox(self, values=combo_list)
-        self.combobox.current(0)
-        self.combobox.grid(row=2, column=0, padx=5, pady=10, sticky="ew")
-
-        self.readonly_combo = ttk.Combobox(self, state="readonly", values=combo_list)
-        self.readonly_combo.current(1)
-        self.readonly_combo.grid(row=3, column=0, padx=5, pady=10, sticky="ew")
-
-        self.menu = tkinter.Menu(self)
-        for n in range(1, 5):
-            self.menu.add_command(label=f"Menu item {n}", background='#FFFFFF')
-
-        self.menubutton = ttk.Menubutton(self, text="Dropdown", menu=self.menu)
-        self.menubutton.grid(row=4, column=0, padx=5, pady=10, sticky="nsew")
-
-        self.separator = ttk.Separator(self)
-        self.separator.grid(row=5, column=0, pady=10, sticky="ew")
-
-        self.button = ttk.Button(self, text="Click me!")
-        self.button.grid(row=6, column=0, padx=5, pady=10, sticky="ew")
-
-        self.accentbutton = ttk.Button(self, text=" I love it!", style="Accent.TButton")
-        self.accentbutton.grid(row=7, column=0, padx=5, pady=10, sticky="ew")
-
-        self.togglebutton = ttk.Checkbutton(self, text="Toggle me!", style="Toggle.TButton")
-        self.togglebutton.grid(row=8, column=0, padx=5, pady=10, sticky="nsew")
-
-
-class PanedDemo(ttk.PanedWindow):
-    def __init__(self, parent):
-        super().__init__(parent)
-
-        self.pane_1 = ttk.Frame(self, padding=(0, 0, 0, 10))
-        self.pane_2 = ttk.Frame(self, padding=(0, 10, 5, 0))
-        self.add(self.pane_1, weight=1)
-        self.add(self.pane_2, weight=3)
-
-        self.var = tkinter.IntVar(self, 47)
-
-        self.add_widgets()
-
-    def add_widgets(self):
-        self.scrollbar = ttk.Scrollbar(self.pane_1)
-        self.scrollbar.pack(side="right", fill="y")
-
-        self.tree = ttk.Treeview(
-            self.pane_1,
-            columns=(1, 2),
-            height=11,
-            selectmode="browse",
-            show=("tree",),
-            yscrollcommand=self.scrollbar.set,
-        )
-        self.scrollbar.config(command=self.tree.yview)
-
-        self.tree.pack(expand=True, fill="both")
-
-        self.tree.column("#0", anchor="w", width=140)
-        self.tree.column(1, anchor="w", width=100)
-        self.tree.column(2, anchor="w", width=100)
-
-        tree_data = [
-            *[("", x, "Foo", ("Bar", "Baz")) for x in range(1, 7)],
-            (6, 7, "Kali", ("2013", "Rolling")),
-            (6, 8, "Ubuntu", ("2004", "Fixed")),
-            (8, 9, "Mint", ("2006", "Fixed")),
-            (8, 10, "Zorin", ("2008", "Fixed")),
-            (8, 11, "Pop!_OS", ("2017", "Fixed")),
-            (6, 12, "MX", ("2014", "Semi-rolling")),
-            (6, 13, "Devuan", ("2016", "Semi-rolling")),
-            ("", 14, "Arch", ("2002", "Rolling, btw")),
-            (14, 15, "Manjaro", ("2011", "Rolling")),
-            (14, 16, "Arco", ("2018", "Rolling")),
-            (14, 17, "EndeavourOS", ("2019", "Rolling")),
-            *[("", x, "Foo", ("Bar", "Baz")) for x in range(18, 26)],
-        ]
-
-        for item in tree_data:
-            parent, iid, text, values = item
-            print("parent=",parent)
-            print("iid=", iid)
-            print("text=", text)
-            print("value=", values)
-            self.tree.insert(parent=parent, index="end", iid=iid, text=text, values=values) 
-            # chèn vào dòng iid, tiêu đề dòng là text, giá trị các cột là value
-
-            if not parent or iid in {8, 21}:
-                self.tree.item(iid, open=True)
-
-        self.tree.selection_set(14)
-        self.tree.see(7)
-
-        self.notebook = ttk.Notebook(self.pane_2)
-        self.notebook.pack(expand=True, fill="both")
-
-        for n in range(1, 4):
-            setattr(self, f"tab_{n}", ttk.Frame(self.notebook))
-            self.notebook.add(getattr(self, f"tab_{n}"), text=f"Tab \n{n}")
-
-        for index in range(2):
-            self.tab_1.columnconfigure(index, weight=1)
-            self.tab_1.rowconfigure(index, weight=1)
-
-        self.scale = ttk.Scale(
-            self.tab_1,
-            from_=100,
-            to=0,
-            variable=self.var,
-        )
-        self.scale.grid(row=0, column=0, padx=(20, 10), pady=(20, 10), sticky="ew")
-
-        self.progress = ttk.Progressbar(self.tab_1, value=0, variable=self.var, mode="determinate")
-        self.progress.grid(row=0, column=1, padx=(10, 20), pady=(20, 10), sticky="ew")
-
-        self.switch = ttk.Checkbutton(
-            self.tab_1, text="Dark theme", style="Switch.TCheckbutton", command=sv_ttk.toggle_theme
-        )
-        self.switch.grid(row=1, column=0, columnspan=2, pady=10)
+# import smbus
 
 
-class App(ttk.Frame):
-    def __init__(self, parent):
-        super().__init__(parent, padding=15)
+# mcuBus=smbus.SMBus(1)
+# adr=0x08
+# character='d'
+# mcuBus.write_byte(adr, ord(character))
 
-        for index in range(2):
-            self.columnconfigure(index, weight=1)
-            self.rowconfigure(index, weight=1)
+# import sys
+# import time
+# import datetime
+# import random
+# from ds3231.ds3231B import *
+# filename = time.strftime("%Y-%m-%d%H:%M:%SRTCTest") + ".txt"
+# starttime = datetime.utcnow()
 
-        CheckBoxDemo(self).grid(row=0, column=0, padx=(0, 10), pady=(0, 20), sticky="nsew")
-        RadioButtonDemo(self).grid(row=1, column=0, padx=(0, 10), sticky="nsew")
-        InputsAndButtonsDemo(self).grid(
-            row=0, column=1, rowspan=2, padx=10, pady=(10, 0), sticky="nsew"
-        )
-        PanedDemo(self).grid(row=0, column=3, rowspan=2, padx=10, pady=(10, 0), sticky="nsew")
+# ds3231 = DS3231(1, 0x68)
+# ds3231.write_now()
 
+# while True:
+# 	currenttime = datetime.utcnow()
+# 	deltatime = currenttime - starttime
+# 	print("Raspberry Pi=\t" + time.strftime("%Y-%m-%d %H:%M:%S"))
+# 	print("DS3231=\t\t%s" % ds3231.read_datetime())
+# 	print("DS3231 Temp=", ds3231.getTemp())
+# 	time.sleep(5.0)
 
-def main():
-    root = tkinter.Tk()
-    root.title("")
+# from bq25896.bq25896 import BQ25896
 
-    sv_ttk.set_theme("light")
+# bqbus=BQ25896(1, 0x6b)
+# data=bqbus._write(0x02, 0x91)
+# data=bqbus._read(0x05)
+# print(data)
+# import time
+from bateryMonitor.powerManager import BQ27510
 
-    App(root).pack(expand=True, fill="both")
+batery = BQ27510()
+# a=batery.ItEnable()
+# print("a",a)
+# batery.set_capacity(9500)
+# batery.set_tempurature(2982)
+# batery.set_opconfigD(9000, 0x53, 0x02)
+# time.sleep(1)
+# b=batery.readExtendedData(0x53, 2, 2)
+# print("b=", b)
+# a=batery.unseal()
+# batery.fullAcess()
+# batery.reset()
+# time.sleep(1)
+# c=batery.batInsert()
+# print("c=", c)
+# batery.calibMode()
+d = batery.sealed()
+print("d=", d)
+print("seal=", "Sealed" if d > 0 else "Unseal")
+data0 = batery.bq27510_battery_voltage()
+data1 = batery.bq27510_battery_current()
+data2 = batery.bq27510_battery_temperature()
+data3 = batery.bq27510_battery_remaining_capacity()
+print([data0, data1, int(data2 * 0.1 - 273), data3])
 
-    root.mainloop()
+# import numpy as np
+# from scipy.signal import kaiserord, lfilter, firwin, freqz, firwin2
+# import matplotlib.pyplot as plt
 
+# # Nyquist rate.
+# nyq_rate = 20000 / 2
 
-if __name__ == "__main__":
-    main()
+# # Width of the roll-off region.
+# width = 500 / nyq_rate
+
+# # Attenuation in the stop band.
+# ripple_db = 12.0
+
+# num_of_taps, beta = kaiserord(ripple_db, width)
+# if num_of_taps % 2 == 0:
+#     num_of_taps = num_of_taps + 1
+
+# # Cut-off frequency.
+# cutoff_hz = 5000.0
+
+# # Estimate the filter coefficients.
+# taps = firwin(num_of_taps, cutoff_hz/nyq_rate, window=('kaiser', beta), pass_zero=False)
+
+# w, h = freqz(taps, worN=4000)
+
+# plt.plot((w/np.pi)*nyq_rate, 20*np.log10(np.abs(h)), linewidth=2)
+
+# plt.axvline(cutoff_hz + width*nyq_rate, linestyle='--', linewidth=1, color='g')
+# plt.axvline(cutoff_hz - width*nyq_rate, linestyle='--', linewidth=1, color='g')
+# plt.axhline(-ripple_db, linestyle='--', linewidth=1, color='c')
+# delta = 10**(-ripple_db/20)
+# plt.axhline(20*np.log10(1 + delta), linestyle='--', linewidth=1, color='r')
+# plt.axhline(20*np.log10(1 - delta), linestyle='--', linewidth=1, color='r')
+
+# plt.xlabel('Frequency (Hz)')
+# plt.ylabel('Gain (dB)')
+# plt.title('Frequency Response')
+# plt.ylim(-40, 5)
+# plt.grid(True)
+# plt.show()
+# from scipy.signal import firwin, remez, kaiser_atten, kaiser_beta
+
+# # # Several flavors of bandpass FIR filters.
+
+# def bandpass_firwin(ntaps, lowcut, highcut, fs, window='hamming'):
+#     nyq = 0.5 * fs
+#     taps = firwin(ntaps, [lowcut, highcut], nyq=nyq, pass_zero=False,
+#                   window=window, scale=False)
+#     return taps
+
+# def lowpass_firwin(ntaps, lowcut, fs, window='hamming'):
+#     nyq = 0.5 * fs
+#     taps = firwin(ntaps, lowcut, nyq=nyq, pass_zero="lowpass",
+#                   window=window, scale=False)
+#     return taps
+
+# def highpass_firwin(ntaps, highcut, fs, window='hamming'):
+#     nyq = 0.5 * fs
+#     taps = firwin(ntaps, highcut, nyq=nyq, pass_zero="highpass",
+#                   window=window, scale=False)
+#     return taps
+
+# def rmsValue(arr):
+#     squareArr=np.square(arr)
+#     meanOfSquareArr=np.mean(squareArr)
+#     rms=np.sqrt(meanOfSquareArr)
+#     # rms=np.sqrt(np.mean(np.square(arr)))
+#     return rms
+
+# if __name__ == "__main__":
+#     import numpy as np
+#     import matplotlib.pyplot as plt
+#     from scipy import signal
+#     from scipy.signal import freqz, lfilter
+#     from scipy import fftpack
+#     plt.figure(1, figsize=(12, 9))
+#     plt.clf()
+#     # Sample rate and desired cutoff frequencies (in Hz).
+#     fs = 5000
+#     lowcut = 1000
+#     highcut = 1000
+#     N=10000
+#     mt = np.linspace(0, N/fs, N, endpoint=False)
+#     ch1=10*np.cos(2 * np.pi * 200 * mt+np.pi/2)  + 2*np.cos(2 * np.pi * 1500 * mt)
+#     ntaps = 129
+#     if not ntaps % 2:
+#         ntaps += 1
+#     # taps_hamming = bandpass_firwin(ntaps, lowcut, highcut, fs=fs)
+#     taps_hamming = lowpass_firwin(ntaps, lowcut, fs=fs)
+#     # taps_hamming = highpass_firwin(ntaps, lowcut, fs=fs)
+#     w, h = freqz(taps_hamming, 1, worN=2000)
+#     plt.subplot(221)
+#     plt.plot((fs * 0.5 / np.pi) * w, abs(h), label="Hamming window")
+#     plt.title(r'Freq response')
+#     plt.grid(True)
+#     plt.subplot(222)
+#     h_Phase = np.unwrap(np.arctan2(np.imag(h),np.real(h)))
+#     plt.plot(fs * 0.5 / np.pi * w, h_Phase)
+#     plt.title(r'Phase response')
+
+#     filtered_signal= lfilter(taps_hamming, 1.0, ch1)
+#     T=1.0/fs
+#     w = signal.hann(N, sym=False)
+#     yf = fftpack.fft(filtered_signal * w) * (4 / N)
+#     yf1 = np.abs(yf[:(int(N // 2))])
+#     xf=fftpack.fftfreq(N, T)[0:int(N//2)]
+#     print("root rms:", rmsValue(ch1))
+#     print("filteredRms:", rmsValue(filtered_signal[ntaps:]))
+#     plt.subplot(223)
+#     plt.plot(xf, yf1, label="fft")
+#     plt.title("FFT")
+#     plt.grid(True)
+
+#     plt.subplot(224)
+#     plt.plot(mt[ntaps:ntaps+200], filtered_signal[ntaps:ntaps+200], label="filtered Signal")
+#     plt.plot(mt[0:200], ch1[0:200], color='red', label="root Signal")   
+#     plt.title("Filtered_Signal")
+#     plt.grid(True)
+#     # plt.xlim(0, 0.2)
+#     plt.show()

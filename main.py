@@ -83,7 +83,7 @@ class TotalConfig(object):
                     "grade":6.3,
                     "radius":1000,
                     "trial_remove":True,
-                    "origin":"LASER",
+                    "origin":"TRIAL MASS",
                     "num_planes":'One',
                     "num_sensors":'One',
                     "num_blades" :4,

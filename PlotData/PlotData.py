@@ -1100,32 +1100,58 @@ class PLT(FigureCanvasTkAgg):
                                                     struct_balancing["run"][i]["amplitude"]), color=color[i])
             self.draw()
 
-            if len(struct_balancing["run"]) > 1:
+            # if len(struct_balancing["run"]) > 1:
+            # [T_amp, T_phase, corr_weight, corr_angle, inf_coe_weight, inf_coe_angle] = calculate_corection(
+            #     struct_balancing["run"][0]["phase"], \
+            #     struct_balancing["run"][0]["amplitude"],\
+            #     struct_balancing["run"][1]["phase"],\
+            #     struct_balancing["run"][1]["amplitude"], \
+            #     struct_balancing["angle1"] * np.pi / 180, \
+            #     struct_balancing["trial_mass1"],
+            #     trial_mass_remove=struct_balancing["trial_remove"])
+            # ax_51.plot([0, T_phase], [0, T_amp], color[4])
+            # ax_51.text(T_phase, T_amp, '(%s/ %0.2f; %0.2f)' % (header[2], T_phase * 180 / 3.14, T_amp), color=color[4])
+            # self.draw()
+            if len(struct_balancing["run"]) == 2:
                 [T_amp, T_phase, corr_weight, corr_angle, inf_coe_weight, inf_coe_angle] = calculate_corection(
-                    struct_balancing["run"][0]["phase"], \
-                    struct_balancing["run"][0]["amplitude"],\
-                    struct_balancing["run"][1]["phase"],\
-                    struct_balancing["run"][1]["amplitude"], \
-                    struct_balancing["angle1"] * np.pi / 180, \
-                    struct_balancing["trial_mass1"],
-                    trial_mass_remove=struct_balancing["trial_remove"])
-                # ax_51.plot([0, T_phase], [0, T_amp], color[4])
-                # ax_51.text(T_phase, T_amp, '(%s/ %0.2f; %0.2f)' % (header[2], T_phase * 180 / 3.14, T_amp), color=color[4])
-                # self.draw()
-                if len(struct_balancing["run"]) == 2:
-                    return [corr_weight, (corr_angle % (2 * np.pi)) * 180 / np.pi, "Corr1"]
-                elif len(struct_balancing["run"]) == 3:
-                    trim_corr_weight = struct_balancing["run"][2]["amplitude"] / inf_coe_weight
-                    trim_corr_angle = ((struct_balancing["run"][2]["phase"] + np.pi - inf_coe_angle) % (2 * np.pi)) * 180 / np.pi
-                    return [trim_corr_weight, trim_corr_angle, "Trim1"]
-                elif len(struct_balancing["run"]) == 4:
-                    trim_corr_weight = struct_balancing["run"][3]["amplitude"] / inf_coe_weight
-                    trim_corr_angle = ((struct_balancing["run"][3]["phase"] + np.pi - inf_coe_angle) % (2 * np.pi)) * 180 / np.pi
-                    return [trim_corr_weight, trim_corr_angle, "Trim2"]
-                else:
-                    return [-1, -1, "No"]
+                struct_balancing["run"][0]["phase"], \
+                struct_balancing["run"][0]["amplitude"],\
+                struct_balancing["run"][1]["phase"],\
+                struct_balancing["run"][1]["amplitude"], \
+                struct_balancing["angle1"] * np.pi / 180, \
+                struct_balancing["trial_mass1"],
+                trial_mass_remove=struct_balancing["trial_remove"])
+                return [corr_weight, (corr_angle % (2 * np.pi)) * 180 / np.pi, "Corr1"]
+            elif len(struct_balancing["run"]) == 3:
+                [T_amp, T_phase, corr_weight, corr_angle, inf_coe_weight, inf_coe_angle] = calculate_corection(
+                struct_balancing["run"][0]["phase"], \
+                struct_balancing["run"][0]["amplitude"],\
+                struct_balancing["run"][2]["phase"],\
+                struct_balancing["run"][2]["amplitude"], \
+                struct_balancing["trim_run"][0][1] * np.pi / 180, \
+                struct_balancing["trim_run"][0][0],
+                trial_mass_remove=struct_balancing["trial_remove"])
+                return [corr_weight, (corr_angle % (2 * np.pi)) * 180 / np.pi, "Trim1"]
+                # trim_corr_weight = struct_balancing["run"][2]["amplitude"] / inf_coe_weight
+                # trim_corr_angle = ((struct_balancing["run"][2]["phase"] + np.pi - inf_coe_angle) % (2 * np.pi)) * 180 / np.pi
+                # return [trim_corr_weight, trim_corr_angle, "Trim1"]
+            elif len(struct_balancing["run"]) == 4:
+                [T_amp, T_phase, corr_weight, corr_angle, inf_coe_weight, inf_coe_angle] = calculate_corection(
+                struct_balancing["run"][2]["phase"], \
+                struct_balancing["run"][2]["amplitude"],\
+                struct_balancing["run"][3]["phase"],\
+                struct_balancing["run"][3]["amplitude"], \
+                struct_balancing["trim_run"][1][1] * np.pi / 180, \
+                struct_balancing["trim_run"][1][0],
+                trial_mass_remove=struct_balancing["trial_remove"])
+                return [corr_weight, (corr_angle % (2 * np.pi)) * 180 / np.pi, "Trim2"]
+                # trim_corr_weight = struct_balancing["run"][3]["amplitude"] / inf_coe_weight
+                # trim_corr_angle = ((struct_balancing["run"][3]["phase"] + np.pi - inf_coe_angle) % (2 * np.pi)) * 180 / np.pi
+                # return [trim_corr_weight, trim_corr_angle, "Trim2"]
             else:
                 return [-1, -1, "No"]
+            # else:
+            #     return [-1, -1, "No"]
 
     def balancing_array_plotter(self, phase_left, phase_right, amplitude_left, amplitude_right, trial_mass1,
                                 trial_mass2):

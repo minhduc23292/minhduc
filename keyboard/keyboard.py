@@ -5,13 +5,24 @@ from i18n import _
 kb_flag=0
 widget=None
 class KeyBoard(Tk.Toplevel):
+    counter = 0
     def __init__(self, currentWidget):
+        KeyBoard.counter += 1
         super().__init__(width=1024, height=600, bg='white')
         self.geometry("1024x600")
         self.attributes('-fullscreen', True)
-        self.createPad(currentWidget)
+        if KeyBoard.counter<=1:
+            self.createPad(currentWidget)
+            KeyBoard.counter=1
+        else:
+            try:
+                KeyBoard.counter=1
+                self.destroy()
+            except:
+                pass
         self.keystyle = ttk.Style()
         self.keystyle.configure('key.TButton', font=('Chakra Petch', 12), justify=Tk.CENTER)
+
 
     def createPad(self, currentWidget):
         global widget, kb_flag
@@ -282,6 +293,7 @@ class KeyBoard(Tk.Toplevel):
     def close(self, currentWidget):
         self.update_content(currentWidget)
         try:
+            KeyBoard.counter -= 1
             self.destroy()
         except:
             pass

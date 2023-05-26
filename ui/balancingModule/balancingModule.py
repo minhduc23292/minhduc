@@ -135,7 +135,7 @@ class Balancing(Tk.Frame):
         self.infoLabel1=ttk.Label(self.infoFrame, text=_("Information"), style="red.TLabel")
         self.infoLabel1.grid(column=0, row=0, padx=0, pady=5, sticky='w')
 
-        self.infoLabel2 = ttk.Label(self.infoFrame, text=_("Click RUN to start."), style="normal.TLabel", width=42)
+        self.infoLabel2 = ttk.Label(self.infoFrame, text=_("Click RUN to start."), style="normal.TLabel", width=50)
         self.infoLabel2.grid(column=0, row=1, padx=0, pady=5, sticky='w')
 
     def on_analysis_button_clicked(self):
@@ -327,7 +327,7 @@ class BalancingConfig(Tk.Frame):
         balancingSpeedEntry['validatecommand'] = (balancingSpeedEntry.register(testVal), '%P', '%d')
         balancingSpeedEntry.grid(column=3, row=5, padx=0, pady=5, sticky="w")
 
-        removeLabel = ttk.Label(BalancingFrame, text=_('Trial mass remove'), style='balancing.TLabel')
+        removeLabel = ttk.Label(BalancingFrame, text=_('Trial mass removable'), style='balancing.TLabel')
         removeLabel.grid(column=2, row=6, padx=(10, 0), pady=5, sticky="w")
 
         self.removeCombo=ttk.Combobox(BalancingFrame, width=8, textvariable=self.balParam15, state="readonly", font=('Chakra Petch', 13))
@@ -337,7 +337,7 @@ class BalancingConfig(Tk.Frame):
         trialCalculate = ttk.LabelFrame(self, text=_('Trial weight calculation'), style='balancing.TLabelframe')
         trialCalculate.pack(side=Tk.LEFT, fill=Tk.BOTH, expand=1)
 
-        rotomass = ttk.Label(trialCalculate, text=_('Roto mass(kg)'), style='balancing.TLabel')
+        rotomass = ttk.Label(trialCalculate, text=_('Rotor mass(kg)'), style='balancing.TLabel')
         rotomass.grid(column=0, row=0, padx=(10, 0), pady=5, sticky="w")
 
         rotomassEntry = ttk.Entry(trialCalculate, width=11, textvariable=self.balParam23, font=('Chakra Petch', 13),
@@ -454,7 +454,7 @@ class BalancingConfig(Tk.Frame):
                 balancing_config_struct["trial_mass1"]=float(tempMass1)
                 balancing_config_struct["trial_mass2"]=float(tempMass2)
                 balancing_config_struct["angle1"] = int(tempAngle1)
-                balancing_config_struct["balancing_speed"] = tempBalancingSpeed
+                balancing_config_struct["balancing_speed"] = int(tempBalancingSpeed)
                 self.infoLabel.config(text=_("OK"))
             
         else:
@@ -468,7 +468,7 @@ class BalancingConfig(Tk.Frame):
                 balancing_config_struct["trial_mass2"]=float(tempMass2)
                 balancing_config_struct["angle1"] = int(tempAngle1)
                 balancing_config_struct["angle2"] = int(tempAngle2)
-                balancing_config_struct["balancing_speed"] = tempBalancingSpeed
+                balancing_config_struct["balancing_speed"] = int(tempBalancingSpeed)
                 self.infoLabel.config(text=_("OK")) 
         try:
                 balancing_config_struct["operation_speed"] = int(self.balParam25.get())
@@ -490,6 +490,7 @@ class BalancingConfig(Tk.Frame):
                 self.balParam5.set(trialWeight)
                 self.balParam6.set(trialWeight)
                 self.infoLabel.config(text=_("OK")) 
+                self.balancingApplyButton.configure(state='normal')
             except:
                 self.infoLabel.config(text=_("Data errors"))
 
@@ -1033,11 +1034,10 @@ class SideButtonFrame(Tk.Frame):
         while click_stop_flag:
             chanelv=[[],[],[],[]]
             chanelm=[[],[],[],[],[]]
-            chaneln=[]
             numADCChanel=6
             
             balancing_speed=self.balancing_config_struct["balancing_speed"]/60
-            data_length = self.balancing_config_struct["num_fft_line"] + 2
+            data_length = self.balancing_config_struct["num_fft_line"]
             total_length=numADCChanel*data_length+1
             ttl=[]
             with lock:
@@ -1066,20 +1066,15 @@ class SideButtonFrame(Tk.Frame):
                     chanelm[4].append(ttl[j])
                 else:
                     pass
-            for i in range(numADCChanel-1):
-                chaneln.append(np.array(chanelm[i][2:]))
 
-            for i in range(3):
-                if self.balancing_config_struct["sensor_type"]=='Acceleration':
-                    chanelv[i]=chaneln[i][2:]*self.accConvertFactor #g
-                    chanelv[i]-=np.mean(chanelv[i])
-                    unit='g'
-                elif self.balancing_config_struct["sensor_type"]=='Velocity':
-                    chanelv[i]=chaneln[i][2:]*self.velConvertFactor  # mm/s
-                    chanelv[i]-=np.mean(chanelv[i])
-                    unit='mm/s'
-                else:
-                    pass
+            if self.balancing_config_struct["sensor_type"]=='Acceleration':
+                for i in range(3):
+                    chanelv[i]=np.array(chanelm[i])*self.accConvertFactor #g
+            elif self.balancing_config_struct["sensor_type"]=='Velocity':
+                for i in range(3):
+                    chanelv[i]=np.array(chanelm[i])*self.velConvertFactor  # mm/s
+            else:
+                pass
 
             if self.balancing_config_struct["sensor1"]=='Port1':
                 samplePlaneData=chanelv[0]
@@ -1089,12 +1084,24 @@ class SideButtonFrame(Tk.Frame):
                 samplePlaneData=chanelv[2]
             else:
                 pass
-            laserSample=chaneln[4][2:]/2
+            laserSample=np.array(chanelm[4])/2
+
+            if self.balancing_config_struct["sensor_type"]=='Acceleration':
+                _samplePlaneData = acc2vel(samplePlaneData, self.balancing_config_struct["sample_rate"])
+                _laserSample=filter_data(laserSample, "BANDPASS", dfc._VIEW_HIGHPASS_FROM, dfc._RMS_LOWPASS_TO, \
+                                         self.balancing_config_struct["sample_rate"], window="Hanning")[:-1]
+
+            elif self.balancing_config_struct["sensor_type"]=='Velocity':
+                _samplePlaneData = filter_data(samplePlaneData, "BANDPASS", dfc._VIEW_HIGHPASS_FROM, dfc._RMS_LOWPASS_TO, 
+                                            self.balancing_config_struct["sample_rate"], window="Hanning")
+                _laserSample = filter_data(laserSample, "BANDPASS", dfc._VIEW_HIGHPASS_FROM, dfc._RMS_LOWPASS_TO, 
+                                            self.balancing_config_struct["sample_rate"], window="Hanning")
+
+            # _samplePlaneData = filter_data(samplePlaneData, "LOWPASS", dfc._RMS_HIGHPASS_FROM, dfc._RMS_LOWPASS_TO, 
+            #                                 self.balancing_config_struct["sample_rate"], window="Hanning")
+            # _laserSample = filter_data(laserSample, "LOWPASS", dfc._RMS_HIGHPASS_FROM, dfc._RMS_LOWPASS_TO, 
+            #                                 self.balancing_config_struct["sample_rate"], window="Hanning")
             
-            _samplePlaneData = filter_data(samplePlaneData, "LOWPASS", dfc._RMS_HIGHPASS_FROM, dfc._RMS_LOWPASS_TO, 
-                                            self.balancing_config_struct["sample_rate"], window="Hanning")
-            _laserSample = filter_data(laserSample, "LOWPASS", dfc._RMS_HIGHPASS_FROM, dfc._RMS_LOWPASS_TO, 
-                                            self.balancing_config_struct["sample_rate"], window="Hanning")
             _laserSample=fresh_laser_pulse(_laserSample)
             _amplitude = rmsValue(_samplePlaneData)
             _phase = phase_shift_calculate(_laserSample, _samplePlaneData, self.balancing_config_struct["sample_rate"], balancing_speed)%(2*np.pi)
@@ -1117,12 +1124,10 @@ class SideButtonFrame(Tk.Frame):
                 
             else:
                 result=Pd.PLT.plot_balancing(self.canvas, self.balancing_config_struct, 1)
-                if self.balancing_config_struct["origin"]=="LASER":
-                    correctionMass=result[0]
-                    correctionAngle=result[1]
-                else:
-                    correctionMass=result[0]
-                    correctionAngle=result[1]-self.balancing_config_struct["angle1"]
+
+                correctionMass=result[0]
+                correctionAngle=result[1]
+
                 if result[-1]=="Corr1":
                     self.infoLabel.config(text=f"Correction Weight= {str(correctionMass)[:4]}g | Correction Angel= {str(int(correctionAngle))}°")
                     self.balancing_config_struct["trim_run"].append(result)
@@ -1141,10 +1146,9 @@ class SideButtonFrame(Tk.Frame):
             
             chanelv=[[],[],[],[]]
             chanelm=[[],[],[],[],[]]
-            chaneln=[]
             numADCChanel=6
             balancing_speed=self.balancing_config_struct["balancing_speed"]/60
-            data_length = self.balancing_config_struct["num_fft_line"] + 2
+            data_length = self.balancing_config_struct["num_fft_line"]
             total_length=numADCChanel*data_length+1
             ttl=[]
             with lock:
@@ -1172,18 +1176,16 @@ class SideButtonFrame(Tk.Frame):
                 elif j%6==5:
                     chanelm[4].append(ttl[j])
                 else:
-                    pass
-            for i in range(numADCChanel-1):
-                chaneln.append(np.array(chanelm[i][2:]))            
-            for i in range(3):
-                if self.balancing_config_struct["sensor_type"]=='Acceleration':
-                    chanelv[i]=chaneln[i][2:]*self.accConvertFactor #g
-                    chanelv[i]-=np.mean(chanelv[i])
-                elif self.balancing_config_struct["sensor_type"]=='Velocity':
-                    chanelv[i]=chaneln[i][2:]*self.velConvertFactor  # mm/s
-                    chanelv[i]-=np.mean(chanelv[i])
-                else:
-                    pass
+                    pass        
+            
+            if self.balancing_config_struct["sensor_type"]=='Acceleration':
+                for i in range(3):
+                    chanelv[i]=np.array(chanelm[i])*self.accConvertFactor #g
+            elif self.balancing_config_struct["sensor_type"]=='Velocity':
+                for i in range(3):
+                    chanelv[i]=np.array(chanelm[i])*self.velConvertFactor  # mm/s
+            else:
+                pass
 
             if self.balancing_config_struct["sensor1"]=='Port1':
                 samplePlane1Data=chanelv[0]
@@ -1201,14 +1203,26 @@ class SideButtonFrame(Tk.Frame):
                 samplePlane2Data=chanelv[2]
             else:
                 pass
-            laserSample=chaneln[4][2:]/2
-            
-            _samplePlane1Data = filter_data(samplePlane1Data, "LOWPASS", dfc._RMS_HIGHPASS_FROM, dfc._RMS_LOWPASS_TO, self.balancing_config_struct["sample_rate"], window="Hanning")
-            _samplePlane2Data = filter_data(samplePlane2Data, "LOWPASS", dfc._RMS_HIGHPASS_FROM, dfc._RMS_LOWPASS_TO, self.balancing_config_struct["sample_rate"], window="Hanning")
-            _laserSample = filter_data(laserSample, "LOWPASS", dfc._RMS_HIGHPASS_FROM, dfc._RMS_LOWPASS_TO, self.balancing_config_struct["sample_rate"], window="Hanning")
+            laserSample=np.array(chanelm[4])/2
+            if self.balancing_config_struct["sensor_type"]=='Acceleration':
+                _samplePlane1Data = acc2vel(samplePlane1Data, self.balancing_config_struct["sample_rate"])
+                _samplePlane2Data = acc2vel(samplePlane2Data, self.balancing_config_struct["sample_rate"])
+                _laserSample=filter_data(laserSample, "BANDPASS", dfc._VIEW_HIGHPASS_FROM, dfc._RMS_LOWPASS_TO, \
+                                         self.balancing_config_struct["sample_rate"], window="Hanning")[:-1]
+
+            elif self.balancing_config_struct["sensor_type"]=='Velocity':
+                _samplePlane1Data = filter_data(samplePlane1Data, "BANDPASS", dfc._VIEW_HIGHPASS_FROM, dfc._RMS_LOWPASS_TO, 
+                                            self.balancing_config_struct["sample_rate"], window="Hanning")
+                _samplePlane2Data = filter_data(samplePlane2Data, "BANDPASS", dfc._VIEW_HIGHPASS_FROM, dfc._RMS_LOWPASS_TO, 
+                                            self.balancing_config_struct["sample_rate"], window="Hanning")
+                _laserSample = filter_data(laserSample, "BANDPASS", dfc._VIEW_HIGHPASS_FROM, dfc._RMS_LOWPASS_TO, 
+                                            self.balancing_config_struct["sample_rate"], window="Hanning")
+            # _samplePlane1Data = filter_data(samplePlane1Data, "LOWPASS", dfc._RMS_HIGHPASS_FROM, dfc._RMS_LOWPASS_TO, self.balancing_config_struct["sample_rate"], window="Hanning")
+            # _samplePlane2Data = filter_data(samplePlane2Data, "LOWPASS", dfc._RMS_HIGHPASS_FROM, dfc._RMS_LOWPASS_TO, self.balancing_config_struct["sample_rate"], window="Hanning")
+            # _laserSample = filter_data(laserSample, "LOWPASS", dfc._RMS_HIGHPASS_FROM, dfc._RMS_LOWPASS_TO, self.balancing_config_struct["sample_rate"], window="Hanning")
             _laserSample=fresh_laser_pulse(_laserSample)
             _amplitude1 = rmsValue(_samplePlane1Data)
-            _amplitude2 = rmsValue(_samplePlane2Data)   
+            _amplitude2 = rmsValue(_samplePlane2Data)
             _phase1 = phase_shift_calculate(_laserSample, _samplePlane1Data, self.balancing_config_struct["sample_rate"], balancing_speed)%(2*np.pi)
             _phase2 = phase_shift_calculate(_laserSample, _samplePlane2Data, self.balancing_config_struct["sample_rate"], balancing_speed)%(2*np.pi)
             current_run = {
@@ -1238,16 +1252,12 @@ class SideButtonFrame(Tk.Frame):
                 elif self.balancing_config_struct["num_sensors"]=="Two":
                     result=Pd.PLT.plot_balancing(self.canvas, self.balancing_config_struct, 3)
                 if result[-1]!="No":
-                    if self.balancing_config_struct["origin"]=="LASER":
-                        Pl1CorrMass=result[0]
-                        Pl1CorrAngle=result[1]
-                        Pl2CorrMass=result[2]
-                        Pl2CorrAngle=result[3]
-                    else:
-                        Pl1CorrMass=result[0]
-                        Pl1CorrAngle=result[1]-self.balancing_config_struct["angle1"]
-                        Pl2CorrMass=result[2]
-                        Pl2CorrAngle=result[3]-self.balancing_config_struct["angle2"]
+                    
+                    Pl1CorrMass=result[0]
+                    Pl1CorrAngle=result[1]
+                    Pl2CorrMass=result[2]
+                    Pl2CorrAngle=result[3]
+                    
                     if result[-1]=="Corr1":
                         self.infoLabel.config(text=f"Corr PL1 W= {str(Pl1CorrMass)[:4]}g | A= {str(int(Pl1CorrAngle))}° || Corr PL2 W= {str(Pl2CorrMass)[:4]}g | A= {str(int(Pl2CorrAngle))}°")
                         self.balancing_config_struct["trim_run"].append(result)

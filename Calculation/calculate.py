@@ -192,15 +192,6 @@ def phase_shift(arr1, arr2, samples_per_second):
     return phase_shift1
 
 
-def vtrial(a0, phi0, a1, phi1):
-    z0 = a0 * np.cos(phi0) + (a0 * np.sin(phi0)) * 1j
-    z1 = a1 * np.cos(phi1) + (a1 * np.sin(phi1)) * 1j
-    azt = z1 - z0
-    amp = np.abs(azt)
-    phase = cmath.phase(azt)
-    return np.pi - phase + phi0
-    # azt = np.sqrt(a0**2+a1**2-2*a0*a1*np.cos(phi0-phi1))\
-
 """ convert the signal using the TSA
     arr: input array from 4 ports and laser
     return the signal after tsa and cut laser pulse"""
@@ -253,7 +244,7 @@ def acc2vel(accel_arr, sample_rate): #g->mm/s
     v=filter_data(
                             v,
                             "BANDPASS",
-                            10,
+                            5,
                             1000,
                             sample_rate,
                             window="Hanning"
@@ -337,6 +328,28 @@ def fresh_tacho_pulse(tachoArr, symCheck):
     #         pass
     # tachoArr-=mean
     return tachoArr
+
+def calculate_speed_from_laser_pulse(laserArr, sample_rate):
+    mark = []
+    numOfCircle=0
+    mean=(np.max(laserArr)+np.min(laserArr))/2
+    for i in range(len(laserArr)):
+        if laserArr[i]<= mean:
+            laserArr[i]=0
+        else:
+            laserArr[i]=1
+            if laserArr[i-1]==0:
+                mark.append(i)
+                numOfCircle+=1
+    if numOfCircle>50:
+        return 1500
+    elif 2<=numOfCircle<=50:
+        readTime=(mark[-1]-mark[0])/sample_rate
+        rpm=int(60*(numOfCircle-1)/readTime)
+        return rpm
+    else:
+        return 0
+
 
 def iso10816_judge(machineType, tocdo, congsuat, foundation="Rigid"):
     if foundation == None:
