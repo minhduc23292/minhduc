@@ -280,7 +280,7 @@ class BalancingConfig(Tk.Frame):
         mass1AngelLabel = ttk.Label(BalancingFrame, text=_("Trial angle 1(deg)"), style='balancing.TLabel')
         mass1AngelLabel.grid(column=2, row=7, padx=(10, 0), pady=5, sticky="w")
         self.mass1AngleEntry = ttk.Entry(BalancingFrame, width=11, textvariable=self.balParam13, font=('Chakra Petch', 13),
-                                validate="key")
+                                validate="key", state="disable")
         self.mass1AngleEntry['validatecommand'] = (self.mass1AngleEntry.register(testVal), '%P', '%d')
         self.mass1AngleEntry.grid(column=3, row=7, padx=0, pady=5, sticky="w")
 

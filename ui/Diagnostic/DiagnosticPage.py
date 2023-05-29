@@ -313,7 +313,6 @@ class DiagnosticPage(Tk.Frame):
 
         }
         unit = ['', '', '', '', '', '']
-        chanelv = [[], [], [], []]
         chaneln = []
         self.origin_config.sensor_config["sample_rate"] = int(self.origin_config.waveform_config_struct["Fmax"] * 2.56)
         self.origin_config.sensor_config["fft_line"] = self.origin_config.waveform_config_struct["num_fft_line"]
@@ -331,7 +330,7 @@ class DiagnosticPage(Tk.Frame):
             n = 6
         else:
             n = 4
-        data_length = pow2(int(self.origin_config.sensor_config["fft_line"]*2.56))+2
+        data_length = pow2(int(self.origin_config.sensor_config["fft_line"]*2.56))
         waitingTime=int(data_length/self.origin_config.sensor_config["sample_rate"])+2
         self.infoLabel2.configure(text=_("READING.....Please wait:")+ f" {str(waitingTime)} " +_("seconds."), style="red.TLabel")
         self.infoLabel2.update_idletasks()
@@ -377,10 +376,9 @@ class DiagnosticPage(Tk.Frame):
                 else:
                     pass
         for i in range(n - 1):
-            chaneln.append(np.array(chanelm[i][2:]))
+            chaneln.append(np.array(chanelm[i]))
 
         if n == 6:
-            chaneln[4] /= 2
             chaneln[4] = fresh_laser_pulse(chaneln[4])
             unit[3] = 'laser sensor'
         if self.origin_config.waveform_config_struct["UseTSA"] == 1 and n == 6:
@@ -452,7 +450,7 @@ class DiagnosticPage(Tk.Frame):
                              
             elif self.origin_config.sensor_config["sensor_input"][i] == 'NONE':
                 self.origin_config.sensor_config["sensor_data"][i] *= 0
-                self.origin_config.sensor_config["store_sensor_data"][i]=self.origin_config.sensor_config["sensor_data"][i][1400:] #1400 relate to bandpass filter order
+                self.origin_config.sensor_config["store_sensor_data"][i]=self.origin_config.sensor_config["sensor_data"][i][700:-700]
                 unit[i] = 'no sensor'
             else:
                 pass

@@ -54,7 +54,7 @@ def filter_data(
             fc = low_pass_cut_off_freq / sample_rate
             ham_lp = build_filter(M, fc, window)
             _samples = np.convolve(samples, ham_lp)
-            _samples = _samples[int(M/2):int(-M/2)]
+            _samples = _samples[M:-M]
 
         elif filter_type == "HIGHPASS":
             fc = high_pass_cut_off_freq / sample_rate
@@ -62,7 +62,7 @@ def filter_data(
             ham_hp = -ham_lp
             ham_hp[M // 2] += 1
             _samples = np.convolve(samples, ham_hp)
-            _samples = _samples[int(M/2):int(-M/2)]
+            _samples = _samples[M:-M]
 
         elif filter_type == "BANDPASS":
             fc_lp = low_pass_cut_off_freq / sample_rate
@@ -73,7 +73,7 @@ def filter_data(
             ham_hp[M // 2] += 1
             ham_bp = np.convolve(ham_lp, ham_hp)
             _samples = np.convolve(samples, ham_bp)
-            _samples = _samples[M:-M]
+            _samples = _samples[2*M:-2*M]
         else:
             _samples = samples
         return _samples
