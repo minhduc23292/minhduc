@@ -58,7 +58,7 @@ class TotalConfig(object):
             "TSATimes": 10,
             "Fmax": 2000,
             "num_fft_line": 3200,
-            "MachineName": "",
+            "MachineName": "M_NAME",
             "MachineType": "GENERAL",
             "Speed": 1500,
             "Power": 1,

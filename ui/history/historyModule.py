@@ -287,15 +287,17 @@ class historyConfig(Tk.Frame):
         self.PrjTable.bind('<<TreeviewSelect>>', self.get_selected_cell)
 
         self.PrjTable.pack(side="left", expand=True, fill="both")
-        self.PrjTable['columns'] = ('PrjID', 'Date', 'Pos', 'SampleRate')
-        self.PrjTable.column("#0", anchor='w', width=120)
-        self.PrjTable.column("PrjID",anchor='w', width=120)
+        self.PrjTable['columns'] = ('PrjID', 'machine', 'Date', 'Pos', 'SampleRate')
+        self.PrjTable.column("#0", anchor='w', width=100)
+        self.PrjTable.column("PrjID",anchor='w', width=100)
+        self.PrjTable.column("machine",anchor='w', width=120)
         self.PrjTable.column("Date",anchor=Tk.CENTER,width=120)
-        self.PrjTable.column("Pos",anchor=Tk.CENTER,width=60)
-        self.PrjTable.column("SampleRate",anchor=Tk.CENTER,width=80)
+        self.PrjTable.column("Pos",anchor=Tk.CENTER,width=50)
+        self.PrjTable.column("SampleRate",anchor=Tk.CENTER,width=60)
 
         self.PrjTable.heading("#0",text="",anchor=Tk.CENTER)
         self.PrjTable.heading("PrjID",text="ID",anchor=Tk.CENTER)
+        self.PrjTable.heading("machine",text="ID",anchor=Tk.CENTER)
         self.PrjTable.heading("Date",text=_("Date"),anchor=Tk.CENTER)
         self.PrjTable.heading("Pos",text=_("Position"),anchor=Tk.CENTER)
         self.PrjTable.heading("SampleRate",text=_("Sample rate"),anchor=Tk.CENTER)
@@ -304,12 +306,13 @@ class historyConfig(Tk.Frame):
         for i in range(len(prjCodeArr)):
             data_arr=self.load_data_base_on_code(prjCodeArr[i])
             companyName=self.find_company_name_base_on_code(prjCodeArr[i])
+            machineName=self.load_machine_name_by_code(prjCodeArr[i])
             date_arr=[arr[0] for arr in data_arr]
             pos_arr=[arr[1] for arr in data_arr]
             sample_rate_arr=[arr[2] for arr in data_arr]
-            self.PrjTable.insert(parent='', index='end', iid=i, text=prjCodeArr[i], values=(str(companyName), '', '', ''))
+            self.PrjTable.insert(parent='', index='end', iid=i, text=prjCodeArr[i], values=(str(companyName), str(machineName), '', '', ''))
             for k in range(len(pos_arr)):
-                self.PrjTable.insert(parent=i,index='end',text='', values=(str(prjCodeArr[i]),str(date_arr[k]), \
+                self.PrjTable.insert(parent=i,index='end',text='', values=(str(prjCodeArr[i]), '', str(date_arr[k]), \
                             str(pos_arr[k]), str(sample_rate_arr[k])))
         # self.PrjTable.item(open=True)
         # print("load_prj_code:", load_data_arr)
@@ -332,8 +335,8 @@ class historyConfig(Tk.Frame):
             self.PrjTable.item(selected_item, open=True)
             if self.PrjTable.parent(selected_item) !='':
                 prjID = self.PrjTable.item(selected_item)['values'][0] # get the value of the cell
-                position=self.PrjTable.item(selected_item)['values'][2]
-                date=self.PrjTable.item(selected_item)['values'][1]
+                position=self.PrjTable.item(selected_item)['values'][3]
+                date=self.PrjTable.item(selected_item)['values'][2]
                 self.historyParam1.set(prjID)
                 self.historyParam2.set(position)
                 self.prjDate.set(date)
@@ -418,6 +421,13 @@ class historyConfig(Tk.Frame):
             name=cur.fetchall()
             return name[0][0]
         
+    def load_machine_name_by_code(self, prjCode):
+        with self.con:
+            cur=self.con.cursor()
+            cur.execute(f"SELECT NOTE FROM Project_ID WHERE CODE =?", (prjCode,))
+            machineName=cur.fetchall()
+            return machineName[0][0]
+
     def find_position_list(self, event):
         prjCode=self.historyParam1.get()
         self.historyParam2.set("")
@@ -454,12 +464,13 @@ class historyConfig(Tk.Frame):
                         for i in range(len(prjCodeArr)):
                             data_arr=self.load_data_base_on_code(prjCodeArr[i])
                             companyName=self.find_company_name_base_on_code(prjCodeArr[i])
+                            machineName=self.load_machine_name_by_code(prjCodeArr[i])
                             date_arr=[arr[0] for arr in data_arr]
                             pos_arr=[arr[1] for arr in data_arr]
                             sample_rate_arr=[arr[2] for arr in data_arr]
-                            self.PrjTable.insert(parent='', index='end', iid=i, text=prjCodeArr[i], values=(str(companyName), '', '', ''))
+                            self.PrjTable.insert(parent='', index='end', iid=i, text=prjCodeArr[i], values=(str(companyName), str(machineName), '', '', ''))
                             for k in range(len(pos_arr)):
-                                self.PrjTable.insert(parent=i,index='end',text='', values=(str(prjCodeArr[i]),str(date_arr[k]), \
+                                self.PrjTable.insert(parent=i,index='end',text='', values=(str(prjCodeArr[i]), '', str(date_arr[k]), \
                                             str(pos_arr[k]), str(sample_rate_arr[k])))
                     else:
                         pass
@@ -871,7 +882,7 @@ class SideButtonFrame(Tk.Frame):
                                 )
                             temp_result_arr.append(amplitude_envelope1)
                     Pd.PLT.plot_all_history(self.canvas, temp_result_arr, date_arr, sample_rate_arr, viewRange, 2, tsaUse, tsaBin, export_png=export_png)
-                self.infoLabel.config(text=_("Project: ")+ str(prjCode) + '. ')
+                self.infoLabel.config(text=_("Project: ")+ str(prjCode) + '-' + str(sensorPosition)+ '.')
             else:
                 self.infoLabel.config(text=_("There is no data, please check SETTING !"))
         except Exception as ex:

@@ -21,6 +21,8 @@ from threading import Lock
 from bateryMonitor.powerManager import *
 from ds3231.ds3231B import DS3231
 from Calculation.calculate import is_number
+# import sqlite3 as lite
+
 remainCap = 50
 remainVolt = 3.8
 stateOfCharge = "CHARGING"
@@ -57,7 +59,7 @@ class SettingPage(Tk.Frame):
         self.batery=BQ27510()
         imageAddress = ImageAdrr()
         self.homePhoto = imageAddress.homePhoto
-        
+        # self.con = lite.connect(f'{parent_directory}/company.db')
         self.btstyle = ttk.Style()
         self.btstyle.configure('normal.TButton', font=('Chakra Petch', 15), borderwidth=5, justify=Tk.CENTER)
         self.btstyle.configure('custom.Accent.TButton', font=('Chakra Petch', 15), bordercolor='black', borderwidth=4,
@@ -82,8 +84,8 @@ class SettingPage(Tk.Frame):
 
         self.creat_setting_feature_panel()
         self.notebook = CreatTab(self.settingFrame)
-        self.generalConfigFrame=GeneralConfig(self.notebook.tab1, self.parent.origin_config)
-        self.generalConfigFrame.pack(side=Tk.LEFT, fill=Tk.BOTH, expand=1)
+        # self.generalConfigFrame=GeneralConfig(self.notebook.tab1, self.parent.origin_config, self.con)
+        # self.generalConfigFrame.pack(side=Tk.LEFT, fill=Tk.BOTH, expand=1)
         self.sensorConfigFrame=SensorConfig(self.notebook.tab5, self.parent.origin_config)
         self.sensorConfigFrame.pack(side=Tk.LEFT, fill=Tk.BOTH, expand=1)
         self.wifiConfigFrame=WifiConfig(self.notebook.tab2, self.infoLabel2).pack(side=Tk.LEFT, fill=Tk.BOTH, expand=1)
@@ -135,8 +137,9 @@ class SettingPage(Tk.Frame):
         self.parent.go_to_home_page()
 
 class GeneralConfig(Tk.Frame):
-    def __init__(self, parent, origin_config):
+    def __init__(self, parent, origin_config, db_connect):
         super().__init__(parent, width=1024, height=350, bg="white")
+        self.con=db_connect
         self.style = ttk.Style()
         self.style.configure('gen.TLabel', font=('Chakra Petch', 14))
         self.style.configure('gen.TLabelframe', font=('Chakra Petch', 10))
@@ -152,7 +155,7 @@ class GeneralConfig(Tk.Frame):
         self.prjParam3.set(origin_config.project_struct["Date"])
 
         projectFrame = ttk.LabelFrame(self, text=_('Project config'))
-        projectFrame.grid(column=0, row=0, padx=10, pady=10, columnspan=2, sticky='wn')
+        projectFrame.pack(side="left", fill='y')
 
         prjCodeLabel = ttk.Label(projectFrame, text=_('Project Code*'), style='gen.TLabel')
         prjCodeLabel.grid(column=0, row=0, padx=10, pady=5, sticky='w')
@@ -184,19 +187,96 @@ class GeneralConfig(Tk.Frame):
                                       command=lambda: self.on_apply_button_clicked(origin_config))
         self.applyButton.grid(column=1, row=3, padx=10, pady=20, ipady=5, sticky='ew')
 
+        self.scrollbar = ttk.Scrollbar(self)
+        self.scrollbar.pack(side="right", fill="y")
+
+        self.PrjTable = ttk.Treeview(self, yscrollcommand=self.scrollbar.set, show=("tree",), style="Custom.Treeview")
+        self.PrjTable.bind('<<TreeviewSelect>>', self.get_selected_cell)
+
+        self.PrjTable.pack(side="left", expand=True, fill="both")
+        self.PrjTable['columns'] = ('PrjID', 'machine')
+        self.PrjTable.column("#0", anchor='w', width=100)
+        self.PrjTable.column("PrjID",anchor='w', width=100)
+        self.PrjTable.column("machine",anchor='w', width=120)
+
+        self.PrjTable.heading("#0",text="",anchor=Tk.CENTER)
+        self.PrjTable.heading("PrjID",text="ID",anchor=Tk.CENTER)
+        self.PrjTable.heading("machine",text="ID",anchor=Tk.CENTER)
+        self.scrollbar.config(command=self.PrjTable.yview)
+        prjCodeArr=self.load_all_project_code()
+        for i in range(len(prjCodeArr)):
+            companyName=self.find_company_name_base_on_code(prjCodeArr[i])
+            machineName=self.load_machine_name_by_code(prjCodeArr[i])
+            
+            self.PrjTable.insert(parent='', index='end', iid=i, text=prjCodeArr[i], values=(str(companyName), str(machineName)))
+
+
+    def load_all_project_code(self):
+        with self.con:
+            cur=self.con.cursor()
+            cur.execute(f"SELECT DISTINCT CODE FROM DATA ORDER BY DATE ASC;")
+            load_data = cur.fetchall()
+            load_data_arr = [i for i in load_data]
+            return [arr[0] for arr in load_data_arr]
+    
+    def find_company_name_base_on_code(self, prjCode):
+        with self.con:
+            cur=self.con.cursor()
+            cur.execute(f"SELECT COM_ID FROM Project_ID WHERE CODE=?", (prjCode,))
+            load_data=cur.fetchall()
+            com_id=load_data[0][0]
+            cur.execute(f"SELECT NAME FROM Company_ID WHERE COM_ID =?", (com_id,))
+            name=cur.fetchall()
+            return name[0][0]
+
+    def load_machine_name_by_code(self, prjCode):
+        with self.con:
+            cur=self.con.cursor()
+            cur.execute(f"SELECT NOTE FROM Project_ID WHERE CODE =?", (prjCode,))
+            machineName=cur.fetchall()
+            return machineName[0][0]
+    
+    def get_selected_cell(self, event):
+        self.applyButton.configure(state='normal') 
+        try:
+            selected_item = self.PrjTable.focus() # get the selected item
+            prjID = self.PrjTable.item(selected_item)['text']
+            self.prjParam1.set(prjID)
+            companyName=self.PrjTable.item(selected_item)['values'][0]
+            self.prjParam2.set(companyName)
+        except:
+            pass
 
     def on_apply_button_clicked(self, origin_config):
-        if self.prjParam2.get()!='':
-            origin_config.project_struct["CompanyName"] = self.prjParam2.get()
-        if self.prjParam1.get()!='':
-            origin_config.project_struct["ProjectCode"] = self.prjParam1.get()
-        if self.prjParam3.get()!='':
-            origin_config.project_struct["Date"] = self.prjParam3.get()
-        self.applyButton.configure(state="disable")
+        
+        tempPrjCode=self.prjParam1.get()
+        tempCompanyName=self.prjParam2.get()
+        prjCodeArr=self.load_all_project_code()
+        if tempPrjCode!='' and tempCompanyName!='':
+            if prjCodeArr.count(tempPrjCode)==0:
+                origin_config.project_struct["ProjectCode"] = tempPrjCode
+                origin_config.project_struct["CompanyName"] = tempCompanyName
+                if self.prjParam3.get()!='':
+                    origin_config.project_struct["Date"] = self.prjParam3.get()
+                self.applyButton.configure(state="disable")
+            else:
+                if pms.general_warning(_("The project code is existed, do you want to continue?")):
+                    origin_config.project_struct["ProjectCode"] = tempPrjCode
+                    origin_config.project_struct["CompanyName"] = tempCompanyName
+                    if self.prjParam3.get()!='':
+                        origin_config.project_struct["Date"] = self.prjParam3.get()
+                    self.applyButton.configure(state="disable")
+                else: 
+                    return
+        else:
+            pms.general_warning(_("The project code and company name may not be empty"))
+            return
+
 
     def on_get_time_now_button_clicked(self):
         text=get_time_now()
         self.prjParam3.set(text)
+        self.applyButton.configure(state="normal")
 
 
 class SensorConfig(Tk.Frame):
@@ -294,12 +374,12 @@ class CreatTab(ttk.Notebook):
 
 
     def creatTab(self):
-        self.tab1 = Tk.Frame(self, name="general", relief="raised", borderwidth=0)
+        # self.tab1 = Tk.Frame(self, name="general", relief="raised", borderwidth=0)
         self.tab2 = Tk.Frame(self, name="wifi", relief="raised", borderwidth=0)
         self.tab3 = Tk.Frame(self, name="power", relief="raised", borderwidth=0)
         self.tab4 = Tk.Frame(self, name="language", relief="raised", borderwidth=0)
         self.tab5 = Tk.Frame(self, name="sensor", relief="raised", borderwidth=0)
-        self.add(self.tab1, text=_("GENERAL"))
+        # self.add(self.tab1, text=_("GENERAL"))
         self.add(self.tab5, text=_("SENSOR"))
         self.add(self.tab2, text=_("WIFI"))
         self.add(self.tab3, text=_("LANGUAGE"))

@@ -24,6 +24,8 @@ from threading import Lock
 import fileOperation.fileOperation as file_operation
 import pms.popMessage as pms
 import sqlite3 as lite
+from ds3231.ds3231B import DS3231
+from datetime import datetime
 current_directory = os.path.dirname(os.path.realpath(__file__))
 parent_directory = os.path.dirname(os.path.dirname(current_directory))
 json_filename = parent_directory + '/i18n/sensor_sensitivity.json'
@@ -47,7 +49,15 @@ def testVal(inStr, acttyp):
             return False
     return True
 
-
+def get_time_now():
+        try:
+            ds3231 = DS3231(1, 0x69)
+            rtcTime=str(ds3231.read_datetime())
+            return rtcTime[:10]
+        except Exception as ex:
+            now = datetime.now()
+            current_time = now.strftime("%Y-%m-%d")
+            return current_time
 class DiagnosticPage(Tk.Frame):
     def __init__(self, parent: "Application"):
         self.parent = parent
@@ -217,7 +227,7 @@ class DiagnosticPage(Tk.Frame):
             self.generalBt.configure(style="normal.TButton")
             self.configBt.configure(style="feature.Accent.TButton")
         clean_frame_for_config_panel()
-        self.config1 = ConfigFrame(self)
+        self.config1 = ConfigFrame(self, self.con)
         self.config1.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
         self.nextBt = ttk.Button(self.configFrame, text=_("APPLY & START"), style='Accent.TButton',
                                  command=lambda: self.on_start_button_clicked(True))
@@ -1260,8 +1270,9 @@ class DiagnosticPage(Tk.Frame):
 
 
 class ConfigFrame(Tk.Frame):
-    def __init__(self, parent: "self.configFrame"):
+    def __init__(self, parent: "self.configFrame", con):
         super().__init__(parent.configFrame, name="cai dat")
+        self.con=con
         self.parent = parent
         self.origin_config=parent.origin_config
         imageAddress = ImageAdrr()
@@ -1338,7 +1349,7 @@ class ConfigFrame(Tk.Frame):
                                            bg='white')
         self.wfConfigFrame.pack(side=Tk.TOP, fill=Tk.BOTH)
 
-        sensorFrame = ttk.LabelFrame(self.wfConfigFrame, text=_('Sensor config'), style='config.TLabelframe')
+        sensorFrame = ttk.LabelFrame(self.wfConfigFrame, text=_('General config'), style='config.TLabelframe')
         sensorFrame.grid(column=0, row=0, padx=5, pady=0, ipadx=2, rowspan=10, columnspan=2, sticky='wn')
 
         # directionLabel = ttk.Label(sensorFrame, text=_('Type'), style='config.TLabel')
@@ -1353,6 +1364,13 @@ class ConfigFrame(Tk.Frame):
         machineCombo['value'] = ('GENERAL', "PUMP", "GEARBOX", "FAN", "CRITICAL MACHINE", 'STEAM TURBINE', "GAS TURBINE", "HYDRO TURBINE", "COMPRESSOR",
             "WIND TURBINE")
         machineCombo.grid(column=1, row=0, padx=0, pady=5, sticky="e")
+
+        projectLabel = ttk.Label(sensorFrame, text=_("Project CFG"), style='config.TLabel')
+        projectLabel.grid(column=2, row=0, padx=5, pady=3, sticky='w')
+
+        prjButton=ttk.Button(sensorFrame, style="normal.TButton", image=self.smallSePhoto,\
+                               command=self.creat_project_config_page)
+        prjButton.grid(column=3, row=0, padx=0, pady=5, sticky='e')
 #ss1
         sensor1Label = ttk.Label(sensorFrame, text=_('Port1'), style='config.TLabel')
         sensor1Label.grid(column=0, row=1, padx=5, pady=5, sticky='w')
@@ -1616,6 +1634,160 @@ class ConfigFrame(Tk.Frame):
         machineType=self.wfParam9.get()
         SensorPositionCanvas1=SensorPositionCanvas(self, waveform_config_struct, machineType)
         SensorPositionCanvas1.place(x=0, y=0, width=1008, height=504)
+
+    def creat_project_config_page(self):
+        projectConfigCanvas1=GeneralConfig(self, self.origin_config, self.con)
+        projectConfigCanvas1.place(x=0, y=0, width=1008, height=504)
+
+class GeneralConfig(Tk.Canvas):
+    def __init__(self, parent, origin_config, db_connect):
+        super().__init__(parent.parent.configFrame, width=1008, height=504, bg="white")
+        self.con=db_connect
+        self.style = ttk.Style()
+        self.style.configure('gen.TLabel', font=('Chakra Petch', 14))
+        self.style.configure('gen.TLabelframe', font=('Chakra Petch', 10))
+        self.style.configure('gen.TButton', font=('Chakra Petch', 15), width=40, height=40)
+        self.creat_genral_config_page(origin_config)
+
+    def creat_genral_config_page(self, origin_config):
+        self.prjParam1 = Tk.StringVar()
+        self.prjParam2 = Tk.StringVar()
+        self.prjParam3 = Tk.StringVar()
+        self.prjParam1.set(origin_config.project_struct["ProjectCode"])
+        self.prjParam2.set(origin_config.project_struct["CompanyName"])
+        self.prjParam3.set(origin_config.project_struct["Date"])
+
+        projectFrame = ttk.LabelFrame(self, text=_('Project config'))
+        projectFrame.pack(side="left", fill='y')
+
+        prjCodeLabel = ttk.Label(projectFrame, text=_('Project Code*'), style='gen.TLabel')
+        prjCodeLabel.grid(column=0, row=0, padx=10, pady=5, sticky='w')
+
+        prjCodeEntry = ttk.Entry(projectFrame, width=20, textvariable=self.prjParam1, takefocus=False,
+                                font=('Chakra Petch', 14))
+        # prjCodeEntry['validatecommand'] = (prjCodeEntry.register(testVal), '%P', '%d')
+        prjCodeEntry.grid(column=1, row=0, padx=10, pady=5, sticky='e')
+
+        companyLabel = ttk.Label(projectFrame, text=_('Company Name'), style='gen.TLabel')
+        companyLabel.grid(column=0, row=1, padx=10, pady=5, sticky='w')
+
+        companyEntry = ttk.Entry(projectFrame, width=20, textvariable=self.prjParam2, takefocus=False,
+                                font=('Chakra Petch', 14))
+        companyEntry.grid(column=1, row=1, padx=10, pady=5, sticky='e')
+
+        noteLabel = ttk.Label(projectFrame, text=_('Date'), style='gen.TLabel')
+        noteLabel.grid(column=0, row=2, padx=10, pady=5, sticky='w')
+
+        self.noteEntry = ttk.Entry(projectFrame, width=20, textvariable=self.prjParam3, takefocus=False,
+                                font=('Chakra Petch', 14))
+        self.noteEntry.grid(column=1, row=2, padx=10, pady=5, sticky='e')
+
+        self.getTimeButton = ttk.Button(projectFrame, text=_("Get time now"), style="Accent.TButton",
+                                      command=self.on_get_time_now_button_clicked)
+        self.getTimeButton.grid(column=2, row=2, padx=10, pady=20, sticky='ew')
+
+        self.applyButton = ttk.Button(projectFrame, text=_("APPLY"), style="Accent.TButton",
+                                      command=lambda: self.on_apply_button_clicked(origin_config))
+        self.applyButton.grid(column=1, row=3, padx=10, pady=20, ipady=5, sticky='ew')
+
+        self.cancelButton = ttk.Button(projectFrame, text=_("CANCEL"), style="Accent.TButton",
+                                      command=self.on_cancel_button_clicked)
+        self.cancelButton.grid(column=0, row=3, padx=10, pady=20, ipady=5, sticky='ew')
+
+        self.scrollbar = ttk.Scrollbar(self)
+        self.scrollbar.pack(side="right", fill="y")
+
+        self.PrjTable = ttk.Treeview(self, yscrollcommand=self.scrollbar.set, show=("tree",), style="Custom.Treeview")
+        self.PrjTable.bind('<<TreeviewSelect>>', self.get_selected_cell)
+
+        self.PrjTable.pack(side="left", expand=True, fill="both")
+        self.PrjTable['columns'] = ('PrjID', 'machine')
+        self.PrjTable.column("#0", anchor='w', width=100)
+        self.PrjTable.column("PrjID",anchor='w', width=100)
+        self.PrjTable.column("machine",anchor='w', width=120)
+
+        self.PrjTable.heading("#0",text="",anchor=Tk.CENTER)
+        self.PrjTable.heading("PrjID",text="ID",anchor=Tk.CENTER)
+        self.PrjTable.heading("machine",text="ID",anchor=Tk.CENTER)
+        self.scrollbar.config(command=self.PrjTable.yview)
+        prjCodeArr=self.load_all_project_code()
+        for i in range(len(prjCodeArr)):
+            companyName=self.find_company_name_base_on_code(prjCodeArr[i])
+            machineName=self.load_machine_name_by_code(prjCodeArr[i])
+            
+            self.PrjTable.insert(parent='', index='end', iid=i, text=prjCodeArr[i], values=(str(companyName), str(machineName)))
+
+
+    def load_all_project_code(self):
+        with self.con:
+            cur=self.con.cursor()
+            cur.execute(f"SELECT DISTINCT CODE FROM DATA ORDER BY DATE ASC;")
+            load_data = cur.fetchall()
+            load_data_arr = [i for i in load_data]
+            return [arr[0] for arr in load_data_arr]
+    
+    def find_company_name_base_on_code(self, prjCode):
+        with self.con:
+            cur=self.con.cursor()
+            cur.execute(f"SELECT COM_ID FROM Project_ID WHERE CODE=?", (prjCode,))
+            load_data=cur.fetchall()
+            com_id=load_data[0][0]
+            cur.execute(f"SELECT NAME FROM Company_ID WHERE COM_ID =?", (com_id,))
+            name=cur.fetchall()
+            return name[0][0]
+
+    def load_machine_name_by_code(self, prjCode):
+        with self.con:
+            cur=self.con.cursor()
+            cur.execute(f"SELECT NOTE FROM Project_ID WHERE CODE =?", (prjCode,))
+            machineName=cur.fetchall()
+            return machineName[0][0]
+    
+    def get_selected_cell(self, event):
+        self.applyButton.configure(state='normal') 
+        try:
+            selected_item = self.PrjTable.focus() # get the selected item
+            prjID = self.PrjTable.item(selected_item)['text']
+            self.prjParam1.set(prjID)
+            companyName=self.PrjTable.item(selected_item)['values'][0]
+            self.prjParam2.set(companyName)
+        except:
+            pass
+
+    def on_apply_button_clicked(self, origin_config):
+        
+        tempPrjCode=self.prjParam1.get()
+        tempCompanyName=self.prjParam2.get()
+        prjCodeArr=self.load_all_project_code()
+        if tempPrjCode!='' and tempCompanyName!='':
+            if prjCodeArr.count(tempPrjCode)==0:
+                origin_config.project_struct["ProjectCode"] = tempPrjCode
+                origin_config.project_struct["CompanyName"] = tempCompanyName
+                if self.prjParam3.get()!='':
+                    origin_config.project_struct["Date"] = self.prjParam3.get()
+                self.applyButton.configure(state="disable")
+                self.destroy()
+            else:
+                if pms.general_warning(_("The project code is existed, do you want to continue?")):
+                    origin_config.project_struct["ProjectCode"] = tempPrjCode
+                    origin_config.project_struct["CompanyName"] = tempCompanyName
+                    if self.prjParam3.get()!='':
+                        origin_config.project_struct["Date"] = self.prjParam3.get()
+                    self.applyButton.configure(state="disable")
+                    self.destroy()
+                else: 
+                    return
+        else:
+            pms.general_warning(_("The project code and company name may not be empty"))
+            return
+    
+    def on_cancel_button_clicked(self):
+        self.destroy()
+
+    def on_get_time_now_button_clicked(self):
+        text=get_time_now()
+        self.prjParam3.set(text)
+        self.applyButton.configure(state="normal")
 
 
 class SensorPositionCanvas(Tk.Canvas):
