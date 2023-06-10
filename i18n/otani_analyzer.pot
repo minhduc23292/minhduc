@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-02 15:10+0700\n"
+"POT-Creation-Date: 2023-06-11 01:58+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -46,7 +46,7 @@ msgid "Please entry the "
 msgstr ""
 
 #: keyboard/keyboard.py:37 ui/history/historyModule.py:516
-#: ui/Diagnostic/DiagnosticPage.py:1821
+#: ui/Diagnostic/DiagnosticPage.py:1880
 msgid "Input"
 msgstr ""
 
@@ -178,8 +178,8 @@ msgstr ""
 
 #: ui/balancingModule/balancingModule.py:374 ui/history/historyModule.py:275
 #: ui/ResonanceModule/ResonanceModule.py:292
-#: ui/Diagnostic/DiagnosticPage.py:236 ui/Diagnostic/DiagnosticPage.py:1689
-#: ui/Diagnostic/DiagnosticPage.py:1893 ui/Settingpage/SettingPage.py:186
+#: ui/Diagnostic/DiagnosticPage.py:236 ui/Diagnostic/DiagnosticPage.py:1690
+#: ui/Diagnostic/DiagnosticPage.py:1952 ui/Settingpage/SettingPage.py:186
 #: ui/Settingpage/SettingPage.py:334
 msgid "APPLY"
 msgstr ""
@@ -436,7 +436,7 @@ msgstr ""
 
 #: ui/balancingModule/balancingModule.py:1123
 #: ui/balancingModule/balancingModule.py:1247 ui/history/historyModule.py:890
-#: ui/history/historyModule.py:933 ui/history/historyModule.py:1175
+#: ui/history/historyModule.py:933 ui/history/historyModule.py:1178
 #: ui/ResonanceModule/ResonanceModule.py:565
 msgid "Data errors."
 msgstr ""
@@ -490,7 +490,7 @@ msgstr ""
 msgid "Delete Project"
 msgstr ""
 
-#: ui/history/historyModule.py:301 ui/Diagnostic/DiagnosticPage.py:1678
+#: ui/history/historyModule.py:301 ui/Diagnostic/DiagnosticPage.py:1679
 #: ui/Settingpage/SettingPage.py:175
 msgid "Date"
 msgstr ""
@@ -661,7 +661,7 @@ msgstr ""
 msgid "Project: "
 msgstr ""
 
-#: ui/history/historyModule.py:887 ui/history/historyModule.py:1173
+#: ui/history/historyModule.py:887 ui/history/historyModule.py:1176
 msgid "There is no data, please check SETTING !"
 msgstr ""
 
@@ -673,43 +673,43 @@ msgstr ""
 msgid "Do you want to export data to .CSV file"
 msgstr ""
 
-#: ui/history/historyModule.py:1001 ui/history/historyModule.py:1157
+#: ui/history/historyModule.py:1003 ui/history/historyModule.py:1160
 msgid "Export CSV is completed"
 msgstr ""
 
-#: ui/history/historyModule.py:1009
+#: ui/history/historyModule.py:1011
 msgid "There is no data, please check input value !"
 msgstr ""
 
-#: ui/history/historyModule.py:1021
+#: ui/history/historyModule.py:1023
 msgid "Do you want to export the report"
 msgstr ""
 
-#: ui/history/historyModule.py:1086
+#: ui/history/historyModule.py:1088
 msgid "Filter bandpass frequency is wrong. Use the default value."
 msgstr ""
 
-#: ui/history/historyModule.py:1115
+#: ui/history/historyModule.py:1117
 msgid "Figure1: Vibration trend"
 msgstr ""
 
-#: ui/history/historyModule.py:1119
+#: ui/history/historyModule.py:1121
 msgid "Figure2: Waveform"
 msgstr ""
 
-#: ui/history/historyModule.py:1123
+#: ui/history/historyModule.py:1125
 msgid "Figure3: Frequency spectrum"
 msgstr ""
 
-#: ui/history/historyModule.py:1127
+#: ui/history/historyModule.py:1129
 msgid "Figure4: Velocity spectrum"
 msgstr ""
 
-#: ui/history/historyModule.py:1131
+#: ui/history/historyModule.py:1133
 msgid "Figure5: Envelope spectrum"
 msgstr ""
 
-#: ui/history/historyModule.py:1171
+#: ui/history/historyModule.py:1174
 msgid "Report is exported. Use QR code scanner to see the report."
 msgstr ""
 
@@ -1037,47 +1037,47 @@ msgstr ""
 msgid "Foundation"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1660 ui/Settingpage/SettingPage.py:157
+#: ui/Diagnostic/DiagnosticPage.py:1661 ui/Settingpage/SettingPage.py:157
 msgid "Project config"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1663 ui/Settingpage/SettingPage.py:160
+#: ui/Diagnostic/DiagnosticPage.py:1664 ui/Settingpage/SettingPage.py:160
 msgid "Project Code*"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1671 ui/Settingpage/SettingPage.py:168
+#: ui/Diagnostic/DiagnosticPage.py:1672 ui/Settingpage/SettingPage.py:168
 msgid "Company Name"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1685 ui/Settingpage/SettingPage.py:182
+#: ui/Diagnostic/DiagnosticPage.py:1686 ui/Settingpage/SettingPage.py:182
 msgid "Get time now"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1693
+#: ui/Diagnostic/DiagnosticPage.py:1694
 msgid "CANCEL"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1771 ui/Settingpage/SettingPage.py:263
+#: ui/Diagnostic/DiagnosticPage.py:1776 ui/Settingpage/SettingPage.py:263
 msgid "The project code is existed, do you want to continue?"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1781 ui/Settingpage/SettingPage.py:272
+#: ui/Diagnostic/DiagnosticPage.py:1840 ui/Settingpage/SettingPage.py:272
 msgid "The project code and company name may not be empty"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1869
+#: ui/Diagnostic/DiagnosticPage.py:1928
 msgid "Select port"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1878
+#: ui/Diagnostic/DiagnosticPage.py:1937
 msgid "Port 1"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1883
+#: ui/Diagnostic/DiagnosticPage.py:1942
 msgid "Port 2"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1888
+#: ui/Diagnostic/DiagnosticPage.py:1947
 msgid "Port 3"
 msgstr ""
 

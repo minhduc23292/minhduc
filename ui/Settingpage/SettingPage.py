@@ -96,7 +96,7 @@ class SettingPage(Tk.Frame):
         self.parent.bind_class('TCombobox', "<<ComboboxSelected>>", self.change_state)
 
     def show_key_board(self, event):
-        self.generalConfigFrame.applyButton.configure(state='normal')
+        # self.generalConfigFrame.applyButton.configure(state='normal')
         self.widget = self.get_focus_widget()
         self.keyboardFrame = KeyBoard(self.widget)
         parentName = event.widget.winfo_parent()

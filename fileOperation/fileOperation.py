@@ -3,6 +3,7 @@ import matplotlib
 matplotlib.use('TKAgg')
 from tkinter import filedialog
 from matplotlib.pyplot import draw_if_interactive
+import csv  
 
 sample_rate=1000
 def simpleParse(mainString, beginString, endString):
@@ -72,15 +73,21 @@ def grabar(canal_1, canal_2, canal_3, archivo):
     arch.write(str_canal)
     arch.close()
 
-def store_data(data_arr, archivo):
+def store_data(data_arr, sample_rate, archivo):
     """ Saves X and Y axis data on file archivo"""
     h_num = len(data_arr)
-    str_canal=''
+    # str_canal=''
+    # for i in range(h_num):
+    #     str_canal += str(format(data_arr[i], "0.7f"))+'\n'
+    # arch = open(archivo, "w")
+    # arch.write(str_canal)
+    data=[]
+    period=1/sample_rate
     for i in range(h_num):
-        str_canal += str(format(data_arr[i], "0.7f"))+'\n'
-    arch = open(archivo, "w")
-    arch.write(str_canal)
-    arch.close()
+        data.append([i*period, data_arr[i]])
+    with open(archivo, 'w', encoding='UTF8') as f:
+        writer = csv.writer(f)
+        writer.writerows(data)
     
 
 def store_data2(data_arr1, data_arr2, data_arr3, archivo):

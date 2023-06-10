@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-02 15:07+0700\n"
+"POT-Creation-Date: 2023-06-11 01:51+0700\n"
 "PO-Revision-Date: 2022-11-02 18:07+0900\n"
 "Last-Translator: Le Phuong <lephuong@phuonglh>\n"
 "Language-Team: Vietnamese\n"
@@ -46,7 +46,7 @@ msgid "Please entry the "
 msgstr "Hãy nhập"
 
 #: keyboard/keyboard.py:37 ui/history/historyModule.py:516
-#: ui/Diagnostic/DiagnosticPage.py:1821
+#: ui/Diagnostic/DiagnosticPage.py:1880
 msgid "Input"
 msgstr "Input"
 
@@ -178,8 +178,8 @@ msgstr "TÍNH TOÁN"
 
 #: ui/balancingModule/balancingModule.py:374 ui/history/historyModule.py:275
 #: ui/ResonanceModule/ResonanceModule.py:292
-#: ui/Diagnostic/DiagnosticPage.py:236 ui/Diagnostic/DiagnosticPage.py:1689
-#: ui/Diagnostic/DiagnosticPage.py:1893 ui/Settingpage/SettingPage.py:186
+#: ui/Diagnostic/DiagnosticPage.py:236 ui/Diagnostic/DiagnosticPage.py:1690
+#: ui/Diagnostic/DiagnosticPage.py:1952 ui/Settingpage/SettingPage.py:186
 #: ui/Settingpage/SettingPage.py:334
 msgid "APPLY"
 msgstr "XÁC NHẬN"
@@ -477,7 +477,7 @@ msgstr "Bước tiếp theo: Chạy thô, gắn cảm biến ở cả hai mặt 
 
 #: ui/balancingModule/balancingModule.py:1123
 #: ui/balancingModule/balancingModule.py:1247 ui/history/historyModule.py:890
-#: ui/history/historyModule.py:933 ui/history/historyModule.py:1175
+#: ui/history/historyModule.py:933 ui/history/historyModule.py:1178
 #: ui/ResonanceModule/ResonanceModule.py:565
 msgid "Data errors."
 msgstr "Lỗi dữ liệu"
@@ -535,10 +535,10 @@ msgstr "Độ dài trung bình"
 msgid "Delete Project"
 msgstr "Xóa dự án"
 
-#: ui/history/historyModule.py:301 ui/Diagnostic/DiagnosticPage.py:1678
+#: ui/history/historyModule.py:301 ui/Diagnostic/DiagnosticPage.py:1679
 #: ui/Settingpage/SettingPage.py:175
 msgid "Date"
-msgstr "Ngày tháng năm"
+msgstr "Thời gian(YYYY-MM-DD)"
 
 #: ui/history/historyModule.py:302
 msgid "Position"
@@ -725,7 +725,7 @@ msgstr "Lỗi Fcut. Sử dụng bộ lọc mặc định."
 msgid "Project: "
 msgstr "Dự án: "
 
-#: ui/history/historyModule.py:887 ui/history/historyModule.py:1173
+#: ui/history/historyModule.py:887 ui/history/historyModule.py:1176
 msgid "There is no data, please check SETTING !"
 msgstr "Không có dữ liệu, kiểm tra cài đặt"
 
@@ -737,43 +737,43 @@ msgstr "Tần số"
 msgid "Do you want to export data to .CSV file"
 msgstr "Bạn có muốn xuất dữ liệu thô ra file CSV"
 
-#: ui/history/historyModule.py:1001 ui/history/historyModule.py:1157
+#: ui/history/historyModule.py:1003 ui/history/historyModule.py:1160
 msgid "Export CSV is completed"
 msgstr "Hoàn thành xuất file .CSV"
 
-#: ui/history/historyModule.py:1009
+#: ui/history/historyModule.py:1011
 msgid "There is no data, please check input value !"
 msgstr "Không có dữ liệu, kiểm tra cài đặt"
 
-#: ui/history/historyModule.py:1021
+#: ui/history/historyModule.py:1023
 msgid "Do you want to export the report"
 msgstr "Bạn có muốn xuất báo cáo"
 
-#: ui/history/historyModule.py:1086
+#: ui/history/historyModule.py:1088
 msgid "Filter bandpass frequency is wrong. Use the default value."
 msgstr "Lỗi bộ lọc thông dải. Sử dụng bộ lọc mặc định."
 
-#: ui/history/historyModule.py:1115
+#: ui/history/historyModule.py:1117
 msgid "Figure1: Vibration trend"
 msgstr "Hình 1: Xu hướng dao động."
 
-#: ui/history/historyModule.py:1119
+#: ui/history/historyModule.py:1121
 msgid "Figure2: Waveform"
 msgstr "Hình 2: Độ rung trong miền thời gian."
 
-#: ui/history/historyModule.py:1123
+#: ui/history/historyModule.py:1125
 msgid "Figure3: Frequency spectrum"
 msgstr "Hình 3: Phổ tần số"
 
-#: ui/history/historyModule.py:1127
+#: ui/history/historyModule.py:1129
 msgid "Figure4: Velocity spectrum"
 msgstr "Phổ tần số vận tốc"
 
-#: ui/history/historyModule.py:1131
+#: ui/history/historyModule.py:1133
 msgid "Figure5: Envelope spectrum"
 msgstr "Hình 5: Phổ đường bao"
 
-#: ui/history/historyModule.py:1171
+#: ui/history/historyModule.py:1174
 msgid "Report is exported. Use QR code scanner to see the report."
 msgstr "Báo cáo đã được xuất bản. Hãy quét mã vạch để xem cáo cáo."
 
@@ -1043,7 +1043,7 @@ msgstr "Cài đặ chung"
 
 #: ui/Diagnostic/DiagnosticPage.py:1360
 msgid "Machine"
-msgstr "Tên máy"
+msgstr "Kiểu máy"
 
 #: ui/Diagnostic/DiagnosticPage.py:1368
 msgid "Project CFG"
@@ -1133,47 +1133,47 @@ msgstr "BRGs bore(mm)"
 msgid "Foundation"
 msgstr "Kiểu nền móng"
 
-#: ui/Diagnostic/DiagnosticPage.py:1660 ui/Settingpage/SettingPage.py:157
+#: ui/Diagnostic/DiagnosticPage.py:1661 ui/Settingpage/SettingPage.py:157
 msgid "Project config"
 msgstr "Cài đặt dự án"
 
-#: ui/Diagnostic/DiagnosticPage.py:1663 ui/Settingpage/SettingPage.py:160
+#: ui/Diagnostic/DiagnosticPage.py:1664 ui/Settingpage/SettingPage.py:160
 msgid "Project Code*"
 msgstr "Mã dự án*"
 
-#: ui/Diagnostic/DiagnosticPage.py:1671 ui/Settingpage/SettingPage.py:168
+#: ui/Diagnostic/DiagnosticPage.py:1672 ui/Settingpage/SettingPage.py:168
 msgid "Company Name"
 msgstr "Công ty"
 
-#: ui/Diagnostic/DiagnosticPage.py:1685 ui/Settingpage/SettingPage.py:182
+#: ui/Diagnostic/DiagnosticPage.py:1686 ui/Settingpage/SettingPage.py:182
 msgid "Get time now"
 msgstr "Lấy thời gian"
 
-#: ui/Diagnostic/DiagnosticPage.py:1693
+#: ui/Diagnostic/DiagnosticPage.py:1694
 msgid "CANCEL"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1771 ui/Settingpage/SettingPage.py:263
+#: ui/Diagnostic/DiagnosticPage.py:1776 ui/Settingpage/SettingPage.py:263
 msgid "The project code is existed, do you want to continue?"
-msgstr "Công ty và dự án đều không tồn tại. Bạn có muốn tiếp tục không"
+msgstr "Dự án đã tồn tại. Bạn có muốn tiếp tục không"
 
-#: ui/Diagnostic/DiagnosticPage.py:1781 ui/Settingpage/SettingPage.py:272
+#: ui/Diagnostic/DiagnosticPage.py:1840 ui/Settingpage/SettingPage.py:272
 msgid "The project code and company name may not be empty"
 msgstr "Hãy nhập mã dự án và tên công ty!"
 
-#: ui/Diagnostic/DiagnosticPage.py:1869
+#: ui/Diagnostic/DiagnosticPage.py:1928
 msgid "Select port"
 msgstr "Chọn cổng"
 
-#: ui/Diagnostic/DiagnosticPage.py:1878
+#: ui/Diagnostic/DiagnosticPage.py:1937
 msgid "Port 1"
 msgstr "Cổng 1"
 
-#: ui/Diagnostic/DiagnosticPage.py:1883
+#: ui/Diagnostic/DiagnosticPage.py:1942
 msgid "Port 2"
 msgstr "Cổng 2"
 
-#: ui/Diagnostic/DiagnosticPage.py:1888
+#: ui/Diagnostic/DiagnosticPage.py:1947
 msgid "Port 3"
 msgstr "Cổng 3"
 

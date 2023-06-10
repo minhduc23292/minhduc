@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-02 15:07+0700\n"
+"POT-Creation-Date: 2023-06-11 01:51+0700\n"
 "PO-Revision-Date: 2022-11-02 18:09+0900\n"
 "Last-Translator: Le Phuong <lephuong@phuonglh>\n"
 "Language-Team: Japanese\n"
@@ -49,7 +49,7 @@ msgid "Please entry the "
 msgstr "入力"
 
 #: keyboard/keyboard.py:37 ui/history/historyModule.py:516
-#: ui/Diagnostic/DiagnosticPage.py:1821
+#: ui/Diagnostic/DiagnosticPage.py:1880
 msgid "Input"
 msgstr "入力"
 
@@ -181,8 +181,8 @@ msgstr "計算する"
 
 #: ui/balancingModule/balancingModule.py:374 ui/history/historyModule.py:275
 #: ui/ResonanceModule/ResonanceModule.py:292
-#: ui/Diagnostic/DiagnosticPage.py:236 ui/Diagnostic/DiagnosticPage.py:1689
-#: ui/Diagnostic/DiagnosticPage.py:1893 ui/Settingpage/SettingPage.py:186
+#: ui/Diagnostic/DiagnosticPage.py:236 ui/Diagnostic/DiagnosticPage.py:1690
+#: ui/Diagnostic/DiagnosticPage.py:1952 ui/Settingpage/SettingPage.py:186
 #: ui/Settingpage/SettingPage.py:334
 msgid "APPLY"
 msgstr "申し込み"
@@ -449,7 +449,7 @@ msgstr ""
 
 #: ui/balancingModule/balancingModule.py:1123
 #: ui/balancingModule/balancingModule.py:1247 ui/history/historyModule.py:890
-#: ui/history/historyModule.py:933 ui/history/historyModule.py:1175
+#: ui/history/historyModule.py:933 ui/history/historyModule.py:1178
 #: ui/ResonanceModule/ResonanceModule.py:565
 msgid "Data errors."
 msgstr "データエラーです。"
@@ -507,10 +507,10 @@ msgstr "平均ビン"
 msgid "Delete Project"
 msgstr "プロジェクト削除"
 
-#: ui/history/historyModule.py:301 ui/Diagnostic/DiagnosticPage.py:1678
+#: ui/history/historyModule.py:301 ui/Diagnostic/DiagnosticPage.py:1679
 #: ui/Settingpage/SettingPage.py:175
 msgid "Date"
-msgstr ""
+msgstr "Date(YYYY-MM-DD)"
 
 #: ui/history/historyModule.py:302
 msgid "Position"
@@ -698,7 +698,7 @@ msgstr "Fcutにエラーが発生しています。デファクトのフィル�
 msgid "Project: "
 msgstr "プロジェクト: "
 
-#: ui/history/historyModule.py:887 ui/history/historyModule.py:1173
+#: ui/history/historyModule.py:887 ui/history/historyModule.py:1176
 msgid "There is no data, please check SETTING !"
 msgstr "データがありません。SETTINGをチェックしてください。"
 
@@ -710,44 +710,44 @@ msgstr "周波数"
 msgid "Do you want to export data to .CSV file"
 msgstr "データを .CSV ファイルにエクスポートしますか."
 
-#: ui/history/historyModule.py:1001 ui/history/historyModule.py:1157
+#: ui/history/historyModule.py:1003 ui/history/historyModule.py:1160
 msgid "Export CSV is completed"
 msgstr "CSVファイルをエクスポート完了"
 
-#: ui/history/historyModule.py:1009
+#: ui/history/historyModule.py:1011
 msgid "There is no data, please check input value !"
 msgstr "データがありません。SETTINGをチェックしてください。"
 
-#: ui/history/historyModule.py:1021
+#: ui/history/historyModule.py:1023
 msgid "Do you want to export the report"
 msgstr "レポートをエクスポートしますか"
 
-#: ui/history/historyModule.py:1086
+#: ui/history/historyModule.py:1088
 msgid "Filter bandpass frequency is wrong. Use the default value."
 msgstr ""
 "フィルターにエラーが発生しています。デファクトのフィルターを使用します。"
 
-#: ui/history/historyModule.py:1115
+#: ui/history/historyModule.py:1117
 msgid "Figure1: Vibration trend"
 msgstr "図1：振動傾向"
 
-#: ui/history/historyModule.py:1119
+#: ui/history/historyModule.py:1121
 msgid "Figure2: Waveform"
 msgstr "図 2: 波形"
 
-#: ui/history/historyModule.py:1123
+#: ui/history/historyModule.py:1125
 msgid "Figure3: Frequency spectrum"
 msgstr "図 3: 周波数スペクトル"
 
-#: ui/history/historyModule.py:1127
+#: ui/history/historyModule.py:1129
 msgid "Figure4: Velocity spectrum"
 msgstr "図4: 速度周波数スペクトル"
 
-#: ui/history/historyModule.py:1131
+#: ui/history/historyModule.py:1133
 msgid "Figure5: Envelope spectrum"
 msgstr "図 5: エンベロープ スペクトル"
 
-#: ui/history/historyModule.py:1171
+#: ui/history/historyModule.py:1174
 msgid "Report is exported. Use QR code scanner to see the report."
 msgstr "レポートを表示するには、QR コード スキャナーを使用します."
 
@@ -1014,7 +1014,7 @@ msgstr "センサー設定: "
 
 #: ui/Diagnostic/DiagnosticPage.py:1360
 msgid "Machine"
-msgstr "機械名"
+msgstr "機械タイプ"
 
 #: ui/Diagnostic/DiagnosticPage.py:1368
 #, fuzzy
@@ -1105,49 +1105,49 @@ msgstr "BRGs内径(mm)"
 msgid "Foundation"
 msgstr "基礎"
 
-#: ui/Diagnostic/DiagnosticPage.py:1660 ui/Settingpage/SettingPage.py:157
+#: ui/Diagnostic/DiagnosticPage.py:1661 ui/Settingpage/SettingPage.py:157
 msgid "Project config"
 msgstr "プロジェクト設定"
 
-#: ui/Diagnostic/DiagnosticPage.py:1663 ui/Settingpage/SettingPage.py:160
+#: ui/Diagnostic/DiagnosticPage.py:1664 ui/Settingpage/SettingPage.py:160
 msgid "Project Code*"
 msgstr "プロジェクトコード*"
 
-#: ui/Diagnostic/DiagnosticPage.py:1671 ui/Settingpage/SettingPage.py:168
+#: ui/Diagnostic/DiagnosticPage.py:1672 ui/Settingpage/SettingPage.py:168
 msgid "Company Name"
 msgstr "会社"
 
-#: ui/Diagnostic/DiagnosticPage.py:1685 ui/Settingpage/SettingPage.py:182
+#: ui/Diagnostic/DiagnosticPage.py:1686 ui/Settingpage/SettingPage.py:182
 msgid "Get time now"
 msgstr "現在の時刻を取得"
 
-#: ui/Diagnostic/DiagnosticPage.py:1693
+#: ui/Diagnostic/DiagnosticPage.py:1694
 msgid "CANCEL"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1771 ui/Settingpage/SettingPage.py:263
+#: ui/Diagnostic/DiagnosticPage.py:1776 ui/Settingpage/SettingPage.py:263
 #, fuzzy
 msgid "The project code is existed, do you want to continue?"
 msgstr "会社名とプロジェクトコードは存在しません。次へ進みますか"
 
-#: ui/Diagnostic/DiagnosticPage.py:1781 ui/Settingpage/SettingPage.py:272
+#: ui/Diagnostic/DiagnosticPage.py:1840 ui/Settingpage/SettingPage.py:272
 #, fuzzy
 msgid "The project code and company name may not be empty"
 msgstr "プロジェクトコードと会社名を入力してください。"
 
-#: ui/Diagnostic/DiagnosticPage.py:1869
+#: ui/Diagnostic/DiagnosticPage.py:1928
 msgid "Select port"
 msgstr "ポートを選択"
 
-#: ui/Diagnostic/DiagnosticPage.py:1878
+#: ui/Diagnostic/DiagnosticPage.py:1937
 msgid "Port 1"
 msgstr "ポート1"
 
-#: ui/Diagnostic/DiagnosticPage.py:1883
+#: ui/Diagnostic/DiagnosticPage.py:1942
 msgid "Port 2"
 msgstr "ポート2"
 
-#: ui/Diagnostic/DiagnosticPage.py:1888
+#: ui/Diagnostic/DiagnosticPage.py:1947
 msgid "Port 3"
 msgstr "ポート3"
 

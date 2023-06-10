@@ -939,14 +939,14 @@ class SideButtonFrame(Tk.Frame):
                 result_arr2=[]
                 pos_arr=[]
                 date_arr=[]
-                
+                sample_rate_arr=[]
                 file_name = ''
                 save_path=f"{parent_directory}/storage/"
                 ProjectCode=self.history_config_struct["ProjectID"]
                 
                 with self.con:
                     cur = self.con.cursor()
-                    cur.execute(f"SELECT DATA, POS, DATE FROM DATA WHERE CODE = ? ORDER BY DATE ASC", (ProjectCode,))
+                    cur.execute(f"SELECT DATA, POS, DATE, Sample_rate FROM DATA WHERE CODE = ? ORDER BY DATE ASC", (ProjectCode,))
                     load_data = cur.fetchall()
                     cur.execute(f"SELECT COM_ID FROM Project_ID WHERE CODE = ?", (ProjectCode,))
                     machineParam = cur.fetchall()
@@ -970,12 +970,14 @@ class SideButtonFrame(Tk.Frame):
                         result_arr2.append(file_operation.extract_str(ari[0]))
                         pos_arr.append(ari[1])
                         date_arr.append(ari[2])
+                        sample_rate_arr.append(ari[3])
                     
 
                     for i in range(len(pos_arr)):
                         new_file_name= f'_{str(i+1)}_' + file_name + date_arr[i] + pos_arr[i] + '.csv'
+                        new_file_name=new_file_name.replace("/", "_")
                         completeName = os.path.join(save_path, new_file_name)
-                        file_operation.store_data(result_arr2[i], completeName)
+                        file_operation.store_data(result_arr2[i], sample_rate_arr[i], completeName)
                         
                     
                     try:
@@ -1131,7 +1133,8 @@ class SideButtonFrame(Tk.Frame):
                     document._add_run(_('Figure5: Envelope spectrum'), style='italic')
                     document.add_blank_comment()
                     document._add_page_break()
-                    new_file_name=str(prjCode)+'_report.docx'
+                    new_file_name=str(prjCode)+ '_' + str(sensorPosition) + '_'+'_report.docx'
+                    new_file_name=new_file_name.replace("/", "_")
                     document._save(new_file_name)
 
                     try:

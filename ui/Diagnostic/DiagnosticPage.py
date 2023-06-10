@@ -1380,10 +1380,10 @@ class ConfigFrame(Tk.Frame):
         sensor1Combo['value'] = ('NONE', "Accelerometer", "Velocity Sensor")
         sensor1Combo.grid(column=1, row=1, padx=0, pady=5, sticky='e')
 
-        port1PosCombo = ttk.Combobox(sensorFrame, width=4, textvariable=self.wfParam16, state="readonly",
+        self.port1PosCombo = ttk.Combobox(sensorFrame, width=4, textvariable=self.wfParam16, state="readonly",
                                     font=('Chakra Petch', 13))
-        port1PosCombo['value']=('NONE')
-        port1PosCombo.grid(column=2, row=1, padx=0, pady=5, sticky='e')
+        self.port1PosCombo['value']=('NONE')
+        self.port1PosCombo.grid(column=2, row=1, padx=0, pady=5, sticky='e')
 
         port1Button=ttk.Button(sensorFrame, style="normal.TButton", image=self.smallSePhoto,\
                                command=lambda: self.creat_sensor_position_page(self.origin_config.waveform_config_struct))
@@ -1397,10 +1397,10 @@ class ConfigFrame(Tk.Frame):
         sensor2Combo['value'] = ('NONE', "Accelerometer", "Velocity Sensor")
         sensor2Combo.grid(column=1, row=2, padx=0, pady=5, sticky='e')
 
-        port2PosCombo = ttk.Combobox(sensorFrame, width=4, textvariable=self.wfParam17, state="readonly",
+        self.port2PosCombo = ttk.Combobox(sensorFrame, width=4, textvariable=self.wfParam17, state="readonly",
                                     font=('Chakra Petch', 13))
-        port2PosCombo['value']=('NONE')
-        port2PosCombo.grid(column=2, row=2, padx=0, pady=5, sticky='e')
+        self.port2PosCombo['value']=('NONE')
+        self.port2PosCombo.grid(column=2, row=2, padx=0, pady=5, sticky='e')
 
 #ss3
         sensor3Label = ttk.Label(sensorFrame, text=_('Port3'), style='config.TLabel')
@@ -1411,10 +1411,10 @@ class ConfigFrame(Tk.Frame):
         sensor3Combo['value'] = ('NONE', "Accelerometer", "Velocity Sensor")
         sensor3Combo.grid(column=1, row=3, padx=0, pady=5, sticky='e')
 
-        port3PosCombo = ttk.Combobox(sensorFrame, width=4, textvariable=self.wfParam18, state="readonly",
+        self.port3PosCombo = ttk.Combobox(sensorFrame, width=4, textvariable=self.wfParam18, state="readonly",
                                     font=('Chakra Petch', 13))
-        port3PosCombo['value']=('NONE')
-        port3PosCombo.grid(column=2, row=3, padx=0, pady=5, sticky='e')
+        self.port3PosCombo['value']=('NONE')
+        self.port3PosCombo.grid(column=2, row=3, padx=0, pady=5, sticky='e')
 
         sensor4Label = ttk.Label(sensorFrame, text=_('Port4'), style='config.TLabel')
         sensor4Label.grid(column=0, row=4, padx=5, pady=5, sticky='w')
@@ -1581,7 +1581,7 @@ class ConfigFrame(Tk.Frame):
         self.origin_config.waveform_config_struct["UseTSA"] = self.tsa_check.get()
         self.origin_config.waveform_config_struct["MachineType"] = self.wfParam9.get()
         self.origin_config.waveform_config_struct["num_fft_line"] = int(self.wfParam8.get())
-        self.origin_config.waveform_config_struct["MachineName"] = self.wfParam14.get()
+        self.origin_config.waveform_config_struct["MachineName"] = self.wfParam14.get().replace("/", "_")
         self.origin_config.waveform_config_struct["Foundation"] = self.wfParam15.get()
 
         self.origin_config.frequency_config_struct["FilterType"] = self.frqParam1.get()
@@ -1643,6 +1643,7 @@ class GeneralConfig(Tk.Canvas):
     def __init__(self, parent, origin_config, db_connect):
         super().__init__(parent.parent.configFrame, width=1008, height=504, bg="white")
         self.con=db_connect
+        self.parent=parent
         self.style = ttk.Style()
         self.style.configure('gen.TLabel', font=('Chakra Petch', 14))
         self.style.configure('gen.TLabelframe', font=('Chakra Petch', 10))
@@ -1758,21 +1759,79 @@ class GeneralConfig(Tk.Canvas):
         
         tempPrjCode=self.prjParam1.get()
         tempCompanyName=self.prjParam2.get()
+        tempDate=self.prjParam3.get()
         prjCodeArr=self.load_all_project_code()
         if tempPrjCode!='' and tempCompanyName!='':
             if prjCodeArr.count(tempPrjCode)==0:
-                origin_config.project_struct["ProjectCode"] = tempPrjCode
-                origin_config.project_struct["CompanyName"] = tempCompanyName
+                origin_config.project_struct["ProjectCode"] = tempPrjCode.replace("/", "-")
+                origin_config.project_struct["CompanyName"] = tempCompanyName.replace("/", "-")
                 if self.prjParam3.get()!='':
-                    origin_config.project_struct["Date"] = self.prjParam3.get()
+                    origin_config.project_struct["Date"] = tempDate.replace("/", "-")
+                self.parent.port1PosCombo["value"]=("NONE")
+                self.parent.port2PosCombo["value"]=("NONE")
+                self.parent.port3PosCombo["value"]=("NONE")
                 self.applyButton.configure(state="disable")
                 self.destroy()
             else:
                 if pms.general_warning(_("The project code is existed, do you want to continue?")):
-                    origin_config.project_struct["ProjectCode"] = tempPrjCode
-                    origin_config.project_struct["CompanyName"] = tempCompanyName
+                    origin_config.project_struct["ProjectCode"] = tempPrjCode.replace("/", "-")
+                    origin_config.project_struct["CompanyName"] = tempCompanyName.replace("/", "-")
                     if self.prjParam3.get()!='':
-                        origin_config.project_struct["Date"] = self.prjParam3.get()
+                        origin_config.project_struct["Date"] = tempDate.replace("/", "-")
+
+                    with self.con:
+                        cur=self.con.cursor()
+                        cur.execute(f"SELECT DATA, POS, Sample_rate FROM DATA WHERE CODE = ? ORDER BY DATE DESC", (origin_config.project_struct["ProjectCode"],))
+                        load_data = cur.fetchall()
+                        cur.execute(f"SELECT POWER, RPM, DRIVEN, BEARINGBORE, GEARTOOTH, FOUNDATION, NOTE FROM Project_ID WHERE CODE = ?", (origin_config.project_struct["ProjectCode"],))
+                        machineParam = cur.fetchall()
+                        load_data_arr = [i for i in load_data] #mang cac chuoi data, date [data,date,sample_rate; data, date, sample_rate]
+                        machine_param_arr = [i for i in machineParam]
+                        if len(load_data_arr)!=0:
+                            fftLine=int((len(file_operation.extract_str(load_data_arr[0][0]))+1400)/2.56)
+                            Fmax=int(load_data_arr[0][2]/2.56)
+                            posList=[]
+                            for i in range(len(load_data)):
+                                posList.append(load_data_arr[i][1])
+                            new_list = []
+                            [new_list.append(item) for item in posList if item not in new_list]
+                            new_pos_arr=[item[:2] for item in new_list]
+                            for ari in machine_param_arr:
+                                try:
+                                    power=int(ari[0])
+                                except:
+                                    power=1
+                                try:
+                                    rpm=int(ari[1])
+                                except :
+                                    rpm=1500 
+                                
+                                try:
+                                    bearing_bore=int(ari[3])
+                                except:
+                                    bearing_bore=50 
+
+                                try:
+                                    gear_tooth=int(ari[4])
+                                except :
+                                    gear_tooth=0 
+                                driven=ari[2]
+                                foundation=ari[5]
+                                note=ari[6]
+
+                            self.parent.wfParam8.set(fftLine)
+                            self.parent.wfParam7.set(Fmax)
+                            self.parent.wfParam10.set(rpm)
+                            self.parent.wfParam11.set(power)
+                            self.parent.wfParam12.set(gear_tooth)
+                            self.parent.wfParam13.set(bearing_bore)
+                            self.parent.wfParam15.set(foundation)
+                            self.parent.wfParam14.set(note)
+                            self.parent.wfParam9.set(driven)
+                            self.parent.port1PosCombo["value"]=tuple(new_pos_arr)
+                            self.parent.port2PosCombo["value"]=tuple(new_pos_arr)
+                            self.parent.port3PosCombo["value"]=tuple(new_pos_arr)
+                            
                     self.applyButton.configure(state="disable")
                     self.destroy()
                 else: 
