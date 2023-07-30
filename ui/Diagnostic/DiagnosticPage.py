@@ -308,6 +308,7 @@ class DiagnosticPage(Tk.Frame):
     def read_sensor(self):
         self.origin_config.sensor_config = {
             "sensor_input": [],
+            "sensor_position":[],
             "sensor_data": [],
             "store_sensor_data": [[],[],[]],
             "unit": [],
@@ -336,6 +337,23 @@ class DiagnosticPage(Tk.Frame):
             self.origin_config.waveform_config_struct["Sensor4"])
         self.origin_config.sensor_config["sensor_key"].append(
             self.origin_config.waveform_config_struct["KeyPhase"])
+        
+        
+        if self.origin_config.waveform_config_struct["Port1Pos"]!="NONE":
+            self.origin_config.sensor_config["sensor_position"].append(1)
+        else:
+            self.origin_config.sensor_config["sensor_position"].append(0)
+
+        if self.origin_config.waveform_config_struct["Port2Pos"]!="NONE":
+            self.origin_config.sensor_config["sensor_position"].append(1)
+        else:
+            self.origin_config.sensor_config["sensor_position"].append(0)
+        
+        if self.origin_config.waveform_config_struct["Port3Pos"]!="NONE":
+            self.origin_config.sensor_config["sensor_position"].append(1)
+        else:
+            self.origin_config.sensor_config["sensor_position"].append(0)
+
         if self.origin_config.sensor_config["sensor_input"][3] == "TACHOMETER":
             n = 6
         else:
@@ -411,7 +429,7 @@ class DiagnosticPage(Tk.Frame):
         accConvertFactor=1000/self.origin_config.sensor_sensitivity["acc_sensitivity"]
         velConvertFactor=1000/self.origin_config.sensor_sensitivity["vel_sensitivity"]
         for i in range(3):
-            if self.origin_config.sensor_config["sensor_input"][i] == 'Accelerometer':
+            if self.origin_config.sensor_config["sensor_input"][i] == 'Accelerometer' and self.origin_config.sensor_config["sensor_position"][i]!=0:
                 self.origin_config.sensor_config["sensor_data"][i] *= accConvertFactor  # g
                 self.origin_config.sensor_config["sensor_data"][i] -= np.mean(
                     self.origin_config.sensor_config["sensor_data"][i])
@@ -438,7 +456,7 @@ class DiagnosticPage(Tk.Frame):
                 self.origin_config.sensor_config["accel_data"].append(
                     self.origin_config.sensor_config["store_sensor_data"][i])     
 
-            elif self.origin_config.sensor_config["sensor_input"][i] == 'Velocity Sensor':
+            elif self.origin_config.sensor_config["sensor_input"][i] == 'Velocity Sensor' and self.origin_config.sensor_config["sensor_position"][i]!=0:
                 self.origin_config.sensor_config["sensor_data"][i] *= velConvertFactor  # mm/s
                 self.origin_config.sensor_config["sensor_data"][i] -= np.mean(
                     self.origin_config.sensor_config["sensor_data"][i])
@@ -458,7 +476,7 @@ class DiagnosticPage(Tk.Frame):
                     vel2disp(self.origin_config.sensor_config["sensor_data"][i],
                              self.origin_config.sensor_config["sample_rate"]))
                              
-            elif self.origin_config.sensor_config["sensor_input"][i] == 'NONE':
+            elif self.origin_config.sensor_config["sensor_position"][i]==0:
                 self.origin_config.sensor_config["sensor_data"][i] *= 0
                 self.origin_config.sensor_config["store_sensor_data"][i]=self.origin_config.sensor_config["sensor_data"][i][700:-700]
                 unit[i] = 'no sensor'
@@ -1377,7 +1395,7 @@ class ConfigFrame(Tk.Frame):
 
         sensor1Combo = ttk.Combobox(sensorFrame, width=8, textvariable=self.wfParam1, state="readonly",
                                     font=('Chakra Petch', 13))
-        sensor1Combo['value'] = ('NONE', "Accelerometer", "Velocity Sensor")
+        sensor1Combo['value'] = ("Accelerometer", "Velocity Sensor")
         sensor1Combo.grid(column=1, row=1, padx=0, pady=5, sticky='e')
 
         self.port1PosCombo = ttk.Combobox(sensorFrame, width=4, textvariable=self.wfParam16, state="readonly",
@@ -1385,16 +1403,13 @@ class ConfigFrame(Tk.Frame):
         self.port1PosCombo['value']=('NONE')
         self.port1PosCombo.grid(column=2, row=1, padx=0, pady=5, sticky='e')
 
-        port1Button=ttk.Button(sensorFrame, style="normal.TButton", image=self.smallSePhoto,\
-                               command=lambda: self.creat_sensor_position_page(self.origin_config.waveform_config_struct))
-        port1Button.grid(column=3, row=1, padx=0, pady=5, sticky='e')
 #ss2
         sensor2Label = ttk.Label(sensorFrame, text=_('Port2'), style='config.TLabel')
         sensor2Label.grid(column=0, row=2, padx=5, pady=5, sticky='w')
 
         sensor2Combo = ttk.Combobox(sensorFrame, width=8, textvariable=self.wfParam2, state="readonly",
                                     font=('Chakra Petch', 13))
-        sensor2Combo['value'] = ('NONE', "Accelerometer", "Velocity Sensor")
+        sensor2Combo['value'] = ("Accelerometer", "Velocity Sensor")
         sensor2Combo.grid(column=1, row=2, padx=0, pady=5, sticky='e')
 
         self.port2PosCombo = ttk.Combobox(sensorFrame, width=4, textvariable=self.wfParam17, state="readonly",
@@ -1402,13 +1417,17 @@ class ConfigFrame(Tk.Frame):
         self.port2PosCombo['value']=('NONE')
         self.port2PosCombo.grid(column=2, row=2, padx=0, pady=5, sticky='e')
 
+        port2Button=ttk.Button(sensorFrame, style="normal.TButton", image=self.smallSePhoto,\
+                               command=lambda: self.creat_sensor_position_page(self.origin_config.waveform_config_struct))
+        port2Button.grid(column=3, row=2, padx=0, pady=5, sticky='e')
+
 #ss3
         sensor3Label = ttk.Label(sensorFrame, text=_('Port3'), style='config.TLabel')
         sensor3Label.grid(column=0, row=3, padx=5, pady=5, sticky='w')
 
         sensor3Combo = ttk.Combobox(sensorFrame, width=8, textvariable=self.wfParam3, state="readonly",
                                     font=('Chakra Petch', 13))
-        sensor3Combo['value'] = ('NONE', "Accelerometer", "Velocity Sensor")
+        sensor3Combo['value'] = ("Accelerometer", "Velocity Sensor")
         sensor3Combo.grid(column=1, row=3, padx=0, pady=5, sticky='e')
 
         self.port3PosCombo = ttk.Combobox(sensorFrame, width=4, textvariable=self.wfParam18, state="readonly",
@@ -1754,7 +1773,7 @@ class GeneralConfig(Tk.Canvas):
             self.prjParam2.set(companyName)
         except:
             pass
-
+    
     def on_apply_button_clicked(self, origin_config):
         
         tempPrjCode=self.prjParam1.get()
@@ -1762,80 +1781,84 @@ class GeneralConfig(Tk.Canvas):
         tempDate=self.prjParam3.get()
         prjCodeArr=self.load_all_project_code()
         if tempPrjCode!='' and tempCompanyName!='':
-            if prjCodeArr.count(tempPrjCode)==0:
-                origin_config.project_struct["ProjectCode"] = tempPrjCode.replace("/", "-")
-                origin_config.project_struct["CompanyName"] = tempCompanyName.replace("/", "-")
-                if self.prjParam3.get()!='':
-                    origin_config.project_struct["Date"] = tempDate.replace("/", "-")
-                self.parent.port1PosCombo["value"]=("NONE")
-                self.parent.port2PosCombo["value"]=("NONE")
-                self.parent.port3PosCombo["value"]=("NONE")
-                self.applyButton.configure(state="disable")
-                self.destroy()
-            else:
-                if pms.general_warning(_("The project code is existed, do you want to continue?")):
+            if validate_time(tempDate)==True:
+                if prjCodeArr.count(tempPrjCode)==0:
                     origin_config.project_struct["ProjectCode"] = tempPrjCode.replace("/", "-")
                     origin_config.project_struct["CompanyName"] = tempCompanyName.replace("/", "-")
-                    if self.prjParam3.get()!='':
-                        origin_config.project_struct["Date"] = tempDate.replace("/", "-")
-
-                    with self.con:
-                        cur=self.con.cursor()
-                        cur.execute(f"SELECT DATA, POS, Sample_rate FROM DATA WHERE CODE = ? ORDER BY DATE DESC", (origin_config.project_struct["ProjectCode"],))
-                        load_data = cur.fetchall()
-                        cur.execute(f"SELECT POWER, RPM, DRIVEN, BEARINGBORE, GEARTOOTH, FOUNDATION, NOTE FROM Project_ID WHERE CODE = ?", (origin_config.project_struct["ProjectCode"],))
-                        machineParam = cur.fetchall()
-                        load_data_arr = [i for i in load_data] #mang cac chuoi data, date [data,date,sample_rate; data, date, sample_rate]
-                        machine_param_arr = [i for i in machineParam]
-                        if len(load_data_arr)!=0:
-                            fftLine=int((len(file_operation.extract_str(load_data_arr[0][0]))+1400)/2.56)
-                            Fmax=int(load_data_arr[0][2]/2.56)
-                            posList=[]
-                            for i in range(len(load_data)):
-                                posList.append(load_data_arr[i][1])
-                            new_list = []
-                            [new_list.append(item) for item in posList if item not in new_list]
-                            new_pos_arr=[item[:2] for item in new_list]
-                            for ari in machine_param_arr:
-                                try:
-                                    power=int(ari[0])
-                                except:
-                                    power=1
-                                try:
-                                    rpm=int(ari[1])
-                                except :
-                                    rpm=1500 
-                                
-                                try:
-                                    bearing_bore=int(ari[3])
-                                except:
-                                    bearing_bore=50 
-
-                                try:
-                                    gear_tooth=int(ari[4])
-                                except :
-                                    gear_tooth=0 
-                                driven=ari[2]
-                                foundation=ari[5]
-                                note=ari[6]
-
-                            self.parent.wfParam8.set(fftLine)
-                            self.parent.wfParam7.set(Fmax)
-                            self.parent.wfParam10.set(rpm)
-                            self.parent.wfParam11.set(power)
-                            self.parent.wfParam12.set(gear_tooth)
-                            self.parent.wfParam13.set(bearing_bore)
-                            self.parent.wfParam15.set(foundation)
-                            self.parent.wfParam14.set(note)
-                            self.parent.wfParam9.set(driven)
-                            self.parent.port1PosCombo["value"]=tuple(new_pos_arr)
-                            self.parent.port2PosCombo["value"]=tuple(new_pos_arr)
-                            self.parent.port3PosCombo["value"]=tuple(new_pos_arr)
-                            
+                    
+                    origin_config.project_struct["Date"] = tempDate
+                    self.parent.port1PosCombo["value"]=("NONE")
+                    self.parent.port2PosCombo["value"]=("NONE")
+                    self.parent.port3PosCombo["value"]=("NONE")
                     self.applyButton.configure(state="disable")
                     self.destroy()
-                else: 
-                    return
+                else:
+                    if pms.general_warning(_("The project code is existed, do you want to measure again ?")):
+                        origin_config.project_struct["ProjectCode"] = tempPrjCode.replace("/", "-")
+                        origin_config.project_struct["CompanyName"] = tempCompanyName.replace("/", "-")
+                        origin_config.project_struct["Date"] = tempDate
+
+                        with self.con:
+                            cur=self.con.cursor()
+                            cur.execute(f"SELECT DATA, POS, Sample_rate FROM DATA WHERE CODE = ? ORDER BY DATE DESC", (origin_config.project_struct["ProjectCode"],))
+                            load_data = cur.fetchall()
+                            cur.execute(f"SELECT POWER, RPM, DRIVEN, BEARINGBORE, GEARTOOTH, FOUNDATION, NOTE FROM Project_ID WHERE CODE = ?", (origin_config.project_struct["ProjectCode"],))
+                            machineParam = cur.fetchall()
+                            load_data_arr = [i for i in load_data] #mang cac chuoi data, date [data,date,sample_rate; data, date, sample_rate]
+                            machine_param_arr = [i for i in machineParam]
+                            if len(load_data_arr)!=0:
+                                fftLine=int((len(file_operation.extract_str(load_data_arr[0][0]))+1400)/2.56)
+                                Fmax=int(load_data_arr[0][2]/2.56)
+                                posList=[]
+                                for i in range(len(load_data)):
+                                    posList.append(load_data_arr[i][1])
+                                new_list = []
+                                [new_list.append(item) for item in posList if item not in new_list]
+                                new_pos_arr=[item[:2] for item in new_list]
+                                new_pos_arr.insert(0, "NONE")
+                                for ari in machine_param_arr:
+                                    try:
+                                        power=int(ari[0])
+                                    except:
+                                        power=1
+                                    try:
+                                        rpm=int(ari[1])
+                                    except :
+                                        rpm=1500 
+                                    
+                                    try:
+                                        bearing_bore=int(ari[3])
+                                    except:
+                                        bearing_bore=50 
+
+                                    try:
+                                        gear_tooth=int(ari[4])
+                                    except :
+                                        gear_tooth=0 
+                                    driven=ari[2]
+                                    foundation=ari[5]
+                                    note=ari[6]
+
+                                self.parent.wfParam8.set(fftLine)
+                                self.parent.wfParam7.set(Fmax)
+                                self.parent.wfParam10.set(rpm)
+                                self.parent.wfParam11.set(power)
+                                self.parent.wfParam12.set(gear_tooth)
+                                self.parent.wfParam13.set(bearing_bore)
+                                self.parent.wfParam15.set(foundation)
+                                self.parent.wfParam14.set(note)
+                                self.parent.wfParam9.set(driven)
+                                self.parent.port1PosCombo["value"]=tuple(new_pos_arr)
+                                self.parent.port2PosCombo["value"]=tuple(new_pos_arr)
+                                self.parent.port3PosCombo["value"]=tuple(new_pos_arr)
+                                
+                        self.applyButton.configure(state="disable")
+                        self.destroy()
+                    else: 
+                        return
+            else:
+                pms.general_warning(_("Date format is wrong"))
+                return
         else:
             pms.general_warning(_("The project code and company name may not be empty"))
             return
@@ -1993,6 +2016,12 @@ class SensorPositionCanvas(Tk.Canvas):
         port1Pos=self.inputParam2.get()
         port2Pos=self.inputParam3.get()
         port3Pos=self.inputParam4.get()
+        if port1Pos=='':
+            port1Pos="NONE"
+        if port2Pos=='':
+            port2Pos="NONE"
+        if port3Pos=='':
+            port3Pos="NONE"
         self.waveform_config_struct["Port1Pos"]=port1Pos
         self.waveform_config_struct["Port2Pos"]=port2Pos
         self.waveform_config_struct["Port3Pos"]=port3Pos

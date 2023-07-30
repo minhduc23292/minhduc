@@ -31,7 +31,7 @@ def company_project_existed_warning():
         return False
 
 def general_warning(state):
-    if messagebox.askyesno("Question", f"{state} ?"):
+    if messagebox.askyesno("Question", f"{state}"):
         return True
     else:
         return False

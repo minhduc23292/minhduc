@@ -1,8 +1,6 @@
 from enum import Enum
 from typing import Sequence
 import numpy as np
-# from numpy.core.records import array
-import popup.pop_message as pms
 from scipy.signal import hann, blackman, flattop, lfilter, firwin, iirfilter
 
 
@@ -101,7 +99,6 @@ def iir_filter_data(
     if low_pass_cut_off_freq >= sample_rate / 2.56:
         low_pass_cut_off_freq = int(sample_rate / 2.56) - 1.0
     if (filter_type == ''):
-        pms.empty_entry_error('sample rate or filter type')
         return samples
     else:
         order = 5

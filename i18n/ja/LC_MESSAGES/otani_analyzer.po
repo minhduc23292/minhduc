@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-11 01:51+0700\n"
+"POT-Creation-Date: 2023-07-10 18:09+0700\n"
 "PO-Revision-Date: 2022-11-02 18:09+0900\n"
 "Last-Translator: Le Phuong <lephuong@phuonglh>\n"
 "Language-Team: Japanese\n"
@@ -49,7 +49,7 @@ msgid "Please entry the "
 msgstr "入力"
 
 #: keyboard/keyboard.py:37 ui/history/historyModule.py:516
-#: ui/Diagnostic/DiagnosticPage.py:1880
+#: ui/Diagnostic/DiagnosticPage.py:1903
 msgid "Input"
 msgstr "入力"
 
@@ -134,7 +134,7 @@ msgid "Rotating direction"
 msgstr "回転方向"
 
 #: ui/balancingModule/balancingModule.py:302
-#: ui/Diagnostic/DiagnosticPage.py:1446
+#: ui/Diagnostic/DiagnosticPage.py:1465
 msgid "FFT lines"
 msgstr "FFT ライン"
 
@@ -181,8 +181,8 @@ msgstr "計算する"
 
 #: ui/balancingModule/balancingModule.py:374 ui/history/historyModule.py:275
 #: ui/ResonanceModule/ResonanceModule.py:292
-#: ui/Diagnostic/DiagnosticPage.py:236 ui/Diagnostic/DiagnosticPage.py:1690
-#: ui/Diagnostic/DiagnosticPage.py:1952 ui/Settingpage/SettingPage.py:186
+#: ui/Diagnostic/DiagnosticPage.py:236 ui/Diagnostic/DiagnosticPage.py:1709
+#: ui/Diagnostic/DiagnosticPage.py:1975 ui/Settingpage/SettingPage.py:186
 #: ui/Settingpage/SettingPage.py:334
 msgid "APPLY"
 msgstr "申し込み"
@@ -200,7 +200,7 @@ msgstr "OK"
 
 #: ui/balancingModule/balancingModule.py:486
 #: ui/balancingModule/balancingModule.py:495
-#: ui/Diagnostic/DiagnosticPage.py:483
+#: ui/Diagnostic/DiagnosticPage.py:501
 msgid "Data errors"
 msgstr "データエラーです。"
 
@@ -491,7 +491,7 @@ msgid "View Limit"
 msgstr "ビュー制限"
 
 #: ui/history/historyModule.py:246 ui/ResonanceModule/ResonanceModule.py:278
-#: ui/Diagnostic/DiagnosticPage.py:1494
+#: ui/Diagnostic/DiagnosticPage.py:1513
 msgid "Tracking speed"
 msgstr "追跡の速度"
 
@@ -503,11 +503,27 @@ msgstr "平均使用"
 msgid "Average Bin"
 msgstr "平均ビン"
 
+#: ui/history/historyModule.py:263
+msgid "Show Vel RMS"
+msgstr "ショー Vel RMS"
+
+#: ui/history/historyModule.py:266
+msgid "Show Bearing gE"
+msgstr "ショー BRGs gE"
+
+#: ui/history/historyModule.py:269
+msgid "Show Gear Acc"
+msgstr "ショー Gear Acc"
+
+#: ui/history/historyModule.py:272
+msgid "Show Bearing HFCF"
+msgstr "ショー BRGs HFCF"
+
 #: ui/history/historyModule.py:279
 msgid "Delete Project"
 msgstr "プロジェクト削除"
 
-#: ui/history/historyModule.py:301 ui/Diagnostic/DiagnosticPage.py:1679
+#: ui/history/historyModule.py:301 ui/Diagnostic/DiagnosticPage.py:1698
 #: ui/Settingpage/SettingPage.py:175
 msgid "Date"
 msgstr "Date(YYYY-MM-DD)"
@@ -590,27 +606,27 @@ msgstr ""
 "なし"
 
 #: ui/history/historyModule.py:670 ui/ResonanceModule/ResonanceModule.py:437
-#: ui/Diagnostic/DiagnosticPage.py:692
+#: ui/Diagnostic/DiagnosticPage.py:710
 msgid "ZOOM IN"
 msgstr "ズームイン "
 
 #: ui/history/historyModule.py:676 ui/ResonanceModule/ResonanceModule.py:443
-#: ui/Diagnostic/DiagnosticPage.py:698
+#: ui/Diagnostic/DiagnosticPage.py:716
 msgid "ZOOM OUT"
 msgstr "ズームアウト"
 
 #: ui/history/historyModule.py:681 ui/ResonanceModule/ResonanceModule.py:448
-#: ui/Diagnostic/DiagnosticPage.py:703
+#: ui/Diagnostic/DiagnosticPage.py:721
 msgid "PAN LEFT"
 msgstr "左パン"
 
 #: ui/history/historyModule.py:687 ui/ResonanceModule/ResonanceModule.py:454
-#: ui/Diagnostic/DiagnosticPage.py:709
+#: ui/Diagnostic/DiagnosticPage.py:727
 msgid "PAN RIGHT"
 msgstr "パン右"
 
 #: ui/history/historyModule.py:693 ui/ResonanceModule/ResonanceModule.py:460
-#: ui/Diagnostic/DiagnosticPage.py:715
+#: ui/Diagnostic/DiagnosticPage.py:733
 msgid "RESET"
 msgstr "リセット"
 
@@ -630,7 +646,7 @@ msgstr ""
 "速度\n"
 "周波数"
 
-#: ui/history/historyModule.py:762 ui/Diagnostic/DiagnosticPage.py:776
+#: ui/history/historyModule.py:762 ui/Diagnostic/DiagnosticPage.py:794
 msgid "ENVELOPED"
 msgstr ""
 
@@ -784,7 +800,7 @@ msgid "Window Factor"
 msgstr "ウィンドウ係数"
 
 #: ui/ResonanceModule/ResonanceModule.py:243
-#: ui/Diagnostic/DiagnosticPage.py:1463
+#: ui/Diagnostic/DiagnosticPage.py:1482
 msgid "Filter type"
 msgstr "フィルタータイプ"
 
@@ -890,22 +906,22 @@ msgstr "スタート "
 msgid "SAVE"
 msgstr "保存"
 
-#: ui/Diagnostic/DiagnosticPage.py:248 ui/Diagnostic/DiagnosticPage.py:480
-#: ui/Diagnostic/DiagnosticPage.py:944 ui/Diagnostic/DiagnosticPage.py:950
-#: ui/Diagnostic/DiagnosticPage.py:971
+#: ui/Diagnostic/DiagnosticPage.py:248 ui/Diagnostic/DiagnosticPage.py:498
+#: ui/Diagnostic/DiagnosticPage.py:962 ui/Diagnostic/DiagnosticPage.py:968
+#: ui/Diagnostic/DiagnosticPage.py:989
 msgid ""
 "LASER\n"
 "VIEW"
 msgstr "レーザ"
 
-#: ui/Diagnostic/DiagnosticPage.py:284 ui/Diagnostic/DiagnosticPage.py:796
-#: ui/Diagnostic/DiagnosticPage.py:817 ui/Diagnostic/DiagnosticPage.py:830
-#: ui/Diagnostic/DiagnosticPage.py:852 ui/Diagnostic/DiagnosticPage.py:872
-#: ui/Diagnostic/DiagnosticPage.py:1211
+#: ui/Diagnostic/DiagnosticPage.py:284 ui/Diagnostic/DiagnosticPage.py:814
+#: ui/Diagnostic/DiagnosticPage.py:835 ui/Diagnostic/DiagnosticPage.py:848
+#: ui/Diagnostic/DiagnosticPage.py:870 ui/Diagnostic/DiagnosticPage.py:890
+#: ui/Diagnostic/DiagnosticPage.py:1229
 msgid "GRID ON"
 msgstr "グリッドオン"
 
-#: ui/Diagnostic/DiagnosticPage.py:288 ui/Diagnostic/DiagnosticPage.py:797
+#: ui/Diagnostic/DiagnosticPage.py:288 ui/Diagnostic/DiagnosticPage.py:815
 msgid ""
 "FUNCTION\n"
 "NONE"
@@ -917,50 +933,50 @@ msgstr ""
 msgid "SUMMARY"
 msgstr "概要"
 
-#: ui/Diagnostic/DiagnosticPage.py:345
+#: ui/Diagnostic/DiagnosticPage.py:363
 msgid "READING.....Please wait:"
 msgstr "READING....Please wait:"
 
-#: ui/Diagnostic/DiagnosticPage.py:345
+#: ui/Diagnostic/DiagnosticPage.py:363
 msgid "seconds."
 msgstr "seconds."
 
-#: ui/Diagnostic/DiagnosticPage.py:468
+#: ui/Diagnostic/DiagnosticPage.py:486
 msgid "Actual sample rate:"
 msgstr "実際のサンプルレート: "
 
-#: ui/Diagnostic/DiagnosticPage.py:475
+#: ui/Diagnostic/DiagnosticPage.py:493
 msgid ""
 "NORMAL\n"
 "VIEW"
 msgstr "普通"
 
-#: ui/Diagnostic/DiagnosticPage.py:511 ui/Diagnostic/DiagnosticPage.py:648
+#: ui/Diagnostic/DiagnosticPage.py:529 ui/Diagnostic/DiagnosticPage.py:666
 msgid "There is no data !"
 msgstr "データがありません。"
 
-#: ui/Diagnostic/DiagnosticPage.py:584 ui/Diagnostic/DiagnosticPage.py:619
-#: ui/Diagnostic/DiagnosticPage.py:640
+#: ui/Diagnostic/DiagnosticPage.py:602 ui/Diagnostic/DiagnosticPage.py:637
+#: ui/Diagnostic/DiagnosticPage.py:658
 msgid "Data is saved."
 msgstr "データが保存されます。"
 
-#: ui/Diagnostic/DiagnosticPage.py:651
+#: ui/Diagnostic/DiagnosticPage.py:669
 msgid "Please input project code and company name !"
 msgstr "プロジェクトコードと会社名を入力してください。"
 
-#: ui/Diagnostic/DiagnosticPage.py:767
+#: ui/Diagnostic/DiagnosticPage.py:785
 msgid "NONE"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:772
+#: ui/Diagnostic/DiagnosticPage.py:790
 msgid "FILTER"
 msgstr "フィルター"
 
-#: ui/Diagnostic/DiagnosticPage.py:781
+#: ui/Diagnostic/DiagnosticPage.py:799
 msgid "PSD"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:786
+#: ui/Diagnostic/DiagnosticPage.py:804
 msgid ""
 "VELOCITY\n"
 "SPECTRAL"
@@ -969,7 +985,7 @@ msgstr ""
 "速度\n"
 "スペクトラム"
 
-#: ui/Diagnostic/DiagnosticPage.py:818
+#: ui/Diagnostic/DiagnosticPage.py:836
 msgid ""
 "FUNCTION\n"
 "FILTER"
@@ -977,7 +993,7 @@ msgstr ""
 "機能\n"
 "フィルター"
 
-#: ui/Diagnostic/DiagnosticPage.py:831
+#: ui/Diagnostic/DiagnosticPage.py:849
 msgid ""
 "FUNCTION\n"
 "ENVELOPED"
@@ -985,7 +1001,7 @@ msgstr ""
 "機能\n"
 "ENVELOPED"
 
-#: ui/Diagnostic/DiagnosticPage.py:853
+#: ui/Diagnostic/DiagnosticPage.py:871
 msgid ""
 "FUNCTION\n"
 "PSD"
@@ -993,7 +1009,7 @@ msgstr ""
 "機能\n"
 "PSD"
 
-#: ui/Diagnostic/DiagnosticPage.py:873
+#: ui/Diagnostic/DiagnosticPage.py:891
 msgid ""
 "FUNCTION\n"
 "VELOCITY\n"
@@ -1003,157 +1019,161 @@ msgstr ""
 "速度\n"
 "スペクトラム"
 
-#: ui/Diagnostic/DiagnosticPage.py:1207
+#: ui/Diagnostic/DiagnosticPage.py:1225
 msgid "GRID OFF"
 msgstr "グリッドオフ"
 
-#: ui/Diagnostic/DiagnosticPage.py:1352
-#, fuzzy
+#: ui/Diagnostic/DiagnosticPage.py:1370
 msgid "General config"
-msgstr "センサー設定: "
+msgstr "一般設定 "
 
-#: ui/Diagnostic/DiagnosticPage.py:1360
+#: ui/Diagnostic/DiagnosticPage.py:1378
 msgid "Machine"
 msgstr "機械タイプ"
 
-#: ui/Diagnostic/DiagnosticPage.py:1368
-#, fuzzy
+#: ui/Diagnostic/DiagnosticPage.py:1386
 msgid "Project CFG"
-msgstr "プロジェクト: "
+msgstr "プロCFG: "
 
-#: ui/Diagnostic/DiagnosticPage.py:1375
+#: ui/Diagnostic/DiagnosticPage.py:1393
 msgid "Port1"
 msgstr "ポート1"
 
-#: ui/Diagnostic/DiagnosticPage.py:1392
+#: ui/Diagnostic/DiagnosticPage.py:1407
 msgid "Port2"
 msgstr "ポート2"
 
-#: ui/Diagnostic/DiagnosticPage.py:1406
+#: ui/Diagnostic/DiagnosticPage.py:1425
 msgid "Port3"
 msgstr "ポート3"
 
-#: ui/Diagnostic/DiagnosticPage.py:1419
+#: ui/Diagnostic/DiagnosticPage.py:1438
 msgid "Port4"
 msgstr "ポート4"
 
-#: ui/Diagnostic/DiagnosticPage.py:1427
+#: ui/Diagnostic/DiagnosticPage.py:1446
 msgid "Key sensor"
 msgstr "キーセンサー"
 
-#: ui/Diagnostic/DiagnosticPage.py:1435
+#: ui/Diagnostic/DiagnosticPage.py:1454
 msgid "  Use TSA"
 msgstr "  TSA使用"
 
-#: ui/Diagnostic/DiagnosticPage.py:1440
+#: ui/Diagnostic/DiagnosticPage.py:1459
 msgid "TSA times"
 msgstr "回数TSA"
 
-#: ui/Diagnostic/DiagnosticPage.py:1453
+#: ui/Diagnostic/DiagnosticPage.py:1472
 msgid "Fmax (Hz)"
 msgstr "Fmax (Hz)"
 
-#: ui/Diagnostic/DiagnosticPage.py:1460
+#: ui/Diagnostic/DiagnosticPage.py:1479
 msgid "Filter configuration"
 msgstr "フィルター設定"
 
-#: ui/Diagnostic/DiagnosticPage.py:1471
+#: ui/Diagnostic/DiagnosticPage.py:1490
 msgid "Window type"
 msgstr "ウィンドウタイプ"
 
-#: ui/Diagnostic/DiagnosticPage.py:1480
+#: ui/Diagnostic/DiagnosticPage.py:1499
 msgid "Filter From (Hz)"
 msgstr "フィルターから(Hz)"
 
-#: ui/Diagnostic/DiagnosticPage.py:1487
+#: ui/Diagnostic/DiagnosticPage.py:1506
 msgid "Filter To (Hz)"
 msgstr "フィルターへ(Hz)"
 
-#: ui/Diagnostic/DiagnosticPage.py:1501
+#: ui/Diagnostic/DiagnosticPage.py:1520
 msgid "Mesh grid"
 msgstr "メッシュ グリッド"
 
-#: ui/Diagnostic/DiagnosticPage.py:1508
+#: ui/Diagnostic/DiagnosticPage.py:1527
 msgid "Unit show"
 msgstr "ユニットを表示"
 
-#: ui/Diagnostic/DiagnosticPage.py:1516
+#: ui/Diagnostic/DiagnosticPage.py:1535
 msgid "Machine configuration"
 msgstr "機械設定"
 
-#: ui/Diagnostic/DiagnosticPage.py:1519
+#: ui/Diagnostic/DiagnosticPage.py:1538
 msgid "Machine name"
 msgstr "機械名"
 
-#: ui/Diagnostic/DiagnosticPage.py:1525
+#: ui/Diagnostic/DiagnosticPage.py:1544
 msgid "Speed (RPM)"
 msgstr "速度 (RPM)"
 
-#: ui/Diagnostic/DiagnosticPage.py:1532
+#: ui/Diagnostic/DiagnosticPage.py:1551
 msgid "Power (kW)"
 msgstr "電力 (kW)"
 
-#: ui/Diagnostic/DiagnosticPage.py:1539
+#: ui/Diagnostic/DiagnosticPage.py:1558
 msgid "Gear teeth"
 msgstr "歯車の歯"
 
-#: ui/Diagnostic/DiagnosticPage.py:1546
+#: ui/Diagnostic/DiagnosticPage.py:1565
 msgid "Brgs bore(mm)"
 msgstr "BRGs内径(mm)"
 
-#: ui/Diagnostic/DiagnosticPage.py:1553
+#: ui/Diagnostic/DiagnosticPage.py:1572
 msgid "Foundation"
 msgstr "基礎"
 
-#: ui/Diagnostic/DiagnosticPage.py:1661 ui/Settingpage/SettingPage.py:157
+#: ui/Diagnostic/DiagnosticPage.py:1680 ui/Settingpage/SettingPage.py:157
 msgid "Project config"
 msgstr "プロジェクト設定"
 
-#: ui/Diagnostic/DiagnosticPage.py:1664 ui/Settingpage/SettingPage.py:160
+#: ui/Diagnostic/DiagnosticPage.py:1683 ui/Settingpage/SettingPage.py:160
 msgid "Project Code*"
 msgstr "プロジェクトコード*"
 
-#: ui/Diagnostic/DiagnosticPage.py:1672 ui/Settingpage/SettingPage.py:168
+#: ui/Diagnostic/DiagnosticPage.py:1691 ui/Settingpage/SettingPage.py:168
 msgid "Company Name"
 msgstr "会社"
 
-#: ui/Diagnostic/DiagnosticPage.py:1686 ui/Settingpage/SettingPage.py:182
+#: ui/Diagnostic/DiagnosticPage.py:1705 ui/Settingpage/SettingPage.py:182
 msgid "Get time now"
 msgstr "現在の時刻を取得"
 
-#: ui/Diagnostic/DiagnosticPage.py:1694
+#: ui/Diagnostic/DiagnosticPage.py:1713
 msgid "CANCEL"
 msgstr ""
 
-#: ui/Diagnostic/DiagnosticPage.py:1776 ui/Settingpage/SettingPage.py:263
-#, fuzzy
-msgid "The project code is existed, do you want to continue?"
-msgstr "会社名とプロジェクトコードは存在しません。次へ進みますか"
+#: ui/Diagnostic/DiagnosticPage.py:1796
+msgid "The project code is existed, do you want to measure again ?"
+msgstr "プロジェクト コードは存在します。再度測定しますか?"
 
-#: ui/Diagnostic/DiagnosticPage.py:1840 ui/Settingpage/SettingPage.py:272
-#, fuzzy
+#: ui/Diagnostic/DiagnosticPage.py:1860
+msgid "Date format is wrong"
+msgstr "日付の形式が間違っています。"
+
+#: ui/Diagnostic/DiagnosticPage.py:1863 ui/Settingpage/SettingPage.py:272
 msgid "The project code and company name may not be empty"
-msgstr "プロジェクトコードと会社名を入力してください。"
+msgstr "プロジェクトコードと会社名を空にすることはできません。"
 
-#: ui/Diagnostic/DiagnosticPage.py:1928
+#: ui/Diagnostic/DiagnosticPage.py:1951
 msgid "Select port"
 msgstr "ポートを選択"
 
-#: ui/Diagnostic/DiagnosticPage.py:1937
+#: ui/Diagnostic/DiagnosticPage.py:1960
 msgid "Port 1"
 msgstr "ポート1"
 
-#: ui/Diagnostic/DiagnosticPage.py:1942
+#: ui/Diagnostic/DiagnosticPage.py:1965
 msgid "Port 2"
 msgstr "ポート2"
 
-#: ui/Diagnostic/DiagnosticPage.py:1947
+#: ui/Diagnostic/DiagnosticPage.py:1970
 msgid "Port 3"
 msgstr "ポート3"
 
 #: ui/Settingpage/SettingPage.py:125
 msgid "Setting"
 msgstr "設定"
+
+#: ui/Settingpage/SettingPage.py:263
+msgid "The project code is existed, do you want to continue?"
+msgstr "プロジェクト コードは存在します。続行しますか?"
 
 #: ui/Settingpage/SettingPage.py:306
 msgid "Sensor config"

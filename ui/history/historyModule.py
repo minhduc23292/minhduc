@@ -260,16 +260,16 @@ class historyConfig(Tk.Frame):
         self.tsaBin['value'] = ('2048','4096','8192','16384','32768')
         self.tsaBin.grid(column=1, row=8, padx=(0, 10), pady=4, ipadx=7, sticky='e')
 
-        checkbox_1 = ttk.Checkbutton(historyFrame, text="Show Vel RMS", variable=self.var_1, command=self.checkbox_clicked)
+        checkbox_1 = ttk.Checkbutton(historyFrame, text=_("Show Vel RMS"), variable=self.var_1, command=self.checkbox_clicked)
         checkbox_1.grid(row=9, column=0, padx=5, pady=4, sticky="w")
 
-        checkbox_2 = ttk.Checkbutton(historyFrame, text="Show Bearing gE", variable=self.var_2, command=self.checkbox_clicked)
+        checkbox_2 = ttk.Checkbutton(historyFrame, text=_("Show Bearing gE"), variable=self.var_2, command=self.checkbox_clicked)
         checkbox_2.grid(row=9, column=1, padx=5, pady=4, sticky="w")
 
-        checkbox_3 = ttk.Checkbutton(historyFrame, text="Show Gear Acc", variable=self.var_3, command=self.checkbox_clicked)
+        checkbox_3 = ttk.Checkbutton(historyFrame, text=_("Show Gear Acc"), variable=self.var_3, command=self.checkbox_clicked)
         checkbox_3.grid(row=10, column=0, padx=5, pady=4, sticky="w")
 
-        checkbox_4 = ttk.Checkbutton(historyFrame, text="Show Bearing HFCF", variable=self.var_4, command=self.checkbox_clicked)
+        checkbox_4 = ttk.Checkbutton(historyFrame, text=_("Show Bearing HFCF"), variable=self.var_4, command=self.checkbox_clicked)
         checkbox_4.grid(row=10, column=1, padx=5, pady=4, sticky="w")
 
         self.applyBt = ttk.Button(historyFrame, style='Accent.TButton', text=_("APPLY"),

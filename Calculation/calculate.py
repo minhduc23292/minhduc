@@ -6,7 +6,15 @@ from scipy.signal import hilbert
 from digitalFilter.digitalFilter import filter_data
 import defaultConfig.default_config as dfc
 from scipy.integrate import cumulative_trapezoid
+from datetime import datetime
 
+def validate_time(time_str):
+    try:
+        datetime.strptime(time_str, '%Y-%m-%d')
+        return True
+    except ValueError:
+        return False
+    
 def is_number(s):
     try:
         float(s)  # for int, long and float

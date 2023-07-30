@@ -16,6 +16,7 @@ class TotalConfig(object):
     def __init__(self):
         self.sensor_config = {
             "sensor_input": [],
+            "sensor_position":[],
             "sensor_data": [],
             "store_sensor_data": [[],[],[]],
             "unit": [],
@@ -46,9 +47,9 @@ class TotalConfig(object):
             "remainCap": 50
         }
         self.waveform_config_struct = {
-            "Sensor1": 'NONE',
-            "Sensor2": 'NONE',
-            "Sensor3": 'NONE',
+            "Sensor1": 'Accelerometer',
+            "Sensor2": 'Accelerometer',
+            "Sensor3": 'Accelerometer',
             "Sensor4": 'NONE',
             "Port1Pos": 'NONE',
             "Port2Pos": 'NONE',
