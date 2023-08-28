@@ -1238,7 +1238,7 @@ class SideButtonFrame(Tk.Frame):
                             img = qr.make_image(fill_color = 'black', back_color = 'white')
                             img.save(save_path + 'MyQRCode2.png')
                             Pd.PLT.plot_image(self.canvas, 'MyQRCode2.png')
-                            self.infoLabel.configure(text=_("Upload success. Use QR scanner to dowload the report."))
+                            self.infoLabel.configure(text=_("Upload success. Use QR scanner to download the report."))
                         else:
                             self.infoLabel.configure(text=_("Upload fail"))
                     try:
