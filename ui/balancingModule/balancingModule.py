@@ -127,7 +127,7 @@ class Balancing(Tk.Frame):
         
         self.analysisBt = ttk.Button(self.featureFrame, style='normal.TButton', text=_("Balancing"),
                                    command=self.on_analysis_button_clicked)
-        self.analysisBt.place(relx=0.265, rely=0.018, width=115, height=72)
+        self.analysisBt.place(relx=0.265, rely=0.018, width=125, height=72)
 
         self.infoFrame= Tk.Frame(self.featureFrame, width=451, height=72, bg='white', bd=0)
         self.infoFrame.place(relx=0.41, rely=0.018)
@@ -338,42 +338,42 @@ class BalancingConfig(Tk.Frame):
         trialCalculate.pack(side=Tk.LEFT, fill=Tk.BOTH, expand=1)
 
         rotomass = ttk.Label(trialCalculate, text=_('Rotor mass(kg)'), style='balancing.TLabel')
-        rotomass.grid(column=0, row=0, padx=(10, 0), pady=5, sticky="w")
+        rotomass.grid(column=0, row=0, padx=(5, 0), pady=5, sticky="w")
 
         rotomassEntry = ttk.Entry(trialCalculate, width=11, textvariable=self.balParam23, font=('Chakra Petch', 13),
                                     validate="key")
         rotomassEntry['validatecommand'] = (rotomassEntry.register(testVal), '%P', '%d')
-        rotomassEntry.grid(column=1, row=0, padx=0, pady=5, sticky="e")
+        rotomassEntry.grid(column=1, row=0, padx=(0, 2), pady=5, sticky="e")
 
         grade = ttk.Label(trialCalculate, text=_('Grade(ISO-1940)'), style='balancing.TLabel')
-        grade.grid(column=0, row=1, padx=(10, 0), pady=5, sticky="w")
+        grade.grid(column=0, row=1, padx=(5, 0), pady=5, sticky="w")
 
         gradeEntry=ttk.Combobox(trialCalculate, width=8, textvariable=self.balParam24, state="readonly", font=('Chakra Petch', 13))
         gradeEntry['value'] = ('1.0','2.5', '6.3', '16')
-        gradeEntry.grid(column=1, row=1, padx=0, pady=5, ipadx=2, sticky="e")
+        gradeEntry.grid(column=1, row=1, padx=(0, 2), pady=5, ipadx=2, sticky="e")
 
         operatingSpeedLabel = ttk.Label(trialCalculate, text=_('Operation speed(RPM)'), style='balancing.TLabel')
-        operatingSpeedLabel.grid(column=0, row=2, padx=(10, 0), pady=5, sticky="w")
+        operatingSpeedLabel.grid(column=0, row=2, padx=(5, 0), pady=5, sticky="w")
 
         operatingSpeedEntry = ttk.Entry(trialCalculate, width=11, textvariable=self.balParam25, font=('Chakra Petch', 13),
                                     validate="key")
         operatingSpeedEntry['validatecommand'] = (operatingSpeedEntry.register(testVal), '%P', '%d')
-        operatingSpeedEntry.grid(column=1, row=2, padx=0, pady=5, sticky="e")
+        operatingSpeedEntry.grid(column=1, row=2, padx=(0, 2), pady=5, sticky="e")
 
         radiusLabel = ttk.Label(trialCalculate, text=_('Correction radius(mm)'), style='balancing.TLabel')
-        radiusLabel.grid(column=0, row=3, padx=(10, 0), pady=5, sticky="w")
+        radiusLabel.grid(column=0, row=3, padx=(5, 0), pady=5, sticky="w")
         radiusEntry = ttk.Entry(trialCalculate, width=11, textvariable=self.balParam26, font=('Chakra Petch', 13),
                                     validate="key")
         radiusEntry['validatecommand'] = (radiusEntry.register(testVal), '%P', '%d')
-        radiusEntry.grid(column=1, row=3, padx=0, pady=5, sticky="e")
+        radiusEntry.grid(column=1, row=3, padx=(0, 2), pady=5, sticky="e")
 
         self.calculateButton = ttk.Button(trialCalculate, text=_("CALCULATE"), style="Accent.TButton",
                                     command=self.calculate_trial_mass)
-        self.calculateButton.grid(column=1, row=4, padx=(5, 0), pady=(5, 5), ipadx=25, ipady=5, sticky='e')
+        self.calculateButton.grid(column=0, row=4, padx=(0, 5), pady=(5, 5), ipadx=20, ipady=5, columnspan=2, sticky='e')
 
         self.balancingApplyButton = ttk.Button(trialCalculate, text=_("APPLY"), style="Accent.TButton",
                                     command=lambda:self.update_config_struct(balancing_config_struct))
-        self.balancingApplyButton.grid(column=1, row=5, columnspan=2, padx=(5, 0), pady=(180, 0), ipadx=30, ipady=5, sticky='e')
+        self.balancingApplyButton.grid(column=0, row=5, columnspan=2, padx=(0, 5), pady=(190, 0), ipadx=30, ipady=5, sticky='e')
 
     def num_plane_combo_callback(self, event):
         

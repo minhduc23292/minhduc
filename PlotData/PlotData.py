@@ -1434,7 +1434,7 @@ class PLT(FigureCanvasTkAgg):
         ax_12.grid()  # Shows grid.
         self.draw()
 
-    def plot_image(self, file_name, link):
+    def plot_image(self, file_name, link=""):
         self.figure.set_size_inches(9.2, 5.2)
         qrPhoto = plt.imread(save_path+file_name)
         axes_arr = self.figure.get_axes()

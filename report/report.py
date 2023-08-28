@@ -79,7 +79,7 @@ class Report():
         p.add_run('..........................................................')
 
         p = self.document.add_paragraph('')
-        p.add_run(_('Shaft bore:')).bold = True
+        p.add_run(_('Bearing shaft bore:')).bold = True
         p.add_run('..........................................................')
 
         p = self.document.add_paragraph('')

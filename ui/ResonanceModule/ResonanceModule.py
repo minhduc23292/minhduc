@@ -133,10 +133,10 @@ class Resonance(Tk.Frame):
         
         self.analysisBt = ttk.Button(self.featureFrame, style='normal.TButton', text=_("Resonance\nAnalysis"),
                                    command=self.on_analysis_button_clicked)
-        self.analysisBt.place(relx=0.265, rely=0.018, width=140, height=72)
+        self.analysisBt.place(relx=0.265, rely=0.018, width=145, height=72)
 
         self.infoFrame= Tk.Frame(self.featureFrame, width=451, height=72, bg='white', bd=0)
-        self.infoFrame.place(relx=0.41, rely=0.018)
+        self.infoFrame.place(relx=0.42, rely=0.018)
 
         self.infoLabel1=ttk.Label(self.infoFrame, text=_("Information"), style="red.TLabel")
         self.infoLabel1.grid(column=0, row=0, padx=0, pady=5, sticky='w')
@@ -291,7 +291,7 @@ class ResonanceConfig(Tk.Frame):
 
         self.resonanceApplyButton = ttk.Button(resonanceConfigFrame, text=_("APPLY"), style="Accent.TButton",
                                     command=lambda: self.update_resonance_struct(resonance_config_struct))
-        self.resonanceApplyButton.grid(column=4, row=6, padx=(160, 0), pady=(140, 0), ipadx=50, ipady=8, sticky='w')
+        self.resonanceApplyButton.grid(column=4, row=6, padx=(120, 0), pady=(150, 0), ipadx=50, ipady=8, sticky='e')
 
 
     def update_resonance_struct(self, resonance_config_struct):

@@ -27,10 +27,12 @@ import sqlite3 as lite
 import fileOperation.fileOperation as file_operation
 import report.report as rp
 import qrcode
+import requests
 balancingOrder=0
 click_stop_flag=False
 blink=0
 blink1=0
+blink2=0
 track_flag=0
 confirm_flag=0
 def testVal(inStr, acttyp):
@@ -596,7 +598,7 @@ class SideButtonFrame(Tk.Frame):
     def __init__(self, parent, history_config_struct, db_connect, infoLabel, canvas):
         super().__init__(parent, bd=1, bg='white', width=90, height=504)
         self.parent=parent
-        self.link="https://dantri.com.vn/"
+        # self.link="https://dantri.com.vn/"
         self.history_config_struct=history_config_struct
         self.infoLabel=infoLabel
         self.canvas=canvas
@@ -610,6 +612,7 @@ class SideButtonFrame(Tk.Frame):
         imageAddress = ImageAdrr()
         self.ZoomCanvas = Tk.Canvas()
         self.functionCanvas = Tk.Canvas()
+        self.exportCanvas = Tk.Canvas()
         self.zoomPhoto = imageAddress.zoomPhoto
         self.savePhoto = imageAddress.savePhoto
         self.zoomIn = imageAddress.zoomIn
@@ -620,10 +623,11 @@ class SideButtonFrame(Tk.Frame):
         self.creat_button()
 
     def creat_button(self):
-        saveBt = ttk.Button(self, style='custom.Accent.TButton', text=_("EXPORT\nREPORT"), command=self.report)
+        saveBt = ttk.Button(self, style='custom.Accent.TButton', text=_("RESERVE"), command=self.report, state="disable")
         saveBt.place(x=0, y=425, width=88, height=75)
 
-        exportDataBt = ttk.Button(self, style='custom.Accent.TButton', text=_("EXPORT\n.CSV"), command=self.export_from_db)
+        exportDataBt = ttk.Button(self, style='custom.Accent.TButton', text=_("EXPORT"),
+                                   command=self.on_export_button_clicked)
         exportDataBt.place(x=0, y=348, width=88, height=75)
 
         freqZoomBt = ttk.Button(self, style='custom.Accent.TButton', text=_("ZOOM"),
@@ -649,16 +653,38 @@ class SideButtonFrame(Tk.Frame):
         self.freqFunctionBt.place(x=0, y=40, width=88, height=75)
 
     def on_zoom_button_clicked(self, x_pos, y_pos):
-        global blink, blink1
-        if blink1 == 1:
-            self.functionCanvas.destroy()
+        global blink, blink1, blink2
+        if blink1 == 1 or blink2==1:
+            try:
+                self.functionCanvas.destroy()
+                self.exportCanvas.destroy()
+            except:
+                pass
             blink1=0
+            blink2=0
         blink = not blink
         if blink == 1:
             self.creat_zoom_button_canvas(self.parent.historyPlotFrame, self.canvas, x_pos,
                                                 y_pos)
         elif blink == 0:
             self.ZoomCanvas.destroy()
+
+    def on_export_button_clicked(self):
+        global blink, blink1, blink2
+        if blink == 1 or blink1==1:
+            try:
+                self.functionCanvas.destroy()
+                self.ZoomCanvas.destroy()
+            except:
+                pass
+            blink1=0
+            blink=0
+        blink2 = not blink2
+        if blink2 == 1:
+            self.creat_export_button_canvas(self.parent.historyPlotFrame)
+        elif blink2 == 0:
+            self.exportCanvas.destroy()
+
        
     def creat_zoom_button_canvas(self, widget, draw_canvas, x_pos, y_pos):
 
@@ -693,6 +719,29 @@ class SideButtonFrame(Tk.Frame):
         button5 = ttk.Button(self.ZoomCanvas, text=_("RESET"), style='zoom.Accent.TButton',
                             command=lambda: self.view_change(draw_canvas, _type='RESET'))
         button5.place(x=0, y=308, width=88, height=75)
+
+    def creat_export_button_canvas(self, widget):
+        x_pos=827
+        y_pos=271
+        self.export_style=ttk.Style()
+        self.export_style.configure('export.Accent.TButton', font=('Chakra Petch', 9), justify=Tk.CENTER)
+        self.exportCanvas = Tk.Canvas(widget, width=90, height=231, bg='white')
+        self.exportCanvas.place(x=x_pos, y=y_pos)
+
+        button3 = ttk.Button(self.exportCanvas, text=_("EXPORT\n.CSV"), style='export.Accent.TButton',
+                             compound=Tk.TOP,
+                             command=self.export_from_db)
+        button3.place(x=0, y=0, width=88, height=75)
+
+        button4 = ttk.Button(self.exportCanvas, text=_("EXPORT\nREPORT\nTO USB"), style='export.Accent.TButton',
+                             compound=Tk.TOP,
+                             command=lambda: self.report(1))
+        button4.place(x=0, y=77, width=88, height=75)
+
+        button5 = ttk.Button(self.exportCanvas, text=_("UPLOAD\nREPORT\nTO SEVER"), style='export.Accent.TButton',
+                            command=lambda: self.report(0))
+        button5.place(x=0, y=154, width=88, height=75)
+
 
     def view_change(self, canvas, _type):
         axes_arr = canvas.figure.get_axes()
@@ -729,10 +778,15 @@ class SideButtonFrame(Tk.Frame):
         except:
             pass
     def on_plot_button_clicked(self, x_pos, y_pos):
-        global blink, blink1
-        if blink == 1:
-            self.ZoomCanvas.destroy()
+        global blink, blink1, blink2
+        if blink == 1 or blink2==1:
+            try:
+                self.ZoomCanvas.destroy()
+                self.exportCanvas.destroy()
+            except:
+                pass
             blink=0
+            blink2=0
         blink1 = not blink1
         if blink1 == 1:
             self.creat_plot_button_canvas(self.parent.historyPlotFrame, self.canvas, x_pos,
@@ -1015,7 +1069,7 @@ class SideButtonFrame(Tk.Frame):
             print("Export from db error", ex)
 
 
-    def report(self):
+    def report(self, export_flag=1):
         from docx.shared import Inches
         save_path=f"{parent_directory}/storage/"
         document=rp.Report(save_path)
@@ -1136,42 +1190,61 @@ class SideButtonFrame(Tk.Frame):
                     new_file_name=str(prjCode)+ '_' + str(sensorPosition) + '_'+'_report.docx'
                     new_file_name=new_file_name.replace("/", "_")
                     document._save(new_file_name)
+                    if(export_flag==1):
+                        try:
+                            os.system("sudo umount /media/pi/usb")
+                        except:
+                            pass
+                        try:
+                            os.system("sudo rmdir /media/pi/usb")
+                        except:
+                            pass
+                        try:
+                            os.system("sudo mkdir /media/pi/usb")
+                        except:
+                            pass
+                        try:
+                            os.system("sudo mount /dev/sda1 /media/pi/usb")
+                        except:
+                            pass
+                        try:
+                            os.system(f"sudo cp -ru -f {save_path}/{new_file_name} /media/pi/usb")
+                            os.system("sudo umount /media/pi/usb")
+                            os.system("sudo rmdir /media/pi/usb")
+                            self.infoLabel.configure(text=_("Export report is completed"))
+                        except Exception as ex:
+                            print(ex)
+                        # try:
+                        #     os.system(f"sudo rm -r {save_path}/*")
+                        # except Exception as ex:
+                        #     print(ex)
+                    else:
+                        url = "https://v424kpn36d.execute-api.ap-northeast-1.amazonaws.com/production/"
+                        file_name = save_path + new_file_name
+                        result = requests.post(f"{url}api/files", json={"file_name": file_name}).json()
 
-                    try:
-                        os.system("sudo umount /media/pi/usb")
-                    except:
-                        pass
-                    try:
-                        os.system("sudo rmdir /media/pi/usb")
-                    except:
-                        pass
-                    try:
-                        os.system("sudo mkdir /media/pi/usb")
-                    except:
-                        pass
-                    try:
-                        os.system("sudo mount /dev/sda1 /media/pi/usb")
-                    except:
-                        pass
-                    try:
-                        os.system(f"sudo cp -ru -f {save_path}/{new_file_name} /media/pi/usb")
-                        os.system("sudo umount /media/pi/usb")
-                        os.system("sudo rmdir /media/pi/usb")
-                        self.infoLabel.configure(text=_("Export CSV is completed"))
-                    except Exception as ex:
-                        print(ex)
+                        file = { 'file': open(file_name, 'rb')}
+                        http_response = requests.post(
+                            result['url'],
+                            data=result['fields'],
+                            files=file
+                        )
+
+                        if http_response.status_code == 204:
+                            text1=str(result['url']+result['fields']['key'])
+                            qr = qrcode.QRCode(version = 1, box_size = 10, border = 5)
+                            qr.add_data(text1)
+                            qr.make(fit = True)
+                            img = qr.make_image(fill_color = 'black', back_color = 'white')
+                            img.save(save_path + 'MyQRCode2.png')
+                            Pd.PLT.plot_image(self.canvas, 'MyQRCode2.png')
+                            self.infoLabel.configure(text=_("Upload success. Use QR scanner to dowload the report."))
+                        else:
+                            self.infoLabel.configure(text=_("Upload fail"))
                     try:
                         os.system(f"sudo rm -r {save_path}/*")
                     except Exception as ex:
                         print(ex)
-                    # qr = qrcode.QRCode(version = 1, box_size = 10, border = 5)
-                    # qr.add_data(self.link)
-                    # qr.make(fit = True)
-                    # img = qr.make_image(fill_color = 'black', back_color = 'white')
-                    # img.save(save_path + 'MyQRCode2.png')
-                    # Pd.PLT.plot_image(self.canvas, 'MyQRCode2.png', self.link)
-
-                    self.infoLabel.configure(text=_("Report is exported. Use QR code scanner to see the report."))
                 else:
                     self.infoLabel.configure(text=_("There is no data, please check SETTING !"))
         except:
