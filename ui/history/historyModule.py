@@ -289,20 +289,20 @@ class historyConfig(Tk.Frame):
         self.PrjTable.bind('<<TreeviewSelect>>', self.get_selected_cell)
 
         self.PrjTable.pack(side="left", expand=True, fill="both")
-        self.PrjTable['columns'] = ('PrjID', 'machine', 'Date', 'Pos', 'SampleRate')
-        self.PrjTable.column("#0", anchor='w', width=100)
-        self.PrjTable.column("PrjID",anchor='w', width=100)
+        self.PrjTable['columns'] = ('PrjID', 'machine', 'Date', 'Pos')
+        self.PrjTable.column("#0", anchor='w', width=150)
+        self.PrjTable.column("PrjID",anchor='w', width=150)
         self.PrjTable.column("machine",anchor='w', width=120)
-        self.PrjTable.column("Date",anchor=Tk.CENTER,width=120)
+        self.PrjTable.column("Date",anchor=Tk.CENTER,width=100)
         self.PrjTable.column("Pos",anchor=Tk.CENTER,width=50)
-        self.PrjTable.column("SampleRate",anchor=Tk.CENTER,width=60)
+        # self.PrjTable.column("SampleRate",anchor=Tk.CENTER,width=60)
 
         self.PrjTable.heading("#0",text="",anchor=Tk.CENTER)
         self.PrjTable.heading("PrjID",text="ID",anchor=Tk.CENTER)
         self.PrjTable.heading("machine",text="ID",anchor=Tk.CENTER)
         self.PrjTable.heading("Date",text=_("Date"),anchor=Tk.CENTER)
         self.PrjTable.heading("Pos",text=_("Position"),anchor=Tk.CENTER)
-        self.PrjTable.heading("SampleRate",text=_("Sample rate"),anchor=Tk.CENTER)
+        # self.PrjTable.heading("SampleRate",text=_("Sample rate"),anchor=Tk.CENTER)
         self.scrollbar.config(command=self.PrjTable.yview)
         prjCodeArr=self.load_all_project_code()
         for i in range(len(prjCodeArr)):
@@ -312,10 +312,9 @@ class historyConfig(Tk.Frame):
             date_arr=[arr[0] for arr in data_arr]
             pos_arr=[arr[1] for arr in data_arr]
             sample_rate_arr=[arr[2] for arr in data_arr]
-            self.PrjTable.insert(parent='', index='end', iid=i, text=prjCodeArr[i], values=(str(companyName), str(machineName), '', '', ''))
+            self.PrjTable.insert(parent='', index='end', iid=i, text=prjCodeArr[i], values=(str(companyName), str(machineName), '', ''))
             for k in range(len(pos_arr)):
-                self.PrjTable.insert(parent=i,index='end',text='', values=(str(prjCodeArr[i]), '', str(date_arr[k]), \
-                            str(pos_arr[k]), str(sample_rate_arr[k])))
+                self.PrjTable.insert(parent=i,index='end',text='', values=(str(prjCodeArr[i]), '', str(date_arr[k]), str(pos_arr[k])))
         # self.PrjTable.item(open=True)
         # print("load_prj_code:", load_data_arr)
 
@@ -473,7 +472,7 @@ class historyConfig(Tk.Frame):
                             self.PrjTable.insert(parent='', index='end', iid=i, text=prjCodeArr[i], values=(str(companyName), str(machineName), '', '', ''))
                             for k in range(len(pos_arr)):
                                 self.PrjTable.insert(parent=i,index='end',text='', values=(str(prjCodeArr[i]), '', str(date_arr[k]), \
-                                            str(pos_arr[k]), str(sample_rate_arr[k])))
+                                            str(pos_arr[k])))
                     else:
                         pass
             else:
@@ -832,116 +831,116 @@ class SideButtonFrame(Tk.Frame):
         self.freqCursorRightBt.configure(state='normal')
         self.freqCursorLeftBt.update_idletasks()
         self.freqCursorRightBt.update_idletasks()
-        try:
-            prjCode = self.history_config_struct["ProjectID"]
-            sensorPosition = self.history_config_struct["SensorPosition"]
-            codeTuple=(prjCode,)
-            dataTuple=(prjCode, sensorPosition,)
-            viewRange=[0, self.history_config_struct["ViewLimit"]]
-            tsaUse = self.history_config_struct["TSA"]
-            tsaBin = self.history_config_struct["TsaBin"]
-            result_arr1=[]
-            date_arr=[]
-            sample_rate_arr=[]
-            with self.con:
-                cur=self.con.cursor()
-                cur.execute(f"SELECT DATA, DATE, Sample_rate FROM DATA WHERE CODE = ? AND POS=? ORDER BY DATE DESC;", dataTuple)
-                load_data = cur.fetchall()
-                cur.execute(f"SELECT POWER, RPM, DRIVEN, BEARINGBORE, GEARTOOTH, FOUNDATION, NOTE FROM Project_ID WHERE CODE = ?", codeTuple)
-                machineParam = cur.fetchall()
-            load_data_arr = [i for i in load_data] #mang cac chuoi data, date [data,date,sample_rate; data, date, sample_rate]
-            machine_param_arr = [i for i in machineParam]
-            if len(load_data_arr)!=0:
-                for ari in load_data_arr:
-                    result_arr1.append(file_operation.extract_str(ari[0]))
-                    date_arr.append(ari[1])
-                    sample_rate_arr.append(ari[2])
-                if len(result_arr1)>6:
-                    result_arr2=result_arr1[0:6]
-                else:
-                    result_arr2=result_arr1
-                for ari in machine_param_arr:
-                    power=ari[0]
-                    rpm=ari[1]
-                    driven=ari[2]
-                    bearing_bore=ari[3]
-                    gear_tooth=ari[4]
-                    foundation=ari[5]
-                    note=ari[6]
-                self.history_config_struct["dataSample"]=result_arr2
-                self.history_config_struct["sampleRate"]=sample_rate_arr
-                if plot_type=="WAVEFORM":
-                    self.freqFunctionBt.configure(text=_("PLOT\nWAVEFORM"), style="small.Accent.TButton")
-                    Pd.PLT.plot_all_history(self.canvas, result_arr2, date_arr, sample_rate_arr, viewRange, 1, tsaUse, tsaBin, export_png=export_png)
-                elif plot_type=="FREQUENCY":
-                    self.freqFunctionBt.configure(text=_("PLOT\nFREQUENCY\nSPECTRUM"), style="small.Accent.TButton")
-                    Pd.PLT.plot_all_history(self.canvas, result_arr2, date_arr, sample_rate_arr, viewRange, 0, tsaUse, tsaBin, export_png=export_png)
-                elif plot_type=="VEL FREQUENCY":
-                    if sensorPosition[-1]=='A':
-                        self.freqFunctionBt.configure(text=_("PLOT\nVELOCITY\nSPECTRUM"), style="small.Accent.TButton")
-                        # Pd.PLT.plot_velocity_spectral_kiem_tra_tich_phan(self.canvas, result_arr2, date_arr, sample_rate_arr, viewRange, export_png=export_png)
-                        Pd.PLT.plot_history_velocity_spectral(self.canvas, result_arr2, date_arr, sample_rate_arr, viewRange, tsaUse, tsaBin, export_png=export_png)
-
-                elif plot_type=="WATERFALL":
-                    self.freqFunctionBt.configure(text=_("PLOT\nWATERFALL"), style="small.Accent.TButton")
-                    Pd.PLT.plot_waterfall(self.canvas, result_arr1, date_arr, sample_rate_arr, viewRange, export_png=export_png)
-
-                elif plot_type=="TREND":
-                    self.freqFunctionBt.configure(text=_("PLOT\nTREND"), style="small.Accent.TButton")
-                    self.freqCursorLeftBt.configure(state='disable')
-                    self.freqCursorRightBt.configure(state='disable')
-                    self.freqCursorLeftBt.update_idletasks()
-                    self.freqCursorRightBt.update_idletasks()
-                    view_arr=[]
-                    view_arr.append(self.history_config_struct["Rms"])
-                    view_arr.append(self.history_config_struct["A_Pk"])
-                    view_arr.append(self.history_config_struct["gE"])
-                    view_arr.append(self.history_config_struct["HFCF"])
-                    isoStandard = iso10816_judge(driven, rpm, power, foundation)
-                    Pd.PLT.plot_trend(self.canvas, result_arr1, date_arr, sample_rate_arr, sensorPosition,\
-                    isoStandard, rpm, bearing_bore, view_arr, export_png=export_png)
-                elif plot_type=="ENVELOPED":
-                    self.freqFunctionBt.configure(text=_("PLOT\nENVELOPED"), style="small.Accent.TButton")
-                    filter_type = "BANDPASS"
-                    filter_from = self.history_config_struct["FilterFrom"]# high pass cutoff freq
-                    filter_to = self.history_config_struct["FilterTo"]# low pass cutoff freq
-                    
-                    if filter_from >= filter_to:
-                        filter_from= dfc._ENV_BANDPASS_FROM
-                        filter_to= dfc._ENV_BANDPASS_TO
-                        self.infoLabel.config(text=_("Fcut is wrong. Use the default value."))
-                    else:
-                        pass
-                    temp_result_arr=[]
-                    if filter_type:
-                        for i in range(len(result_arr2)):
-                            _samples_1=filter_data(
-                                result_arr2[i],
-                                filter_type,
-                                filter_from,
-                                filter_to,
-                                sample_rate_arr[i],
-                                window="Hanning"
-                                )
-                            analytical_signal1 = hilbert(_samples_1)
-                            # enveloped_signal1=_samples_1 + 1j*analytical_signal1
-                            amplitude_envelope1 = np.abs(analytical_signal1)
-                            amplitude_envelope1 = filter_data(
-                                amplitude_envelope1,
-                                "LOWPASS",
-                                filter_from,
-                                filter_to/2,
-                                sample_rate_arr[i],
-                                window="Hanning"
-                                )
-                            temp_result_arr.append(amplitude_envelope1)
-                    Pd.PLT.plot_all_history(self.canvas, temp_result_arr, date_arr, sample_rate_arr, viewRange, 2, tsaUse, tsaBin, export_png=export_png)
-                self.infoLabel.config(text=_("Project: ")+ str(prjCode) + '-' + str(sensorPosition)+ '.')
+        # try:
+        prjCode = self.history_config_struct["ProjectID"]
+        sensorPosition = self.history_config_struct["SensorPosition"]
+        codeTuple=(prjCode,)
+        dataTuple=(prjCode, sensorPosition,)
+        viewRange=[0, self.history_config_struct["ViewLimit"]]
+        tsaUse = self.history_config_struct["TSA"]
+        tsaBin = self.history_config_struct["TsaBin"]
+        result_arr1=[]
+        date_arr=[]
+        sample_rate_arr=[]
+        with self.con:
+            cur=self.con.cursor()
+            cur.execute(f"SELECT DATA, DATE, Sample_rate FROM DATA WHERE CODE = ? AND POS=? ORDER BY DATE DESC;", dataTuple)
+            load_data = cur.fetchall()
+            cur.execute(f"SELECT POWER, RPM, DRIVEN, BEARINGBORE, GEARTOOTH, FOUNDATION, NOTE FROM Project_ID WHERE CODE = ?", codeTuple)
+            machineParam = cur.fetchall()
+        load_data_arr = [i for i in load_data] #mang cac chuoi data, date [data,date,sample_rate; data, date, sample_rate]
+        machine_param_arr = [i for i in machineParam]
+        if len(load_data_arr)!=0:
+            for ari in load_data_arr:
+                result_arr1.append(file_operation.extract_str(ari[0]))
+                date_arr.append(ari[1])
+                sample_rate_arr.append(ari[2])
+            if len(result_arr1)>6:
+                result_arr2=result_arr1[0:6]
             else:
-                self.infoLabel.config(text=_("There is no data, please check SETTING !"))
-        except Exception as ex:
-            print(ex)
-            self.infoLabel.config(text=_("Data errors."))
+                result_arr2=result_arr1
+            for ari in machine_param_arr:
+                power=ari[0]
+                rpm=ari[1]
+                driven=ari[2]
+                bearing_bore=ari[3]
+                gear_tooth=ari[4]
+                foundation=ari[5]
+                note=ari[6]
+            self.history_config_struct["dataSample"]=result_arr2
+            self.history_config_struct["sampleRate"]=sample_rate_arr
+            if plot_type=="WAVEFORM":
+                self.freqFunctionBt.configure(text=_("PLOT\nWAVEFORM"), style="small.Accent.TButton")
+                Pd.PLT.plot_all_history(self.canvas, result_arr2, date_arr, sample_rate_arr, viewRange, 1, tsaUse, tsaBin, export_png=export_png)
+            elif plot_type=="FREQUENCY":
+                self.freqFunctionBt.configure(text=_("PLOT\nFREQUENCY\nSPECTRUM"), style="small.Accent.TButton")
+                Pd.PLT.plot_all_history(self.canvas, result_arr2, date_arr, sample_rate_arr, viewRange, 0, tsaUse, tsaBin, export_png=export_png)
+            elif plot_type=="VEL FREQUENCY":
+                if sensorPosition[-1]=='A':
+                    self.freqFunctionBt.configure(text=_("PLOT\nVELOCITY\nSPECTRUM"), style="small.Accent.TButton")
+                    # Pd.PLT.plot_velocity_spectral_kiem_tra_tich_phan(self.canvas, result_arr2, date_arr, sample_rate_arr, viewRange, export_png=export_png)
+                    Pd.PLT.plot_history_velocity_spectral(self.canvas, result_arr2, date_arr, sample_rate_arr, viewRange, tsaUse, tsaBin, export_png=export_png)
+
+            elif plot_type=="WATERFALL":
+                self.freqFunctionBt.configure(text=_("PLOT\nWATERFALL"), style="small.Accent.TButton")
+                Pd.PLT.plot_waterfall(self.canvas, result_arr1, date_arr, sample_rate_arr, viewRange, export_png=export_png)
+
+            elif plot_type=="TREND":
+                self.freqFunctionBt.configure(text=_("PLOT\nTREND"), style="small.Accent.TButton")
+                self.freqCursorLeftBt.configure(state='disable')
+                self.freqCursorRightBt.configure(state='disable')
+                self.freqCursorLeftBt.update_idletasks()
+                self.freqCursorRightBt.update_idletasks()
+                view_arr=[]
+                view_arr.append(self.history_config_struct["Rms"])
+                view_arr.append(self.history_config_struct["A_Pk"])
+                view_arr.append(self.history_config_struct["gE"])
+                view_arr.append(self.history_config_struct["HFCF"])
+                isoStandard = iso10816_judge(driven, rpm, power, foundation)
+                Pd.PLT.plot_trend(self.canvas, result_arr1, date_arr, sample_rate_arr, sensorPosition,\
+                isoStandard, rpm, bearing_bore, view_arr, export_png=export_png)
+            elif plot_type=="ENVELOPED":
+                self.freqFunctionBt.configure(text=_("PLOT\nENVELOPED"), style="small.Accent.TButton")
+                filter_type = "BANDPASS"
+                filter_from = self.history_config_struct["FilterFrom"]# high pass cutoff freq
+                filter_to = self.history_config_struct["FilterTo"]# low pass cutoff freq
+                
+                if filter_from >= filter_to:
+                    filter_from= dfc._ENV_BANDPASS_FROM
+                    filter_to= dfc._ENV_BANDPASS_TO
+                    self.infoLabel.config(text=_("Fcut is wrong. Use the default value."))
+                else:
+                    pass
+                temp_result_arr=[]
+                if filter_type:
+                    for i in range(len(result_arr2)):
+                        _samples_1=filter_data(
+                            result_arr2[i],
+                            filter_type,
+                            filter_from,
+                            filter_to,
+                            sample_rate_arr[i],
+                            window="Hanning"
+                            )
+                        analytical_signal1 = hilbert(_samples_1)
+                        # enveloped_signal1=_samples_1 + 1j*analytical_signal1
+                        amplitude_envelope1 = np.abs(analytical_signal1)
+                        amplitude_envelope1 = filter_data(
+                            amplitude_envelope1,
+                            "LOWPASS",
+                            filter_from,
+                            filter_to/2,
+                            sample_rate_arr[i],
+                            window="Hanning"
+                            )
+                        temp_result_arr.append(amplitude_envelope1)
+                Pd.PLT.plot_all_history(self.canvas, temp_result_arr, date_arr, sample_rate_arr, viewRange, 2, tsaUse, tsaBin, export_png=export_png)
+            self.infoLabel.config(text=_("Project: ")+ str(prjCode) + '-' + str(sensorPosition)+ '.')
+        else:
+            self.infoLabel.config(text=_("There is no data, please check SETTING !"))
+        # except Exception as ex:
+        #     print(ex)
+        #     self.infoLabel.config(text=_("Data errors."))
 
     def Tracking(self, dir:bool):
         global track_flag

@@ -74,7 +74,7 @@ class TotalConfig(object):
                     "FilterFrom":5,
                     "FilterTo":1500,
                     "KeyPhase":"Sensor1",
-                    "TrackRange":25,
+                    "TrackRange":20,
                     "mesh":25,
                     "unit":"Original"
         }
@@ -110,7 +110,7 @@ class TotalConfig(object):
                     "FilterFrom":1400,
                     "FilterTo":14000,
                     "ViewLimit":5000,
-                    "TrackingResolution":25,
+                    "TrackingResolution":20,
                     "dataSample":[],
                     "sampleRate":[],
                     "Rms":1,
@@ -133,7 +133,7 @@ class TotalConfig(object):
                     "sampleRate":4096,
                     "sampling_time":4,
                     "num_of_average":3,
-                    "Tracking":25
+                    "Tracking":20
         }
 
         self.language_config_struct={

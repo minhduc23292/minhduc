@@ -354,10 +354,7 @@ class DiagnosticPage(Tk.Frame):
         else:
             self.origin_config.sensor_config["sensor_position"].append(0)
 
-        if self.origin_config.sensor_config["sensor_input"][3] == "TACHOMETER":
-            n = 6
-        else:
-            n = 4
+        n=4
         data_length = pow2(int(self.origin_config.sensor_config["fft_line"]*2.56))
         waitingTime=int(data_length/self.origin_config.sensor_config["sample_rate"])+2
         self.infoLabel2.configure(text=_("READING.....Please wait:")+ f" {str(waitingTime)} " +_("seconds."), style="red.TLabel")
@@ -374,46 +371,33 @@ class DiagnosticPage(Tk.Frame):
         ad7609.freeme(kq)
         actual_sample_rate= int(ttl[-1])
         chanelm=[[],[],[],[],[]]
-        if n==4:
-            for j in range(len(ttl)-1):
-                if j%4==0:
-                    chanelm[0].append(ttl[j])
-                elif j%4==1:
-                    chanelm[1].append(ttl[j])
-                elif j%4==2:
-                    chanelm[2].append(ttl[j])
-                elif j%4==3:
-                    chanelm[3].append(ttl[j])
-                else:
-                    pass
-        elif n==6:
-            for j in range(len(ttl)-1):
-                if j%6==0:
-                    chanelm[0].append(ttl[j])
-                elif j%6==1:
-                    chanelm[1].append(ttl[j])
-                elif j%6==2:
-                    pass
-                    # chanelm[5].append(ttl[j])
-                elif j%6==3:
-                    chanelm[2].append(ttl[j])
-                elif j%6==4:
-                    chanelm[3].append(ttl[j])
-                elif j%6==5:
-                    chanelm[4].append(ttl[j])
-                else:
-                    pass
-        for i in range(n - 1):
-            chaneln.append(np.array(chanelm[i]))
 
-        if n == 6:
-            chaneln[4] = fresh_laser_pulse(chaneln[4])
+        for j in range(len(ttl)-1):
+            if j%4==0:
+                chanelm[0].append(ttl[j])
+            elif j%4==1:
+                chanelm[1].append(ttl[j])
+            elif j%4==2:
+                chanelm[2].append(ttl[j])
+            elif j%4==3:
+                chanelm[3].append(ttl[j])
+            else:
+                pass
+
+        for i in range(n):
+            chaneln.append(np.array(chanelm[i]))
+        # print(chaneln[0][0:5])
+        # print(chaneln[1][0:5])
+        # print(chaneln[2][0:5])
+        # print(chaneln[3][0:5])
+        if self.origin_config.sensor_config["sensor_input"][3] == "TACHOMETER":
+            chaneln[3] = fresh_laser_pulse(chaneln[3])
             unit[3] = 'laser sensor'
-        if self.origin_config.waveform_config_struct["UseTSA"] == 1 and n == 6:
+        if self.origin_config.waveform_config_struct["UseTSA"] == 1 and self.origin_config.sensor_config["sensor_input"][3] == "TACHOMETER":
             mark = []
             chanelk = []
-            for i in range(len(chaneln[4]) - 1):
-                if chaneln[4][i] < 0.5 and chaneln[4][i + 1] > 0.7:
+            for i in range(len(chaneln[3]) - 1):
+                if chaneln[3][i] < 0.5 and chaneln[3][i + 1] > 0.7:
                     mark.append(i + 1)
             tsa_temp_value = self.origin_config.waveform_config_struct["TSATimes"]
             if tsa_temp_value >= len(mark):
@@ -491,9 +475,9 @@ class DiagnosticPage(Tk.Frame):
         try:
             if view_flag==1:
                 self.laserBt.configure(text=_("NORMAL\nVIEW"))
-                _canal=self.origin_config.sensor_config["sensor_data"][4]
+                _canal=self.origin_config.sensor_config["sensor_data"][3]
                 _sample_rate=self.origin_config.sensor_config["sample_rate"]
-                Pd.PLT.plot1chanel(self.waveformFrameCanvas.canvas1, _canal, self.origin_config.sensor_config["unit"][4], _sample_rate, win_var="Hanning")
+                Pd.PLT.plot1chanel(self.waveformFrameCanvas.canvas1, _canal, self.origin_config.sensor_config["unit"][3], _sample_rate, win_var="Hanning")
             else:
                 self.laserBt.configure(text=_("LASER\nVIEW"))
                 self.on_refresh_button_clicked()
@@ -1814,7 +1798,7 @@ class GeneralConfig(Tk.Canvas):
                                     posList.append(load_data_arr[i][1])
                                 new_list = []
                                 [new_list.append(item) for item in posList if item not in new_list]
-                                new_pos_arr=[item[:2] for item in new_list]
+                                new_pos_arr=[item[:-1] for item in new_list]
                                 new_pos_arr.insert(0, "NONE")
                                 for ari in machine_param_arr:
                                     try:
@@ -1912,8 +1896,8 @@ class SensorPositionCanvas(Tk.Canvas):
         elif machineType=="GENERAL" or machineType=="CRITICAL MACHINE" or machineType=="FAN":
             image = imageAdress.fanPhoto
             x=[66,   66, 204, 204, 253, 316, 316, 282, 587, 587, 528, 528]
-            y=[228, 337, 228, 336, 362, 284, 337, 362, 284, 337, 420, 461 ]
-            dir=["AV", "AH", "BV", "BH", "BA", "CV", "CH", "CA", "DV", "DH", "EV", "FV"]
+            y=[228, 337, 228, 336, 355, 284, 337, 362, 284, 337, 420, 461 ]
+            dir=["M1V", "M1H", "M2V", "M2H", "M2A", "G1V", "G1H", "G1A", "G2V", "G2H", "F1V", "F2V"]
         elif machineType=="WIND TURBINE":
             image = imageAdress.windPhoto
             x=[195, 253, 318, 412, 434, 419, 500, 510, 478, 590, 591]

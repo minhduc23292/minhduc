@@ -130,32 +130,14 @@
 # data=bqbus._read(0x05)
 # print(data)
 # import time
-from bateryMonitor.powerManager import BQ27510
+from bateryMonitor.bateryMonitor import BQ40Z50
 
-batery = BQ27510()
-# a=batery.ItEnable()
-# print("a",a)
-# batery.set_capacity(9500)
-# batery.set_tempurature(2982)
-# batery.set_opconfigD(9000, 0x53, 0x02)
-# time.sleep(1)
-# b=batery.readExtendedData(0x53, 2, 2)
-# print("b=", b)
-# a=batery.unseal()
-# batery.fullAcess()
-# batery.reset()
-# time.sleep(1)
-# c=batery.batInsert()
-# print("c=", c)
-# batery.calibMode()
-d = batery.sealed()
-print("d=", d)
-print("seal=", "Sealed" if d > 0 else "Unseal")
-data0 = batery.bq27510_battery_voltage()
-data1 = batery.bq27510_battery_current()
-data2 = batery.bq27510_battery_temperature()
-data3 = batery.bq27510_battery_remaining_capacity()
-print([data0, data1, int(data2 * 0.1 - 273), data3])
+batery = BQ40Z50()
+data0 = batery.read_voltage()
+data1 = batery.read_current()
+data2 = batery.read_temp()
+data3 = batery.read_remain_cap()
+print([data0, data1, data2, data3])
 
 # import numpy as np
 # from scipy.signal import kaiserord, lfilter, firwin, freqz, firwin2

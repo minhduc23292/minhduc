@@ -110,6 +110,7 @@ class BatteryFrame(Tk.Frame):
                 else:
                     stateOfCharge = "DISCHARGE"
             except:
-                remainCap = 30
-                remainVolt = 3.0
-                stateOfCharge = "DISCHARGE"
+                pass
+                # remainCap = 30
+                # remainVolt = 3.0
+                # stateOfCharge = "DISCHARGE"

@@ -6,21 +6,21 @@
 #include <string.h>
 #include <time.h>
 
-#define p_standby 6
-#define p_cs 23
+#define p_standby 7
+#define p_cs 22
 #define p_clock 11
-#define p_convstab 9
-#define p_dataA 8
-#define p_dataB 7
-#define p_reset 10
+#define p_convstab 10
+#define p_dataA 6
+#define p_dataB 5
+#define p_reset 9
 #define p_busy 24
-#define p_1stData 25
-#define p_range 5
-#define  p_os0 13
-#define  p_os1 19
-#define  p_os2 26
-#define  sen1_en 21
-float xferFactor = 20/(pow(2,17)); // 20=2x10, 2 mean the voltage is devided by 2 so we must multiple by 2.
+#define p_1stData 18
+#define p_range 8
+#define p_an_sw1 21
+#define p_an_sw2 20
+#define p_an_sw3 16
+#define p_kill_cm4 14
+float xferFactor = 10/(pow(2,17)); // 20=2x10, 2 mean the voltage is devided by 2 so we must multiple by 2.
 float *res=NULL;
 struct timespec gettime_now;
 //int num_chanel=6;
@@ -73,17 +73,17 @@ void init(){
 	pinMode(p_convstab, OUTPUT);
 	pinMode(p_cs, OUTPUT);
 	pinMode(p_clock, OUTPUT);
-	pinMode(p_os0, OUTPUT);
-	pinMode(p_os1, OUTPUT);
-	pinMode(p_os2, OUTPUT);
 	pinMode(p_range, OUTPUT);
-    pinMode(sen1_en, OUTPUT);
-
+    pinMode(p_kill_cm4, OUTPUT);
+    pinMode(p_an_sw1, OUTPUT);
+    pinMode(p_an_sw2, OUTPUT);
+    pinMode(p_an_sw2, OUTPUT);
 
 	pinMode(p_dataA, INPUT);
 	pinMode(p_dataB, INPUT);
 	pinMode(p_busy, INPUT);
 	pinMode(p_1stData, INPUT);
+    
     // pullUpDnControl(p_dataA, PUD_DOWN);
     // pullUpDnControl(p_dataB, PUD_DOWN);
 
@@ -99,20 +99,19 @@ void init(){
     digitalWrite(p_convstab,HIGH);
     digitalWrite(p_cs,HIGH);
     digitalWrite(p_cs,HIGH);
-	digitalWrite(p_range,HIGH);
-	digitalWrite(p_range,HIGH);
+	digitalWrite(p_range,LOW);
+	digitalWrite(p_range,LOW);
     digitalWrite(p_standby,LOW);
 	digitalWrite(p_standby,LOW);
-    digitalWrite(p_os0,HIGH);
-	digitalWrite(p_os0,HIGH);
-    digitalWrite(p_os1,LOW);
-	digitalWrite(p_os1,LOW);
-    digitalWrite(p_os2,LOW);
-	digitalWrite(p_os2,LOW);
-    digitalWrite(sen1_en,HIGH);
-    digitalWrite(sen1_en,HIGH);
+    digitalWrite(p_an_sw1,LOW);
+	digitalWrite(p_an_sw1,LOW);
+    digitalWrite(p_an_sw2,LOW);
+	digitalWrite(p_an_sw2,LOW);
+    digitalWrite(p_an_sw3,LOW);
+	digitalWrite(p_an_sw3,LOW);
     digitalWrite(p_clock,HIGH);
     digitalWrite(p_clock,HIGH);
+    digitalWrite(p_kill_cm4, LOW);
 
 }
 
@@ -209,14 +208,21 @@ void freeme(float *ptr)
         free(ptr);
 }
 
-void turn_on_24v(){
-    digitalWrite(sen1_en,HIGH);
-    digitalWrite(sen1_en,HIGH);
+void change_to_displacement_probe(){
+    digitalWrite(p_an_sw1,HIGH);
+    digitalWrite(p_an_sw1,HIGH);
+    digitalWrite(p_an_sw2,HIGH);
+    digitalWrite(p_an_sw2,HIGH);
+    digitalWrite(p_an_sw3,HIGH);
+    digitalWrite(p_an_sw3,HIGH);
     delay_ns(20);
 }
 
-void turn_off_24v(){
-    digitalWrite(sen1_en,LOW);
-    digitalWrite(sen1_en,LOW);
-    delay_ns(20);
+void turn_off_power(){
+    for(int _m=0; _m<100; _m++){
+        digitalWrite(p_kill_cm4,LOW);
+        delay_ns(500000);
+        digitalWrite(p_kill_cm4,HIGH);
+        delay_ns(500000);
+    }
 }

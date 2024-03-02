@@ -64,7 +64,7 @@ class PLT(FigureCanvasTkAgg):
         ax_12.plot(xf[2:], yf1[2:], color='blue', linewidth=0.5)
         ax_12.grid()
         ax_12.set_xlabel("Hz")
-        ax_12.set_ylabel(_("Amplitude") + f' {unit}')
+        ax_12.set_ylabel(_("Amplitude") + f'({unit})')
         ax_12.set_xlim(xmax=max_freq)
         self.draw()
 
@@ -291,9 +291,9 @@ class PLT(FigureCanvasTkAgg):
         ax_41.clear()
         ax_41.view_init(30, -80)  # tham so 1 la goc nang mat phang xy, tham so 2 la goc quay truc z
         ax_41.set_box_aspect((3, 3, 1))
-        ax_41.w_xaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
-        ax_41.w_yaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
-        ax_41.w_zaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
+        ax_41.xaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
+        ax_41.yaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
+        ax_41.zaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
         ax_41.zaxis.set_major_formatter(FormatStrFormatter('%0.2f'))
 
         for i in range(h_num):
