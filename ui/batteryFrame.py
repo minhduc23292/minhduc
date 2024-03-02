@@ -4,7 +4,7 @@ import threading
 from threading import Lock
 import os
 from datetime import datetime
-from bateryMonitor.powerManager import BQ27510
+from bateryMonitor.bateryMonitor import BQ40Z50
 from ds3231.ds3231B import DS3231
 from image.image import ImageAdrr
 
@@ -18,7 +18,7 @@ class BatteryFrame(Tk.Frame):
         super().__init__(master, bd=1, bg='white', width=130, height=35, **kwargs)
         self.style = ttk.Style()
         self.style.configure('bat.TLabel', font=('Chakra Petch', 13))
-        self.batery=BQ27510()
+        self.batery=BQ40Z50()
         self.lock=Lock()
         imageAddress = ImageAdrr()
         self.low_bat = imageAddress.low_bat
@@ -89,7 +89,7 @@ class BatteryFrame(Tk.Frame):
             if firstTime:
                 # pms.general_warning(_("Low Battery! Plug in the charger to keep it running"))
                 firstTime = False
-            if remainVolt <= 2.85:
+            if remainVolt <= 10.0:
                 if stateOfCharge !="CHARGING":
                     try:
                         with self.lock:
@@ -103,9 +103,9 @@ class BatteryFrame(Tk.Frame):
         global remainCap, stateOfCharge, remainVolt
         with self.lock:
             try:
-                remainCap = round(self.batery.get_remaining_capacity())
-                remainVolt=self.batery.bq27510_battery_voltage()
-                if self.batery.bq27510_battery_current() > 0:
+                remainCap = round(self.batery.read_remain_cap())
+                remainVolt=self.batery.read_voltage()
+                if self.batery.read_current() > 0:
                     stateOfCharge = "CHARGING"
                 else:
                     stateOfCharge = "DISCHARGE"

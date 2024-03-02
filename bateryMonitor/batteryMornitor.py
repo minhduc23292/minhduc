@@ -87,7 +87,8 @@ class STATUS(Enum):
 class BQ40Z50():
     def __init__(self):
         self.bus = SMBus(1)
-
+    def i2c_send_turn_off(self):
+        pass
     def unseal1(self, word1, word2):
         self.bus.write_word_data(DEV_ADDR, 0x00, word1)
         self.bus.write_word_data(DEV_ADDR, 0x00, word2)

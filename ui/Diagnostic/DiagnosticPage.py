@@ -1947,30 +1947,30 @@ class SensorPositionCanvas(Tk.Canvas):
         for i in range(len(x)):
             self.listBt[i]=Tk.Button(self, text='O', bg="green2", command=lambda text=dir[i], index=i: self.update_text(text, index))
             self.listBt[i].place(x=x[i], y=y[i], width=25, height=25)
-        
+
+        pos1Label= ttk.Label(inputFrame, text=_("Port 1"), style="pos0.TLabel")
+        pos1Label.grid(column=0, row=0, padx=5, pady=0, sticky="w")
+        self.port1Entry=ttk.Entry(inputFrame, width=10, textvariable=self.inputParam2, validate="key", font=('Chakra Petch', 13))
+        self.port1Entry.grid(column=1, row=0, padx=5, pady=5, sticky='e')
+
+        pos2Label= ttk.Label(inputFrame, text=_("Port 2"), style="pos0.TLabel")
+        pos2Label.grid(column=0, row=1, padx=5, pady=0, sticky="w")
+        self.port2Entry=ttk.Entry(inputFrame, width=10, textvariable=self.inputParam3, validate="key", font=('Chakra Petch', 13))
+        self.port2Entry.grid(column=1, row=1, padx=5, pady=5, sticky='e')
+
+        pos3Label= ttk.Label(inputFrame, text=_("Port 3"), style="pos0.TLabel")
+        pos3Label.grid(column=0, row=2, padx=5, pady=0, sticky="w")
+        self.port3Entry=ttk.Entry(inputFrame, width=10, textvariable=self.inputParam4, validate="key", font=('Chakra Petch', 13))
+        self.port3Entry.grid(column=1, row=2, padx=5, pady=5, sticky='e')
+
         sensorLabel=ttk.Label(inputFrame, text=_("Select port"), style="pos0.TLabel")
-        sensorLabel.grid(column=0, row=0, padx=5, pady=0, sticky="w")
+        sensorLabel.grid(column=0, row=3, padx=5, pady=0, sticky="w")
         self.sensorCombo=ttk.Combobox(inputFrame, width=8, textvariable=self.inputParam1, validate="key", font=('Chakra Petch', 13),\
                                  state="readonly" )
         self.sensorCombo['value'] = ('Port1', 'Port2', 'Port3')
         self.sensorCombo.current(0)
         self.sensorCombo.bind("<<ComboboxSelected>>", self.sensor_combo_callback)  
-        self.sensorCombo.grid(column=1, row=0, padx=5, pady=5, sticky='e')
-
-        pos1Label= ttk.Label(inputFrame, text=_("Port 1"), style="pos0.TLabel")
-        pos1Label.grid(column=0, row=1, padx=5, pady=0, sticky="w")
-        self.port1Entry=ttk.Entry(inputFrame, width=10, textvariable=self.inputParam2, validate="key", font=('Chakra Petch', 13))
-        self.port1Entry.grid(column=1, row=1, padx=5, pady=5, sticky='e')
-
-        pos2Label= ttk.Label(inputFrame, text=_("Port 2"), style="pos0.TLabel")
-        pos2Label.grid(column=0, row=2, padx=5, pady=0, sticky="w")
-        self.port2Entry=ttk.Entry(inputFrame, width=10, textvariable=self.inputParam3, validate="key", font=('Chakra Petch', 13))
-        self.port2Entry.grid(column=1, row=2, padx=5, pady=5, sticky='e')
-
-        pos3Label= ttk.Label(inputFrame, text=_("Port 3"), style="pos0.TLabel")
-        pos3Label.grid(column=0, row=3, padx=5, pady=0, sticky="w")
-        self.port3Entry=ttk.Entry(inputFrame, width=10, textvariable=self.inputParam4, validate="key", font=('Chakra Petch', 13))
-        self.port3Entry.grid(column=1, row=3, padx=5, pady=5, sticky='e')
+        self.sensorCombo.grid(column=1, row=3, padx=5, pady=5, sticky='e')
 
         applyButton=ttk.Button(self, text=_('APPLY'), style="Accent.TButton", command=self.on_apply_button_click)
         applyButton.place(x=860, y=456, width=130, height=40)
