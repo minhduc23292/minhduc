@@ -1,5 +1,6 @@
 import tkinter as Tk
 from tkinter import ttk
+from tkinter.filedialog import askopenfilename, asksaveasfilename
 import matplotlib
 import matplotlib.pyplot as plt
 matplotlib.use('TKAgg')
@@ -7,18 +8,14 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 import os
 from i18n import _
-from keyboard.keyboard import KeyBoard
 from image.image import ImageAdrr
 import numpy as np
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from main import Application
-from tkinter import scrolledtext
+    from meanlab import Application
 current_directory = os.path.dirname(os.path.realpath(__file__))
 parent_directory = os.path.dirname(os.path.dirname(current_directory))
-import ctypes
-from numpy.ctypeslib import ndpointer
-ad7609 = ctypes.CDLL(f'{parent_directory}/ad7609BTZ.so')
+working_directory = os.getcwd()
 from digitalFilter.digitalFilter import filter_data
 from Calculation.calculate import *
 import PlotData.PlotData as Pd
@@ -26,10 +23,7 @@ import pms.popMessage as pms
 import sqlite3 as lite
 import fileOperation.fileOperation as file_operation
 import report.report as rp
-import qrcode
-import requests
-balancingOrder=0
-click_stop_flag=False
+import csv
 blink=0
 blink1=0
 blink2=0
@@ -55,7 +49,7 @@ class History(Tk.Frame):
         self.style.configure('normal.TLabel', font=('Chakra Petch', 13), background='white')
         self.style.configure('red.TLabel', font=('Chakra Petch', 13), background='white', foreground='#C40069')
         self.con = lite.connect(f'{parent_directory}/company.db')
-        self.mainFrame = Tk.Frame(self.parent, bd=1, bg='white', width=1024, height=600)
+        self.mainFrame = Tk.Frame(self.parent, bd=1, bg='white', width=1024, height=650)
         self.mainFrame.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
         self.mainFrame.pack_propagate(0)
 
@@ -77,19 +71,7 @@ class History(Tk.Frame):
         self.bearingFrequencyFrame.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
         self.bearingFrequencyFrame.pack_propagate(0)
         self.bearingFrequencyFrame.pack_forget()
-
-        self.parent.bind_class('TEntry', "<FocusIn>", self.show_key_board)
         self.parent.bind_class('TCombobox', "<<ComboboxSelected>>", self.change_state)
-
-    def show_key_board(self, event):
-        global confirm_flag
-        confirm_flag=0
-        self.historyConfigFrame.applyBt.configure(state="normal")
-        self.widget = self.get_focus_widget()
-        self.keyboardFrame = KeyBoard(self.widget)
-        parentName = event.widget.winfo_parent()
-        self.parent1 = event.widget._nametowidget(parentName)
-        self.parent1.focus()
 
     def get_focus_widget(self):
         widget = self.parent.focus_get()
@@ -171,7 +153,7 @@ class History(Tk.Frame):
 
 class historyConfig(Tk.Frame):
     def __init__(self, parent, infoLabel, db_connect, history_config_struct):
-        super().__init__(parent, width=1024, height=520, background='white')
+        super().__init__(parent, width=1024, height=570, background='white')
         self.parent=parent
         self.infoLabel=infoLabel
         self.prjDate=Tk.StringVar()
@@ -216,38 +198,42 @@ class historyConfig(Tk.Frame):
 
         projectIDLabel = ttk.Label(historyFrame, text=_('Project Code'), style="history.TLabel")
         projectIDLabel.grid(column=0, row=0, padx=5, pady=4, sticky="w")
-        projectIDEntry=ttk.Entry(historyFrame, width=14, textvariable=self.historyParam1, font=('Chakra Petch', 13),
+        projectIDEntry=ttk.Entry(historyFrame, width=12, textvariable=self.historyParam1, font=('Chakra Petch', 13),
                                 validate="key")
         projectIDEntry.grid(column=1, row=0, padx=(0,10), pady=4, sticky="e")
 
+        self.addBt = ttk.Button(historyFrame, style='Accent.TButton', text="Add .CSV",
+                                command=self.add_project)
+        self.addBt.grid(column=3, row=0, padx=(0, 2), sticky='w')
+
         positionLabel = ttk.Label(historyFrame, text=_('Sensor Position'), style="history.TLabel")
         positionLabel.grid(column=0, row=1, padx=5, pady=4, sticky="w")
-        self.positionCombo=ttk.Combobox(historyFrame, width=10, textvariable=self.historyParam2, state="readonly",
+        self.positionCombo=ttk.Combobox(historyFrame, width=8, textvariable=self.historyParam2, state="readonly",
                                     font=('Chakra Petch', 13))
         self.positionCombo.bind("<Button-1>", self.find_position_list)
         self.positionCombo.grid(column=1, row=1, padx=(0, 10), pady=4, ipadx=7, sticky="e")
 
-        filterFromLabel = ttk.Label(historyFrame, text=_("Bandpass Filter From"), style="history.TLabel")
+        filterFromLabel = ttk.Label(historyFrame, text=_("BP Filter From"), style="history.TLabel")
         filterFromLabel.grid(column=0, row=3, padx=5, pady=4, sticky='w')
-        filterFromEntry=ttk.Entry(historyFrame, width=14, textvariable=self.historyParam4, font=('Chakra Petch', 13),
+        filterFromEntry=ttk.Entry(historyFrame, width=12, textvariable=self.historyParam4, font=('Chakra Petch', 13),
                                 validate="key")
         filterFromEntry.grid(column=1, row=3, padx=(0,10), pady=4, sticky='e')
 
-        filterToLabel = ttk.Label(historyFrame, text=_("Bandpass Filter To"), style="history.TLabel")
+        filterToLabel = ttk.Label(historyFrame, text=_("BP Filter To"), style="history.TLabel")
         filterToLabel.grid(column=0, row=4, padx=5, pady=4, sticky='w')
-        filterToEntry=ttk.Entry(historyFrame, width=14, textvariable=self.historyParam5, font=('Chakra Petch', 13),
+        filterToEntry=ttk.Entry(historyFrame, width=12, textvariable=self.historyParam5, font=('Chakra Petch', 13),
                                 validate="key")
         filterToEntry.grid(column=1, row=4, padx=(0, 10), pady=4, sticky='e')
 
         viewLabel = ttk.Label(historyFrame, text=_("View Limit"), style="history.TLabel")
         viewLabel.grid(column=0, row=5, padx=5, pady=4, sticky='w')
-        viewEntry=ttk.Entry(historyFrame, width=14, textvariable=self.historyParam6, font=('Chakra Petch', 13),
+        viewEntry=ttk.Entry(historyFrame, width=12, textvariable=self.historyParam6, font=('Chakra Petch', 13),
                                 validate="key")
         viewEntry.grid(column=1, row=5, padx=(0, 10), pady=4, sticky='e')
 
         meshLabel = ttk.Label(historyFrame, text=_("Tracking speed"), style="history.TLabel")
         meshLabel.grid(column=0, row=6, padx=5, pady=4, sticky='w')
-        meshEntry=ttk.Entry(historyFrame, width=14, textvariable=self.historyParam7, font=('Chakra Petch', 13),
+        meshEntry=ttk.Entry(historyFrame, width=12, textvariable=self.historyParam7, font=('Chakra Petch', 13),
                                 validate="key")
         meshEntry.grid(column=1, row=6, padx=(0, 10), pady=4, sticky='e')
         
@@ -257,7 +243,7 @@ class historyConfig(Tk.Frame):
 
         tsaLabel = ttk.Label(historyFrame, text=_("Average Bin"), style="history.TLabel")
         tsaLabel.grid(column=0, row=8, padx=5, pady=4, sticky='w')
-        self.tsaBin=ttk.Combobox(historyFrame, width=10, textvariable=self.historyParam8, state="readonly",
+        self.tsaBin=ttk.Combobox(historyFrame, width=8, textvariable=self.historyParam8, state="readonly",
                                     font=('Chakra Petch', 13))
         self.tsaBin['value'] = ('2048','4096','8192','16384','32768')
         self.tsaBin.grid(column=1, row=8, padx=(0, 10), pady=4, ipadx=7, sticky='e')
@@ -276,11 +262,11 @@ class historyConfig(Tk.Frame):
 
         self.applyBt = ttk.Button(historyFrame, style='Accent.TButton', text=_("APPLY"),
                                    command=lambda: self.update_config_struct(history_config_struct))
-        self.applyBt.grid(column=0, row=11, padx=(5, 5), pady=4, ipadx=50, ipady=4, sticky='w')
+        self.applyBt.grid(column=0, row=11, padx=(5, 5), pady=4, ipadx=30, ipady=0, sticky='w')
 
         deletePrjButton = ttk.Button(historyFrame, text=_("Delete Project"), style='Accent.TButton',
                             command=self.delete_project)
-        deletePrjButton.grid(column=1, row=11, padx=(5, 5), pady=4, ipadx=20, ipady=4, sticky='w')
+        deletePrjButton.grid(column=1, row=11, padx=(5, 5), pady=4, ipadx=8, ipady=0, sticky='w')
 
         self.scrollbar = ttk.Scrollbar(self)
         self.scrollbar.pack(side="right", fill="y")
@@ -289,20 +275,20 @@ class historyConfig(Tk.Frame):
         self.PrjTable.bind('<<TreeviewSelect>>', self.get_selected_cell)
 
         self.PrjTable.pack(side="left", expand=True, fill="both")
-        self.PrjTable['columns'] = ('PrjID', 'machine', 'Date', 'Pos', 'SampleRate')
-        self.PrjTable.column("#0", anchor='w', width=100)
-        self.PrjTable.column("PrjID",anchor='w', width=100)
+        self.PrjTable['columns'] = ('PrjID', 'machine', 'Date', 'Pos')
+        self.PrjTable.column("#0", anchor='w', width=130)
+        self.PrjTable.column("PrjID",anchor='w', width=130)
         self.PrjTable.column("machine",anchor='w', width=120)
-        self.PrjTable.column("Date",anchor=Tk.CENTER,width=120)
+        self.PrjTable.column("Date",anchor=Tk.CENTER,width=100)
         self.PrjTable.column("Pos",anchor=Tk.CENTER,width=50)
-        self.PrjTable.column("SampleRate",anchor=Tk.CENTER,width=60)
+        # self.PrjTable.column("SampleRate",anchor=Tk.CENTER,width=60)
 
         self.PrjTable.heading("#0",text="",anchor=Tk.CENTER)
         self.PrjTable.heading("PrjID",text="ID",anchor=Tk.CENTER)
         self.PrjTable.heading("machine",text="ID",anchor=Tk.CENTER)
         self.PrjTable.heading("Date",text=_("Date"),anchor=Tk.CENTER)
         self.PrjTable.heading("Pos",text=_("Position"),anchor=Tk.CENTER)
-        self.PrjTable.heading("SampleRate",text=_("Sample rate"),anchor=Tk.CENTER)
+        # self.PrjTable.heading("SampleRate",text=_("Sample rate"),anchor=Tk.CENTER)
         self.scrollbar.config(command=self.PrjTable.yview)
         prjCodeArr=self.load_all_project_code()
         for i in range(len(prjCodeArr)):
@@ -312,10 +298,10 @@ class historyConfig(Tk.Frame):
             date_arr=[arr[0] for arr in data_arr]
             pos_arr=[arr[1] for arr in data_arr]
             sample_rate_arr=[arr[2] for arr in data_arr]
-            self.PrjTable.insert(parent='', index='end', iid=i, text=prjCodeArr[i], values=(str(companyName), str(machineName), '', '', ''))
+            self.PrjTable.insert(parent='', index='end', iid=i, text=prjCodeArr[i], values=(str(companyName), str(machineName), '', ''))
             for k in range(len(pos_arr)):
                 self.PrjTable.insert(parent=i,index='end',text='', values=(str(prjCodeArr[i]), '', str(date_arr[k]), \
-                            str(pos_arr[k]), str(sample_rate_arr[k])))
+                            str(pos_arr[k])))
         # self.PrjTable.item(open=True)
         # print("load_prj_code:", load_data_arr)
 
@@ -323,7 +309,149 @@ class historyConfig(Tk.Frame):
         #                 self.PrjTable.insert(parent='',index='end',iid=i,text='', values=(str(load_data_arr[i][0]),str(load_data_arr[i][1]), \
         #                                     str(load_data_arr[i][2]), str(load_data_arr[i][3])))
 
-        
+    def add_project(self):
+        rows = []
+        save_path = askopenfilename(initialdir='/',
+                                 title="Select File", filetypes=(("Text files", "*.csv*"), ("All Files", "*.*")))
+
+        with open(save_path) as f:
+            csvreader = csv.reader(f)
+            for row in csvreader:
+                rows.append(row)
+            result_arr2= [float(i[0]) for i in rows[13:-1]]
+            companyName = rows[0][1]
+            prjCode = rows[1][1]
+            date=rows[2][1].replace("/", "-")
+            pos=rows[3][1]
+            sample_rate=rows[4][1]
+            machineType = rows[6][1]
+            machineName = rows[7][1]
+            powerVal = rows[8][1]
+            rpmVal = rows[9][1]
+            foundationVal = rows[10][1]
+            gearToothVal = rows[11][1]
+            bearingBoreVal = rows[12][1]
+
+        if companyName != "" and prjCode != "":
+            companyNameTuple = (companyName,)
+            prjCodeTuple = (prjCode,)
+
+            if len(result_arr2) != 0:
+                canal1_str = file_operation.conv_str_tag(result_arr2)
+                with self.con:
+                    cur = self.con.cursor()
+                    exist_name = cur.execute(f"SELECT * FROM Company_ID WHERE NAME = ?", companyNameTuple)
+                    arr = [b for b in exist_name]
+                    exist_code = cur.execute(f"SELECT * FROM Project_ID WHERE CODE = ?", prjCodeTuple)
+                    arr1 = [b for b in exist_code]
+                    companylist = cur.execute("SELECT * FROM Company_ID")
+                    companylistarr = [b for b in companylist]
+                    # projectlist = cur.execute("SELECT * FROM Project_ID")
+                    # projectlistarr = [b for b in projectlist]
+                    companyData = {
+                        "id": len(companylistarr) + 1,
+                        "name": companyName,
+                        "address": ''
+                    }
+                    projectData = {
+                        "id": len(companylistarr) + 1,
+                        "code": str(prjCode),
+                        "power": powerVal,
+                        "rpm": rpmVal,
+                        "driven": str(machineType),
+                        "note": str(machineName),
+                        "foundation": str(foundationVal),
+                        "gearTooth": gearToothVal,
+                        "bearingBore": bearingBoreVal
+                    }
+
+                    channel1Data = {
+                        "prjCode": str(prjCode),
+                        "date": str(date),
+                        "position": str(pos),
+                        "chanelData": str(canal1_str),
+                        "sampleRate": sample_rate
+                    }
+
+                    if len(arr) == 0 and len(arr1) == 0:
+                        if pms.company_project_dont_exist_warning() == True:
+                            cur.execute(f"INSERT INTO Company_ID (COM_ID, NAME, ADR) VALUES (:id, :name, :address)", companyData)
+                            cur.execute(
+                                f"""INSERT INTO Project_ID (COM_ID, CODE, POWER, RPM, DRIVEN, NOTE, FOUNDATION, GEARTOOTH, BEARINGBORE) VALUES 
+                                                (:id, :code, :power, :rpm, :driven, :note, :foundation, :gearTooth, :bearingBore)""",
+                                projectData)
+
+                            cur.execute(
+                                f""" INSERT INTO DATA (CODE, DATE, POS, DATA, Sample_rate) VALUES (:prjCode, :date, :position, :chanelData, :sampleRate)""",
+                                channel1Data)
+
+                            # self.infoLabel2.configure(text=_("Data is saved."), style="normal.TLabel")
+
+                        else:
+                            print('Data is not save')
+
+                    elif len(arr) == 0 and len(arr1) == 1:
+                        pms.company_project_exist_error()
+
+                    elif len(arr) == 1 and len(arr1) == 0:
+                        if (pms.company_or_project_existed_warning()) == True:
+                            projectData1 = {
+                                "id": arr[0][0],
+                                "code": str(prjCode),
+                                "power": powerVal,
+                                "rpm": rpmVal,
+                                "driven": str(machineType),
+                                "note": str(machineName),
+                                "foundation": str(foundationVal),
+                                "gearTooth": gearToothVal,
+                                "bearingBore": bearingBoreVal
+                            }
+                            cur.execute(
+                                f"""INSERT INTO Project_ID (COM_ID, CODE, POWER, RPM, DRIVEN, NOTE, FOUNDATION, GEARTOOTH, BEARINGBORE) 
+                                    VALUES (:id, :code, :power, :rpm, :driven, :note, :foundation, :gearTooth, :bearingBore)""",
+                                projectData1)
+                            cur.execute(
+                                f""" INSERT INTO DATA (CODE, DATE, POS, DATA, Sample_rate) VALUES (:prjCode, :date, :position, :chanelData, :sampleRate)""",
+                                channel1Data)
+
+                            # self.infoLabel2.configure(text=_("Data is saved."), style="normal.TLabel")
+                        else:
+                            pass
+                    elif len(arr) == 1 and len(arr1) == 1:
+                        if arr[0][0] == arr1[0][1]:
+                            if pms.company_project_existed_warning() == True:
+                                cur.execute(
+                                    f""" INSERT INTO DATA (CODE, DATE, POS, DATA, Sample_rate) VALUES (:prjCode, :date, :position, :chanelData, :sampleRate)""",
+                                    channel1Data)
+
+                                # self.infoLabel2.configure(text=_("Data is saved."), style="normal.TLabel")
+                            else:
+                                pass
+                        else:
+                            pms.company_project_exist_error()
+                    else:
+                        pass
+            else:
+                pms.show_error('There is no data !')
+                return
+            for row in self.PrjTable.get_children():
+                self.PrjTable.delete(row)
+            prjCodeArr = self.load_all_project_code()
+            for i in range(len(prjCodeArr)):
+                _data_arr = self.load_data_base_on_code(prjCodeArr[i])
+                _companyName = self.find_company_name_base_on_code(prjCodeArr[i])
+                _machineName = self.load_machine_name_by_code(prjCodeArr[i])
+                _date_arr = [arr[0] for arr in _data_arr]
+                _pos_arr = [arr[1] for arr in _data_arr]
+                # sample_rate_arr = [arr[2] for arr in _data_arr]
+                self.PrjTable.insert(parent='', index='end', iid=i, text=prjCodeArr[i],
+                                     values=(str(_companyName), str(_machineName), '', ''))
+                for k in range(len(_pos_arr)):
+                    self.PrjTable.insert(parent=i, index='end', text='', values=(str(prjCodeArr[i]), '', str(_date_arr[k]),
+                                                                                 str(_pos_arr[k])))
+        else:
+            pms.show_error('Please input project code and company name !')
+            return
     def checkbox_clicked(self):
         self.applyBt.configure(state='normal')
         
@@ -469,11 +597,11 @@ class historyConfig(Tk.Frame):
                             machineName=self.load_machine_name_by_code(prjCodeArr[i])
                             date_arr=[arr[0] for arr in data_arr]
                             pos_arr=[arr[1] for arr in data_arr]
-                            sample_rate_arr=[arr[2] for arr in data_arr]
-                            self.PrjTable.insert(parent='', index='end', iid=i, text=prjCodeArr[i], values=(str(companyName), str(machineName), '', '', ''))
+                            # sample_rate_arr=[arr[2] for arr in data_arr]
+                            self.PrjTable.insert(parent='', index='end', iid=i, text=prjCodeArr[i], values=(str(companyName), str(machineName), '', ''))
                             for k in range(len(pos_arr)):
-                                self.PrjTable.insert(parent=i,index='end',text='', values=(str(prjCodeArr[i]), '', str(date_arr[k]), \
-                                            str(pos_arr[k]), str(sample_rate_arr[k])))
+                                self.PrjTable.insert(parent=i,index='end',text='', values=(str(prjCodeArr[i]), '', str(date_arr[k]),
+                                            str(pos_arr[k])))
                     else:
                         pass
             else:
@@ -596,9 +724,8 @@ class bearingFrequency(Tk.Frame):
             pass
 class SideButtonFrame(Tk.Frame):
     def __init__(self, parent, history_config_struct, db_connect, infoLabel, canvas):
-        super().__init__(parent, bd=1, bg='white', width=90, height=504)
+        super().__init__(parent, bd=1, bg='white', width=90, height=498)
         self.parent=parent
-        # self.link="https://dantri.com.vn/"
         self.history_config_struct=history_config_struct
         self.infoLabel=infoLabel
         self.canvas=canvas
@@ -725,7 +852,7 @@ class SideButtonFrame(Tk.Frame):
         y_pos=271
         self.export_style=ttk.Style()
         self.export_style.configure('export.Accent.TButton', font=('Chakra Petch', 9), justify=Tk.CENTER)
-        self.exportCanvas = Tk.Canvas(widget, width=90, height=231, bg='white')
+        self.exportCanvas = Tk.Canvas(widget, width=90, height=225, bg='white')
         self.exportCanvas.place(x=x_pos, y=y_pos)
 
         button3 = ttk.Button(self.exportCanvas, text=_("EXPORT\n.CSV"), style='export.Accent.TButton',
@@ -733,13 +860,12 @@ class SideButtonFrame(Tk.Frame):
                              command=self.export_from_db)
         button3.place(x=0, y=0, width=88, height=75)
 
-        button4 = ttk.Button(self.exportCanvas, text=_("EXPORT\nREPORT\nTO USB"), style='export.Accent.TButton',
+        button4 = ttk.Button(self.exportCanvas, text=_("EXPORT\nREPORT"), style='export.Accent.TButton',
                              compound=Tk.TOP,
                              command=lambda: self.report(1))
         button4.place(x=0, y=77, width=88, height=75)
 
-        button5 = ttk.Button(self.exportCanvas, text=_("UPLOAD\nREPORT\nTO SEVER"), style='export.Accent.TButton',
-                            command=lambda: self.report(0))
+        button5 = ttk.Button(self.exportCanvas, text=_("RESERVE"), style='export.Accent.TButton', state="disable")
         button5.place(x=0, y=154, width=88, height=75)
 
 
@@ -989,36 +1115,36 @@ class SideButtonFrame(Tk.Frame):
 
     def export_from_db(self):
         try:
-            if pms.general_warning(_("Do you want to export data to .CSV file")):
+            file_path = asksaveasfilename(defaultextension=".csv",
+                                          filetypes=[("CSV File", "*.csv"), ("All files", "*.*")])
+            if file_path:
                 result_arr2=[]
                 pos_arr=[]
                 date_arr=[]
                 sample_rate_arr=[]
-                file_name = ''
-                save_path=f"{parent_directory}/storage/"
                 ProjectCode=self.history_config_struct["ProjectID"]
                 
                 with self.con:
                     cur = self.con.cursor()
                     cur.execute(f"SELECT DATA, POS, DATE, Sample_rate FROM DATA WHERE CODE = ? ORDER BY DATE ASC", (ProjectCode,))
                     load_data = cur.fetchall()
-                    cur.execute(f"SELECT COM_ID FROM Project_ID WHERE CODE = ?", (ProjectCode,))
+                    cur.execute(f"SELECT COM_ID, DRIVEN, NOTE, POWER, RPM, FOUNDATION, GEARTOOTH, BEARINGBORE FROM Project_ID WHERE CODE = ?", (ProjectCode,))
                     machineParam = cur.fetchall()
                 load_data_arr = [i for i in load_data]
                 machine_param_arr = [i for i in machineParam]
                 comId=machine_param_arr[0][0]
-                
+                machineType=machine_param_arr[0][1]
+                machineName=machine_param_arr[0][2]
+                power=machine_param_arr[0][3]
+                rpm=machine_param_arr[0][4]
+                foundation=machine_param_arr[0][5]
+                geartooth=machine_param_arr[0][6]
+                bearingbore=machine_param_arr[0][7]
                 with self.con:
                     cur = self.con.cursor()
                     cur.execute(f"SELECT NAME FROM Company_ID WHERE COM_ID = ?", (str(comId),))
                     companyTuple=cur.fetchall()
                 companyName= companyTuple[0][0]
-                name=companyName + '_' + ProjectCode+'__'
-                if name =='':
-                    file_name +='NONAME_DATA__-__-__'
-                else:
-                    file_name += name
-
                 if len(load_data_arr)!=0:
                     for ari in load_data_arr:
                         result_arr2.append(file_operation.extract_str(ari[0]))
@@ -1028,39 +1154,10 @@ class SideButtonFrame(Tk.Frame):
                     
 
                     for i in range(len(pos_arr)):
-                        new_file_name= f'_{str(i+1)}_' + file_name + date_arr[i] + pos_arr[i] + '.csv'
-                        new_file_name=new_file_name.replace("/", "_")
-                        completeName = os.path.join(save_path, new_file_name)
-                        file_operation.store_data(result_arr2[i], sample_rate_arr[i], completeName)
-                        
-                    
-                    try:
-                        os.system("sudo umount /media/pi/usb")
-                    except:
-                        pass
-                    try:
-                        os.system("sudo rmdir /media/pi/usb")
-                    except:
-                        pass
-                    try:
-                        os.system("sudo mkdir /media/pi/usb")
-                    except:
-                        pass
-                    try:
-                        os.system("sudo mount /dev/sda1 /media/pi/usb")
-                    except:
-                        pass
-                    try:
-                        os.system(f"sudo cp -ru -f {save_path}/* /media/pi/usb" )
-                        os.system("sudo umount /media/pi/usb")
-                        os.system("sudo rmdir /media/pi/usb")
-                        self.infoLabel.configure(text=_("Export CSV is completed"))
-                    except Exception as ex:
-                        print(ex)
-                    try:
-                        os.system(f"sudo rm -r {save_path}/*")
-                    except Exception as ex:
-                        print(ex)
+                        file_operation.store_data(result_arr2[i], sample_rate_arr[i], file_path, companyName,
+                                                  ProjectCode, date_arr[i], pos_arr[i], machineType, machineName,
+                                                  power, rpm, foundation, geartooth, bearingbore)
+
                 else:
                     self.infoLabel.configure(text=_("There is no data, please check input value !"))
             else:
@@ -1071,10 +1168,13 @@ class SideButtonFrame(Tk.Frame):
 
     def report(self, export_flag=1):
         from docx.shared import Inches
-        save_path=f"{parent_directory}/storage/"
+        file_path = asksaveasfilename(defaultextension=".docx",
+                                      filetypes=[("Docx File", "*.docx"), ("All files", "*.*")])
+        save_path = os.path.dirname(file_path)
+        file_name = os.path.basename(file_path)
         document=rp.Report(save_path)
         try:
-            if pms.general_warning(_("Do you want to export the report")):
+            if file_path:
                 prjCode = self.history_config_struct["ProjectID"]
                 sensorPosition = self.history_config_struct["SensorPosition"]
                 viewRange=[0, self.history_config_struct["ViewLimit"]]
@@ -1110,15 +1210,15 @@ class SideButtonFrame(Tk.Frame):
                         note=ari[6]
                     # Export waveform image
                     Pd.PLT.plot_all_history(self.canvas, result_arr2, date_arr, sample_rate_arr, viewRange, 1, tsaUse, tsaBin, export_png=True)
-                    
+
                     # Export acc frequency image
                     Pd.PLT.plot_all_history(self.canvas, result_arr2, date_arr, sample_rate_arr, viewRange, 0, tsaUse, tsaBin, export_png=True)
-                    
+
                     # Export velocity frequency image
                     if sensorPosition[-1]=='A':
                         Pd.PLT.plot_history_velocity_spectral(self.canvas, result_arr2, date_arr, sample_rate_arr, [0, 1000], tsaUse, tsaBin, export_png=True)
-                    
-                    # Export waterfall image  
+
+                    # Export waterfall image
                     Pd.PLT.plot_waterfall(self.canvas, result_arr1, date_arr, sample_rate_arr, viewRange, export_png=True)
 
                     # Export Iso image
@@ -1128,18 +1228,18 @@ class SideButtonFrame(Tk.Frame):
                     view_arr.append(self.history_config_struct["gE"])
                     view_arr.append(self.history_config_struct["HFCF"])
                     isoStandard = iso10816_judge(driven, rpm, power, foundation)
-                    Pd.PLT.plot_trend(self.canvas, result_arr1, date_arr, sample_rate_arr, sensorPosition,\
+                    Pd.PLT.plot_trend(self.canvas, result_arr1, date_arr, sample_rate_arr, sensorPosition,
                     isoStandard, rpm, bearing_bore, view_arr, export_png=True)
 
                     # Export envelop image
                     filter_type = "BANDPASS"
                     filter_from = self.history_config_struct["FilterFrom"]# high pass cutoff freq
                     filter_to = self.history_config_struct["FilterTo"]# low pass cutoff freq
-                    
+
                     if filter_from >= filter_to:
                         filter_from= dfc._ENV_BANDPASS_FROM
                         filter_to= dfc._ENV_BANDPASS_TO
-                        self.infoLabel.configure(text=_("Filter bandpass frequency is wrong. Use the default value."))
+                        self.infoLabel.configure(text="Filter bandpass frequency is wrong. Use the default value.")
                     else:
                         pass
                     temp_result_arr=[]
@@ -1167,84 +1267,30 @@ class SideButtonFrame(Tk.Frame):
                             temp_result_arr.append(amplitude_envelope1)
                     Pd.PLT.plot_all_history(self.canvas, temp_result_arr, date_arr, sample_rate_arr, [0, 2000], 2, tsaUse, tsaBin, export_png=True)
                     document.first_page()
-                    document._add_picture(save_path+'trend.png', width=Inches(6.0))
+                    document._add_picture(working_directory+'\image\\trend.png', width=Inches(6.0))
                     document._add_run(_('Figure1: Vibration trend'), style='italic')
                     document.add_blank_comment()
 
-                    document._add_picture(save_path+'waveform.png', width=Inches(6.0))
+                    document._add_picture(working_directory+'\image\waveform.png', width=Inches(6.0))
                     document._add_run(_('Figure2: Waveform'), style='italic')
                     document.add_blank_comment()
 
-                    document._add_picture(save_path+'frequency.png', width=Inches(6.0))
+                    document._add_picture(working_directory+'\image\\frequency.png', width=Inches(6.0))
                     document._add_run(_('Figure3: Frequency spectrum'), style='italic')
                     document.add_blank_comment()
 
-                    document._add_picture(save_path+'velocity_frequency.png', width=Inches(6.0))
+                    document._add_picture(working_directory+'\image\\velocity_frequency.png', width=Inches(6.0))
                     document._add_run(_('Figure4: Velocity spectrum'), style='italic')
                     document.add_blank_comment()
 
-                    document._add_picture(save_path+'envelop.png', width=Inches(6.0))
+                    document._add_picture(working_directory+'\image\envelop.png', width=Inches(6.0))
                     document._add_run(_('Figure5: Envelope spectrum'), style='italic')
                     document.add_blank_comment()
                     document._add_page_break()
-                    new_file_name=str(prjCode)+ '_' + str(sensorPosition) + '_'+'_report.docx'
-                    new_file_name=new_file_name.replace("/", "_")
-                    document._save(new_file_name)
-                    if(export_flag==1):
-                        try:
-                            os.system("sudo umount /media/pi/usb")
-                        except:
-                            pass
-                        try:
-                            os.system("sudo rmdir /media/pi/usb")
-                        except:
-                            pass
-                        try:
-                            os.system("sudo mkdir /media/pi/usb")
-                        except:
-                            pass
-                        try:
-                            os.system("sudo mount /dev/sda1 /media/pi/usb")
-                        except:
-                            pass
-                        try:
-                            os.system(f"sudo cp -ru -f {save_path}/{new_file_name} /media/pi/usb")
-                            os.system("sudo umount /media/pi/usb")
-                            os.system("sudo rmdir /media/pi/usb")
-                            self.infoLabel.configure(text=_("Export report is completed"))
-                        except Exception as ex:
-                            print(ex)
-                        # try:
-                        #     os.system(f"sudo rm -r {save_path}/*")
-                        # except Exception as ex:
-                        #     print(ex)
-                    else:
-                        url = "https://v424kpn36d.execute-api.ap-northeast-1.amazonaws.com/production/"
-                        file_name = save_path + new_file_name
-                        result = requests.post(f"{url}api/files", json={"file_name": file_name}).json()
+                    document._save(file_name)
 
-                        file = { 'file': open(file_name, 'rb')}
-                        http_response = requests.post(
-                            result['url'],
-                            data=result['fields'],
-                            files=file
-                        )
+                    self.infoLabel.configure(text=_("Export report is completed"))
 
-                        if http_response.status_code == 204:
-                            text1=str(result['url']+result['fields']['key'])
-                            qr = qrcode.QRCode(version = 1, box_size = 10, border = 5)
-                            qr.add_data(text1)
-                            qr.make(fit = True)
-                            img = qr.make_image(fill_color = 'black', back_color = 'white')
-                            img.save(save_path + 'MyQRCode2.png')
-                            Pd.PLT.plot_image(self.canvas, 'MyQRCode2.png')
-                            self.infoLabel.configure(text=_("Upload success. Use QR scanner to download the report."))
-                        else:
-                            self.infoLabel.configure(text=_("Upload fail"))
-                    try:
-                        os.system(f"sudo rm -r {save_path}/*")
-                    except Exception as ex:
-                        print(ex)
                 else:
                     self.infoLabel.configure(text=_("There is no data, please check SETTING !"))
         except:

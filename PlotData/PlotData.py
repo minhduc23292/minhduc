@@ -20,8 +20,8 @@ from scipy.stats import kurtosis
 from tkinter import PhotoImage
 current_directory = os.path.dirname(os.path.realpath(__file__))
 parent_directory = os.path.dirname(current_directory)
-save_path = f"{parent_directory}/storage/"
-
+working_directory = os.getcwd()
+save_path = f"{working_directory}\image\\"
 
 class PLT(FigureCanvasTkAgg):
     def plot1chanel(self, canal, unit, sample_rate, win_var="Hanning"):
@@ -392,7 +392,7 @@ class PLT(FigureCanvasTkAgg):
             completeName = os.path.join(save_path, file_name)
             for i in range(h_num):
                 n = len(arr[i])
-                read_time = (n / sample_rate[i]) * 1000
+                read_time = (n / int(sample_rate[i])) * 1000
                 X1 = np.linspace(0, int(read_time), num=n)
                 axes_arr1[i].yaxis.set_major_formatter(FormatStrFormatter('%0.2f'))
                 axes_arr1[i].plot(X1, arr[i], color='blue', linewidth=0.5)
@@ -675,7 +675,7 @@ class PLT(FigureCanvasTkAgg):
                 for index, value in enumerate(Acc_Pk_arr):
                     ax_42.text(index, value+0.2, str(value)[0:4])
             if view_arr[2] == 1:
-                ax_43.plot(tick_arr, gE_arr, color="blue", linestyle='solid', marker='o', \
+                ax_43.plot(tick_arr, gE_arr, color="blue", linestyle='solid', marker='o',
                            markerfacecolor='red', markersize=5, label="BRGs-gE")
                 ax_43.plot(tick_arr1, gE_alert_arr, linewidth=0.3, color="orange")
                 ax_43.plot(tick_arr1, gE_danger_arr, linewidth=0.3, color="red")
@@ -950,14 +950,14 @@ class PLT(FigureCanvasTkAgg):
                 ax_51.plot([0, struct_balancing["run"][i]["phase1"]], [0, struct_balancing["run"][i]["amplitude1"]],
                            color[i])
                 ax_51.text(struct_balancing["run"][i]["phase1"], struct_balancing["run"][i]["amplitude1"],
-                           '(%s/ %0.1f°; %0.2f)' % (header[i], \
+                           '(%s/ %0.1f°; %0.2f)' % (header[i],
                                                     struct_balancing["run"][i]["phase1"] * 180 / 3.14,
                                                     struct_balancing["run"][i]["amplitude1"]), color=color[i])
 
                 ax_61.plot([0, struct_balancing["run"][i]["phase2"]], [0, struct_balancing["run"][i]["amplitude2"]],
                            color[i])
                 ax_61.text(struct_balancing["run"][i]["phase2"], struct_balancing["run"][i]["amplitude2"],
-                           '(%s/ %0.1f°; %0.2f)' % (header[i], \
+                           '(%s/ %0.1f°; %0.2f)' % (header[i],
                                                     struct_balancing["run"][i]["phase2"] * 180 / 3.14,
                                                     struct_balancing["run"][i]["amplitude2"]), color=color[i])
             self.draw()
@@ -1095,7 +1095,7 @@ class PLT(FigureCanvasTkAgg):
                 ax_51.plot([0, struct_balancing["run"][i]["phase"]], [0, struct_balancing["run"][i]["amplitude"]],
                            color[i])
                 ax_51.text(struct_balancing["run"][i]["phase"], struct_balancing["run"][i]["amplitude"],
-                           '(%s/ %0.1f°; %0.2f)' % (header[i], \
+                           '(%s/ %0.1f°; %0.2f)' % (header[i],
                                                     struct_balancing["run"][i]["phase"] * 180 / 3.14,
                                                     struct_balancing["run"][i]["amplitude"]), color=color[i])
             self.draw()

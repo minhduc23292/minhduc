@@ -73,21 +73,36 @@ def grabar(canal_1, canal_2, canal_3, archivo):
     arch.write(str_canal)
     arch.close()
 
-def store_data(data_arr, sample_rate, archivo):
+def store_data(data_arr, sample_rate, file_path, companyName, ProjectCode, date, pos, machineType,machineName,
+               power, rpm, foundation, geartooth, bearingbore):
     """ Saves X and Y axis data on file archivo"""
     h_num = len(data_arr)
     # str_canal=''
     # for i in range(h_num):
     #     str_canal += str(format(data_arr[i], "0.7f"))+'\n'
-    # arch = open(archivo, "w")
+    # arch = open(file_path, "w")
     # arch.write(str_canal)
     data=[]
     period=1/sample_rate
     for i in range(h_num):
-        data.append([i*period, data_arr[i]])
-    with open(archivo, 'w', encoding='UTF8') as f:
+        data.append([data_arr[i]])
+    with open(file_path, mode='w', newline='') as f:
         writer = csv.writer(f)
+        writer.writerows([["CompanyName", companyName]])
+        writer.writerows([["ProjectCode", ProjectCode]])
+        writer.writerows([["Date", date]])
+        writer.writerows([["Position", pos]])
+        writer.writerows([["Sample_rate", sample_rate]])
+        writer.writerows([["Num_Of_Sample", h_num]])
+        writer.writerows([["MachineType", machineType]])
+        writer.writerows([["MachineName", machineName]])
+        writer.writerows([["Power", power]])
+        writer.writerows([["RPM", rpm]])
+        writer.writerows([["Foundation", foundation]])
+        writer.writerows([["GearTooth", geartooth]])
+        writer.writerows([["BearingBore", bearingbore]])
         writer.writerows(data)
+
     
 
 def store_data2(data_arr1, data_arr2, data_arr3, archivo):

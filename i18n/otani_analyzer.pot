@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-28 16:39+0700\n"
+"POT-Creation-Date: 2024-03-09 01:44+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,1280 +16,6 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
-
-#: popup/pop_message.py:5 pms/popMessage.py:5
-msgid "OS IS BEING SHUTDDWN"
-msgstr ""
-
-#: popup/pop_message.py:8 pms/popMessage.py:8
-msgid "Company name and project code dont exist. Do you want to continue ?"
-msgstr ""
-
-#: popup/pop_message.py:13 pms/popMessage.py:13
-msgid "Do you want shutdown the device?"
-msgstr ""
-
-#: popup/pop_message.py:18 pms/popMessage.py:18
-msgid "This project code is existed, please type another code"
-msgstr ""
-
-#: popup/pop_message.py:23 pms/popMessage.py:23
-msgid "Company existed and project code dont exist. Do you want to continue ?"
-msgstr ""
-
-#: popup/pop_message.py:28 pms/popMessage.py:28
-msgid "Company and project existed. Do you want to continue ?"
-msgstr ""
-
-#: popup/pop_message.py:40 pms/popMessage.py:40
-msgid "Please entry the "
-msgstr ""
-
-#: keyboard/keyboard.py:37 ui/history/historyModule.py:518
-#: ui/Diagnostic/DiagnosticPage.py:1903
-msgid "Input"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:111 ui/history/historyModule.py:105
-#: ui/ResonanceModule/ResonanceModule.py:117
-#: ui/Diagnostic/DiagnosticPage.py:178 ui/Settingpage/SettingPage.py:116
-msgid "Home"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:120 ui/history/historyModule.py:114
-#: ui/ResonanceModule/ResonanceModule.py:126
-#: ui/Diagnostic/DiagnosticPage.py:187
-msgid "Config"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:128
-msgid "Balancing"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:135 ui/history/historyModule.py:134
-#: ui/ResonanceModule/ResonanceModule.py:141
-#: ui/Diagnostic/DiagnosticPage.py:207 ui/Settingpage/SettingPage.py:128
-msgid "Information"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:138
-msgid "Click RUN to start."
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:149 ui/history/historyModule.py:150
-#: ui/ResonanceModule/ResonanceModule.py:155
-msgid "Click APPLY button before using this funtion."
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:220 ui/history/historyModule.py:214
-#: ui/ResonanceModule/ResonanceModule.py:205
-msgid "Configuration"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:223
-msgid "Num of planes"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:231
-msgid "Num of sensors"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:238
-msgid "Sensor type"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:245
-msgid "Plane 1"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:252
-msgid "Plane 2"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:259
-msgid "Coordinate Origin"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:266
-msgid "Trial mass 1 (g)"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:273
-msgid "Trial mass 2 (g)"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:280
-msgid "Trial angle 1(deg)"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:287
-msgid "Trial angle 2(deg)"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:295
-msgid "Rotating direction"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:302
-#: ui/Diagnostic/DiagnosticPage.py:1465
-msgid "FFT lines"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:309 ui/history/historyModule.py:305
-#: ui/ResonanceModule/ResonanceModule.py:264
-msgid "Sample rate"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:316
-msgid "Num of blades"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:323
-msgid "Balancing speed(RPM)"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:330
-msgid "Trial mass removable"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:337
-msgid "Trial weight calculation"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:340
-msgid "Rotor mass(kg)"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:348
-msgid "Grade(ISO-1940)"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:355
-msgid "Operation speed(RPM)"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:363
-msgid "Correction radius(mm)"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:370
-msgid "CALCULATE"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:374 ui/history/historyModule.py:277
-#: ui/ResonanceModule/ResonanceModule.py:292
-#: ui/Diagnostic/DiagnosticPage.py:236 ui/Diagnostic/DiagnosticPage.py:1709
-#: ui/Diagnostic/DiagnosticPage.py:1975 ui/Settingpage/SettingPage.py:186
-#: ui/Settingpage/SettingPage.py:334
-msgid "APPLY"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:450
-#: ui/balancingModule/balancingModule.py:463 ui/history/historyModule.py:383
-msgid "Parameter errors. Check the input type."
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:458
-#: ui/balancingModule/balancingModule.py:472
-#: ui/balancingModule/balancingModule.py:492 ui/history/historyModule.py:390
-msgid "OK"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:486
-#: ui/balancingModule/balancingModule.py:495
-#: ui/Diagnostic/DiagnosticPage.py:501
-msgid "Data errors"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:578
-msgid "CW split"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:671
-msgid ""
-"START\n"
-"INITIAL\n"
-"RUN"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:681
-#: ui/balancingModule/balancingModule.py:697
-#: ui/balancingModule/balancingModule.py:713
-#: ui/balancingModule/balancingModule.py:729
-#: ui/balancingModule/balancingModule.py:758
-#: ui/balancingModule/balancingModule.py:774
-#: ui/balancingModule/balancingModule.py:791
-#: ui/balancingModule/balancingModule.py:808
-#: ui/balancingModule/balancingModule.py:825
-#: ui/balancingModule/balancingModule.py:842
-#: ui/balancingModule/balancingModule.py:859
-#: ui/balancingModule/balancingModule.py:876
-#: ui/balancingModule/balancingModule.py:893
-#: ui/balancingModule/balancingModule.py:910
-#: ui/balancingModule/balancingModule.py:938
-#: ui/balancingModule/balancingModule.py:955
-#: ui/balancingModule/balancingModule.py:972
-#: ui/balancingModule/balancingModule.py:989
-#: ui/balancingModule/balancingModule.py:1006
-msgid "STOP"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:685
-#: ui/balancingModule/balancingModule.py:701
-#: ui/balancingModule/balancingModule.py:717
-#: ui/balancingModule/balancingModule.py:733
-#: ui/balancingModule/balancingModule.py:762
-#: ui/balancingModule/balancingModule.py:778
-#: ui/balancingModule/balancingModule.py:795
-#: ui/balancingModule/balancingModule.py:812
-#: ui/balancingModule/balancingModule.py:829
-#: ui/balancingModule/balancingModule.py:846
-#: ui/balancingModule/balancingModule.py:863
-#: ui/balancingModule/balancingModule.py:880
-#: ui/balancingModule/balancingModule.py:897
-#: ui/balancingModule/balancingModule.py:914
-#: ui/balancingModule/balancingModule.py:942
-#: ui/balancingModule/balancingModule.py:959
-#: ui/balancingModule/balancingModule.py:976
-#: ui/balancingModule/balancingModule.py:993
-#: ui/balancingModule/balancingModule.py:1010
-msgid "Wait until phase and amplitude is stable and click STOP"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:689
-msgid ""
-"TRIAL\n"
-"RUN"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:693
-msgid "Next step: Execute the trial run"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:705
-#: ui/balancingModule/balancingModule.py:981
-msgid ""
-"TRIM 1\n"
-"RUN"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:709
-msgid "Next step: Execute the first trim run"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:721
-#: ui/balancingModule/balancingModule.py:998
-msgid ""
-"TRIM 2\n"
-"RUN"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:725
-msgid "Next step: Execute the second trim run"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:737
-msgid ""
-"END\n"
-"PROCESS"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:741
-msgid "Next step: Finish!"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:751
-#: ui/balancingModule/balancingModule.py:1015
-msgid ""
-"INITIAL\n"
-"RUN"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:766
-msgid ""
-"INITIAL\n"
-"PL2"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:770
-msgid "Next step: Initial Run, Collect data on the plane 2"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:783
-msgid ""
-"TRIAL 1\n"
-"PL1"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:787
-msgid "Next step: First Trial Run, Collect data on the plane 1"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:800
-msgid ""
-"TRIAL 1\n"
-"PL2"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:804
-msgid "Next step: First Trial Run, Collect data on the plane 2"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:817
-msgid ""
-"TRIAL 2\n"
-"PL1"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:821
-msgid "Next step: Second Trial Run, Collect data on the plane 1"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:834
-msgid ""
-"TRIAL 2\n"
-"PL2"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:838
-msgid "Next step: Second Trial Run, Collect data on the plane 2"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:851
-msgid ""
-"TRIM 1\n"
-"PL1"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:855
-msgid "Next step: First Trim Run, Collect data on the plane 1"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:868
-msgid ""
-"TRIM 1\n"
-"PL2"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:872
-msgid "Next step: First Trim Run, Collect data on the plane 2"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:885
-msgid ""
-"TRIM 2\n"
-"PL1"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:889
-msgid "Next step: Second Trim Run, Collect data on the plane 1"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:902
-msgid ""
-"TRIM 2\n"
-"PL2"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:906
-#: ui/balancingModule/balancingModule.py:923
-msgid "Next step: Second Trim Run, Collect data on the plane 2"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:919
-msgid ""
-"INITIAL 1\n"
-"PL1"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:947
-msgid ""
-"TRIAL 1\n"
-"RUN"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:951
-msgid "Next step: First Trial Run, Mount the sensor on two planes and execute"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:964
-msgid ""
-"TRIAL 2\n"
-"RUN"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:968
-msgid "Next step: Second Trial Run, Mount the sensor on two planes and execute"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:985
-msgid "Next step: First Trim Run, Mount the sensor on two planes and execute"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:1002
-msgid "Next step: Second Trim Run, Mount the sensor on two planes and execute"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:1019
-msgid "Next step: Initial Run, Mount the sensor on two planes and execute"
-msgstr ""
-
-#: ui/balancingModule/balancingModule.py:1123
-#: ui/balancingModule/balancingModule.py:1247 ui/history/historyModule.py:944
-#: ui/history/historyModule.py:987 ui/history/historyModule.py:1251
-#: ui/ResonanceModule/ResonanceModule.py:565
-msgid "Data errors."
-msgstr ""
-
-#: ui/history/historyModule.py:122
-msgid ""
-"History\n"
-"Analysis"
-msgstr ""
-
-#: ui/history/historyModule.py:126
-msgid ""
-"Bearing\n"
-"Frequency"
-msgstr ""
-
-#: ui/history/historyModule.py:217 ui/history/historyModule.py:480
-msgid "Project Code"
-msgstr ""
-
-#: ui/history/historyModule.py:223
-msgid "Sensor Position"
-msgstr ""
-
-#: ui/history/historyModule.py:230 ui/ResonanceModule/ResonanceModule.py:250
-msgid "Bandpass Filter From"
-msgstr ""
-
-#: ui/history/historyModule.py:236 ui/ResonanceModule/ResonanceModule.py:257
-msgid "Bandpass Filter To"
-msgstr ""
-
-#: ui/history/historyModule.py:242
-msgid "View Limit"
-msgstr ""
-
-#: ui/history/historyModule.py:248 ui/ResonanceModule/ResonanceModule.py:278
-#: ui/Diagnostic/DiagnosticPage.py:1513
-msgid "Tracking speed"
-msgstr ""
-
-#: ui/history/historyModule.py:254
-msgid "Use Average"
-msgstr ""
-
-#: ui/history/historyModule.py:258
-msgid "Average Bin"
-msgstr ""
-
-#: ui/history/historyModule.py:265
-msgid "Show Vel RMS"
-msgstr ""
-
-#: ui/history/historyModule.py:268
-msgid "Show Bearing gE"
-msgstr ""
-
-#: ui/history/historyModule.py:271
-msgid "Show Gear Acc"
-msgstr ""
-
-#: ui/history/historyModule.py:274
-msgid "Show Bearing HFCF"
-msgstr ""
-
-#: ui/history/historyModule.py:281
-msgid "Delete Project"
-msgstr ""
-
-#: ui/history/historyModule.py:303 ui/Diagnostic/DiagnosticPage.py:1698
-#: ui/Settingpage/SettingPage.py:175
-msgid "Date"
-msgstr ""
-
-#: ui/history/historyModule.py:304
-msgid "Position"
-msgstr ""
-
-#: ui/history/historyModule.py:456
-msgid "Do you want to delete this project?"
-msgstr ""
-
-#: ui/history/historyModule.py:462
-msgid "Selected project is deleted."
-msgstr ""
-
-#: ui/history/historyModule.py:482
-msgid "Delete project errors"
-msgstr ""
-
-#: ui/history/historyModule.py:522
-msgid "Bearing frequency table"
-msgstr ""
-
-#: ui/history/historyModule.py:539
-msgid "Bearing Name"
-msgstr ""
-
-#: ui/history/historyModule.py:546
-msgid "Speed(RPM)"
-msgstr ""
-
-#: ui/history/historyModule.py:552
-msgid "SEARCH"
-msgstr ""
-
-#: ui/history/historyModule.py:626
-msgid "RESERVE"
-msgstr ""
-
-#: ui/history/historyModule.py:629
-msgid "EXPORT"
-msgstr ""
-
-#: ui/history/historyModule.py:633 ui/ResonanceModule/ResonanceModule.py:373
-#: ui/Diagnostic/DiagnosticPage.py:252 ui/Diagnostic/DiagnosticPage.py:270
-msgid "ZOOM"
-msgstr ""
-
-#: ui/history/historyModule.py:640 ui/ResonanceModule/ResonanceModule.py:378
-#: ui/Diagnostic/DiagnosticPage.py:276
-msgid ""
-"CURSOR\n"
-"LEFT"
-msgstr ""
-
-#: ui/history/historyModule.py:644 ui/ResonanceModule/ResonanceModule.py:382
-#: ui/Diagnostic/DiagnosticPage.py:280
-msgid ""
-"CURSOR\n"
-"RIGHT"
-msgstr ""
-
-#: ui/history/historyModule.py:651
-msgid ""
-"PLOT\n"
-"NONE"
-msgstr ""
-
-#: ui/history/historyModule.py:696 ui/ResonanceModule/ResonanceModule.py:437
-#: ui/Diagnostic/DiagnosticPage.py:710
-msgid "ZOOM IN"
-msgstr ""
-
-#: ui/history/historyModule.py:702 ui/ResonanceModule/ResonanceModule.py:443
-#: ui/Diagnostic/DiagnosticPage.py:716
-msgid "ZOOM OUT"
-msgstr ""
-
-#: ui/history/historyModule.py:707 ui/ResonanceModule/ResonanceModule.py:448
-#: ui/Diagnostic/DiagnosticPage.py:721
-msgid "PAN LEFT"
-msgstr ""
-
-#: ui/history/historyModule.py:713 ui/ResonanceModule/ResonanceModule.py:454
-#: ui/Diagnostic/DiagnosticPage.py:727
-msgid "PAN RIGHT"
-msgstr ""
-
-#: ui/history/historyModule.py:719 ui/ResonanceModule/ResonanceModule.py:460
-#: ui/Diagnostic/DiagnosticPage.py:733
-msgid "RESET"
-msgstr ""
-
-#: ui/history/historyModule.py:731
-msgid ""
-"EXPORT\n"
-".CSV"
-msgstr ""
-
-#: ui/history/historyModule.py:736
-msgid ""
-"EXPORT\n"
-"REPORT\n"
-"TO USB"
-msgstr ""
-
-#: ui/history/historyModule.py:741
-msgid ""
-"UPLOAD\n"
-"REPORT\n"
-"TO SEVER"
-msgstr ""
-
-#: ui/history/historyModule.py:804
-msgid "WAVEFORM"
-msgstr ""
-
-#: ui/history/historyModule.py:808
-msgid "FREQUENCY"
-msgstr ""
-
-#: ui/history/historyModule.py:812
-msgid ""
-"VELOCITY\n"
-"FREQUENCY"
-msgstr ""
-
-#: ui/history/historyModule.py:816 ui/Diagnostic/DiagnosticPage.py:794
-msgid "ENVELOPED"
-msgstr ""
-
-#: ui/history/historyModule.py:820
-msgid "WATERFALL"
-msgstr ""
-
-#: ui/history/historyModule.py:824
-msgid "TREND"
-msgstr ""
-
-#: ui/history/historyModule.py:874
-msgid ""
-"PLOT\n"
-"WAVEFORM"
-msgstr ""
-
-#: ui/history/historyModule.py:877
-msgid ""
-"PLOT\n"
-"FREQUENCY\n"
-"SPECTRUM"
-msgstr ""
-
-#: ui/history/historyModule.py:881
-msgid ""
-"PLOT\n"
-"VELOCITY\n"
-"SPECTRUM"
-msgstr ""
-
-#: ui/history/historyModule.py:886
-msgid ""
-"PLOT\n"
-"WATERFALL"
-msgstr ""
-
-#: ui/history/historyModule.py:890
-msgid ""
-"PLOT\n"
-"TREND"
-msgstr ""
-
-#: ui/history/historyModule.py:904
-msgid ""
-"PLOT\n"
-"ENVELOPED"
-msgstr ""
-
-#: ui/history/historyModule.py:912
-msgid "Fcut is wrong. Use the default value."
-msgstr ""
-
-#: ui/history/historyModule.py:939
-msgid "Project: "
-msgstr ""
-
-#: ui/history/historyModule.py:941 ui/history/historyModule.py:1249
-msgid "There is no data, please check SETTING !"
-msgstr ""
-
-#: ui/history/historyModule.py:984
-msgid "Frequency:"
-msgstr ""
-
-#: ui/history/historyModule.py:992
-msgid "Do you want to export data to .CSV file"
-msgstr ""
-
-#: ui/history/historyModule.py:1057
-msgid "Export CSV is completed"
-msgstr ""
-
-#: ui/history/historyModule.py:1065
-msgid "There is no data, please check input value !"
-msgstr ""
-
-#: ui/history/historyModule.py:1077
-msgid "Do you want to export the report"
-msgstr ""
-
-#: ui/history/historyModule.py:1142
-msgid "Filter bandpass frequency is wrong. Use the default value."
-msgstr ""
-
-#: ui/history/historyModule.py:1171
-msgid "Figure1: Vibration trend"
-msgstr ""
-
-#: ui/history/historyModule.py:1175
-msgid "Figure2: Waveform"
-msgstr ""
-
-#: ui/history/historyModule.py:1179
-msgid "Figure3: Frequency spectrum"
-msgstr ""
-
-#: ui/history/historyModule.py:1183
-msgid "Figure4: Velocity spectrum"
-msgstr ""
-
-#: ui/history/historyModule.py:1187
-msgid "Figure5: Envelope spectrum"
-msgstr ""
-
-#: ui/history/historyModule.py:1214
-msgid "Export report is completed"
-msgstr ""
-
-#: ui/history/historyModule.py:1241
-msgid "Upload success. Use QR scanner to download the report."
-msgstr ""
-
-#: ui/history/historyModule.py:1243
-msgid "Upload fail"
-msgstr ""
-
-#: ui/ResonanceModule/ResonanceModule.py:134 ui/home/HomePage.py:47
-msgid ""
-"Resonance\n"
-"Analysis"
-msgstr ""
-
-#: ui/ResonanceModule/ResonanceModule.py:144
-msgid "Click the READ SENSOR and make a hit."
-msgstr ""
-
-#: ui/ResonanceModule/ResonanceModule.py:207
-msgid "Function"
-msgstr ""
-
-#: ui/ResonanceModule/ResonanceModule.py:214
-msgid "Sensor Port"
-msgstr ""
-
-#: ui/ResonanceModule/ResonanceModule.py:221
-msgid "Hammer Port"
-msgstr ""
-
-#: ui/ResonanceModule/ResonanceModule.py:228
-msgid "Window Type"
-msgstr ""
-
-#: ui/ResonanceModule/ResonanceModule.py:235
-msgid "Window Factor"
-msgstr ""
-
-#: ui/ResonanceModule/ResonanceModule.py:243
-#: ui/Diagnostic/DiagnosticPage.py:1482
-msgid "Filter type"
-msgstr ""
-
-#: ui/ResonanceModule/ResonanceModule.py:271
-msgid "Sampling time"
-msgstr ""
-
-#: ui/ResonanceModule/ResonanceModule.py:285
-msgid "Num of Averages"
-msgstr ""
-
-#: ui/ResonanceModule/ResonanceModule.py:369
-#: ui/Diagnostic/DiagnosticPage.py:258
-msgid ""
-"READ\n"
-"SENSOR"
-msgstr ""
-
-#: ui/ResonanceModule/ResonanceModule.py:386
-msgid ""
-"FACTOR\n"
-"+-"
-msgstr ""
-
-#: ui/ResonanceModule/ResonanceModule.py:390
-msgid "ADD"
-msgstr ""
-
-#: ui/ResonanceModule/ResonanceModule.py:515
-msgid "FACTOR+"
-msgstr ""
-
-#: ui/ResonanceModule/ResonanceModule.py:519
-msgid "FACTOR-"
-msgstr ""
-
-#: ui/ResonanceModule/ResonanceModule.py:583
-msgid "The averaged graph are shown in figure 1 and 2:"
-msgstr ""
-
-#: ui/ResonanceModule/ResonanceModule.py:644
-msgid "Time remain: "
-msgstr ""
-
-#: ui/ResonanceModule/ResonanceModule.py:723
-msgid "This hit is invalid. Make a new hit."
-msgstr ""
-
-#: ui/home/HomePage.py:37
-msgid "Diagnostic"
-msgstr ""
-
-#: ui/home/HomePage.py:42
-msgid ""
-"Dynamic\n"
-"Balancing"
-msgstr ""
-
-#: ui/home/HomePage.py:52
-msgid "History"
-msgstr ""
-
-#: ui/home/HomePage.py:56
-msgid "Settings"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:195
-msgid ""
-"Waveform\n"
-"Analysis"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:199
-msgid ""
-"Frequency\n"
-"Analysis"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:203
-msgid ""
-"General\n"
-"Monitoring"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:232
-msgid "APPLY & START"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:241 ui/Diagnostic/DiagnosticPage.py:263
-#: ui/Diagnostic/DiagnosticPage.py:299
-msgid "SAVE"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:248 ui/Diagnostic/DiagnosticPage.py:498
-#: ui/Diagnostic/DiagnosticPage.py:962 ui/Diagnostic/DiagnosticPage.py:968
-#: ui/Diagnostic/DiagnosticPage.py:989
-msgid ""
-"LASER\n"
-"VIEW"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:284 ui/Diagnostic/DiagnosticPage.py:814
-#: ui/Diagnostic/DiagnosticPage.py:835 ui/Diagnostic/DiagnosticPage.py:848
-#: ui/Diagnostic/DiagnosticPage.py:870 ui/Diagnostic/DiagnosticPage.py:890
-#: ui/Diagnostic/DiagnosticPage.py:1229
-msgid "GRID ON"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:288 ui/Diagnostic/DiagnosticPage.py:815
-msgid ""
-"FUNCTION\n"
-"NONE"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:292
-msgid "SUMMARY"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:363
-msgid "READING.....Please wait:"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:363
-msgid "seconds."
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:486
-msgid "Actual sample rate:"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:493
-msgid ""
-"NORMAL\n"
-"VIEW"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:529 ui/Diagnostic/DiagnosticPage.py:666
-msgid "There is no data !"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:602 ui/Diagnostic/DiagnosticPage.py:637
-#: ui/Diagnostic/DiagnosticPage.py:658
-msgid "Data is saved."
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:669
-msgid "Please input project code and company name !"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:785
-msgid "NONE"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:790
-msgid "FILTER"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:799
-msgid "PSD"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:804
-msgid ""
-"VELOCITY\n"
-"SPECTRAL"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:836
-msgid ""
-"FUNCTION\n"
-"FILTER"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:849
-msgid ""
-"FUNCTION\n"
-"ENVELOPED"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:871
-msgid ""
-"FUNCTION\n"
-"PSD"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:891
-msgid ""
-"FUNCTION\n"
-"VELOCITY\n"
-"SPECTRUM"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:1225
-msgid "GRID OFF"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:1370
-msgid "General config"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:1378
-msgid "Machine"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:1386
-msgid "Project CFG"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:1393
-msgid "Port1"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:1407
-msgid "Port2"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:1425
-msgid "Port3"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:1438
-msgid "Port4"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:1446
-msgid "Key sensor"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:1454
-msgid "  Use TSA"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:1459
-msgid "TSA times"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:1472
-msgid "Fmax (Hz)"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:1479
-msgid "Filter configuration"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:1490
-msgid "Window type"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:1499
-msgid "Filter From (Hz)"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:1506
-msgid "Filter To (Hz)"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:1520
-msgid "Mesh grid"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:1527
-msgid "Unit show"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:1535
-msgid "Machine configuration"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:1538
-msgid "Machine name"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:1544
-msgid "Speed (RPM)"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:1551
-msgid "Power (kW)"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:1558
-msgid "Gear teeth"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:1565
-msgid "Brgs bore(mm)"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:1572
-msgid "Foundation"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:1680 ui/Settingpage/SettingPage.py:157
-msgid "Project config"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:1683 ui/Settingpage/SettingPage.py:160
-msgid "Project Code*"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:1691 ui/Settingpage/SettingPage.py:168
-msgid "Company Name"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:1705 ui/Settingpage/SettingPage.py:182
-msgid "Get time now"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:1713
-msgid "CANCEL"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:1796
-msgid "The project code is existed, do you want to measure again ?"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:1860
-msgid "Date format is wrong"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:1863 ui/Settingpage/SettingPage.py:272
-msgid "The project code and company name may not be empty"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:1951
-msgid "Select port"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:1960
-msgid "Port 1"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:1965
-msgid "Port 2"
-msgstr ""
-
-#: ui/Diagnostic/DiagnosticPage.py:1970
-msgid "Port 3"
-msgstr ""
-
-#: ui/Settingpage/SettingPage.py:125
-msgid "Setting"
-msgstr ""
-
-#: ui/Settingpage/SettingPage.py:263
-msgid "The project code is existed, do you want to continue?"
-msgstr ""
-
-#: ui/Settingpage/SettingPage.py:306
-msgid "Sensor config"
-msgstr ""
-
-#: ui/Settingpage/SettingPage.py:309
-msgid "Accelerometer Sensitivity(mmV/g)"
-msgstr ""
-
-#: ui/Settingpage/SettingPage.py:317
-msgid "Velocity Transducer Sensitivity (mmV/m/s)"
-msgstr ""
-
-#: ui/Settingpage/SettingPage.py:325
-msgid "Hammer Sensitivity (mmV/N)"
-msgstr ""
-
-#: ui/Settingpage/SettingPage.py:360
-msgid ""
-"Restart is required to change the sensor sensitivity. Do you want to restart "
-"now"
-msgstr ""
-
-#: ui/Settingpage/SettingPage.py:383
-msgid "SENSOR"
-msgstr ""
-
-#: ui/Settingpage/SettingPage.py:384
-msgid "WIFI"
-msgstr ""
-
-#: ui/Settingpage/SettingPage.py:385
-msgid "LANGUAGE"
-msgstr ""
-
-#: ui/Settingpage/SettingPage.py:386
-msgid "POWER"
-msgstr ""
-
-#: ui/Settingpage/SettingPage.py:423
-msgid "Wifi config"
-msgstr ""
-
-#: ui/Settingpage/SettingPage.py:443
-msgid "Password"
-msgstr ""
-
-#: ui/Settingpage/SettingPage.py:454
-msgid "CONNECT"
-msgstr ""
-
-#: ui/Settingpage/SettingPage.py:458
-msgid "DISCONNECT"
-msgstr ""
-
-#: ui/Settingpage/SettingPage.py:472
-msgid "WIFI Successfull connection."
-msgstr ""
-
-#: ui/Settingpage/SettingPage.py:476 ui/Settingpage/SettingPage.py:479
-msgid "WIFI Failure connection."
-msgstr ""
-
-#: ui/Settingpage/SettingPage.py:533
-msgid "WIFI is disconnected."
-msgstr ""
-
-#: ui/Settingpage/SettingPage.py:536 ui/Settingpage/SettingPage.py:538
-msgid "WIFI Failure."
-msgstr ""
-
-#: ui/Settingpage/SettingPage.py:556
-msgid "SHUTDOWN"
-msgstr ""
-
-#: ui/Settingpage/SettingPage.py:562
-msgid "RESTART"
-msgstr ""
-
-#: ui/Settingpage/SettingPage.py:600
-msgid "Language config"
-msgstr ""
-
-#: ui/Settingpage/SettingPage.py:602
-msgid "Language"
-msgstr ""
-
-#: ui/Settingpage/SettingPage.py:621
-msgid "Restart is required to change the language. Do you want to restart now"
-msgstr ""
-
-#: report/report.py:37
-msgid "MACHINE DIAGNOSTIC REPORT"
-msgstr ""
-
-#: report/report.py:39
-msgid "Setup"
-msgstr ""
-
-#: report/report.py:42
-msgid "Diagnostic Person:"
-msgstr ""
-
-#: report/report.py:46
-msgid "Machine type:"
-msgstr ""
-
-#: report/report.py:50
-msgid "Power(kW):"
-msgstr ""
-
-#: report/report.py:54
-msgid "Speed(RPM):"
-msgstr ""
-
-#: report/report.py:58
-msgid "Shaft diameter:"
-msgstr ""
-
-#: report/report.py:62
-msgid "Measurement type:"
-msgstr ""
-
-#: report/report.py:66
-msgid "Sensor:"
-msgstr ""
-
-#: report/report.py:70
-msgid "Sensor mount:"
-msgstr ""
-
-#: report/report.py:74
-msgid "Sensor position:"
-msgstr ""
-
-#: report/report.py:78
-msgid "Bearing code:"
-msgstr ""
-
-#: report/report.py:82
-msgid "Bearing shaft bore:"
-msgstr ""
-
-#: report/report.py:86
-msgid "Gear teeth:"
-msgstr ""
-
-#: report/report.py:90
-msgid "Other:"
-msgstr ""
-
-#: report/report.py:93
-msgid "Conclusion"
-msgstr ""
-
-#: report/report.py:123
-msgid "Details"
-msgstr ""
 
 #: PlotData/PlotData.py:32 PlotData/PlotData.py:67 PlotData/PlotData.py:321
 #: PlotData/PlotData.py:636 PlotData/PlotData.py:645
@@ -1369,4 +95,407 @@ msgstr ""
 #: PlotData/PlotData.py:1358 PlotData/PlotData.py:1413
 #: PlotData/PlotData.py:1433
 msgid "Phase-degree"
+msgstr ""
+
+#: pms/popMessage.py:5
+msgid "OS IS BEING SHUTDDWN"
+msgstr ""
+
+#: pms/popMessage.py:8
+msgid "Company name and project code dont exist. Do you want to continue ?"
+msgstr ""
+
+#: pms/popMessage.py:13
+msgid "Do you want shutdown the device?"
+msgstr ""
+
+#: pms/popMessage.py:18
+msgid "This project code is existed, please type another code"
+msgstr ""
+
+#: pms/popMessage.py:23
+msgid "Company existed and project code dont exist. Do you want to continue ?"
+msgstr ""
+
+#: pms/popMessage.py:28
+msgid "Company and project existed. Do you want to continue ?"
+msgstr ""
+
+#: pms/popMessage.py:40
+msgid "Please entry the "
+msgstr ""
+
+#: report/report.py:37
+msgid "MACHINE DIAGNOSTIC REPORT"
+msgstr ""
+
+#: report/report.py:39
+msgid "Setup"
+msgstr ""
+
+#: report/report.py:42
+msgid "Diagnostic Person:"
+msgstr ""
+
+#: report/report.py:46
+msgid "Machine type:"
+msgstr ""
+
+#: report/report.py:50
+msgid "Power(kW):"
+msgstr ""
+
+#: report/report.py:54
+msgid "Speed(RPM):"
+msgstr ""
+
+#: report/report.py:62
+msgid "Measurement type:"
+msgstr ""
+
+#: report/report.py:66
+msgid "Sensor:"
+msgstr ""
+
+#: report/report.py:70
+msgid "Sensor mount:"
+msgstr ""
+
+#: report/report.py:74
+msgid "Sensor position:"
+msgstr ""
+
+#: report/report.py:78
+msgid "Bearing code:"
+msgstr ""
+
+#: report/report.py:82
+msgid "Bearing shaft bore:"
+msgstr ""
+
+#: report/report.py:86
+msgid "Gear teeth:"
+msgstr ""
+
+#: report/report.py:90
+msgid "Other:"
+msgstr ""
+
+#: report/report.py:93
+msgid "Conclusion"
+msgstr ""
+
+#: report/report.py:123
+msgid "Details"
+msgstr ""
+
+#: ui/history/historyModule.py:87
+msgid "Home"
+msgstr ""
+
+#: ui/history/historyModule.py:96
+msgid "Config"
+msgstr ""
+
+#: ui/history/historyModule.py:104
+msgid ""
+"History\n"
+"Analysis"
+msgstr ""
+
+#: ui/history/historyModule.py:108
+msgid ""
+"Bearing\n"
+"Frequency"
+msgstr ""
+
+#: ui/history/historyModule.py:116
+msgid "Information"
+msgstr ""
+
+#: ui/history/historyModule.py:132
+msgid "Click APPLY button before using this funtion."
+msgstr ""
+
+#: ui/history/historyModule.py:196
+msgid "Configuration"
+msgstr ""
+
+#: ui/history/historyModule.py:199 ui/history/historyModule.py:608
+msgid "Project Code"
+msgstr ""
+
+#: ui/history/historyModule.py:209
+msgid "Sensor Position"
+msgstr ""
+
+#: ui/history/historyModule.py:216
+msgid "BP Filter From"
+msgstr ""
+
+#: ui/history/historyModule.py:222
+msgid "BP Filter To"
+msgstr ""
+
+#: ui/history/historyModule.py:228
+msgid "View Limit"
+msgstr ""
+
+#: ui/history/historyModule.py:234
+msgid "Tracking speed"
+msgstr ""
+
+#: ui/history/historyModule.py:240
+msgid "Use Average"
+msgstr ""
+
+#: ui/history/historyModule.py:244
+msgid "Average Bin"
+msgstr ""
+
+#: ui/history/historyModule.py:251
+msgid "Show Vel RMS"
+msgstr ""
+
+#: ui/history/historyModule.py:254
+msgid "Show Bearing gE"
+msgstr ""
+
+#: ui/history/historyModule.py:257
+msgid "Show Gear Acc"
+msgstr ""
+
+#: ui/history/historyModule.py:260
+msgid "Show Bearing HFCF"
+msgstr ""
+
+#: ui/history/historyModule.py:263
+msgid "APPLY"
+msgstr ""
+
+#: ui/history/historyModule.py:267
+msgid "Delete Project"
+msgstr ""
+
+#: ui/history/historyModule.py:289
+msgid "Date"
+msgstr ""
+
+#: ui/history/historyModule.py:290
+msgid "Position"
+msgstr ""
+
+#: ui/history/historyModule.py:511
+msgid "Parameter errors. Check the input type."
+msgstr ""
+
+#: ui/history/historyModule.py:518
+msgid "OK"
+msgstr ""
+
+#: ui/history/historyModule.py:584
+msgid "Do you want to delete this project?"
+msgstr ""
+
+#: ui/history/historyModule.py:590
+msgid "Selected project is deleted."
+msgstr ""
+
+#: ui/history/historyModule.py:610
+msgid "Delete project errors"
+msgstr ""
+
+#: ui/history/historyModule.py:646
+msgid "Input"
+msgstr ""
+
+#: ui/history/historyModule.py:650
+msgid "Bearing frequency table"
+msgstr ""
+
+#: ui/history/historyModule.py:667
+msgid "Bearing Name"
+msgstr ""
+
+#: ui/history/historyModule.py:674
+msgid "Speed(RPM)"
+msgstr ""
+
+#: ui/history/historyModule.py:680
+msgid "SEARCH"
+msgstr ""
+
+#: ui/history/historyModule.py:753 ui/history/historyModule.py:868
+msgid "RESERVE"
+msgstr ""
+
+#: ui/history/historyModule.py:756
+msgid "EXPORT"
+msgstr ""
+
+#: ui/history/historyModule.py:760
+msgid "ZOOM"
+msgstr ""
+
+#: ui/history/historyModule.py:767
+msgid ""
+"CURSOR\n"
+"LEFT"
+msgstr ""
+
+#: ui/history/historyModule.py:771
+msgid ""
+"CURSOR\n"
+"RIGHT"
+msgstr ""
+
+#: ui/history/historyModule.py:778
+msgid ""
+"PLOT\n"
+"NONE"
+msgstr ""
+
+#: ui/history/historyModule.py:823
+msgid "ZOOM IN"
+msgstr ""
+
+#: ui/history/historyModule.py:829
+msgid "ZOOM OUT"
+msgstr ""
+
+#: ui/history/historyModule.py:834
+msgid "PAN LEFT"
+msgstr ""
+
+#: ui/history/historyModule.py:840
+msgid "PAN RIGHT"
+msgstr ""
+
+#: ui/history/historyModule.py:846
+msgid "RESET"
+msgstr ""
+
+#: ui/history/historyModule.py:858
+msgid ""
+"EXPORT\n"
+".CSV"
+msgstr ""
+
+#: ui/history/historyModule.py:863
+msgid ""
+"EXPORT\n"
+"REPORT"
+msgstr ""
+
+#: ui/history/historyModule.py:930
+msgid "WAVEFORM"
+msgstr ""
+
+#: ui/history/historyModule.py:934
+msgid "FREQUENCY"
+msgstr ""
+
+#: ui/history/historyModule.py:938
+msgid ""
+"VELOCITY\n"
+"FREQUENCY"
+msgstr ""
+
+#: ui/history/historyModule.py:942
+msgid "ENVELOPED"
+msgstr ""
+
+#: ui/history/historyModule.py:946
+msgid "WATERFALL"
+msgstr ""
+
+#: ui/history/historyModule.py:950
+msgid "TREND"
+msgstr ""
+
+#: ui/history/historyModule.py:1000
+msgid ""
+"PLOT\n"
+"WAVEFORM"
+msgstr ""
+
+#: ui/history/historyModule.py:1003
+msgid ""
+"PLOT\n"
+"FREQUENCY\n"
+"SPECTRUM"
+msgstr ""
+
+#: ui/history/historyModule.py:1007
+msgid ""
+"PLOT\n"
+"VELOCITY\n"
+"SPECTRUM"
+msgstr ""
+
+#: ui/history/historyModule.py:1012
+msgid ""
+"PLOT\n"
+"WATERFALL"
+msgstr ""
+
+#: ui/history/historyModule.py:1016
+msgid ""
+"PLOT\n"
+"TREND"
+msgstr ""
+
+#: ui/history/historyModule.py:1030
+msgid ""
+"PLOT\n"
+"ENVELOPED"
+msgstr ""
+
+#: ui/history/historyModule.py:1038
+msgid "Fcut is wrong. Use the default value."
+msgstr ""
+
+#: ui/history/historyModule.py:1065
+msgid "Project: "
+msgstr ""
+
+#: ui/history/historyModule.py:1067 ui/history/historyModule.py:1295
+msgid "There is no data, please check SETTING !"
+msgstr ""
+
+#: ui/history/historyModule.py:1070 ui/history/historyModule.py:1113
+#: ui/history/historyModule.py:1297
+msgid "Data errors."
+msgstr ""
+
+#: ui/history/historyModule.py:1110
+msgid "Frequency:"
+msgstr ""
+
+#: ui/history/historyModule.py:1162
+msgid "There is no data, please check input value !"
+msgstr ""
+
+#: ui/history/historyModule.py:1271
+msgid "Figure1: Vibration trend"
+msgstr ""
+
+#: ui/history/historyModule.py:1275
+msgid "Figure2: Waveform"
+msgstr ""
+
+#: ui/history/historyModule.py:1279
+msgid "Figure3: Frequency spectrum"
+msgstr ""
+
+#: ui/history/historyModule.py:1283
+msgid "Figure4: Velocity spectrum"
+msgstr ""
+
+#: ui/history/historyModule.py:1287
+msgid "Figure5: Envelope spectrum"
+msgstr ""
+
+#: ui/history/historyModule.py:1292
+msgid "Export report is completed"
 msgstr ""

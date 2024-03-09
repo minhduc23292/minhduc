@@ -54,9 +54,9 @@ class Report():
         p.add_run(_('Speed(RPM):')).bold = True
         p.add_run('..........................................................')
 
-        p = self.document.add_paragraph('')
-        p.add_run(_('Shaft diameter:')).bold = True
-        p.add_run('..........................................................')
+        # p = self.document.add_paragraph('')
+        # p.add_run(_('Shaft diameter:')).bold = True
+        # p.add_run('..........................................................')
 
         p = self.document.add_paragraph('')
         p.add_run(_('Measurement type:')).bold = True

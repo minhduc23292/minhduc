@@ -5,7 +5,7 @@ from i18n import _
 from image.image import ImageAdrr
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from main import Application
+    from meanlab import Application
 
 class HomePage(Tk.Frame):
     def __init__(self, parent: "Application"):
@@ -14,10 +14,9 @@ class HomePage(Tk.Frame):
         imageAddress = ImageAdrr()
         self.settingPhoto = imageAddress.settingPhoto
         self.smallSePhoto = imageAddress.smallSettingPhoto
-        self.diagnosPhoto = imageAddress.diagnosPhoto
-        self.balancePhoto = imageAddress.balancePhoto
+        self.meanLab=imageAddress.meanLab
         self.historyPhoto = imageAddress.historyPhoto
-        self.resonacePhoto = imageAddress.resonacePhoto
+
         self.creat_home_page(self.parent.origin_config)
 
     def creat_home_page(self, origin_config):
@@ -30,49 +29,13 @@ class HomePage(Tk.Frame):
         self.homeFrame.pack()
         self.homeFrame.pack_propagate(0)
 
-        homeLabel = ttk.Label(self.homeFrame, style='home.TLabel', text="Vibration Expert", image=self.settingPhoto,
+        homeLabel = ttk.Label(self.homeFrame, style='home.TLabel', text=" MEANLAB", image=self.meanLab,
                               compound=Tk.LEFT)
-        homeLabel.place(relx=0.25, rely=0.1)
+        homeLabel.place(relx=0.26, rely=0.11)
 
-        self.diagnosticButton = ttk.Button(self.homeFrame, style='home.TButton', text=_("Diagnostic"),
-                                           image=self.resonacePhoto,
-                                           compound=Tk.TOP, command=self.move_to_diagnostic_page)
-        self.diagnosticButton.place(relx=0.21, rely=0.32, width=188, height=125)
-
-        self.balancingButton = ttk.Button(self.homeFrame, style='home.TButton', text=_("Dynamic\nBalancing"),
-                                          image=self.balancePhoto,
-                                          compound=Tk.TOP, command=self.move_to_balancing_page)
-        self.balancingButton.place(relx=0.578, rely=0.32, width=188, height=125)
-
-        self.resonanceButton = ttk.Button(self.homeFrame, style='home.TButton', text=_("Resonance\nAnalysis"),
-                                          image=self.resonacePhoto,
-                                          compound=Tk.TOP, command=self.move_to_resonance_page)
-        self.resonanceButton.place(relx=0.21, rely=0.59, width=188, height=125)
-
-        self.historyButton = ttk.Button(self.homeFrame, style='home.TButton', text=_("History"), image=self.historyPhoto,
+        self.historyButton = ttk.Button(self.homeFrame, style='home.TButton', text="VIBRATION\nMANAGERMENT", image=self.historyPhoto,
                                         compound=Tk.TOP, command=self.move_to_history_page)
-        self.historyButton.place(relx=0.578, rely=0.59, width=188, height=125)
-
-        self.settingButton = ttk.Button(self.homeFrame, style='home.TButton', text=_("Settings"), image=self.smallSePhoto,
-                                        compound=Tk.LEFT, command=self.move_to_setting_page)
-        self.settingButton.place(relx=0.76, rely=0.86, width=210, height=52)
-
-
-    def move_to_diagnostic_page(self):
-        self.homeFrame.destroy()
-        self.parent.go_to_diagnostic_page()
-
-    def move_to_setting_page(self):
-        self.homeFrame.destroy()
-        self.parent.go_to_setting_page()
-
-    def move_to_resonance_page(self):
-        self.homeFrame.destroy()
-        self.parent.go_to_resonance_page()
-
-    def move_to_balancing_page(self):
-        self.homeFrame.destroy()
-        self.parent.go_to_balancing_page()
+        self.historyButton.place(relx=0.4, rely=0.42, width=200, height=150)
 
     def move_to_history_page(self):
         self.homeFrame.destroy()
