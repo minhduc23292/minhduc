@@ -5,7 +5,7 @@ from threading import Lock
 import os
 from datetime import datetime
 from bateryMonitor.bateryMonitor import BQ40Z50
-from ds3231.ds3231B import DS3231
+from PCF85063.PCF85063ATT import PCF85063
 from image.image import ImageAdrr
 
 remainCap = 50
@@ -51,10 +51,11 @@ class BatteryFrame(Tk.Frame):
 
     def get_time_now(self):
         try:
-            ds3231 = DS3231(1, 0x69)
-            rtcTime=str(ds3231.read_datetime())
+            pcf85063 = PCF85063()
+            rtcTime=pcf85063.readTime()
+            time=f"{str(rtcTime[2])}:{str(rtcTime[1])}"
             # rtcTime=time.strftime("%Y-%m-%d %H:%M:%S")
-            return rtcTime[11:16]
+            return time
         except Exception as ex:
             now = datetime.now()
             current_time = now.strftime("%H:%M")

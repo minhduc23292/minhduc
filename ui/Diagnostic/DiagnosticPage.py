@@ -24,7 +24,7 @@ from threading import Lock
 import fileOperation.fileOperation as file_operation
 import pms.popMessage as pms
 import sqlite3 as lite
-from ds3231.ds3231B import DS3231
+from PCF85063.PCF85063ATT import PCF85063
 from datetime import datetime
 current_directory = os.path.dirname(os.path.realpath(__file__))
 parent_directory = os.path.dirname(os.path.dirname(current_directory))
@@ -51,9 +51,10 @@ def testVal(inStr, acttyp):
 
 def get_time_now():
         try:
-            ds3231 = DS3231(1, 0x69)
-            rtcTime=str(ds3231.read_datetime())
-            return rtcTime[:10]
+            pcf85063 = PCF85063()
+            rtcTime=pcf85063.readTime()
+            time=f"{str(rtcTime[5])}-{str(rtcTime[4])}-{str(rtcTime[3])}"
+            return time
         except Exception as ex:
             now = datetime.now()
             current_time = now.strftime("%Y-%m-%d")
@@ -1382,10 +1383,10 @@ class ConfigFrame(Tk.Frame):
         sensor1Combo['value'] = ("Accelerometer", "Velocity Sensor")
         sensor1Combo.grid(column=1, row=1, padx=0, pady=5, sticky='e')
 
-        self.port1PosCombo = ttk.Combobox(sensorFrame, width=4, textvariable=self.wfParam16, state="readonly",
+        self.port1PosCombo = ttk.Combobox(sensorFrame, width=5, textvariable=self.wfParam16, state="readonly",
                                     font=('Chakra Petch', 13))
         self.port1PosCombo['value']=('NONE')
-        self.port1PosCombo.grid(column=2, row=1, padx=0, pady=5, sticky='e')
+        self.port1PosCombo.grid(column=2, row=1, padx=2, pady=5, sticky='w')
 
 #ss2
         sensor2Label = ttk.Label(sensorFrame, text=_('Port2'), style='config.TLabel')
@@ -1396,10 +1397,10 @@ class ConfigFrame(Tk.Frame):
         sensor2Combo['value'] = ("Accelerometer", "Velocity Sensor")
         sensor2Combo.grid(column=1, row=2, padx=0, pady=5, sticky='e')
 
-        self.port2PosCombo = ttk.Combobox(sensorFrame, width=4, textvariable=self.wfParam17, state="readonly",
+        self.port2PosCombo = ttk.Combobox(sensorFrame, width=5, textvariable=self.wfParam17, state="readonly",
                                     font=('Chakra Petch', 13))
         self.port2PosCombo['value']=('NONE')
-        self.port2PosCombo.grid(column=2, row=2, padx=0, pady=5, sticky='e')
+        self.port2PosCombo.grid(column=2, row=2, padx=2, pady=5, sticky='w')
 
         port2Button=ttk.Button(sensorFrame, style="normal.TButton", image=self.smallSePhoto,\
                                command=lambda: self.creat_sensor_position_page(self.origin_config.waveform_config_struct))
@@ -1414,10 +1415,10 @@ class ConfigFrame(Tk.Frame):
         sensor3Combo['value'] = ("Accelerometer", "Velocity Sensor")
         sensor3Combo.grid(column=1, row=3, padx=0, pady=5, sticky='e')
 
-        self.port3PosCombo = ttk.Combobox(sensorFrame, width=4, textvariable=self.wfParam18, state="readonly",
+        self.port3PosCombo = ttk.Combobox(sensorFrame, width=5, textvariable=self.wfParam18, state="readonly",
                                     font=('Chakra Petch', 13))
         self.port3PosCombo['value']=('NONE')
-        self.port3PosCombo.grid(column=2, row=3, padx=0, pady=5, sticky='e')
+        self.port3PosCombo.grid(column=2, row=3, padx=2, pady=5, sticky='w')
 
         sensor4Label = ttk.Label(sensorFrame, text=_('Port4'), style='config.TLabel')
         sensor4Label.grid(column=0, row=4, padx=5, pady=5, sticky='w')
@@ -1937,15 +1938,24 @@ class SensorPositionCanvas(Tk.Canvas):
         self.port1Entry=ttk.Entry(inputFrame, width=10, textvariable=self.inputParam2, validate="key", font=('Chakra Petch', 13))
         self.port1Entry.grid(column=1, row=0, padx=5, pady=5, sticky='e')
 
+        clearButton1=ttk.Button(inputFrame, text=_('Clear'), style="Accent.TButton", command=self.clear_button_1)
+        clearButton1.grid(column=2, row=0, padx=5, pady=5, sticky='e')
+
         pos2Label= ttk.Label(inputFrame, text=_("Port 2"), style="pos0.TLabel")
         pos2Label.grid(column=0, row=1, padx=5, pady=0, sticky="w")
         self.port2Entry=ttk.Entry(inputFrame, width=10, textvariable=self.inputParam3, validate="key", font=('Chakra Petch', 13))
         self.port2Entry.grid(column=1, row=1, padx=5, pady=5, sticky='e')
 
+        clearButton2=ttk.Button(inputFrame, text=_('Clear'), style="Accent.TButton", command=self.clear_button_2)
+        clearButton2.grid(column=2, row=1, padx=5, pady=5, sticky='e')
+
         pos3Label= ttk.Label(inputFrame, text=_("Port 3"), style="pos0.TLabel")
         pos3Label.grid(column=0, row=2, padx=5, pady=0, sticky="w")
         self.port3Entry=ttk.Entry(inputFrame, width=10, textvariable=self.inputParam4, validate="key", font=('Chakra Petch', 13))
         self.port3Entry.grid(column=1, row=2, padx=5, pady=5, sticky='e')
+
+        clearButton3=ttk.Button(inputFrame, text=_('Clear'), style="Accent.TButton", command=self.clear_button_3)
+        clearButton3.grid(column=2, row=2, padx=5, pady=5, sticky='e')
 
         sensorLabel=ttk.Label(inputFrame, text=_("Select port"), style="pos0.TLabel")
         sensorLabel.grid(column=0, row=3, padx=5, pady=0, sticky="w")
@@ -1958,6 +1968,15 @@ class SensorPositionCanvas(Tk.Canvas):
 
         applyButton=ttk.Button(self, text=_('APPLY'), style="Accent.TButton", command=self.on_apply_button_click)
         applyButton.place(x=860, y=456, width=130, height=40)
+
+    def clear_button_1(self):
+        self.inputParam2.set("NONE")
+    
+    def clear_button_2(self):
+        self.inputParam3.set("NONE")
+
+    def clear_button_3(self):
+        self.inputParam4.set("NONE")
 
     def update_text(self, text, index):
         global SensorPosition

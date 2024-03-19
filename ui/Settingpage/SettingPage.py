@@ -18,18 +18,12 @@ import sys
 from image.image import ImageAdrr
 import threading
 from threading import Lock
-from bateryMonitor.powerManager import *
-from ds3231.ds3231B import DS3231
+from PCF85063.PCF85063ATT import PCF85063
 from Calculation.calculate import is_number
-# import sqlite3 as lite
-
-remainCap = 50
-remainVolt = 3.8
-stateOfCharge = "CHARGING"
-firstTime = True
+import ctypes
 current_directory = os.path.dirname(os.path.realpath(__file__))
 parent_directory = os.path.dirname(os.path.dirname(current_directory))
-
+ad7609 = ctypes.CDLL(f'{parent_directory}/ad7609BTZ.so')
 def testVal(inStr, acttyp):
     if acttyp == '1':  # insert
         if not inStr.isdigit():
@@ -44,9 +38,9 @@ def testFloat(inStr, acttyp):
 
 def get_time_now():
         try:
-            ds3231 = DS3231(1, 0x69)
-            rtcTime=str(ds3231.read_datetime())
-            return rtcTime[:10]
+            pcf85063 = PCF85063()
+            rtcTime=pcf85063.readTime()
+            time=f"{str(rtcTime[5])}-{str(rtcTime[4])}-{str(rtcTime[3])}"
         except Exception as ex:
             now = datetime.now()
             current_time = now.strftime("%Y-%m-%d")
@@ -56,7 +50,6 @@ class SettingPage(Tk.Frame):
     def __init__(self, parent: "Application"):
         self.parent = parent
         self.lock = Lock()
-        self.batery=BQ27510()
         imageAddress = ImageAdrr()
         self.homePhoto = imageAddress.homePhoto
         # self.con = lite.connect(f'{parent_directory}/company.db')
@@ -89,7 +82,7 @@ class SettingPage(Tk.Frame):
         self.sensorConfigFrame=SensorConfig(self.notebook.tab5, self.parent.origin_config)
         self.sensorConfigFrame.pack(side=Tk.LEFT, fill=Tk.BOTH, expand=1)
         self.wifiConfigFrame=WifiConfig(self.notebook.tab2, self.infoLabel2).pack(side=Tk.LEFT, fill=Tk.BOTH, expand=1)
-        self.powerConfigFrame=Power(self.notebook.tab4, self.lock, self.batery).pack(side=Tk.LEFT, fill=Tk.BOTH, expand=1)
+        self.powerConfigFrame=Power(self.notebook.tab4, self.lock).pack(side=Tk.LEFT, fill=Tk.BOTH, expand=1)
         self.languageConfigFrame=LanguageConfig(self.notebook.tab3, self.parent.origin_config.language_config_struct)
         self.languageConfigFrame.pack(side=Tk.LEFT, fill=Tk.BOTH, expand=1)
         self.parent.bind_class('TEntry', "<FocusIn>", self.show_key_board)
@@ -112,7 +105,6 @@ class SettingPage(Tk.Frame):
         # self.applyBt.configure(state="normal")
 
     def creat_setting_feature_panel(self):
-        global remainCap
         self.homeBt = ttk.Button(self.featureFrame, style='normal.TButton', text=_("Home"), image=self.homePhoto,
                                  compound=Tk.TOP,
                                  command=self.go_home)
@@ -539,9 +531,9 @@ class WifiConfig(Tk.Frame):
             print(ex)
 
 class Power(Tk.Frame):
-    def __init__(self, parent, lock, batery):
+    def __init__(self, parent, lock):
+        ad7609.init()
         self.lock=lock
-        self.batery=batery
         self.style = ttk.Style()
         self.style.configure('power.TLabel', font=('Chakra Petch', 13))
         self.style.configure('power.TLabelframe', font=('Chakra Petch', 15))
@@ -568,7 +560,9 @@ class Power(Tk.Frame):
         if (pms.company_project_shutdown_warning()):
             try:
                 with self.lock:
-                    self.batery.i2c_send_turn_off()
+                    ad7609.turn_off_power.restype = None
+                    ad7609.turn_off_power.argtypes = None
+                    ad7609.turn_off_power()
             except:
                 pass
             os.system("sudo shutdown -h now")

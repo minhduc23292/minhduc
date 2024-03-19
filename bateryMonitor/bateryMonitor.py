@@ -89,9 +89,6 @@ class BQ40Z50():
         self.bus = SMBus(1)
     def i2c_send_turn_off(self):
         pass
-    def unseal1(self, word1, word2):
-        self.bus.write_word_data(DEV_ADDR, 0x00, word1)
-        self.bus.write_word_data(DEV_ADDR, 0x00, word2)
 
     # Check if the BQ27441-G1A is sealed or not.
     def status(self):
@@ -102,9 +99,6 @@ class BQ40Z50():
         print("stattus:", stat)
         return stat & BQ27441_STATUS_SS
 
-    
-
-    # Seal the BQ27441-G1A
     def seal(self):
         # return self.readControlWord(BQ27441_CONTROL_SEALED)
         self.bus.write_block_data(BSP_NORMAL_MODE_I2C_ADDR, 0x44, [0x30, 0x00])
@@ -141,17 +135,27 @@ class BQ40Z50():
         time.sleep(0.5)
         self.bus.write_block_data(BSP_NORMAL_MODE_I2C_ADDR, 0x44, [0x1f, 0x00])
 
+    def fet_en(self):
+        self.bus.write_block_data(BSP_NORMAL_MODE_I2C_ADDR, 0x44, [0x22, 0x00])
+
+    def enable_gauge(self):
+        self.bus.write_block_data(BSP_NORMAL_MODE_I2C_ADDR, 0x44, [0x21, 0x00])
+
     def deviceType(self):
         return self.readControlWord(0x01)
     
+    def read_device_name(self):
+        ret = self.bus.read_i2c_block_data(BSP_NORMAL_MODE_I2C_ADDR, 0x21,9)
+        return ret
+    
     def read_from_flash(self):
-        self.bus.write_block_data(0x0B, 0x44, [0x11, 0x48])
+        self.bus.write_block_data(0x0B, 0x44, [0x50, 0x49])
         time.sleep(0.1)
         ret=self.bus.read_i2c_block_data(0x0B, 0x44, 5 )
         return ret
     
     def write_to_flash(self):
-        self.bus.write_block_data(0x0B, 0x44, [0x5C, 0x49, 0x04])
+        self.bus.write_block_data(0x0B, 0x44, [0x50, 0x49, 0x12])
         time.sleep(0.1)
 
     def change_design_cap(self):
@@ -163,6 +167,16 @@ class BQ40Z50():
         time.sleep(0.1)
         ret=self.bus.read_i2c_block_data(0x0B, 0x44, 5 )
         return ret[3]+ret[4]*256
+
+    def change_temperature_sensor_to_internal(self):
+        self.bus.write_block_data(0x0B, 0x44, [0x5B, 0x49, 0x01])
+        time.sleep(0.1)
+    
+    def read_temperature_enable_flash(self):
+        self.bus.write_block_data(0x0B, 0x44, [0x5B, 0x49])
+        time.sleep(0.1)
+        ret=self.bus.read_i2c_block_data(0x0B, 0x44, 5 )
+        return ret
 
     def read_voltage(self):
         ret = self.bus.read_word_data(BSP_NORMAL_MODE_I2C_ADDR, 0x09)
@@ -189,11 +203,30 @@ class BQ40Z50():
         return ret
     
 
-    def readstatus(self):
+    def read_operation_status(self):
+        self.bus.write_block_data(BSP_NORMAL_MODE_I2C_ADDR, 0x44, [0x54, 0x00])
+        time.sleep(0.5)
+        ret = self.bus.read_i2c_block_data(BSP_NORMAL_MODE_I2C_ADDR, 0x44, 7)
+        return ret
+    
+    def read_charging_status(self):
         self.bus.write_block_data(BSP_NORMAL_MODE_I2C_ADDR, 0x44, [0x55, 0x00])
         time.sleep(0.5)
         ret = self.bus.read_i2c_block_data(BSP_NORMAL_MODE_I2C_ADDR, 0x44, 7)
         return ret
+
+    def read_manufactoring_status(self):
+        self.bus.write_block_data(BSP_NORMAL_MODE_I2C_ADDR, 0x44, [0x57, 0x00])
+        time.sleep(0.5)
+        ret = self.bus.read_i2c_block_data(BSP_NORMAL_MODE_I2C_ADDR, 0x44, 7)
+        return ret
+    
+    def read_gauging_status(self):
+        self.bus.write_block_data(BSP_NORMAL_MODE_I2C_ADDR, 0x44, [0x56, 0x00])
+        time.sleep(0.5)
+        ret = self.bus.read_i2c_block_data(BSP_NORMAL_MODE_I2C_ADDR, 0x44, 7)
+        return ret
+
     def calibMode(self):
         return self.readControlWord(0x0040)
 

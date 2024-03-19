@@ -32,7 +32,7 @@ class HomePage(Tk.Frame):
 
         homeLabel = ttk.Label(self.homeFrame, style='home.TLabel', text="Vibration Expert", image=self.settingPhoto,
                               compound=Tk.LEFT)
-        homeLabel.place(relx=0.25, rely=0.1)
+        homeLabel.place(relx=0.24, rely=0.1)
 
         self.diagnosticButton = ttk.Button(self.homeFrame, style='home.TButton', text=_("Diagnostic"),
                                            image=self.resonacePhoto,
