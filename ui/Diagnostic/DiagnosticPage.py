@@ -86,10 +86,10 @@ class DiagnosticPage(Tk.Frame):
             currentSensitivity = json.load(f)
         self.origin_config.sensor_sensitivity["acc_sensitivity"]=float(currentSensitivity["accSensitivity"])
         self.origin_config.sensor_sensitivity["vel_sensitivity"]=float(currentSensitivity["velSensitivity"])
-
+        self.origin_config.sensor_sensitivity["disp_sensitivity"]=float(currentSensitivity["dispSensitivity"])
         self.btstyle = ttk.Style()
         self.btstyle.configure('normal.TButton', font=('Chakra Petch', 15), borderwidth=1, justify=Tk.CENTER)
-        self.btstyle.configure('custom.Accent.TButton', font=('Chakra Petch', 10), justify=Tk.CENTER)
+        self.btstyle.configure('custom.Accent.TButton', font=('Chakra Petch', 9), justify=Tk.CENTER)
         self.btstyle.configure('custom2.Accent.TButton', font=('Chakra Petch', 8), justify=Tk.CENTER)
         self.btstyle.configure('feature.Accent.TButton', font=('Chakra Petch', 15), borderwidth=1, justify=Tk.CENTER)
         self.btstyle.configure('normal.TLabel', font=('Chakra Petch', 13), background='white')
@@ -126,6 +126,11 @@ class DiagnosticPage(Tk.Frame):
         self.summaryPlotFrame.pack(side=Tk.LEFT, fill=Tk.BOTH, expand=1)
         self.summaryPlotFrame.pack_propagate(0)
         self.summaryPlotFrame.pack_forget()
+
+        self.readSensorPendingFrame = PendingFrameCanvas(self.mainFrame)
+        self.readSensorPendingFrame.pack(side=Tk.LEFT, fill=Tk.BOTH, expand=1)
+        self.readSensorPendingFrame.pack_propagate(0)
+        self.readSensorPendingFrame.pack_forget()
 
         self.waveformSideButtonFrame = Tk.Frame(self.mainFrame, name="wasi", bd=1, bg='white', width=90, height=504)
         self.waveformSideButtonFrame.pack(side=Tk.RIGHT, fill=Tk.Y, expand=1)
@@ -173,7 +178,7 @@ class DiagnosticPage(Tk.Frame):
         self.frequencyFrameCanvas = FrequencyFrameCanvas(self.freqPlotFrame)
         self.generalFrameCanvas = GeneralFrameCanvas(self.generalPlotFrame)
         self.summaryFrameCanvas = SummaryFrameCanvas(self.summaryPlotFrame)
-     
+    
     def creat_diagnostic_feature_panel(self):
 
         self.homeBt = ttk.Button(self.featureFrame, style='normal.TButton', text=_("Home"), image=self.homePhoto,
@@ -257,7 +262,7 @@ class DiagnosticPage(Tk.Frame):
         zoomBt.image = self.zoomPhoto
 
         readData = ttk.Button(self.waveformSideButtonFrame, style='custom.Accent.TButton', text=_("READ\nSENSOR"),
-                              command=self.on_read_sensor_button_clicked)
+                              command=lambda: self.on_start_button_clicked(False))
         readData.place(x=0, y=425, width=88, height=75)
 ###
 
@@ -286,7 +291,7 @@ class DiagnosticPage(Tk.Frame):
                                       command=self.on_grid_button)
         self.freqGridtBt.place(x=0, y=117, width=88, height=75)
 
-        self.freqFunctionBt = ttk.Button(self.freqSideButtonFrame, style='custom.Accent.TButton', text=_("FUNCTION\nNONE"),
+        self.freqFunctionBt = ttk.Button(self.freqSideButtonFrame, style='custom.Accent.TButton', text=_("FUNC\nNONE"),
                                          command=lambda: self.creat_frequency_funtion_button_canvas(827, 40))
         self.freqFunctionBt.place(x=0, y=40, width=88, height=75)
 ##
@@ -358,7 +363,7 @@ class DiagnosticPage(Tk.Frame):
         n=4
         data_length = pow2(int(self.origin_config.sensor_config["fft_line"]*2.56))
         waitingTime=int(data_length/self.origin_config.sensor_config["sample_rate"])+2
-        self.infoLabel2.configure(text=_("READING.....Please wait:")+ f" {str(waitingTime)} " +_("seconds."), style="red.TLabel")
+        self.infoLabel2.configure(text=_("READING....Wait:")+ f" {str(waitingTime)} " +_("seconds."), style="red.TLabel")
         self.infoLabel2.update_idletasks()
         total_length=data_length*n+1
         ttl=[]
@@ -413,6 +418,7 @@ class DiagnosticPage(Tk.Frame):
             self.origin_config.sensor_config["sensor_data"] = chaneln
         accConvertFactor=1000/self.origin_config.sensor_sensitivity["acc_sensitivity"]
         velConvertFactor=1000/self.origin_config.sensor_sensitivity["vel_sensitivity"]
+        dispConvertFactor=1000/self.origin_config.sensor_sensitivity["disp_sensitivity"]
         for i in range(3):
             if self.origin_config.sensor_config["sensor_input"][i] == 'Accelerometer' and self.origin_config.sensor_config["sensor_position"][i]!=0:
                 self.origin_config.sensor_config["sensor_data"][i] *= accConvertFactor  # g
@@ -460,6 +466,14 @@ class DiagnosticPage(Tk.Frame):
                 self.origin_config.sensor_config["displacement_data"].append(
                     vel2disp(self.origin_config.sensor_config["sensor_data"][i],
                              self.origin_config.sensor_config["sample_rate"]))
+            elif self.origin_config.sensor_config["sensor_input"][i] == 'Displacement Probe' and self.origin_config.sensor_config["sensor_position"][i]!=0:
+                self.origin_config.sensor_config["sensor_data"][i] *= dispConvertFactor  # um
+                unit[i] = 'um'
+                self.origin_config.sensor_config["store_sensor_data"][i]=self.origin_config.sensor_config["sensor_data"][i][700:-700]
+                self.origin_config.sensor_config["dis"].append(i)
+                self.origin_config.sensor_config["displacement_data"].append(
+                    self.origin_config.sensor_config["store_sensor_data"][i])
+
                              
             elif self.origin_config.sensor_config["sensor_position"][i]==0:
                 self.origin_config.sensor_config["sensor_data"][i] *= 0
@@ -963,8 +977,6 @@ class DiagnosticPage(Tk.Frame):
         if from_config:
             self.config1.update_diagnostic_struct()
             self.applyBt.configure(state="disable")
-            # self.configFrame.pack_forget()
-            # self.on_waveform_button_clicked()
 
     def on_start_button_clicked(self, from_config: bool):
         """This button callback is responsed get the data from sensor and execute the waveform callback function"""
@@ -972,12 +984,11 @@ class DiagnosticPage(Tk.Frame):
         view_flag=0
         plot_flag=0
         self.laserBt.configure(text=_("LASER\nVIEW"))
+        self.on_pending()
         if from_config:
             self.config1.update_diagnostic_struct()
-            # self.configFrame.pack_forget()
         self.read_sensor()
         self.on_waveform_button_clicked()
-     
         Pd.PLT.plot_all_chanel(self.waveformFrameCanvas.canvas1,
                                self.origin_config.sensor_config["store_sensor_data"][0],
                                self.origin_config.sensor_config["store_sensor_data"][1],
@@ -990,6 +1001,8 @@ class DiagnosticPage(Tk.Frame):
                         self.origin_config.sensor_config["sample_rate"],
                         self.origin_config.sensor_config["unit"][:3],
                         [1, 2, 3], win_var="Hanning")
+        
+        
 
 
     def general_indicator_plot(self):
@@ -1063,12 +1076,19 @@ class DiagnosticPage(Tk.Frame):
         self.freqSideButtonFrame.pack_forget()
         self.generalPlotFrame.pack_forget()
         self.generalSideButtonFrame.pack_forget()
-        self.configFrame.pack(side=Tk.LEFT, fill=Tk.X, expand=1)
         self.summaryPlotFrame.pack_forget()
+        self.readSensorPendingFrame.pack_forget()
+        self.configFrame.pack(side=Tk.LEFT, fill=Tk.X, expand=1)
+        
         self.waveformBt.configure(style="normal.TButton")
         self.frequencyBt.configure(style="normal.TButton")
         self.generalBt.configure(style="normal.TButton")
         self.configBt.configure(style="feature.Accent.TButton")
+
+    def on_pending(self):
+        self.waveformPlotFrame.pack_forget()
+        self.configFrame.pack_forget()
+        self.readSensorPendingFrame.pack(side=Tk.LEFT, fill=Tk.BOTH, expand=1)
 
     def on_waveform_button_clicked(self):
         global summary_flag
@@ -1082,6 +1102,7 @@ class DiagnosticPage(Tk.Frame):
         self.generalSideButtonFrame.pack_forget()
         self.configFrame.pack_forget()
         self.summaryPlotFrame.pack_forget()
+        self.readSensorPendingFrame.pack_forget()
         self.waveformBt.configure(style="feature.Accent.TButton")
         self.frequencyBt.configure(style="normal.TButton")
         self.generalBt.configure(style="normal.TButton")
@@ -1380,7 +1401,7 @@ class ConfigFrame(Tk.Frame):
 
         sensor1Combo = ttk.Combobox(sensorFrame, width=8, textvariable=self.wfParam1, state="readonly",
                                     font=('Chakra Petch', 13))
-        sensor1Combo['value'] = ("Accelerometer", "Velocity Sensor")
+        sensor1Combo['value'] = ("Accelerometer", "Velocity Sensor", "Displacement Probe")
         sensor1Combo.grid(column=1, row=1, padx=0, pady=5, sticky='e')
 
         self.port1PosCombo = ttk.Combobox(sensorFrame, width=5, textvariable=self.wfParam16, state="readonly",
@@ -1394,7 +1415,7 @@ class ConfigFrame(Tk.Frame):
 
         sensor2Combo = ttk.Combobox(sensorFrame, width=8, textvariable=self.wfParam2, state="readonly",
                                     font=('Chakra Petch', 13))
-        sensor2Combo['value'] = ("Accelerometer", "Velocity Sensor")
+        sensor2Combo['value'] = ("Accelerometer", "Velocity Sensor", "Displacement Probe")
         sensor2Combo.grid(column=1, row=2, padx=0, pady=5, sticky='e')
 
         self.port2PosCombo = ttk.Combobox(sensorFrame, width=5, textvariable=self.wfParam17, state="readonly",
@@ -1412,7 +1433,7 @@ class ConfigFrame(Tk.Frame):
 
         sensor3Combo = ttk.Combobox(sensorFrame, width=8, textvariable=self.wfParam3, state="readonly",
                                     font=('Chakra Petch', 13))
-        sensor3Combo['value'] = ("Accelerometer", "Velocity Sensor")
+        sensor3Combo['value'] = ("Accelerometer", "Velocity Sensor", "Displacement Probe")
         sensor3Combo.grid(column=1, row=3, padx=0, pady=5, sticky='e')
 
         self.port3PosCombo = ttk.Combobox(sensorFrame, width=5, textvariable=self.wfParam18, state="readonly",
@@ -2033,6 +2054,13 @@ class SensorPositionCanvas(Tk.Canvas):
         self.parent.wfParam18.set(port3Pos)
         self.destroy()
 
+class PendingFrameCanvas(Tk.Frame):
+    def __init__(self, parent):
+        super().__init__(parent, width=918, height=504, bg='white')
+        self.pendingStyle = ttk.Style()
+        self.pendingStyle.configure('red1.TLabel', font=('Chakra Petch', 20), background='white', foreground='#C40069')
+        self.pendingLabel=ttk.Label(self, text=_("READING..."), style="red1.TLabel")
+        self.pendingLabel.place(relx=0.45, rely=0.42)
 
 class WaveformFrameCanvas():
     def __init__(self, parent: "waveformPlotFrame"):

@@ -796,7 +796,7 @@ class SideButtonFrame(Tk.Frame):
     def creat_plot_button_canvas(self, widget, draw_canvas, x_pos, y_pos):
 
         self.plotStyle=ttk.Style()
-        self.plotStyle.configure('plot.Accent.TButton', font=('Chakra Petch', 9), justify=Tk.CENTER)
+        self.plotStyle.configure('plot.Accent.TButton', font=('Chakra Petch', 8), justify=Tk.CENTER)
         self.functionCanvas = Tk.Canvas(widget, width=90, height=462, bg='white')
         self.functionCanvas.place(x=x_pos, y=y_pos)
 

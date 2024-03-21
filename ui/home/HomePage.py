@@ -35,7 +35,7 @@ class HomePage(Tk.Frame):
         homeLabel.place(relx=0.24, rely=0.1)
 
         self.diagnosticButton = ttk.Button(self.homeFrame, style='home.TButton', text=_("Diagnostic"),
-                                           image=self.resonacePhoto,
+                                           image=self.diagnosPhoto,
                                            compound=Tk.TOP, command=self.move_to_diagnostic_page)
         self.diagnosticButton.place(relx=0.21, rely=0.32, width=188, height=125)
 

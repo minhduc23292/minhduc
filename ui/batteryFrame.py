@@ -9,7 +9,7 @@ from PCF85063.PCF85063ATT import PCF85063
 from image.image import ImageAdrr
 
 remainCap = 50
-remainVolt = 3.8
+remainVolt = 10.0
 stateOfCharge = "CHARGING"
 firstTime = True
 
@@ -90,7 +90,7 @@ class BatteryFrame(Tk.Frame):
             if firstTime:
                 # pms.general_warning(_("Low Battery! Plug in the charger to keep it running"))
                 firstTime = False
-            if remainVolt <= 10.0:
+            if remainVolt <= 9.6:
                 if stateOfCharge !="CHARGING":
                     try:
                         with self.lock:

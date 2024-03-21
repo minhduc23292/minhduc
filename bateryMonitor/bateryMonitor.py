@@ -149,19 +149,42 @@ class BQ40Z50():
         return ret
     
     def read_from_flash(self):
-        self.bus.write_block_data(0x0B, 0x44, [0x50, 0x49])
+        self.bus.write_block_data(0x0B, 0x44, [0x5B, 0x49])
         time.sleep(0.1)
         ret=self.bus.read_i2c_block_data(0x0B, 0x44, 5 )
         return ret
     
     def write_to_flash(self):
-        self.bus.write_block_data(0x0B, 0x44, [0x50, 0x49, 0x12])
+        self.bus.write_block_data(0x0B, 0x44, [0x5C, 0x49, 0x04])
         time.sleep(0.1)
 
     def change_design_cap(self):
-        self.bus.write_block_data(0x0B, 0x44, [0x11, 0x48, 0x00, 0x19])
+        self.bus.write_block_data(0x0B, 0x44, [0x11, 0x48, 0x80, 0x0C])
+        time.sleep(0.1)
+    
+    def change_design_voltage(self):
+        self.bus.write_block_data(0x0B, 0x44, [0x15, 0x48, 0xC8, 0x32])
         time.sleep(0.1)
 
+    def change_design_cell1_cap(self):
+        self.bus.write_block_data(0x0B, 0x44, [0x06, 0x43, 0x80, 0x0C])
+        time.sleep(0.1)
+    
+    def change_design_cell2_cap(self):
+        self.bus.write_block_data(0x0B, 0x44, [0x08, 0x43, 0x80, 0x0C])
+        time.sleep(0.1)
+
+    def change_design_cell3_cap(self):
+        self.bus.write_block_data(0x0B, 0x44, [0x0A, 0x43, 0x80, 0x0C])
+        time.sleep(0.1)
+
+    def config_gauge(self):
+        self.change_design_cap()
+        # self.change_design_voltage()
+        self.change_design_cell1_cap()
+        self.change_design_cell2_cap()
+        self.change_design_cell3_cap()
+        
     def read_design_cap(self):
         self.bus.write_block_data(0x0B, 0x44, [0x11, 0x48])
         time.sleep(0.1)

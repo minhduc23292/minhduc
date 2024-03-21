@@ -155,7 +155,9 @@ data1 = batery.read_current()
 data2 = batery.read_temp()
 data3 = batery.read_remain_cap()
 print([data0, data1, data2, data3])
-
+# batery.config_gauge()
+# data=batery.read_from_flash()
+# print("data: ", data)
 # import numpy as np
 # from scipy.signal import kaiserord, lfilter, firwin, freqz, firwin2
 # import matplotlib.pyplot as plt

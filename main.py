@@ -34,6 +34,7 @@ class TotalConfig(object):
         self.sensor_sensitivity= {
             "acc_sensitivity": 100.0,
             "vel_sensitivity":4.0,
+            "disp_sensitivity": 7.8,
             "hammer_sensitivity":12.0
         }
 
